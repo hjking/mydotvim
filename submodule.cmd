@@ -13,3 +13,14 @@ git submodule add https://github.com/vim-scripts/Align.git bundle/Align
 git submodule add https://github.com/vim-scripts/Markdown.git bundle/Markdown
 git submodule add https://github.com/vim-scripts/L9.git bundle/L9
 git submodule add https://github.com/tomasr/molokai.git bundle/molokai
+
+
+git submodule add URL bundle/NAME
+git submodule init
+git submodule update
+
+;; to update
+git submodule update
+git submodule foreach git pull origin master
+
+
