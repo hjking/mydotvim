@@ -118,3 +118,18 @@
 [submodule "bundle/molokai"]
 	path = bundle/molokai
 	url = https://github.com/tomasr/molokai.git
+[submodule "bundle/file-line"]
+	path = bundle/file-line
+	url = https://github.com/vim-scripts/file-line.git
+[submodule "bundle/FuzzyFinder"]
+	path = bundle/FuzzyFinder
+	url = https://github.com/vim-scripts/FuzzyFinder.git
+[submodule "bundle/L9"]
+	path = bundle/L9
+	url = https://github.com/vim-scripts/L9.git
+[submodule "bundle/Markdown"]
+	path = bundle/Markdown
+	url = https://github.com/vim-scripts/Markdown.git
+[submodule "bundle/Align"]
+	path = bundle/Align
+	url = https://github.com/vim-scripts/Align.git
