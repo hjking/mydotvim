@@ -1,3 +1,102 @@
 [submodule "bundle/vim-pathogen"]
 	path = bundle/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
+[submodule "bundle/auto-pairs"]
+	path = bundle/auto-pairs
+	url = https://github.com/jiangmiao/auto-pairs.git
+[submodule "bundle/badwolf"]
+	path = bundle/badwolf
+	url = https://github.com/sjl/badwolf.git
+[submodule "bundle/c"]
+	path = bundle/c
+	url = https://github.com/vim-scripts/c.vim.git
+[submodule "bundle/closetag"]
+	path = bundle/closetag
+	url = https://github.com/vim-scripts/closetag.vim.git
+[submodule "bundle/command-t"]
+	path = bundle/command-t
+	url = git://git.wincent.com/command-t.git
+[submodule "bundle/cucumber"]
+	path = bundle/cucumber
+	url = https://github.com/vim-scripts/cucumber.zip.git
+[submodule "bundle/git"]
+	path = bundle/git
+	url = https://github.com/vim-scripts/git.zip.git
+[submodule "bundle/Headlights"]
+	path = bundle/Headlights
+	url = https://github.com/vim-scripts/Headlights.git
+[submodule "bundle/nerdcommenter"]
+	path = bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter.git
+[submodule "bundle/nerdtree"]
+	path = bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "bundle/project"]
+	path = bundle/project
+	url = https://github.com/vim-scripts/project.tar.gz.git
+[submodule "bundle/Rainbow-Parenthsis-Bundle"]
+	path = bundle/Rainbow-Parenthsis-Bundle
+	url = https://github.com/vim-scripts/Rainbow-Parenthsis-Bundle.git
+[submodule "bundle/repeat"]
+	path = bundle/repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "bundle/snipmate"]
+	path = bundle/snipmate
+	url = https://github.com/gmarik/snipmate.vim.git
+[submodule "bundle/sparkup"]
+	path = bundle/sparkup
+	url = https://github.com/rstacruz/sparkup.git
+[submodule "bundle/SuperTab"]
+	path = bundle/SuperTab
+	url = https://github.com/vim-scripts/SuperTab.git
+[submodule "bundle/syntastic"]
+	path = bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule "bundle/tlib_vim"]
+	path = bundle/tlib_vim
+	url = https://github.com/tomtom/tlib_vim.git
+[submodule "bundle/vcscommand"]
+	path = bundle/vcscommand
+	url = https://github.com/vim-scripts/vcscommand.vim.git
+[submodule "bundle/Vimball"]
+	path = bundle/Vimball
+	url = https://github.com/vim-scripts/Vimball.git
+[submodule "bundle/solarized"]
+	path = bundle/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "bundle/easymotion"]
+	path = bundle/easymotion
+	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule "bundle/matchit"]
+	path = bundle/matchit
+	url = https://github.com/mirell/vim-matchit.git
+[submodule "bundle/powerline"]
+	path = bundle/powerline
+	url = git://github.com/Lokaltog/vim-powerline.git
+[submodule "bundle/rails"]
+	path = bundle/rails
+	url = https://github.com/tpope/vim-rails.git
+[submodule "bundle/speeddating"]
+	path = bundle/speeddating
+	url = https://github.com/tpope/vim-speeddating.git
+[submodule "bundle/Vim-Support"]
+	path = bundle/Vim-Support
+	url = https://github.com/vim-scripts/Vim-Support.git
+[submodule "bundle/surround"]
+	path = bundle/surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "bundle/vimtips"]
+	path = bundle/vimtips
+	url = https://github.com/vim-scripts/vimtips.zip.git
+[submodule "bundle/YankRing"]
+	path = bundle/YankRing
+	url = https://github.com/chrismetcalf/vim-yankring.git
+[submodule "bundle/winmanager"]
+	path = bundle/winmanager
+	url = https://github.com/vim-scripts/winmanager.git
+[submodule "bundle/Zoomwin"]
+	path = bundle/Zoomwin
+	url = https://github.com/vim-scripts/ZoomWin.git
+[submodule "bundle/vimwiki"]
+	path = bundle/vimwiki
+	url = https://github.com/vim-scripts/vimwiki.git
