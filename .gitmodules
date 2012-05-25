@@ -13,9 +13,6 @@
 [submodule "bundle/closetag"]
 	path = bundle/closetag
 	url = https://github.com/vim-scripts/closetag.vim.git
-[submodule "bundle/command-t"]
-	path = bundle/command-t
-	url = git://git.wincent.com/command-t.git
 [submodule "bundle/cucumber"]
 	path = bundle/cucumber
 	url = https://github.com/vim-scripts/cucumber.zip.git
@@ -100,3 +97,6 @@
 [submodule "bundle/vimwiki"]
 	path = bundle/vimwiki
 	url = https://github.com/vim-scripts/vimwiki.git
+[submodule "bundle/command-t"]
+	path = bundle/command-t
+	url = http://github.com/vim-scripts/Command-T.git
