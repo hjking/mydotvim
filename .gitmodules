@@ -136,3 +136,9 @@
 [submodule "bundle/zenburn"]
 	path = bundle/zenburn
 	url = https://github.com/jnurmine/Zenburn.git
+[submodule "bundle/vividchalk"]
+	path = bundle/vividchalk
+	url = https://github.com/tpope/vim-vividchalk.git
+[submodule "bundle/inkpot"]
+	path = bundle/inkpot
+	url = https://github.com/ciaranm/inkpot.git
