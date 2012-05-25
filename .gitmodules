@@ -133,3 +133,6 @@
 [submodule "bundle/Align"]
 	path = bundle/Align
 	url = https://github.com/vim-scripts/Align.git
+[submodule "bundle/zenburn"]
+	path = bundle/zenburn
+	url = https://github.com/jnurmine/Zenburn.git
