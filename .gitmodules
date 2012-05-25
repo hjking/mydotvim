@@ -85,9 +85,6 @@
 [submodule "bundle/vimtips"]
 	path = bundle/vimtips
 	url = https://github.com/vim-scripts/vimtips.zip.git
-[submodule "bundle/YankRing"]
-	path = bundle/YankRing
-	url = https://github.com/chrismetcalf/vim-yankring.git
 [submodule "bundle/winmanager"]
 	path = bundle/winmanager
 	url = https://github.com/vim-scripts/winmanager.git
