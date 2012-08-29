@@ -151,3 +151,9 @@
 [submodule "bundle/desertink"]
 	path = bundle/desertink
 	url = https://github.com/toupeira/vim-desertink.git
+[submodule "bundle/neocomplcache"]
+	path = bundle/neocomplcache
+	url = https://github.com/Shougo/neocomplcache.git
+[submodule "bundle/conque"]
+	path = bundle/conque
+	url = https://github.com/rson/vim-conque.git
