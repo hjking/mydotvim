@@ -115,9 +115,6 @@
 [submodule "bundle/FuzzyFinder"]
 	path = bundle/FuzzyFinder
 	url = https://github.com/vim-scripts/FuzzyFinder.git
-[submodule "bundle/L9"]
-	path = bundle/L9
-	url = https://github.com/vim-scripts/L9.git
 [submodule "bundle/Markdown"]
 	path = bundle/Markdown
 	url = https://github.com/vim-scripts/Markdown.git
@@ -163,3 +160,6 @@
 [submodule "bundle/Rainbow-Parentheses-Improved"]
 	path = bundle/Rainbow-Parentheses-Improved
 	url = https://github.com/hcwndbyw/Rainbow-Parentheses-Improved.git
+[submodule "bundle/L9"]
+	path = bundle/L9
+	url = https://github.com/vim-scripts/L9.git
