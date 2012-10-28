@@ -31,9 +31,6 @@
 [submodule "bundle/project"]
 	path = bundle/project
 	url = https://github.com/vim-scripts/project.tar.gz.git
-[submodule "bundle/Rainbow-Parenthsis-Bundle"]
-	path = bundle/Rainbow-Parenthsis-Bundle
-	url = https://github.com/vim-scripts/Rainbow-Parenthsis-Bundle.git
 [submodule "bundle/repeat"]
 	path = bundle/repeat
 	url = https://github.com/tpope/vim-repeat.git
