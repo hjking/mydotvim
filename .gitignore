@@ -1,4 +1,15 @@
-*tags
+tags
 doc/tags
 doc/tags-cn
 doc/tags-jp
+/vim-support/codesnippets/plugin-start.vim
+/vim-support/rc/customization.gvimrc
+/vim-support/rc/customization.vimrc
+/vim-support/rc/sample_template_file
+/vim-support/templates/Templates
+/vim-support/templates/comments.templates
+/vim-support/templates/documentation.templates
+/vim-support/templates/idioms.templates
+/vim-support/templates/perl.templates
+/vim-support/templates/regex.templates
+/vim-support/templates/statements.templates
