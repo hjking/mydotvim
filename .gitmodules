@@ -115,9 +115,6 @@
 [submodule "bundle/FuzzyFinder"]
 	path = bundle/FuzzyFinder
 	url = https://github.com/vim-scripts/FuzzyFinder.git
-[submodule "bundle/Markdown"]
-	path = bundle/Markdown
-	url = https://github.com/vim-scripts/Markdown.git
 [submodule "bundle/Align"]
 	path = bundle/Align
 	url = https://github.com/vim-scripts/Align.git
