@@ -154,10 +154,6 @@
 	path = bundle/FuzzyFinder
 	url = https://github.com/vim-scripts/FuzzyFinder.git
     ignore = dirty
-[submodule "bundle/Markdown"]
-	path = bundle/Markdown
-	url = https://github.com/vim-scripts/Markdown.git
-    ignore = dirty
 [submodule "bundle/Align"]
 	path = bundle/Align
 	url = https://github.com/vim-scripts/Align.git
@@ -217,4 +213,8 @@
 [submodule "bundle/L9"]
 	path = bundle/L9
 	url = https://github.com/vim-scripts/L9.git
+    ignore = dirty
+[submodule "bundle/markdown"]
+	path = bundle/markdown
+	url = https://github.com/hallison/vim-markdown.git
     ignore = dirty
