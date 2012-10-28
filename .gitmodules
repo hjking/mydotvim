@@ -87,7 +87,7 @@
 	url = https://github.com/vim-scripts/vimwiki.git
 [submodule "bundle/command-t"]
 	path = bundle/command-t
-	url = http://github.com/vim-scripts/Command-T.git
+	url = https://github.com/wincent/Command-T.git
 [submodule "bundle/ColorV"]
 	path = bundle/ColorV
 	url = https://github.com/Rykka/ColorV.git
@@ -163,3 +163,9 @@
 [submodule "bundle/markdown"]
 	path = bundle/markdown
 	url = https://github.com/hallison/vim-markdown.git
+[submodule "bundle/buftabs"]
+	path = bundle/buftabs
+	url = https://github.com/vim-scripts/buftabs.git
+[submodule "bundle/commentary"]
+	path = bundle/commentary
+	url = https://github.com/tpope/vim-commentary.git
