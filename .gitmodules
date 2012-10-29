@@ -233,15 +233,20 @@
 [submodule "bundle/vim-git"]
 	path = bundle/vim-git
 	url = https://github.com/tpope/vim-git.git
+    ignore = dirty
 [submodule "bundle/DrawIt"]
 	path = bundle/DrawIt
 	url = https://github.com/vim-scripts/DrawIt.git
+    ignore = dirty
 [submodule "bundle/ColorV"]
 	path = bundle/ColorV
 	url = https://github.com/Rykka/colorv.vim.git
+    ignore = dirty
 [submodule "bundle/galaxy"]
 	path = bundle/galaxy
 	url = https://github.com/Rykka/galaxy.vim.git
+    ignore = dirty
 [submodule "bundle/headlights"]
 	path = bundle/headlights
 	url = https://github.com/mbadran/headlights.git
+    ignore = dirty
