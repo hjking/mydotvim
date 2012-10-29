@@ -22,10 +22,6 @@
 	path = bundle/cucumber
 	url = https://github.com/vim-scripts/cucumber.zip.git
     ignore = dirty
-[submodule "bundle/git"]
-	path = bundle/git
-	url = https://github.com/vim-scripts/git.zip.git
-    ignore = dirty
 [submodule "bundle/nerdcommenter"]
 	path = bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
