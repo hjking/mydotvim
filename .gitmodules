@@ -245,6 +245,4 @@
 [submodule "bundle/vim-colorschemes"]
 	path = bundle/vim-colorschemes
 	url = https://github.com/flazz/vim-colorschemes.git
-[submodule "unimpaired"]
-	path = unimpaired
-	url = https://github.com/tpope/vim-unimpaired.git
+    ignore = dirty
