@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-29 11:46:09
+" Last Modified:     2012-10-29 14:19:48
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -84,6 +84,7 @@ if v:version < 703 || !has('python')
 endif
 
 call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
 
 "-----------------------------------------------------------
 " Encoding Setting
@@ -276,36 +277,41 @@ set autochdir          " Change the current working dir whenever open a file,
 "-----------------------------------------------------------
 """ Status Line
 "-----------------------------------------------------------
-" set ruler                     " Show the line and column number of the cursor position
-" set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+if has('cmdline_info')
+    set ruler                     " Show the line and column number of the cursor position
+    " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+endif
 " Color of Status Line
-"highlight StatusLine guifg=SlateBlue guibg=Yellow
-"highlight StatusLine guifg=SlateBlue guibg=#008800
-highlight StatusLine guifg=orange guibg=#008800 gui=underline
-highlight StatusLineNC guifg=Gray guibg=White
-set laststatus=2           " always show the status line
-hi User1 guifg=yellow
-hi User2 guifg=lightblue
-hi User3 guifg=red
-hi User4 guifg=cyan
-hi User5 guifg=lightgreen
-hi User6 gui=bold,inverse guifg=red term=bold,inverse cterm=bold,inverse ctermfg=red
-" set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
-" set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-" set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-set statusline=
-set statusline+=[%f]                " file name
-set statusline+=[Format=%{&ff}]     " file format
-set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
-set statusline+=%y                  " file type
-set statusline+=%6*%m%*             " modified flag
-set statusline+=%r                  " readonly flag
-set statusline+=%h                  " 
-set statusline+=%w
-set statusline+=%=                  " left/right separator
-set statusline+=%b(0X%B)
-set statusline+=[Pos=%l,%c%V]
-set statusline+=[%l/%L(%p%%)]       " cursor position
+if has('statusline')
+    "highlight StatusLine guifg=SlateBlue guibg=Yellow
+    "highlight StatusLine guifg=SlateBlue guibg=#008800
+    highlight StatusLine guifg=orange guibg=#008800 gui=underline
+    highlight StatusLineNC guifg=Gray guibg=White
+    set laststatus=2           " always show the status line
+    hi User1 guifg=yellow
+    hi User2 guifg=lightblue
+    hi User3 guifg=red
+    hi User4 guifg=cyan
+    hi User5 guifg=lightgreen
+    hi User6 gui=bold,inverse guifg=red term=bold,inverse cterm=bold,inverse ctermfg=red
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    set statusline=
+    set statusline+=[%f]                " file name
+    set statusline+=[Format=%{&ff}]     " file format
+    set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
+    set statusline+=%y                  " file type
+    set statusline+=%6*%m%*             " modified flag
+    set statusline+=%r                  " readonly flag
+    set statusline+=%h                  " 
+    set statusline+=%w
+    set statusline+=%=                  " left/right separator
+    set statusline+=%b(0X%B)
+    set statusline+=[Pos=%l,%c%V]
+    set statusline+=[%l/%L(%p%%)]       " cursor position
+endif
 set showcmd                     " display incomplete commands
 
 "-----------------------------------------------------------
@@ -326,7 +332,7 @@ set magic           " Changes the special characters that can be used in search 
 "-----------------------------------------------------------
 set nofoldenable            " disable folding
 if exists("&foldlevel")
-set foldlevel=999           " make it really high, so they're not displayed by default
+    set foldlevel=999           " make it really high, so they're not displayed by default
 endif
 set foldenable              " turn on folding
 set foldmarker={,}
@@ -337,7 +343,17 @@ set foldlevel=5             " Don't autofold anything (but I can still fold manu
 set foldlevelstart=1000     " fdls:  fold level start
 set foldopen-=search        " don't open folds when you search into them
 "set foldopen-=undo         " don't open folds when you undo stuff
-
+""" Code folding options
+nmap <leader>f0 :set foldlevel=0<CR>
+nmap <leader>f1 :set foldlevel=1<CR>
+nmap <leader>f2 :set foldlevel=2<CR>
+nmap <leader>f3 :set foldlevel=3<CR>
+nmap <leader>f4 :set foldlevel=4<CR>
+nmap <leader>f5 :set foldlevel=5<CR>
+nmap <leader>f6 :set foldlevel=6<CR>
+nmap <leader>f7 :set foldlevel=7<CR>
+nmap <leader>f8 :set foldlevel=8<CR>
+nmap <leader>f9 :set foldlevel=9<CR>
 
 "-----------------------------------------------------------
 " File Format
@@ -422,9 +438,12 @@ set complete-=u
 set complete-=i
 set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
 set completeopt=longest,menu    " Insert mode completetion
-set wildmode=longest:full,full
+" set wildmode=longest:full,full
+set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
 set wildmenu                    " command-line completion operates in an enhanced mode
-set wildignore=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
+set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
 
 "-----------------------------------------------------------
 "Auto Complete Pairs
@@ -669,6 +688,9 @@ nnoremap <silent> <leader>w :write<CR>
 
 " ,W - clear trailing whitespace
 nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
+
+"clearing highlighted search
+nmap <silent> <leader>/ :nohlsearch<CR>
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -980,6 +1002,7 @@ let NERDChristmasTree=1                     " more colorful
 let NERDTreeWinPos="left"                   " put NERDTree at left
 let NERDTreeWinSize=25                      " set size
 let NERDTreeShowLineNumbers=0               " show line number
+let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
 
 "-----------------------------------------------------------
 "Scope
@@ -1298,7 +1321,7 @@ if index(g:pathogen_disabled, 'tagbar') == -1
       let g:tagbar_singleclick = 1
       let g:tagbar_usearrows = 1
 
-      nnoremap <silent> ,t :TagbarToggle<CR>
+      nnoremap <silent><leader>tt :TagbarToggle<CR>
     endif
 endif
 " }}}
@@ -1406,3 +1429,25 @@ if index(g:pathogen_disabled, 'gundo') == -1
     nnoremap <silent> ,u :GundoToggle<CR>
 endif
 
+"-----------------------------------------------------------
+" ctrlp
+if index(g:pathogen_disabled, 'ctrlp') == -1
+    " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+    let g:ctrlp_custom_ignore = {
+        \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+        \ 'file': '\v\.(exe|so|dll)$'
+        \ }
+    let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    ""let g:ctrlp_user_command = {
+    ""        \ 'types': {
+    ""            \ 1: ['.git', 'cd %s && git ls-files'],
+    ""            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    ""            \ },
+    ""        \ 'fallback': 'find %s -type f'
+    ""        \ }
+endif
+
+""if filereadable(expand("~/.vimrc.bundles.local"))
+""    source ~/.vimrc.bundles.local
+""endif
