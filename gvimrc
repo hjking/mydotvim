@@ -16,7 +16,7 @@ let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af',
             \ 'candy', 'calmar256-dark', 'candycode', 'colorer',
             \ 'dante', 'fnaqevan', 'fruity',
             \ 'koehler', 'molokai', 'metacosm',
-            \ 'tango', 'tir_black', 'winter', 'desert256']
+            \ 'tango', 'tir_black', 'winter', 'desert256', 'galaxy']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
 " Display Settings

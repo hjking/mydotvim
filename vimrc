@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-29 21:07:00
+" Last Modified:     2012-10-29 22:17:54
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -95,6 +95,9 @@ call pathogen#helptags()
 " Encoding Setting
 "-----------------------------------------------------------
 if has("multi_byte")
+    if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+        set ambiwidth=double
+    endif
     " Set fileencoding priority
     if getfsize(expand("%")) > 0
         set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
@@ -122,9 +125,8 @@ if has("multi_byte")
         set encoding=cp932                  " euc-jp
         set termencoding=cp932              " euc-jp
         set fileencoding=cp932              " euc-jp
-    endif
-    " Detect UTF-8 locale, and replace CJK setting if needed
-    if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
+    elseif v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
+        " Detect UTF-8 locale, and replace CJK setting if needed
         set encoding=utf-8
         set termencoding=utf-8
         set fileencoding=utf-8
@@ -588,11 +590,6 @@ inoremap    <C-Z> <C-O>u
 " comma always followed by a space
 " inoremap  ,  ,<Space>
 
-"Bash like
-cnoremap <C-A>    <Home>
-cnoremap <C-E>    <End>
-cnoremap <C-K>    <C-U>
-
 " set filetype to verilog
 "map ,fv     :set ft=verilog<CR>
 map ,fv     :set ft=verilog<CR>
@@ -706,11 +703,11 @@ if has("autocmd")
     autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
     autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,Verilog_SystemVerilog,sv,vimwiki set textwidth=80
     autocmd FileType lisp set ts=2
-    au  FileType help set nonu
+    autocmd FileType help set nonu
     autocmd FileType lisp set softtabstop=2
     autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype Verilog_SystemVerilog
 "    autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
-    autocmd BufReadPre,BufNewFile,BufRead *.do *.tree     setfiletype tcl
+    autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
     autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
     autocmd BufReadPost * 
@@ -989,7 +986,19 @@ autocmd BufRead,BufNew :call UMiniBufExplorer
 if v:version < '702'
     let g:loaded_netrwPlugin = 1
 else
-    let g:netrw_winsize=25
+    let g:netrw_winsize        = 25
+    let g:netrw_keepdir        = 0
+    " let g:netrw_preview        = 0
+    let g:netrw_liststyle      = 0
+    let g:netrw_browse_split   = 0
+    let g:netrw_cursor         = 3
+    let g:netrw_banner         = 0
+    let g:netrw_mousemaps      = 0
+    let g:netrw_special_syntax = 1
+    let g:netrw_timefmt        = "%y-%m-%d  %H-%M-%S"
+    let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
+    let g:netrw_cursor         = 0
+    let g:netrw_errorlvl       = 1
     map fe :Texplore<CR>            " open in new tab
     map vfe :Vexplore<CR>           " vertical split
     nmap <silent> <leader>fe :Sexplore!<cr>
@@ -1235,7 +1244,6 @@ cno $q <C-\>eDeleteTillSlash()<cr>
 cnoremap <C-A>      <Home>
 cnoremap <C-E>      <End>
 cnoremap <C-K>      <C-U>
-
 cnoremap <C-P> <Up>
 cnoremap <C-N> <Down>
 
