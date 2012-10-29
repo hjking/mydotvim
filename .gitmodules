@@ -26,10 +26,6 @@
 	path = bundle/git
 	url = https://github.com/vim-scripts/git.zip.git
     ignore = dirty
-[submodule "bundle/Headlights"]
-	path = bundle/Headlights
-	url = https://github.com/vim-scripts/Headlights.git
-    ignore = dirty
 [submodule "bundle/nerdcommenter"]
 	path = bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
@@ -118,14 +114,6 @@
 	path = bundle/command-t
 	url = https://github.com/wincent/Command-T.git
     ignore = dirty
-[submodule "bundle/ColorV"]
-	path = bundle/ColorV
-	url = https://github.com/Rykka/ColorV.git
-    ignore = dirty
-[submodule "bundle/fugitive"]
-	path = bundle/fugitive
-	url = https://github.com/tpope/vim-fugitive.git
-    ignore = dirty
 [submodule "bundle/cscope_win"]
 	path = bundle/cscope_win
 	url = https://github.com/vim-scripts/cscope_win.git
@@ -133,14 +121,6 @@
 [submodule "bundle/Decho"]
 	path = bundle/Decho
 	url = https://github.com/vim-scripts/Decho.git
-    ignore = dirty
-[submodule "bundle/DrawIt"]
-	path = bundle/DrawIt
-	url = https://github.com/vim-scripts/DrawIt.git
-    ignore = dirty
-[submodule "bundle/galaxy"]
-	path = bundle/galaxy
-	url = https://github.com/Rykka/vim-galaxy.git
     ignore = dirty
 [submodule "bundle/molokai"]
 	path = bundle/molokai
@@ -249,6 +229,8 @@
 [submodule "bundle/gitv"]
 	path = bundle/gitv
 	url = https://github.com/gregsexton/gitv.git
+    ignore = dirty
 [submodule "bundle/unimpaired"]
-	path = bundle/unimpaired
-	url = https://github.com/tpope/vim-unimpaired.git
+    path = bundle/unimpaired
+    url = https://github.com/tpope/vim-unimpaired.git
+    ignore = dirty
