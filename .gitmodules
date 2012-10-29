@@ -242,3 +242,9 @@
 	path = bundle/VisIncr
 	url = https://github.com/vim-scripts/VisIncr.git
     ignore = dirty
+[submodule "bundle/vim-colorschemes"]
+	path = bundle/vim-colorschemes
+	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "unimpaired"]
+	path = unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
