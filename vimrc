@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-29 17:40:38
+" Last Modified:     2012-10-29 21:07:00
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -83,8 +83,10 @@ if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
 endif
 
-call add(g:pathogen_disabled, 'ColorV')
-call add(g:pathogen_disabled, 'galaxy')
+if v:version < 702
+    call add(g:pathogen_disabled, 'ColorV')
+    call add(g:pathogen_disabled, 'galaxy')
+endif
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -693,7 +695,7 @@ nnoremap <silent> <leader>w :write<CR>
 nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
 
 "clearing highlighted search
-nmap <silent> <leader>/ :nohlsearch<CR>
+nmap <silent> <leader>\ :nohlsearch<CR>
 
 "-----------------------------------------------------------
 " AutoCommands
