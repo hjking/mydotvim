@@ -242,3 +242,6 @@
 [submodule "bundle/galaxy"]
 	path = bundle/galaxy
 	url = https://github.com/Rykka/galaxy.vim.git
+[submodule "bundle/headlights"]
+	path = bundle/headlights
+	url = https://github.com/mbadran/headlights.git

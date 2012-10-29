@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-29 14:19:48
+" Last Modified:     2012-10-29 17:40:38
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -82,6 +82,9 @@ endif
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
 endif
+
+call add(g:pathogen_disabled, 'ColorV')
+call add(g:pathogen_disabled, 'galaxy')
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
