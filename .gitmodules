@@ -273,3 +273,6 @@
 [submodule "bundle/vim-alignta"]
 	path = bundle/vim-alignta
 	url = https://github.com/h1mesuke/vim-alignta.git
+[submodule "bundle/AutoComplPop"]
+	path = bundle/AutoComplPop
+	url = https://github.com/tonybyrne/AutoComplPop.git
