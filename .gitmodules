@@ -288,3 +288,6 @@
 [submodule "bundle/ShowMarks"]
 	path = bundle/ShowMarks
 	url = https://github.com/bootleq/ShowMarks.git
+[submodule "bundle/FencView"]
+	path = bundle/FencView
+	url = https://github.com/vim-scripts/FencView.vim.git
