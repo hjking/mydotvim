@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 13:18:42
+" Last Modified:     2012-10-30 13:38:10
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -56,6 +56,10 @@ if v:version < 700 || !has('patch167')
     call add(g:pathogen_disabled, 'tagbar')
 endif
 
+if v:version < 701
+    call add(g:pathogen_disabled, 'vim-alignta')
+endif
+
 if v:version < 702
     call add(g:pathogen_disabled, 'Zoomwin')
     call add(g:pathogen_disabled, 'Vimball')
@@ -81,6 +85,9 @@ if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
     call add(g:pathogen_disabled, 'numbers')
 endif
+
+" Disable on purpose
+call add(g:pathogen_disabled, 'Align')
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -1456,6 +1463,44 @@ inoremap <buffer> /*          /**/<Left><Left>
 inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
 inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
 inoremap <buffer> <Leader>/*  /*
+
+"-----------------------------------------------------------
+" vim-cycle
+if index(g:pathogen_disabled, 'vim-cycle') == -1
+    let g:cycle_default_groups = [
+          \   [['true', 'false']],
+          \   [['yes', 'no']],
+          \   [['on', 'off']],
+          \   [['+', '-']],
+          \   [['>', '<']],
+          \   [['"', "'"]],
+          \   [['==', '!=']],
+          \   [['0', '1']],
+          \   [['and', 'or']],
+          \   [['in', 'out']],
+          \   [['up', 'down']],
+          \   [['min', 'max']],
+          \   [['get', 'set']],
+          \   [['add', 'remove']],
+          \   [['to', 'from']],
+          \   [['read', 'write']],
+          \   [['save', 'load', 'restore']],
+          \   [['next', 'previous', 'prev']],
+          \   [['only', 'except']],
+          \   [['without', 'with']],
+          \   [['exclude', 'include']],
+          \   [['width', 'height']],
+          \   [['asc', 'desc']],
+          \   [['是', '否']],
+          \   [['上', '下']],
+          \   [['男', '女']],
+          \   [['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+          \     'Friday', 'Saturday'], ['hard_case', {'name': 'Days'}]],
+          \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
+          \   [['（:）', '「:」', '『:』'], 'sub_pairs'],
+          \ ]
+endif
+
 
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
