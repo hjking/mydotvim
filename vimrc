@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 12:13:59
+" Last Modified:     2012-10-30 13:18:42
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -829,13 +829,13 @@ map <F9> :!python.exe
 "-----------------------------------------------------------
 " Verilog Automatic
 "-----------------------------------------------------------
-:inoremap       iav     <ESC>:Allpn<CR>
+inoremap        iav     <ESC>:Allpn<CR>
 map             :iav        :Allpn<CR>
 " :inoremap     av      <ESC>:Allcom<CR>
 " map               :av     :Allcom<CR>
-:inoremap       ihv             <ESC>:AddHeader<CR>
+inoremap        ihv             <ESC>:AddHeader<CR>
 map             <leader>hv      :AddHeader<CR>
-:inoremap       icv             <ESC>:Acontent<CR>
+inoremap        icv             <ESC>:Acontent<CR>
 map             <leader>cv      :Acontent<CR>
 
 
@@ -1452,6 +1452,10 @@ if index(g:pathogen_disabled, 'numbers') == -1
     nnoremap <leader>nt :NumbersToggle<CR>
 endif
 
+inoremap <buffer> /*          /**/<Left><Left>
+inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
+inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
+inoremap <buffer> <Leader>/*  /*
 
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
