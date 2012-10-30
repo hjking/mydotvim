@@ -306,3 +306,6 @@
 	path = bundle/EnhCommentify
 	url = https://github.com/vim-scripts/EnhCommentify.vim.git
     ignore = dirty
+[submodule "bundle/minibufexpl"]
+	path = bundle/minibufexpl
+	url = https://github.com/fholgado/minibufexpl.vim.git
