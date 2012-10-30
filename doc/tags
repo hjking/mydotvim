@@ -13,16 +13,6 @@
 <Leader>star	mark.txt	/*<Leader>star*
 DisableTimestamp	timestamp.txt	/*DisableTimestamp*
 EnableTimestamp	timestamp.txt	/*EnableTimestamp*
-EnhComm-Bugs	EnhancedCommentify.txt	/*EnhComm-Bugs*
-EnhComm-Credits	EnhancedCommentify.txt	/*EnhComm-Credits*
-EnhComm-EnhCommentify	EnhancedCommentify.txt	/*EnhComm-EnhCommentify*
-EnhComm-Fallbacks	EnhancedCommentify.txt	/*EnhComm-Fallbacks*
-EnhComm-Keybindings	EnhancedCommentify.txt	/*EnhComm-Keybindings*
-EnhComm-NewLanguages	EnhancedCommentify.txt	/*EnhComm-NewLanguages*
-EnhComm-Options	EnhancedCommentify.txt	/*EnhComm-Options*
-EnhComm-Support	EnhancedCommentify.txt	/*EnhComm-Support*
-EnhancedCommentify	EnhancedCommentify.txt	/*EnhancedCommentify*
-EnhancedCommentify()	EnhancedCommentify.txt	/*EnhancedCommentify()*
 GetLatestVimScripts	pi_getscript.txt	/*GetLatestVimScripts*
 GetLatestVimScripts-copyright	pi_getscript.txt	/*GetLatestVimScripts-copyright*
 GetLatestVimScripts_dat	pi_getscript.txt	/*GetLatestVimScripts_dat*
