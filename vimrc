@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 11:57:00
+" Last Modified:     2012-10-30 12:13:59
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -699,14 +699,14 @@ nmap <silent> <leader>\ :nohlsearch<CR>
 " AutoCommands
 "-----------------------------------------------------------
 if has("autocmd") 
-    autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,Verilog_SystemVerilog,sv set number
+    autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
     autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
     autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
-    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,Verilog_SystemVerilog,sv,vimwiki set textwidth=80
+    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,sv,vimwiki set textwidth=80
     autocmd FileType lisp set ts=2
     autocmd FileType help set nonu
     autocmd FileType lisp set softtabstop=2
-    autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype Verilog_SystemVerilog
+    autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
 "    autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
     autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
@@ -1218,22 +1218,6 @@ let g:rainbow_load_separately = [
     \   ]
 let g:rainbow_guifgs = ['RoyalBlue3', 'SeaGreen3', 'DarkOrange3', 'FireBrick',]
 
-" function s:rainbow_parenthsis_load()
-""if exists("g:btm_rainbow_color") && g:btm_rainbow_color
-""    call rainbow_parenthsis#LoadSquare ()
-""    call rainbow_parenthsis#LoadRound ()
-""    call rainbow_parenthsis#Activate ()
-""endif
-" endfunction
-
-" au Syntax python call s:rainbow_parenthsis_load()
-" "au Syntax verilog call s:rainbow_parenthsis_load()
-" au Syntax Verilog_SystemVerilog call s:rainbow_parenthsis_load()
-" au Syntax vim call s:rainbow_parenthsis_load()
-" au Syntax sh call s:rainbow_parenthsis_load()
-" au Syntax csh call s:rainbow_parenthsis_load()
-" au Syntax conf call s:rainbow_parenthsis_load()
-" au Syntax c call s:rainbow_parenthsis_load()
 
 """""""""""""""""""""""""""""""""""
 "" Command Line mode
