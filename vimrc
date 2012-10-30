@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 11:37:30
+" Last Modified:     2012-10-30 11:49:07
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -593,7 +593,7 @@ inoremap    <C-Z> <C-O>u
 
 " set filetype to verilog
 "map ,fv     :set ft=verilog<CR>
-map ,fv     :set ft=verilog<CR>
+map ,fv     :set ft=Verilog_SystemVerilog<CR>
 
 " Fold
 nmap <silent> <leader>zo zO
