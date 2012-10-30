@@ -291,3 +291,6 @@
 [submodule "bundle/FencView"]
 	path = bundle/FencView
 	url = https://github.com/vim-scripts/FencView.vim.git
+[submodule "bundle/utl"]
+	path = bundle/utl
+	url = https://github.com/vim-scripts/utl.vim.git
