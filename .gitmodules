@@ -281,3 +281,7 @@
 [submodule "bundle/AnsiEsc"]
 	path = bundle/AnsiEsc
 	url = https://github.com/jakar/vim-AnsiEsc.git
+    ignore = dirty
+[submodule "bundle/netrw"]
+	path = bundle/netrw
+	url = https://github.com/vim-scripts/netrw.vim.git
