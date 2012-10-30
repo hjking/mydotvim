@@ -262,3 +262,6 @@
 [submodule "bundle/verilog_systemverilog"]
 	path = bundle/verilog_systemverilog
 	url = https://github.com/kshenoy/verilog_systemverilog.vim.git
+[submodule "bundle/vim-cycle"]
+	path = bundle/vim-cycle
+	url = https://github.com/bootleq/vim-cycle.git
