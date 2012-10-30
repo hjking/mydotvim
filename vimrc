@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 13:58:36
+" Last Modified:     2012-10-30 14:24:58
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -88,6 +88,7 @@ endif
 
 " Disable on purpose
 call add(g:pathogen_disabled, 'Align')
+call add(g:pathogen_disabled, 'numbers')
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -1452,7 +1453,8 @@ endif
 "-----------------------------------------------------------
 " numbers
 if index(g:pathogen_disabled, 'numbers') == -1
-    nnoremap <leader>nt :NumbersToggle<CR>
+    ""nnoremap <leader>nt :NumbersToggle<CR>
+    nnoremap <F10> :NumbersToggle<CR>
 endif
 
 inoremap <buffer> /*          /**/<Left><Left>
