@@ -259,3 +259,6 @@
 [submodule "bundle/unite"]
 	path = bundle/unite
 	url = https://github.com/Shougo/unite.vim.git
+[submodule "bundle/verilog_systemverilog"]
+	path = bundle/verilog_systemverilog
+	url = https://github.com/kshenoy/verilog_systemverilog.vim.git
