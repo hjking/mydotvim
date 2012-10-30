@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 10:46:51
+" Last Modified:     2012-10-30 11:08:49
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -52,11 +52,10 @@ elseif MySys() == "linux"
 endif
 let g:pathogen_disabled = []
 
-" pathogen 管理vba格式的插件
-"   :e name.vba
-"   :!mkdir $VIM\vimfiles\bundle\name
-"   :UseVimball $VIM\vimfiles\bundle\name
-" }}}
+if v:version < 700 || !has('patch167')
+    call add(g:pathogen_disabled, 'tagbar')
+endif
+
 if v:version < 702
     call add(g:pathogen_disabled, 'Zoomwin')
     call add(g:pathogen_disabled, 'Vimball')
@@ -64,9 +63,12 @@ if v:version < 702
     call add(g:pathogen_disabled, 'cscope_win')
     call add(g:pathogen_disabled, 'syntastic')
     call add(g:pathogen_disabled, 'powerline')
+    call add(g:pathogen_disabled, 'unite')
+    call add(g:pathogen_disabled, 'ColorV')
+    call add(g:pathogen_disabled, 'galaxy')
 endif
 
-if v:version < '702' || !has('float')
+if v:version < 702 || !has('float')
     call add(g:pathogen_disabled, 'L9')
     call add(g:pathogen_disabled, 'FuzzyFinder')
 endif
@@ -75,22 +77,20 @@ if v:version < 702
     let g:loaded_acp = 1
 endif
 
-if v:version < 700 || !has('patch167')
-    call add(g:pathogen_disabled, 'tagbar')
-endif
-
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
     call add(g:pathogen_disabled, 'numbers')
 endif
 
-if v:version < 702
-    call add(g:pathogen_disabled, 'ColorV')
-    call add(g:pathogen_disabled, 'galaxy')
-endif
-
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+
+" pathogen 管理vba格式的插件
+"   :e name.vba
+"   :!mkdir $VIM\vimfiles\bundle\name
+"   :UseVimball $VIM\vimfiles\bundle\name
+" }}}
+
 
 "-----------------------------------------------------------
 " Encoding Setting
@@ -142,7 +142,7 @@ fun! ViewUTF8()
 endfun
 
 fun! UTF8()
-    set encoding=utf-8                                  
+    set encoding=utf-8
     set termencoding=big5
     set fileencoding=utf-8
     set fileencodings=ucs-bom,big5,utf-8,latin1
