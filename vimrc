@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 13:38:10
+" Last Modified:     2012-10-30 13:50:01
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -389,7 +389,7 @@ set autoindent              " Copy indent from current line when starting a new 
 set smartindent             " Do smart autoindenting when starting a new line
 set cindent                 " Enables automatic C program indenting
 
-if v:version > '703'
+if v:version > 703
     set cryptmethod=blowfish
 endif
 
@@ -991,7 +991,7 @@ autocmd BufRead,BufNew :call UMiniBufExplorer
 "i           切换显示方式               "R    改名文件或目录
 "s           选择排序方式               "x    定制浏览方式，使用你指定的程序打开该文件
 "
-if v:version < '702'
+if v:version < 702
     let g:loaded_netrwPlugin = 1
 else
     let g:netrw_winsize        = 25
@@ -1063,7 +1063,7 @@ map ca :Calendar<CR>
 "-----------------------------------------------------------
 " lookupfile setting
 "-----------------------------------------------------------
-if v:version < '701'
+if v:version < 701
     let g:loaded_lookupfile = 1
 else
     let g:LookupFile_MinPatLength = 2
@@ -1252,7 +1252,6 @@ let g:loaded_vis = 1
 " _ Powerline {{{
 " Powerline and neocomplcache require Vim 7.2
 if index(g:pathogen_disabled, 'powerline') == -1
-""if v:version > '702'
     if !has('gui_running')
         call add(g:pathogen_disabled, 'powerline')
     endif
@@ -1275,7 +1274,6 @@ endif
 "-----------------------------------------------------------
 " Syntastic
 "-----------------------------------------------------------
-""if v:version > '702'
 if index(g:pathogen_disabled, 'syntastic') == -1
     let g:syntastic_enable_signs=1
     let g:syntastic_auto_loc_list=1
@@ -1335,7 +1333,7 @@ endif
 " neocomplcache
 " {{{
 if index(g:pathogen_disabled, 'neocomplcache') == -1
-    if v:version > '702'
+    if v:version > 702
       let g:neocomplcache_enable_at_startup = 1
       let g:neocomplcache_enable_auto_select = 1
       let g:neocomplcache_enable_smart_case = 1
@@ -1415,7 +1413,6 @@ nnoremap <silent> ,i :IndentGuidesToggle<CR>
 " fuzzy finder
 " {{{
 " FuzzyFinder/L9 require Vim 7.2 and floating-point support
-""if v:version > '702' && has('float')
 if index(g:pathogen_disabled, 'FuzzyFinder') == -1
     ""call add(g:pathogen_disabled, 'l9')
     ""call add(g:pathogen_disabled, 'fuzzyfinder')
@@ -1429,7 +1426,6 @@ endif
 "-----------------------------------------------------------
 " gundo
 " Gundo requires Vim 7.3 and Python
-""if v:version > '703' && has('python')
 if index(g:pathogen_disabled, 'gundo') == -1
     nnoremap <silent> ,u :GundoToggle<CR>
 endif
