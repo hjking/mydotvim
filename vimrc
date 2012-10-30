@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-29 22:17:54
+" Last Modified:     2012-10-30 10:46:51
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -81,6 +81,7 @@ endif
 
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
+    call add(g:pathogen_disabled, 'numbers')
 endif
 
 if v:version < 702
@@ -1460,6 +1461,13 @@ if index(g:pathogen_disabled, 'ctrlp') == -1
     ""        \ 'fallback': 'find %s -type f'
     ""        \ }
 endif
+
+"-----------------------------------------------------------
+" numbers
+if index(g:pathogen_disabled, 'numbers') == -1
+    nnoremap <leader>nt :NumbersToggle<CR>
+endif
+
 
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
