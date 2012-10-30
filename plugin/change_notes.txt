@@ -1,9 +1,0 @@
- @ 2010-11-26 18:11
-    add camelcasemotion.vim
-    netrwPlugin.vim
-    view_diff.vim
-    ZoomWin.vim
- @ 2011-11-22 13:38
-    add rainbow_parenthis.vim
- @ 2011-11-22 13:38
-    update yankring.vim
