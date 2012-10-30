@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 13:50:01
+" Last Modified:     2012-10-30 13:58:36
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1282,7 +1282,7 @@ endif
 " ------------------------------------------------------------
 "  Setting for Align
 " ------------------------------------------------------------
-let g:DrChipTopLvlMenu = '' " remove 'DrChip' menu
+let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
 
 " ------------------------------------------------------------
 "  Setting for headlighes
