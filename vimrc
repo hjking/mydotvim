@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 10:54:00
+" Last Modified:     2012-10-31 13:47:13
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1322,7 +1322,7 @@ let g:loaded_totd = 1
 " {{{
 if index(g:pathogen_disabled, 'tagbar') == -1
     if v:version > 700 && has('patch167')
-      let g:tagbar_width = 31
+      let g:tagbar_width = 30
       let g:tagbar_autofocus = 1
       let g:tagbar_sort = 0
       let g:tagbar_compact = 1
