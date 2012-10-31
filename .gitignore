@@ -13,3 +13,5 @@ doc/tags-jp
 /vim-support/templates/perl.templates
 /vim-support/templates/regex.templates
 /vim-support/templates/statements.templates
+tags
+tags-cn
