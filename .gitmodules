@@ -190,10 +190,6 @@
 	path = bundle/markdown
 	url = https://github.com/hallison/vim-markdown.git
     ignore = dirty
-[submodule "bundle/buftabs"]
-	path = bundle/buftabs
-	url = https://github.com/vim-scripts/buftabs.git
-    ignore = dirty
 [submodule "bundle/commentary"]
 	path = bundle/commentary
 	url = https://github.com/tpope/vim-commentary.git
