@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 13:56:37
+" Last Modified:     2012-10-31 16:24:52
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1017,6 +1017,7 @@ else
     map vfe :Vexplore<CR>           " vertical split
     nmap <silent> <leader>fe :Sexplore!<cr>
 endif
+
 "-----------------------------------------------------------
 " NERD Tree  File Manager
 "-----------------------------------------------------------
@@ -1030,7 +1031,12 @@ let NERDChristmasTree=1                     " more colorful
 let NERDTreeWinPos="left"                   " put NERDTree at left
 let NERDTreeWinSize=25                      " set size
 let NERDTreeShowLineNumbers=0               " show line number
-let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
+let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
+" setting root dir in NT also sets VIM's cd"
+let NERDTreeChDirMode=2
+let NERDTreeShowHidden=1
+" single click to open directory
+let NERDTreeMouseMode = 2
 
 "-----------------------------------------------------------
 "Scope
@@ -1284,11 +1290,6 @@ if index(g:pathogen_disabled, 'Vim-Support') == -1
 endif
 " }}}
 
-" ------------------------------------------------------------
-" tips of the day (totd)
-" ------------------------------------------------------------
-let g:loaded_totd = 1
-
 "-----------------------------------------------------------
 " tagbar
 " {{{
@@ -1412,6 +1413,7 @@ endif
 " ctrlp
 if index(g:pathogen_disabled, 'ctrlp') == -1
     " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+    let g:ctrlp_map = '<Leader>p'
     let g:ctrlp_custom_ignore = {
         \ 'dir':  '\v[\/]\.(git|hg|svn)$',
         \ 'file': '\v\.(exe|so|dll)$'

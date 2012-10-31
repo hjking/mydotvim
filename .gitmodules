@@ -86,10 +86,6 @@
 	path = bundle/surround
 	url = https://github.com/tpope/vim-surround.git
     ignore = dirty
-[submodule "bundle/vimtips"]
-	path = bundle/vimtips
-	url = https://github.com/vim-scripts/vimtips.zip.git
-    ignore = dirty
 [submodule "bundle/winmanager"]
 	path = bundle/winmanager
 	url = https://github.com/vim-scripts/winmanager.git
