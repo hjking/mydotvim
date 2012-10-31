@@ -8,4 +8,4 @@ netrw vs NERDTree
 
 autocomplpop vs neocompletecache
 
-
+align vs alignta
