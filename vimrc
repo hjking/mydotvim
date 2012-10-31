@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 16:24:52
+" Last Modified:     2012-10-31 16:30:18
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -728,7 +728,7 @@ if has("autocmd")
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal g`\"" |
       \ endif
-"    autocmd BufWritePost $MYVIMRC so $MYVIMRC
+    autocmd BufWritePost .vimrc so %
     autocmd BufEnter * :syntax sync fromstart
 endif " has("autocmd")
 

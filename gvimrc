@@ -88,6 +88,9 @@ if has("gui_running")
 endif
 set scrolloff=3             " Keep 3 lines when cursor reach the top/bottom
 
+" autocmd
+autocmd BufWritePost .vimrc source % source ~/.gvimrc
+autocmd BufWritePost .gvimrc source %
 
 "-----------------------------------------------------------
 "gvim max size when open
