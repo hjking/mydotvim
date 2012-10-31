@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-30 14:24:58
+" Last Modified:     2012-10-31 10:54:00
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -70,6 +70,7 @@ if v:version < 702
     call add(g:pathogen_disabled, 'unite')
     call add(g:pathogen_disabled, 'ColorV')
     call add(g:pathogen_disabled, 'galaxy')
+	call add(g:pathogen_disabled, 'neosnippet')
 endif
 
 if v:version < 702 || !has('float')
@@ -89,6 +90,7 @@ endif
 " Disable on purpose
 call add(g:pathogen_disabled, 'Align')
 call add(g:pathogen_disabled, 'numbers')
+call add(g:pathogen_disabled, 'ultisnips')
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -1301,11 +1303,14 @@ let g:headlights_show_load_order = 0    " (Disabled)
 let g:headlights_debug_mode = 0         " (Disabled)
 
 " ------------------------------------------------------------
-"  Setting for vim-support
-" ------------------------------------------------------------
-let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
-let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
-let g:Vim_MapLeader  = ','
+"  vim-support
+" {{{
+if index(g:pathogen_disabled, 'Vim-Support') == -1
+    let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
+    let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
+    let g:Vim_MapLeader  = ','
+endif
+" }}}
 
 " ------------------------------------------------------------
 " tips of the day (totd)
@@ -1464,6 +1469,7 @@ inoremap <buffer> <Leader>/*  /*
 
 "-----------------------------------------------------------
 " vim-cycle
+" {{{
 if index(g:pathogen_disabled, 'vim-cycle') == -1
     let g:cycle_default_groups = [
           \   [['true', 'false']],
@@ -1498,7 +1504,31 @@ if index(g:pathogen_disabled, 'vim-cycle') == -1
           \   [['£¨:£©', '¡¸:¡¹', '¡º:¡»'], 'sub_pairs'],
           \ ]
 endif
+" }}}
 
+"-----------------------------------------------------------
+" Neosnippet
+" {{{
+if index(g:pathogen_disabled, 'Neosnippet') == -1
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+
+    " SuperTab like snippets behavior.
+    imap <expr><TAB> neosnippet#expandable() ?
+    "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable() ?
+    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+    " For snippet_complete marker.
+    if has('conceal')
+          set conceallevel=2 concealcursor=i
+    endif"
+
+    " use a different collection of snippets other than the built-in ones
+    let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
+endif
+" }}}
 
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
