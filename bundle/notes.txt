@@ -1,0 +1,11 @@
+Plugins Notes
+
+snipMate / UltiSnips / neosnippet
+
+Sparkup vs ZenCoding
+
+netrw vs NERDTree
+
+autocomplpop vs neocompletecache
+
+
