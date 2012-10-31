@@ -318,10 +318,6 @@
 	path = bundle/neosnippet
 	url = https://github.com/Shougo/neosnippet.git
     ignore = dirty
-[submodule "bundle/ultisnips"]
-	path = bundle/ultisnips
-	url = https://github.com/SirVer/ultisnips
-    ignore = dirty
 [submodule "bundle/snipmate-snippets"]
 	path = bundle/snipmate-snippets
 	url = https://github.com/honza/snipmate-snippets.git
