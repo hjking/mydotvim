@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 16:30:18
+" Last Modified:     2012-10-31 17:45:17
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -42,6 +42,7 @@ endfunction
 """ pathogen.vim {{{
 " auto load all plugins
 "-----------------------------------------------------------
+let g:pathogen_not_loaded = 1
 if MySys() == "windows"
     source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect()
@@ -88,7 +89,7 @@ if v:version < 703 || !has('python')
 endif
 
 " Disable on purpose
-if v:version < 704
+if exists('g:pathogen_not_loaded')
     call add(g:pathogen_disabled, 'Align')
     call add(g:pathogen_disabled, 'numbers')
     call add(g:pathogen_disabled, 'ultisnips')
