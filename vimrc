@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 10:54:00
+" Last Modified:     2012-10-31 13:56:37
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -88,9 +88,12 @@ if v:version < 703 || !has('python')
 endif
 
 " Disable on purpose
-call add(g:pathogen_disabled, 'Align')
-call add(g:pathogen_disabled, 'numbers')
-call add(g:pathogen_disabled, 'ultisnips')
+if v:version < 704
+    call add(g:pathogen_disabled, 'Align')
+    call add(g:pathogen_disabled, 'numbers')
+    call add(g:pathogen_disabled, 'ultisnips')
+    call add(g:pathogen_disabled, 'buftabs')
+endif
 
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
@@ -1183,37 +1186,6 @@ endfunction
 "-----------------------------------------------------------
 let g:yankring_enabled=0
 map <leader>yr :YRShow<cr>
-
-"global search and replace in all buffers with one command
-function AllBuffers(cmnd)
-  let cmnd = a:cmnd
-  let i = 1
-  while (i <= bufnr("$"))
-    if bufexists(i)
-      execute "buffer" i
-      execute cmnd
-    endif
-    let i = i+1
-  endwhile
-endfun
-
-
-"-----------------------------------------------------------
-" Auto commenting for "}"
-" au BufNewFile,BufRead *.c,*.cc,*.C,*.h,*.v,*.py imap } <ESC>:call CurlyBracket()<CR>a
-
-function CurlyBracket()
-  let l:my_linenum = line(".")
-  iunmap }
-  sil exe "normal i}"
-  imap } <ESC>:call CurlyBracket()<CR>
-  let l:result1 =  searchpair('{', '', '}', 'bW')
-  if (result1 > 0)
-    let l:my_string = substitute(getline("."), '^\s*\(.*\){', '\1', "")
-    sil exe ":" . l:my_linenum
-    sil exe "normal a //" . l:my_string
-  endif
-endfunction
 
 set isfname-==  " remove = from filename characters
 
