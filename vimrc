@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 22:22:51
+" Last Modified:     2012-11-01 12:56:41
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -68,20 +68,21 @@ if v:version < 702
     call add(g:pathogen_disabled, 'neocomplcache')
     call add(g:pathogen_disabled, 'cscope_win')
     call add(g:pathogen_disabled, 'syntastic')
-    call add(g:pathogen_disabled, 'powerline')
     call add(g:pathogen_disabled, 'unite')
     call add(g:pathogen_disabled, 'ColorV')
     call add(g:pathogen_disabled, 'galaxy')
 	call add(g:pathogen_disabled, 'neosnippet')
+    call add(g:pathogen_disabled, 'AutoComplPop')
+    call add(g:pathogen_disabled, 'netrw')
+endif
+
+if v:version < 702 || !has('gui_running')
+    call add(g:pathogen_disabled, 'powerline')
 endif
 
 if v:version < 702 || !has('float')
     call add(g:pathogen_disabled, 'L9')
     call add(g:pathogen_disabled, 'FuzzyFinder')
-endif
-
-if v:version < 702
-    let g:loaded_acp = 1
 endif
 
 if v:version < 703 || !has('python')
@@ -858,28 +859,30 @@ map             <leader>cv      :Acontent<CR>
 " [[  跳到前一个文件                    " ]]  跳到后一个文件
 " q   关闭taglist窗口                   " <F1>  显示帮助
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
-if MySys() == "windows"
-    let Tlist_Ctags_Cmd = './vimfiles/ctags58/ctags.exe'           "设置ctags的路径
-elseif MySys() == "linux"
-    let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+if pathogen#is_disabled('taglist') == 0
+    if MySys() == "windows"
+        let Tlist_Ctags_Cmd = './vimfiles/ctags58/ctags.exe'           "设置ctags的路径
+    elseif MySys() == "linux"
+        let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+    endif
+    let Tlist_Use_Right_Window=1                " display at right side
+    let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
+    let Tlist_Sort_Type = "name"                " sort by name
+    let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
+    let Tlist_Auto_Open=0                     " not auto open
+    let Tlist_Compact_Format=1                " compress
+    let Tlist_Enable_Fold_Column=0            " Do not show folding tree
+    " let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
+    " let Tlist_Show_Menu=1                     " show taglist menu
+    " let Tlist_Show_One_File=1           
+    " let Tlist_Auto_Update=1                   " auto update
+    " let Tlist_Process_File_Always             " 始终解析文件中的tag
+    " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
+    " map to  :TlistOpen<CR>                    " 键盘映射 to 打开tag窗口
+    " map tc  :TlistClose<CR>                   " tc 关闭tag窗口
+    map tt  :TlistToggle<CR>
+    nmap <silent> <leader>tl :Tlist<cr>
 endif
-let Tlist_Use_Right_Window=1                " display at right side
-let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
-let Tlist_Sort_Type = "name"                " sort by name
-let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
-let Tlist_Auto_Open=0                     " not auto open
-let Tlist_Compact_Format=1                " compress
-let Tlist_Enable_Fold_Column=0            " Do not show folding tree
-" let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
-" let Tlist_Show_Menu=1                     " show taglist menu
-" let Tlist_Show_One_File=1           
-" let Tlist_Auto_Update=1                   " auto update
-" let Tlist_Process_File_Always             " 始终解析文件中的tag
-" let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
-" map to  :TlistOpen<CR>                    " 键盘映射 to 打开tag窗口
-" map tc  :TlistClose<CR>                   " tc 关闭tag窗口
-map tt  :TlistToggle<CR>
-nmap <silent> <leader>tl :Tlist<cr>
 
 "-----------------------------------------------------------
 " File Explorer
@@ -906,18 +909,20 @@ nmap <silent> <leader>tl :Tlist<cr>
 "-----------------------------------------------------------
 "WinManager
 "-----------------------------------------------------------
-" let loaded_winmanager = 1
-"nmap <silent> <leader>wm :WMToggle<cr>
-let g:winManagerWindowLayout='NERDTree|BufExplorer'  
-"let g:winManagerWindowLayout='FileExplorer|TagList' "what windows CTRL-N 切换
-"let g:winManagerWindowLayout = 'FileExplorer|TagList'  
-"let g:winManagerWindowLayout = 'FileExplorer'  
-let g:winManagerWidth = 25               " How wide should it be( pixels)
-let g:defaultExplorer = 0
-nmap wm :WMToggle<cr>
-nmap <C-W><C-F> :FirstExplorerWindow<cr>
-nmap <C-W><C-B> :BottomExplorerWindow<cr>
-autocmd BufWinEnter \[Buf\ List\] setl nonumber
+if pathogen#is_disabled('winmanager') == 0
+    " let loaded_winmanager = 1
+    "nmap <silent> <leader>wm :WMToggle<cr>
+    let g:winManagerWindowLayout='NERDTree|BufExplorer'  
+    "let g:winManagerWindowLayout='FileExplorer|TagList' "what windows CTRL-N 切换
+    "let g:winManagerWindowLayout = 'FileExplorer|TagList'  
+    "let g:winManagerWindowLayout = 'FileExplorer'  
+    let g:winManagerWidth = 25               " How wide should it be( pixels)
+    let g:defaultExplorer = 0
+    nmap wm :WMToggle<cr>
+    nmap <C-W><C-F> :FirstExplorerWindow<cr>
+    nmap <C-W><C-B> :BottomExplorerWindow<cr>
+    autocmd BufWinEnter \[Buf\ List\] setl nonumber
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Switch to buffer according to file name
@@ -950,26 +955,30 @@ endfunction
 "-----------------------------------------------------------
 "MiniBufExplorer
 "-----------------------------------------------------------
-let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplMapWindowNavArrows = 1
-let g:miniBufExplModSelTarget = 1
-let g:miniBufExplSplitBelow = 1
-let g:miniBufExplMaxSize = 2
-let g:miniBufExplUseSingleClick = 1    " select by single click
-autocmd BufRead,BufNew :call UMiniBufExplorer
+if pathogen#is_disabled('minibufexpl') == 0
+    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
+    let g:miniBufExplMapCTabSwitchBufs = 1
+    let g:miniBufExplMapWindowNavVim = 1
+    let g:miniBufExplMapWindowNavArrows = 1
+    let g:miniBufExplModSelTarget = 1
+    let g:miniBufExplSplitBelow = 1
+    let g:miniBufExplMaxSize = 2
+    let g:miniBufExplUseSingleClick = 1    " select by single click
+    autocmd BufRead,BufNew :call UMiniBufExplorer
+endif
 
 "-----------------------------------------------------------
 "BufExplorer
 "-----------------------------------------------------------
-"       map ,be :BufExplorerHorizontalSplit<CR> " set hotkey for BufExplorer
-"       let g:bufExplorerDefaultHelp=1          " Show default help.
-"       let g:bufExplorerDetailedHelp=0         " Show detailed help
-"       let g:bufExplorerShowRelativePath=1     " Show relative paths.
-"       let g:bufExplorerSortBy='name'          " Sort by name.
-"       let g:bufExplorerSplitBelow=0           " Split new window above current.
-"       let g:bufExplorerShowDirectories=1      " Show directories
+if pathogen#is_disabled('bufexplorer') == 0
+    map ,be :BufExplorerHorizontalSplit<CR> " set hotkey for BufExplorer
+    let g:bufExplorerDefaultHelp=1          " Show default help.
+    let g:bufExplorerDetailedHelp=0         " Show detailed help
+    let g:bufExplorerShowRelativePath=1     " Show relative paths.
+    let g:bufExplorerSortBy='name'          " Sort by name.
+    let g:bufExplorerSplitBelow=0           " Split new window above current.
+    let g:bufExplorerShowDirectories=1      " Show directories
+endif
 
 "-----------------------------------------------------------
 "Matchit
@@ -986,9 +995,7 @@ autocmd BufRead,BufNew :call UMiniBufExplorer
 "i           切换显示方式               "R    改名文件或目录
 "s           选择排序方式               "x    定制浏览方式，使用你指定的程序打开该文件
 "
-if v:version < 702
-    let g:loaded_netrwPlugin = 1
-else
+if pathogen#is_disabled('netrw') == 0
     let g:netrw_winsize        = 25
     let g:netrw_keepdir        = 0
     " let g:netrw_preview        = 0
@@ -1015,17 +1022,19 @@ endif
 " tab   open file in a split window         " !     execute current file
 " x     close the current nodes parent      " X     Recursively close all children of the current node
 " e     open a netrw for the current dir
-map ne :NERDTree<CR>
-let NERDChristmasTree=1                     " more colorful
-let NERDTreeWinPos="left"                   " put NERDTree at left
-let NERDTreeWinSize=25                      " set size
-let NERDTreeShowLineNumbers=0               " show line number
-let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
-" setting root dir in NT also sets VIM's cd"
-let NERDTreeChDirMode=2
-let NERDTreeShowHidden=1
-" single click to open directory
-let NERDTreeMouseMode = 2
+if pathogen#is_disabled('nerdtree') == 0
+    map ne :NERDTree<CR>
+    let NERDChristmasTree=1                     " more colorful
+    let NERDTreeWinPos="left"                   " put NERDTree at left
+    let NERDTreeWinSize=25                      " set size
+    let NERDTreeShowLineNumbers=0               " show line number
+    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
+    " setting root dir in NT also sets VIM's cd"
+    let NERDTreeChDirMode=2
+    let NERDTreeShowHidden=1
+    " single click to open directory
+    let NERDTreeMouseMode = 2
+endif
 
 "-----------------------------------------------------------
 "Scope
@@ -1099,31 +1108,35 @@ else
     endfunction
     let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc'
 endif
+
 "-----------------------------------------------------------
 " SVN Command
 "-----------------------------------------------------------
-" let SVNCommandSplit='vertical'
-" let SVNCommandDiffSplit='vertical'
-let SVNCommandEnableBufferSetup=1
-let SVNCommandEdit='split'
-let SVNCommandNameResultBuffers=1
-" let SVNAutoCommitDiff='1'
-let SVNCommandCommitOnWrite=1
-let SVNCommandAutoSVK='svk'
-
+if pathogen#is_disabled('vcscommand') == 0
+    " let SVNCommandSplit='vertical'
+    " let SVNCommandDiffSplit='vertical'
+    let SVNCommandEnableBufferSetup=1
+    let SVNCommandEdit='split'
+    let SVNCommandNameResultBuffers=1
+    " let SVNAutoCommitDiff='1'
+    let SVNCommandCommitOnWrite=1
+    let SVNCommandAutoSVK='svk'
+endif
 
 "-----------------------------------------------------------
 " showmarks setting
 "-----------------------------------------------------------
-" Enable ShowMarks
-let showmarks_enable = 1
-" Show which marks
-let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-" Ignore help, quickfix, non-modifiable buffers
-let showmarks_ignore_type = "hqm"
-" Hilight lower & upper marks
-let showmarks_hlline_lower = 1
-let showmarks_hlline_upper = 1
+if pathogen#is_disabled('ShowMarks') == 0
+    " Enable ShowMarks
+    let showmarks_enable = 1
+    " Show which marks
+    let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    " Ignore help, quickfix, non-modifiable buffers
+    let showmarks_ignore_type = "hqm"
+    " Hilight lower & upper marks
+    let showmarks_hlline_lower = 1
+    let showmarks_hlline_upper = 1
+endif
 
 
 "-----------------------------------------------------------
@@ -1142,12 +1155,14 @@ vmap <silent> <leader>hr <Plug>MarkRegex
 "-----------------------------------------------------------
 " Vimwiki
 " {{{
-let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
-                     \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
-                     \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
-                     \ 'diary_rel_path': 'diary/'}]
-let g:vimwiki_badsyms = ' '
-let g:vimwiki_camel_case = 0
+if pathogen#is_disabled('vimwiki') == 0
+    let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
+                         \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
+                         \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
+                         \ 'diary_rel_path': 'diary/'}]
+    let g:vimwiki_badsyms = ' '
+    let g:vimwiki_camel_case = 0
+endif
 " }}}
 
 "-----------------------------------------------------------
@@ -1184,8 +1199,10 @@ endfunction
 " yankring.vim
 " {{{
 "-----------------------------------------------------------
-let g:yankring_enabled=0
-map <leader>yr :YRShow<cr>
+if pathogen#is_disabled('yankring') == 0
+    let g:yankring_enabled=0
+    map <leader>yr :YRShow<cr>
+endif
 " }}}
 
 set isfname-==  " remove = from filename characters
@@ -1193,14 +1210,16 @@ set isfname-==  " remove = from filename characters
 "-----------------------------------------------------------
 " Rainbow Parentheses
 " {{{
-let g:rainbow_active = 1
-let g:rainbow_load_separately = [
-    \   [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \   [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
-    \   [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \   [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
-    \   ]
-let g:rainbow_guifgs = ['RoyalBlue3', 'SeaGreen3', 'DarkOrange3', 'FireBrick',]
+if pathogen#is_disabled('Rainbow-Parentheses-Improved') == 0
+    let g:rainbow_active = 1
+    let g:rainbow_load_separately = [
+        \   [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+        \   [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+        \   [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+        \   [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+        \   ]
+    let g:rainbow_guifgs = ['RoyalBlue3', 'SeaGreen3', 'DarkOrange3', 'FireBrick',]
+endif
 " }}}
 
 """""""""""""""""""""""""""""""""""
@@ -1229,10 +1248,7 @@ let g:loaded_vis = 1
 " _ Powerline {{{
 " {{{
 " Powerline and neocomplcache require Vim 7.2
-if index(g:pathogen_disabled, 'powerline') == -1
-    if !has('gui_running')
-        call add(g:pathogen_disabled, 'powerline')
-    endif
+if pathogen#is_disabled('powerline') == 0
     if has('win32') || has('win64')
       let g:Powerline_symbols = 'compatible'
     elseif has('gui_macvim')
@@ -1252,7 +1268,7 @@ endif
 "-----------------------------------------------------------
 " Syntastic
 " {{{
-if index(g:pathogen_disabled, 'syntastic') == -1
+if pathogen#is_disabled('syntastic') == 0
     let g:syntastic_enable_signs=1
     let g:syntastic_auto_loc_list=1
 endif
@@ -1268,23 +1284,25 @@ let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
 " ------------------------------------------------------------
 "  Setting for headlighes
 " {{{
-let g:loaded_headlights = 1             " (Disable)
-let g:headlights_use_plugin_menu = 0    " (Disabled)
-let g:headlights_smart_menus = 1        " (Enabled)
-let g:headlights_show_commands = 1      " (Enabled)
-let g:headlights_show_mappings = 1      " (Enabled)
-let g:headlights_show_abbreviations = 0 " (Disabled)
-let g:headlights_show_functions = 0     " (Disabled)
-let g:headlights_show_highlights = 0    " (Disabled)
-let g:headlights_show_files = 0         " (Disabled)
-let g:headlights_show_load_order = 0    " (Disabled)
-let g:headlights_debug_mode = 0         " (Disabled)
+if pathogen#is_disabled('headlights') == 0
+    let g:loaded_headlights = 1             " (Disable)
+    let g:headlights_use_plugin_menu = 0    " (Disabled)
+    let g:headlights_smart_menus = 1        " (Enabled)
+    let g:headlights_show_commands = 1      " (Enabled)
+    let g:headlights_show_mappings = 1      " (Enabled)
+    let g:headlights_show_abbreviations = 0 " (Disabled)
+    let g:headlights_show_functions = 0     " (Disabled)
+    let g:headlights_show_highlights = 0    " (Disabled)
+    let g:headlights_show_files = 0         " (Disabled)
+    let g:headlights_show_load_order = 0    " (Disabled)
+    let g:headlights_debug_mode = 0         " (Disabled)
+endif
 " }}}
 
 " ------------------------------------------------------------
 "  vim-support
 " {{{
-if index(g:pathogen_disabled, 'Vim-Support') == -1
+if pathogen#is_disabled('Vim-Support') == 0
     let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
     let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
     let g:Vim_MapLeader  = ','
@@ -1294,7 +1312,7 @@ endif
 "-----------------------------------------------------------
 " tagbar
 " {{{
-if index(g:pathogen_disabled, 'tagbar') == -1
+if pathogen#is_disabled('tagbar') == 0
     if v:version > 700 && has('patch167')
       let g:tagbar_width = 30
       let g:tagbar_autofocus = 1
@@ -1312,7 +1330,7 @@ endif
 "-----------------------------------------------------------
 " neocomplcache
 " {{{
-if index(g:pathogen_disabled, 'neocomplcache') == -1
+if pathogen#is_disabled('neocomplcache') == 0
     if v:version > 702
       let g:neocomplcache_enable_at_startup = 1
       let g:neocomplcache_enable_auto_select = 1
@@ -1345,23 +1363,6 @@ if index(g:pathogen_disabled, 'neocomplcache') == -1
       " inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
       " use <Tab> to complete words, and also handle snippets
-      function! TabWrapper(...)
-        if a:0 == 0
-          if pumvisible()
-            " close the popup and expand snippets
-            return "\<C-y>\<C-R>=TabWrapper(1)\<CR>"
-          else
-            echomsg "2"
-            " popup is closed, use normal SnipMate behavior
-            return TriggerSnippet()
-          endif
-        else
-          echomsg "3"
-          " expand snippets, but don't insert a <Tab>
-          return substitute(TriggerSnippet(), '\t', '', '')
-        endif
-      endfunction
-      autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
     endif
 endif
 " }}}
@@ -1369,7 +1370,7 @@ endif
 "-----------------------------------------------------------
 " conque
 " {{{
-if index(g:pathogen_disabled, 'conque') == -1
+if pathogen#is_disabled('conque') == 0
   autocmd FileType conque_term match none
   let g:ConqueTerm_StartMessages = 0
 
@@ -1382,18 +1383,20 @@ endif
 "-----------------------------------------------------------
 " indent guides
 " {{{
-let g:indent_guides_auto_colors = 0
-autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
-autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
+if pathogen#is_disabled('indent-guides') == 0
+    let g:indent_guides_auto_colors = 0
+    autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
+    autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
-nnoremap <silent> ,i :IndentGuidesToggle<CR>
+    nnoremap <silent> ,i :IndentGuidesToggle<CR>
+endif
 " }}}
 
 "-----------------------------------------------------------
 " fuzzy finder
 " {{{
 " FuzzyFinder/L9 require Vim 7.2 and floating-point support
-if index(g:pathogen_disabled, 'FuzzyFinder') == -1
+if pathogen#is_disabled('FuzzyFinder') == 0
     ""call add(g:pathogen_disabled, 'l9')
     ""call add(g:pathogen_disabled, 'fuzzyfinder')
     nnoremap <silent> ,b :FufBuffer<CR>
@@ -1412,7 +1415,7 @@ endif
 
 "-----------------------------------------------------------
 " ctrlp
-if index(g:pathogen_disabled, 'ctrlp') == -1
+if pathogen#is_disabled('ctrlp') == 0
     " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     let g:ctrlp_map = '<Leader>p'
     let g:ctrlp_custom_ignore = {
@@ -1432,7 +1435,7 @@ endif
 
 "-----------------------------------------------------------
 " numbers
-if index(g:pathogen_disabled, 'numbers') == -1
+if pathogen#is_disabled('numbers') == 0
     ""nnoremap <leader>nt :NumbersToggle<CR>
     nnoremap <F10> :NumbersToggle<CR>
 endif
