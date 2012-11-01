@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-01 13:10:36
+" Last Modified:     2012-11-01 16:32:42
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -682,7 +682,13 @@ nnoremap <silent> <leader>s :split<CR>
 nnoremap <silent> <leader>v :vsplit<CR>
 
 " ,w - write file
-nnoremap <silent> <leader>w :write<CR>
+func! DeleteTrailingWS()
+  exe "normal mz"
+  %s/\s\+$//ge
+  exe "normal `z"
+endfunc
+noremap <leader>w :call DeleteTrailingWS()<CR>
+" nnoremap <silent> <leader>w :write<CR>
 
 " ,W - clear trailing whitespace
 nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
@@ -1257,12 +1263,14 @@ if pathogen#is_disabled('powerline') == 0
     endif
 
     let g:Powerline_cache_enabled = 1
+    " override the dividers
+    let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
     " let Powerline_theme = 'skwp'
     " let Powerline_colorscheme = 'skwp'
     " Insert the charcode segment after the filetype segment
-    call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
+    " call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
     " Replace the scrollpercent segment with the charcode segment
-    call Pl#Theme#ReplaceSegment('scrollpercent', 'fileinfo')
+    " call Pl#Theme#ReplaceSegment('scrollpercent', 'fileinfo')
 endif
 " }}}
 
@@ -1333,17 +1341,26 @@ endif
 " {{{
 if pathogen#is_disabled('neocomplcache') == 0
     if v:version > 702
-      let g:neocomplcache_enable_at_startup = 1
-      let g:neocomplcache_enable_auto_select = 1
-      let g:neocomplcache_enable_smart_case = 1
-      let g:neocomplcache_enable_camel_case_completion = 1
-      let g:neocomplcache_enable_underbar_completion = 1
+      let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
+      let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
+      let g:neocomplcache_enable_auto_select = 1 
+      let g:neocomplcache_enable_smart_case = 1  " Use smartcase
+      let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
+      let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
+      " Set minimum syntax keyword length.
+      let g:neocomplcache_min_syntax_length = 3
+      let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
       let g:neocomplcache_source_disable = {
         \ 'syntax_complete': 1,
         \ }
 
       let g:neocomplcache_auto_completion_start_length = 2
+      " Define keyword.
+      if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
+      endif
+      let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
       if !exists('g:neocomplcache_omni_patterns')
         let g:neocomplcache_omni_patterns = {}
@@ -1353,6 +1370,12 @@ if pathogen#is_disabled('neocomplcache') == 0
       let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
       let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
       let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+      " Plugin key-mappings.
+      imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      inoremap <expr><C-g>     neocomplcache#undo_completion()
+      inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
       " Recommended key-mappings.
       " <CR>: cancel popup and save indent.
@@ -1490,11 +1513,9 @@ if pathogen#is_disabled('neosnippet') == 0
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 
-    " SuperTab like snippets behavior.
-    imap <expr><TAB> neosnippet#expandable() ?
-    "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable() ?
-    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    "" " SuperTab like snippets behavior
+    "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+    "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
     " For snippet_complete marker.
     if has('conceal')
