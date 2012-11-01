@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-01 13:23:46
+" Last Modified:     2012-11-01 13:49:03
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1255,11 +1255,13 @@ if pathogen#is_disabled('powerline') == 0
       let g:Powerline_symbols = 'unicode'
     elseif has('gui_macvim')
       let g:Powerline_symbols = 'fancy'
-    elseif has('gui_running')
+    else
       let g:Powerline_symbols = 'unicode'
     endif
 
     let g:Powerline_cache_enabled = 1
+    " override the dividers
+    let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
     " let Powerline_theme = 'skwp'
     " let Powerline_colorscheme = 'skwp'
     " Insert the charcode segment after the filetype segment
