@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-01 16:32:42
+" Last Modified:     2012-11-01 16:37:37
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1257,9 +1257,12 @@ let g:loaded_vis = 1
 " Powerline and neocomplcache require Vim 7.2
 if pathogen#is_disabled('powerline') == 0
     if has('win32') || has('win64')
-      let g:Powerline_symbols = 'compatible'
+      ""let g:Powerline_symbols = 'compatible'
+      let g:Powerline_symbols = 'unicode'
     elseif has('gui_macvim')
       let g:Powerline_symbols = 'fancy'
+    else
+      let g:Powerline_symbols = 'unicode'
     endif
 
     let g:Powerline_cache_enabled = 1
