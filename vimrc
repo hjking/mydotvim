@@ -2,8 +2,8 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-01 12:56:41
-" Revesion:          0.1
+" Last Modified:     2012-11-01 13:10:36
+" Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
 " Description:       Vim configuration file
@@ -13,6 +13,7 @@
 " ------------------------------------------------------------------------------
 " 2010.08.13    Hong Jin    0.1             1. Initial revision
 " 2010.12.01    Hong Jin    0.2             1. Change coloscheme to randomly
+" 2012.11.01    Hong Jin    0.3             1. Change structure
 " ------------------------------------------------------------------------------
 "
 "******************************************************************************/
