@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-10-31 17:45:17
+" Last Modified:     2012-10-31 22:22:51
 " Revesion:          0.1
 " ID:                $Id$
 " Reference:         Vim docs
@@ -25,6 +25,7 @@
 set nocompatible                " not use vi keyboard mode
 
 let g:vimrc_loaded = 1
+let g:vimrc_disable_setting = 1
 
 "-----------------------------------------------------------
 " Platform
@@ -42,7 +43,7 @@ endfunction
 """ pathogen.vim {{{
 " auto load all plugins
 "-----------------------------------------------------------
-let g:pathogen_not_loaded = 1
+let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
     source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect()
@@ -89,11 +90,8 @@ if v:version < 703 || !has('python')
 endif
 
 " Disable on purpose
-if exists('g:pathogen_not_loaded')
-    call add(g:pathogen_disabled, 'Align')
+if exists('g:pathogen_not_loaded_plugin')
     call add(g:pathogen_disabled, 'numbers')
-    call add(g:pathogen_disabled, 'ultisnips')
-    call add(g:pathogen_disabled, 'buftabs')
 endif
 
 call pathogen#runtime_append_all_bundles()
@@ -196,11 +194,11 @@ syntax on
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
 "-----------------------------------------------------------
-filetype plugin on              " load filetype plugin
-filetype indent on              " load indent
+filetype plugin indent on              " load filetype plugin
+""filetype indent on              " load indent
 
 if exists("&autoread")
-set autoread                    " autoload when file changed outside vim
+    set autoread                    " autoload when file changed outside vim
 endif
 set autowrite                   " write a modified buffer on each :next , ...
 
@@ -470,22 +468,6 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
 "-----------------------------------------------------------
 "Auto Complete Pairs
 "-----------------------------------------------------------
-"   :inoremap ( ()<ESC>i
-"   :inoremap ) <c-r>=ClosePair(')')<CR>
-"   :inoremap { {}<ESC>i
-"   :inoremap } <c-r>=ClosePair('}')<CR>
-"   :inoremap [ []<ESC>i
-"   :inoremap ] <c-r>=ClosePair(']')<CR>
-":inoremap < <><ESC>i
-":inoremap > <c-r>=ClosePair('>')<CR>
-
-function! ClosePair(char)
-    if getline('.')[col('.') - 1] == a:char
-        return "\<Right>"
-    else
-        return a:char
-    endif
-endf
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -570,13 +552,10 @@ nmap <C-l> <C-W>l
 imap <m-$> <esc>$a
 imap <m-0> <esc>0i
 
-" auto load vimrc when editing it
 if MySys() == "windows"
     nmap ,v :e $VIM/_vimrc<CR> " key mapping for editing vimrc
-    autocmd! bufwritepost vimrc source $VIM/_vimrc
 elseif MySys() == "linux"
     nmap ,v :e ~/.vimrc
-    autocmd! bufwritepost vimrc source ~/.vimrc
 endif
 
 " CTRL-A is Select All
@@ -709,6 +688,11 @@ nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question
 "clearing highlighted search
 nmap <silent> <leader>\ :nohlsearch<CR>
 
+inoremap <buffer> /*          /**/<Left><Left>
+inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
+inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
+inoremap <buffer> <Leader>/*  /*
+
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
@@ -729,8 +713,13 @@ if has("autocmd")
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal g`\"" |
       \ endif
-    autocmd BufWritePost .vimrc so %
     autocmd BufEnter * :syntax sync fromstart
+    " auto load vimrc when editing it
+    if MySys() == "windows"
+        autocmd! bufwritepost _vimrc source $VIM/_vimrc
+    elseif MySys() == "linux"
+        autocmd! BufWritePost .vimrc source %
+    endif
 endif " has("autocmd")
 
 "-----------------------------------------------------------
@@ -747,7 +736,6 @@ iab #c= ====================
 iab #c# ####################
 iab #c1 /****************************************************************
 iab #c2 <Space>***************************************************************/
-
 
 "-----------------------------------------------------------
 " Visual mode
@@ -1141,35 +1129,39 @@ let showmarks_hlline_upper = 1
 "-----------------------------------------------------------
 " mark setting
 "-----------------------------------------------------------
+" {{{
 nmap <silent> <leader>hl <Plug>MarkSet
 vmap <silent> <leader>hl <Plug>MarkSet
 nmap <silent> <leader>hh <Plug>MarkClear
 vmap <silent> <leader>hh <Plug>MarkClear
 nmap <silent> <leader>hr <Plug>MarkRegex
 vmap <silent> <leader>hr <Plug>MarkRegex
+" }}}
 
 
 "-----------------------------------------------------------
 " Vimwiki
-"-----------------------------------------------------------
+" {{{
 let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
                      \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
                      \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
                      \ 'diary_rel_path': 'diary/'}]
 let g:vimwiki_badsyms = ' '
 let g:vimwiki_camel_case = 0
+" }}}
 
 "-----------------------------------------------------------
 " timestamp
-"-----------------------------------------------------------
+" {{{
 "let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified)\s*:\s+)@<=.*$|2010-08-13 09:49:39'
 let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
 let g:timestamp_rep = '%Y-%m-%d %H:%M:%S'
 let g:timestamp_modelines = 20
+" }}}
 
 "-----------------------------------------------------------
 " Auto Change Date
-"-----------------------------------------------------------
+" {{{
 " autodate.vim: include "Last Changed: ."
 "   let autodate_keyword_pre =
 "   let autodate_keyword_pre  = '\$Date'            : default: '\cLast Changed:'
@@ -1186,18 +1178,21 @@ function! LastMod()
   endif
   exe "1," . l . "s/[Ll]ast [Mm]odified: .*/Last modified: " . strftime("%c") . " [" . hostname() . "]/e"
 endfunction
-
+" }}}
 
 "-----------------------------------------------------------
 " yankring.vim
+" {{{
 "-----------------------------------------------------------
 let g:yankring_enabled=0
 map <leader>yr :YRShow<cr>
+" }}}
 
 set isfname-==  " remove = from filename characters
 
 "-----------------------------------------------------------
 " Rainbow Parentheses
+" {{{
 let g:rainbow_active = 1
 let g:rainbow_load_separately = [
     \   [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
@@ -1206,13 +1201,13 @@ let g:rainbow_load_separately = [
     \   [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
     \   ]
 let g:rainbow_guifgs = ['RoyalBlue3', 'SeaGreen3', 'DarkOrange3', 'FireBrick',]
-
+" }}}
 
 """""""""""""""""""""""""""""""""""
 "" Command Line mode
 """""""""""""""""""""""""""""""""""
 " $q is super useful when browsing on the command line
-cno $q <C-\>eDeleteTillSlash()<cr>
+cnoremap $q <C-\>eDeleteTillSlash()<cr>
 
 " Bash like keys for the command line
 cnoremap <C-A>      <Home>
@@ -1232,6 +1227,7 @@ let g:loaded_vis = 1
 
 "-----------------------------------------------------------
 " _ Powerline {{{
+" {{{
 " Powerline and neocomplcache require Vim 7.2
 if index(g:pathogen_disabled, 'powerline') == -1
     if !has('gui_running')
@@ -1255,20 +1251,23 @@ endif
 
 "-----------------------------------------------------------
 " Syntastic
-"-----------------------------------------------------------
+" {{{
 if index(g:pathogen_disabled, 'syntastic') == -1
     let g:syntastic_enable_signs=1
     let g:syntastic_auto_loc_list=1
 endif
+" }}}
 
 " ------------------------------------------------------------
 "  Setting for Align
 " ------------------------------------------------------------
+" {{{
 let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
+" }}}
 
 " ------------------------------------------------------------
 "  Setting for headlighes
-" ------------------------------------------------------------
+" {{{
 let g:loaded_headlights = 1             " (Disable)
 let g:headlights_use_plugin_menu = 0    " (Disabled)
 let g:headlights_smart_menus = 1        " (Enabled)
@@ -1280,6 +1279,7 @@ let g:headlights_show_highlights = 0    " (Disabled)
 let g:headlights_show_files = 0         " (Disabled)
 let g:headlights_show_load_order = 0    " (Disabled)
 let g:headlights_debug_mode = 0         " (Disabled)
+" }}}
 
 " ------------------------------------------------------------
 "  vim-support
@@ -1322,7 +1322,7 @@ if index(g:pathogen_disabled, 'neocomplcache') == -1
 
       let g:neocomplcache_source_disable = {
         \ 'syntax_complete': 1,
-      \ }
+        \ }
 
       let g:neocomplcache_auto_completion_start_length = 2
 
@@ -1437,15 +1437,11 @@ if index(g:pathogen_disabled, 'numbers') == -1
     nnoremap <F10> :NumbersToggle<CR>
 endif
 
-inoremap <buffer> /*          /**/<Left><Left>
-inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
-inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
-inoremap <buffer> <Leader>/*  /*
-
 "-----------------------------------------------------------
 " vim-cycle
 " {{{
-if index(g:pathogen_disabled, 'vim-cycle') == -1
+""if index(g:pathogen_disabled, 'vim-cycle') == -1
+if pathogen#is_disabled('vim-cycle') == 0
     let g:cycle_default_groups = [
           \   [['true', 'false']],
           \   [['yes', 'no']],
@@ -1484,7 +1480,8 @@ endif
 "-----------------------------------------------------------
 " Neosnippet
 " {{{
-if index(g:pathogen_disabled, 'Neosnippet') == -1
+""if index(g:pathogen_disabled, 'Neosnippet') == -1
+if pathogen#is_disabled('neosnippet') == 0
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -1504,6 +1501,10 @@ if index(g:pathogen_disabled, 'Neosnippet') == -1
     let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
 endif
 " }}}
+
+" if pathogen#is_disabled('molokai') == 0
+"     echoerr "molokai enable"
+" endif
 
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
