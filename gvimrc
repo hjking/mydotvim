@@ -14,9 +14,9 @@ set background=dark
 let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af',
             \ 'billw', 'blacksea', 'blackbeauty', 'blugrine', 'brookstream',
             \ 'candy', 'calmar256-dark', 'candycode', 'colorer',
-            \ 'dante', 'fnaqevan', 'fruity',
-            \ 'koehler', 'molokai', 'metacosm',
-            \ 'tango', 'tir_black', 'winter', 'desert256', 'galaxy']
+            \ 'dante', 'fnaqevan', 'fruity', 'koehler', 'molokai', 'metacosm',
+            \ 'tango', 'tir_black', 'winter', 'desert256', 'bluechia', 'galaxy',
+            \ 'desertink','diablo3', 'luinnar', 'putty', 'manxome']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
 " Display Settings
