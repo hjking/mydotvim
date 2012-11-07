@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-01 16:37:37
+" Last Modified:     2012-11-07 17:37:02
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1527,6 +1527,15 @@ if pathogen#is_disabled('neosnippet') == 0
 
     " use a different collection of snippets other than the built-in ones
     let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
+endif
+" }}}
+
+"-----------------------------------------------------------
+" vim-snippet
+" {{{
+""if index(g:pathogen_disabled, 'Neosnippet') == -1
+if pathogen#is_disabled('vim-snipmate') == 0
+    let g:snips_trigger_key='<c-space>'
 endif
 " }}}
 
