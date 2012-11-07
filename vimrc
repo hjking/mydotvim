@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-07 17:37:02
+" Last Modified:     2012-11-07 21:17:41
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1315,9 +1315,15 @@ endif
 "  vim-support
 " {{{
 if pathogen#is_disabled('Vim-Support') == 0
-    let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
-    let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
+    if MySys() == "windows"
+        let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
+        let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
+    elseif MySys() == "linux"
+        let g:Vim_GlobalTemplateDir = '~/.vim/bundle/Vim-Support/vim-support/templates'
+        let g:Vim_GlobalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
+    endif
     let g:Vim_MapLeader  = ','
+    let g:Vim_RootMenu = "&Plugin"
 endif
 " }}}
 

@@ -11,7 +11,7 @@ let g:AuthorHomePage=""
 map <F4> ms:call TitleDet()<cr>
 function AddTitle()
     call append(0,"/*******************************************************************************")
-    call append(1,"* (C) Copyright 2010 Founder International Software(Wuhan) Co.,Ltd")
+    call append(1,"* (C) Copyright 2012 Linksprite Tech Co.,Ltd")
     call append(2,"*")
     call append(3,"* Filename:          ".expand("%:t"))
     call append(4,"* Author:            ".g:AuthorName." (".g:AuthorEmail.")")
