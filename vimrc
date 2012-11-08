@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-08 11:58:52
+" Last Modified:     2012-11-08 13:09:03
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -1544,7 +1544,6 @@ endif
 "-----------------------------------------------------------
 " vim-snippet
 " {{{
-""if index(g:pathogen_disabled, 'Neosnippet') == -1
 if pathogen#is_disabled('vim-snipmate') == 0
     let g:snips_trigger_key='<c-space>'
 endif
