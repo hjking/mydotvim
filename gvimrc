@@ -13,10 +13,10 @@ let g:gvimrc_loaded = 1
 set background=dark
 let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af',
             \ 'billw', 'blacksea', 'blackbeauty', 'blugrine', 'brookstream',
-            \ 'candy', 'calmar256-dark', 'candycode', 'colorer',
+            \ 'candy', 'calmar256-dark', 'candycode', 'colorer', 'badwolf',
             \ 'dante', 'fnaqevan', 'fruity', 'koehler', 'molokai', 'metacosm',
             \ 'tir_black', 'winter', 'desert256', 'bluechia', 'galaxy',
-            \ 'desertink','diablo3', 'luinnar', 'putty', 'manxome']
+            \ 'desertink', 'diablo3', 'luinnar', 'putty', 'manxome']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
 " Display Settings

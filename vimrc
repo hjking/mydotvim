@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-08 13:09:03
+" Last Modified:     2012-11-08 15:06:03
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -88,12 +88,10 @@ endif
 
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
-    call add(g:pathogen_disabled, 'numbers')
 endif
 
 " Disable on purpose
 if exists('g:pathogen_not_loaded_plugin')
-    call add(g:pathogen_disabled, 'numbers')
 endif
 
 call pathogen#runtime_append_all_bundles()
@@ -251,7 +249,7 @@ elseif MySys() == "linux"
 endif
 
 set cmdheight=1                 " heighth of CMD line
-set columns=100                 " max column number
+set columns=1000                " max column number
 " set title                       " display title
 set shortmess=atI               " To avoid some hint messages
 set report=0                    " Threshold for reporting number of lines changed
@@ -381,8 +379,7 @@ nmap <leader>f9 :set foldlevel=9<CR>
 "-----------------------------------------------------------
 " File Format
 "-----------------------------------------------------------
-set backspace=2             " Influences the working of <BS>, <Del>, CTRL-W and CTRL-U in Insert mode
-set backspace=indent,eol,start " same effect with above line
+set backspace=indent,start  " same effect with above line
 set formatoptions+=mM       " describes how automatic formatting is to be done
 set tabstop=4               " TAB width
 set softtabstop=4           " Soft TAB width
@@ -468,10 +465,6 @@ set wildmenu                    " command-line completion operates in an enhance
 set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
-
-"-----------------------------------------------------------
-"Auto Complete Pairs
-"-----------------------------------------------------------
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -1319,6 +1312,7 @@ endif
 " {{{
 if pathogen#is_disabled('Vim-Support') == 0
     if MySys() == "windows"
+        let g:plugin_dir = '$VIM/vimfiles/bundle/Vim-Support'
         let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
         let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
         let g:Vim_LocalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
@@ -1537,7 +1531,11 @@ if pathogen#is_disabled('neosnippet') == 0
     endif"
 
     " use a different collection of snippets other than the built-in ones
-    let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
+    if MySys() == "windows"
+        let g:neosnippet#snippets_directory='$VIM/vimfiles/bundle/snipmate-snippets/snippets'
+    elseif MySys() == "linux"
+        let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
+    endif
 endif
 " }}}
 
@@ -1547,6 +1545,12 @@ endif
 if pathogen#is_disabled('vim-snipmate') == 0
     let g:snips_trigger_key='<c-space>'
 endif
+" }}}
+
+"-----------------------------------------------------------
+" Auto Pairs
+" {{{
+let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 " }}}
 
 " if pathogen#is_disabled('molokai') == 0

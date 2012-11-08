@@ -2,10 +2,6 @@
 	path = bundle/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen.git
     ignore = dirty
-[submodule "bundle/auto-pairs"]
-	path = bundle/auto-pairs
-	url = https://github.com/jiangmiao/auto-pairs.git
-    ignore = dirty
 [submodule "bundle/badwolf"]
 	path = bundle/badwolf
 	url = https://github.com/sjl/badwolf.git
@@ -314,3 +310,6 @@
 	path = bundle/vim-addon-mw-utils
 	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
     ignore = dirty
+[submodule "bundle/delimitMate"]
+	path = bundle/delimitMate
+	url = https://github.com/Raimondi/delimitMate.git
