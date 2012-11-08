@@ -49,12 +49,11 @@ endif
 "-----------------------------------------------------------
 let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
-    set rtp+=$VIM/vimfiles/bundle
+    " set rtp+=$VIM/vimfiles/bundle
     source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect()
 elseif MySys() == "linux"
-    set rtp+=~/.vim/bundle
-    " source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
+    " set rtp+=~/.vim/bundle
     runtime bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect('')
 endif
