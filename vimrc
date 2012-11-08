@@ -2,7 +2,7 @@
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
 " Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-07 21:17:41
+" Last Modified:     2012-11-08 11:58:52
 " Revesion:          0.3
 " ID:                $Id$
 " Reference:         Vim docs
@@ -234,7 +234,7 @@ set selection=inclusive         " defines the behavior of the selection
 set selectmode=mouse            " when use mouse, launch SELECT mode
 set keymodel=startsel           " Shift + arrow key
 " set mousemodel=extend
-set nomousehide
+set nomousehide                 " Hide the mouse when typing text
 " set selectmode=key
 
 "-----------------------------------------------------------
@@ -259,6 +259,7 @@ set noerrorbells                " No bell for error messages
 " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
 set fillchars=stl:-,stlnc:\ ,diff:-  " Characters to fill the statuslines and vertical separators
 set novisualbell                " Use visual bell instead of beeping
+set browsedir=current           " which directory to use for the file browser
 
 "-----------------------------------------------------------
 """ Line Feed
@@ -270,7 +271,7 @@ nmap <leader>fu :se ff=unix<cr>
 "-----------------------------------------------------------
 """ Wrap Line
 "-----------------------------------------------------------
-set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
+" set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
 if has("gui_running")
     if has("gui_win32")     " Win OS
         set wrap            " Wrap line
@@ -459,6 +460,7 @@ set sessionoptions+=sesdir
 set complete-=u
 set complete-=i
 set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
+set complete+=k                 " scan the files given with the 'dictionary' option
 set completeopt=longest,menu    " Insert mode completetion
 " set wildmode=longest:full,full
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
@@ -722,6 +724,7 @@ if has("autocmd")
       \   exe "normal g`\"" |
       \ endif
     autocmd BufEnter * :syntax sync fromstart
+    autocmd BufEnter * :lchdir %:p:h
     " auto load vimrc when editing it
     if MySys() == "windows"
         autocmd! bufwritepost _vimrc source $VIM/_vimrc
@@ -1318,9 +1321,11 @@ if pathogen#is_disabled('Vim-Support') == 0
     if MySys() == "windows"
         let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
         let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
+        let g:Vim_LocalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
     elseif MySys() == "linux"
         let g:Vim_GlobalTemplateDir = '~/.vim/bundle/Vim-Support/vim-support/templates'
         let g:Vim_GlobalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
+        let g:Vim_LocalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
     endif
     let g:Vim_MapLeader  = ','
     let g:Vim_RootMenu = "&Plugin"
