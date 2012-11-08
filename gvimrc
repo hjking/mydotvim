@@ -11,7 +11,7 @@ let g:gvimrc_loaded = 1
 " colo adrian          "molokai fruity blackbeauty adaryn fnaqevan myColor_1
 "set colorscheme randomly
 set background=dark
-let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af',
+let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af', 'solarized',
             \ 'billw', 'blacksea', 'blackbeauty', 'blugrine', 'brookstream',
             \ 'candy', 'calmar256-dark', 'candycode', 'colorer', 'badwolf',
             \ 'dante', 'fnaqevan', 'fruity', 'koehler', 'molokai', 'metacosm',

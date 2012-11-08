@@ -1,11 +1,6 @@
 "*******************************************************************************
 " Filename:          _vimrc
 " Author:            Hong Jin - bestkindy@gmail.com
-" Created:           2010-08-13 14:04:30
-" Last Modified:     2012-11-08 15:06:03
-" Revesion:          0.3
-" ID:                $Id$
-" Reference:         Vim docs
 " Description:       Vim configuration file
 "
 " Revision History:
@@ -22,7 +17,6 @@
 " Get out of VI's compatible mode
 " Use Vim settings, rather then Vi settings.
 " This must be first, because it changes other options as a side effect.
-"-------------------------------------------------------------------------------
 set nocompatible                " not use vi keyboard mode
 
 let g:vimrc_loaded = 1
@@ -40,15 +34,26 @@ function! MySys()
     endif
 endfunction
 
+" Windows Compatible {
+" On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
+" across (heterogeneous) systems easier.
+if has('win32') || has('win64')
+    set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
+" }
+
+
 "-----------------------------------------------------------
 """ pathogen.vim {{{
 " auto load all plugins
 "-----------------------------------------------------------
 let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
+    set rtp+=$VIM/vimfiles/bundle
     source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect()
 elseif MySys() == "linux"
+    set rtp+=~/.vim/bundle
     " source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
     runtime bundle/vim-pathogen/autoload/pathogen.vim
     call pathogen#infect('')
@@ -249,15 +254,17 @@ elseif MySys() == "linux"
 endif
 
 set cmdheight=1                 " heighth of CMD line
-set columns=1000                " max column number
+" set columns=1000                " max column number
 " set title                       " display title
-set shortmess=atI               " To avoid some hint messages
+set shortmess+=atoOIT           " To avoid some hint messages
 set report=0                    " Threshold for reporting number of lines changed
 set noerrorbells                " No bell for error messages
 " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
 set fillchars=stl:-,stlnc:\ ,diff:-  " Characters to fill the statuslines and vertical separators
 set novisualbell                " Use visual bell instead of beeping
 set browsedir=current           " which directory to use for the file browser
+set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
+set virtualedit=onemore         " allow for cursor beyond last character
 
 "-----------------------------------------------------------
 """ Line Feed
@@ -302,6 +309,7 @@ if has('cmdline_info')
     set ruler                     " Show the line and column number of the cursor position
     " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
     set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+    set showcmd                     " display incomplete commands
 endif
 " Color of Status Line
 if has('statusline')
@@ -333,7 +341,6 @@ if has('statusline')
     set statusline+=[Pos=%l,%c%V]
     set statusline+=[%l/%L(%p%%)]       " cursor position
 endif
-set showcmd                     " display incomplete commands
 
 "-----------------------------------------------------------
 "Replace/Search
@@ -438,11 +445,12 @@ if MySys() == "windows"
     endfunction
 endif
 
-" if $TERM == "xterm"
-    set t_Co=256
-    " colors simple256
-    let g:solarized_termcolors=256      " use solarized 256 fallback
-" endif
+" Solarized
+set t_Co=256
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
 
 "-----------------------------------------------------------
 " Session options
