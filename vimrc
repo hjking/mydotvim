@@ -222,6 +222,8 @@ highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
 highlight Pmenu ctermbg=8 guibg=#606060
 highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
 highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
+highlight LineNr ctermbg=0
+highlight FoldColumn ctermbg=0
 
 ":match OverLength '\%200v.*'
 
