@@ -201,6 +201,14 @@ syntax on
 filetype plugin indent on              " load filetype plugin
 ""filetype indent on              " load indent
 
+" Solarized
+set t_Co=256
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
+colorscheme solarized
+
 if exists("&autoread")
     set autoread                    " autoload when file changed outside vim
 endif
@@ -210,10 +218,12 @@ set lazyredraw                  " Don't redraw while executing macros
 
 " HighLight Character
 highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-":match OverLength '\%200v.*'
+" highlight pop menu
+highlight Pmenu ctermbg=8 guibg=#606060
+highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
 
-colorscheme solarized
-" colorscheme darkblue
+":match OverLength '\%200v.*'
 
 "-----------------------------------------------------------
 " Backup
@@ -444,12 +454,6 @@ if MySys() == "windows"
     endfunction
 endif
 
-" Solarized
-set t_Co=256
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
-let g:solarized_contrast="high"
-let g:solarized_visibility="high"
 
 "-----------------------------------------------------------
 " Session options
@@ -779,11 +783,6 @@ endfunction
 "Basically you press * or # to search for the current selection !! Really useful
 vnoremap <silent> * :call VisualSearch('f')<CR>
 vnoremap <silent> # :call VisualSearch('b')<CR>
-
-
-highlight Pmenu ctermbg=8 guibg=#606060
-highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
-highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
 
 
 "-----------------------------------------------------------
