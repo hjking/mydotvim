@@ -1521,6 +1521,8 @@ if pathogen#is_disabled('vim-cycle') == 0
           \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
           \   [['£¨:£©', '¡¸:¡¹', '¡º:¡»'], 'sub_pairs'],
           \ ]
+    nmap <silent> <Leader>n <Plug>CycleNext
+    vmap <silent> <Leader>n <Plug>CycleNext
 endif
 " }}}
 
