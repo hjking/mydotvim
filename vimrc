@@ -212,7 +212,7 @@ set lazyredraw                  " Don't redraw while executing macros
 highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
 ":match OverLength '\%200v.*'
 
-colorscheme peachpuff
+colorscheme solarized
 " colorscheme darkblue
 
 "-----------------------------------------------------------
@@ -779,6 +779,11 @@ endfunction
 "Basically you press * or # to search for the current selection !! Really useful
 vnoremap <silent> * :call VisualSearch('f')<CR>
 vnoremap <silent> # :call VisualSearch('b')<CR>
+
+
+highlight Pmenu ctermbg=8 guibg=#606060
+highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
 
 
 "-----------------------------------------------------------

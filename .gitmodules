@@ -313,3 +313,6 @@
 [submodule "bundle/delimitMate"]
 	path = bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
+[submodule "bundle/irblack"]
+	path = bundle/irblack
+	url = https://github.com/wgibbs/vim-irblack.git
