@@ -87,6 +87,7 @@ if has("gui_running")
     endif
 endif
 set scrolloff=3             " Keep 3 lines when cursor reach the top/bottom
+set sidescrolloff=2
 
 " autocmd
 autocmd BufWritePost .vimrc source % source ~/.gvimrc

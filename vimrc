@@ -22,6 +22,10 @@ set nocompatible                " not use vi keyboard mode
 let g:vimrc_loaded = 1
 let g:vimrc_disable_setting = 1
 
+" set mapleader
+let mapleader=","
+let g:mapleader=","
+imap jj <Esc> " Professor VIM says '87% of users prefer jj over esc', jj abrams disagrees
 "-----------------------------------------------------------
 " Platform
 "-----------------------------------------------------------
@@ -307,11 +311,12 @@ set iskeyword+=_,$,@,%,#,-  " Keywords for search and some commands, no wrap
 set clipboard+=unnamed
 
 set list                        " list mode
-"set listchars=tab:\|\ ,trail:.,extends:>,precedes:<,eol:$   "display TAB£¬EOL,etc
+"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB£¬EOL,etc
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 
 set autochdir          " Change the current working dir whenever open a file,
                        " switch buffers, delete a buffer, open/close a window
+set matchpairs+=<:>
 
 "-----------------------------------------------------------
 """ Status Line
@@ -369,11 +374,11 @@ set magic           " Changes the special characters that can be used in search 
 "-----------------------------------------------------------
 """ Folding Setting
 "-----------------------------------------------------------
+" set foldenable              " turn on folding
 set nofoldenable            " disable folding
 if exists("&foldlevel")
     set foldlevel=999           " make it really high, so they're not displayed by default
 endif
-set foldenable              " turn on folding
 set foldmarker={,}
 set foldmethod=indent       " Make folding indent sensitive  // syntax
 set foldnestmax=5
@@ -416,12 +421,18 @@ if v:version > 703
     set cryptmethod=blowfish
 endif
 
+"-----------------------------------------------------------
+" Windows
+"-----------------------------------------------------------
+set equalalways " Multiple windows, when created, are equal in size
 set splitbelow
 set splitright
 
 set virtualedit+=block
 
 set display+=lastline
+
+set updatetime=1000
 
 "-----------------------------------------------------------
 " Diff
@@ -497,9 +508,6 @@ set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
 " :cmap    -      -        -         -                -         yes           -
 " :lmap    -      -        -         -               yes*       yes*          yes*
 "-----------------------------------------------------------
-" set mapleader
-let mapleader=","
-let g:mapleader=","
 
 " map <F1> :call ToggleSketch()<CR>
 " map <F2> zr
@@ -685,6 +693,7 @@ nnoremap <silent> <leader>p :bprevious<CR>
 
 " ,s - split horizontally
 nnoremap <silent> <leader>s :split<CR>
+:noremap <Leader>h :split^M^W^W<cr>
 
 " ,v - split vertically
 nnoremap <silent> <leader>v :vsplit<CR>
@@ -708,6 +717,8 @@ inoremap <buffer> /*          /**/<Left><Left>
 inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
 inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
 inoremap <buffer> <Leader>/*  /*
+
+map <Leader>p <C-^>     "Go back to previous file
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -744,7 +755,6 @@ endif " has("autocmd")
 "-----------------------------------------------------------
 "highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
 "au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
-set ut=100
 
 "-----------------------------------------------------------
 " Abbreviations
