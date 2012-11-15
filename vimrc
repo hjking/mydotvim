@@ -1425,6 +1425,7 @@ endfunction
 "-----------------------------------------------------------
 if pathogen#is_disabled('yankring') == 0
     let g:yankring_enabled=0
+    let g:yankring_history_file = '.yankring'
     map <leader>yr :YRShow<cr>
 endif
 " }}}
