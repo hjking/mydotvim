@@ -313,9 +313,12 @@
 [submodule "bundle/delimitMate"]
 	path = bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
+    ignore = dirty
 [submodule "bundle/irblack"]
 	path = bundle/irblack
 	url = https://github.com/wgibbs/vim-irblack.git
+    ignore = dirty
 [submodule "bundle/vimfiler"]
 	path = bundle/vimfiler
 	url = https://github.com/Shougo/vimfiler.git
+    ignore = dirty
