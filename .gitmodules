@@ -316,3 +316,6 @@
 [submodule "bundle/irblack"]
 	path = bundle/irblack
 	url = https://github.com/wgibbs/vim-irblack.git
+[submodule "bundle/vimfiler"]
+	path = bundle/vimfiler
+	url = https://github.com/Shougo/vimfiler.git

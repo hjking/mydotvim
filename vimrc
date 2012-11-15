@@ -25,7 +25,6 @@ let g:vimrc_disable_setting = 1
 " set mapleader
 let mapleader=","
 let g:mapleader=","
-imap jj <Esc> " Professor VIM says '87% of users prefer jj over esc', jj abrams disagrees
 "-----------------------------------------------------------
 " Platform
 "-----------------------------------------------------------
@@ -37,6 +36,7 @@ function! MySys()
         return "linux"
     endif
 endfunction
+let s:is_windows = has('win32') || has('win64')
 
 " Windows Compatible {
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
@@ -80,7 +80,7 @@ if v:version < 702
     call add(g:pathogen_disabled, 'unite')
     call add(g:pathogen_disabled, 'ColorV')
     call add(g:pathogen_disabled, 'galaxy')
-	call add(g:pathogen_disabled, 'neosnippet')
+    call add(g:pathogen_disabled, 'neosnippet')
     call add(g:pathogen_disabled, 'AutoComplPop')
     call add(g:pathogen_disabled, 'netrw')
 endif
@@ -128,65 +128,57 @@ if has("multi_byte")
     " CJK environment detection and corresponding setting
     if v:lang =~ "^zh_CN"
     " Use cp936 to support GBK, euc-cn == gb2312
-        set encoding=chinese
-        set termencoding=chinese
+        " set encoding=chinese
+        set encoding=utf-8
         set fileencoding=chinese
     elseif v:lang =~ "^zh_TW"
-        " cp950, big5 or euc-tw. Are they equal to each other?
         set encoding=taiwan
-        set termencoding=taiwan
         set fileencoding=taiwan
     elseif v:lang =~ "^ko"
-        " Copied from someone's dotfile, untested
         set encoding=euc-kr
-        set termencoding=euc-kr
         set fileencoding=euc-kr
     elseif v:lang =~ "^ja_JP"
-        " Copied from someone's dotfile, unteste
         set encoding=cp932                  " euc-jp
-        set termencoding=cp932              " euc-jp
         set fileencoding=cp932              " euc-jp
-    elseif v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
+    elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
         " Detect UTF-8 locale, and replace CJK setting if needed
         set encoding=utf-8
-        set termencoding=utf-8
         set fileencoding=utf-8
     endif
+    let &termencoding = &encoding
 else
     echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
 endif
 
-fun! ViewUTF8()
-    set encoding=utf-8
-    set termencoding=big5
-endfun
-
-fun! UTF8()
-    set encoding=utf-8
-    set termencoding=big5
-    set fileencoding=utf-8
-    set fileencodings=ucs-bom,big5,utf-8,latin1
-endfun
-
-fun! Big5()
-    set encoding=big5
-    set fileencoding=big5
-endfun
-
+if MySys() == "windows"
+    language message en                   " message language
+    " language message en_US                   " message language
+    " language message zh_CN.UTF-8
+    " lang messages zh_CN.UTF-8 " 解决consle输出乱码
+elseif MySys() == "linux"
+    language message C
+endif
 "set langmenu=zh_CN.UTF-8
 set langmenu=none               " menu language
-"language message zh_CN.UTF-8
-lang mes en_US                   " message language
-" lang messages zh_CN.UTF-8 " 解决consle输出乱码
+
+if MySys() == "windows"
+    if exists('+shellslash')
+        set shellslash      " Exchange path separator
+    endif
+endif
 
 set history=200                 " save cmd number in history
 set viminfo='50,<1000,:50,n$VIM/viminfo     " save session
 
 source $VIMRUNTIME/vimrc_example.vim
-" source $VIMRUNTIME/mswin.vim      " Win behaviour
-" behave mswin
+if MySys() == "windows"
+    " source $VIMRUNTIME/mswin.vim      " Win behaviour
+endif
 
-" set helplang=cn                 " use Chinese help
+runtime! ftplugin/man.vim
+runtime! macros/matchit.vim
+
+set helplang& helplang=en                 " use Chinese help
 
 "-----------------------------------------------------------
 " Switch syntax highlighting on.
@@ -213,10 +205,15 @@ let g:solarized_contrast="high"
 let g:solarized_visibility="high"
 colorscheme solarized
 
+" Set augroup
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
 if exists("&autoread")
     set autoread                    " autoload when file changed outside vim
 endif
-set autowrite                   " write a modified buffer on each :next , ...
+set autowrite                   " write a modified buffer on each :next
 
 set lazyredraw                  " Don't redraw while executing macros
 
@@ -275,15 +272,25 @@ set shortmess+=atoOIT           " To avoid some hint messages
 set report=0                    " Threshold for reporting number of lines changed
 set noerrorbells                " No bell for error messages
 " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
-set fillchars=stl:-,stlnc:\ ,diff:-  " Characters to fill the statuslines and vertical separators
+set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set novisualbell                " Use visual bell instead of beeping
 set browsedir=current           " which directory to use for the file browser
 set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
-set virtualedit=onemore         " allow for cursor beyond last character
+" set virtualedit=onemore         " allow for cursor beyond last character
+set virtualedit+=block          " Enable virtualedit in visual block mode
+
+" Set keyword help.
+set keywordprg=:help
+
+" Check timestamp more for 'autoread'.
+autocmd MyAutoCmd WinEnter * checktime
 
 "-----------------------------------------------------------
 """ Line Feed
 "-----------------------------------------------------------
+" Default fileformat
+set fileformat=unix
+" Automatic recognition of a new line cord
 set fileformats=unix,dos,mac
 nmap <leader>fd :se ff=dos<cr>
 nmap <leader>fu :se ff=unix<cr>
@@ -304,11 +311,18 @@ endif
 set linebreak               " wrap at the right place
 set showbreak=>
 set iskeyword+=_,$,@,%,#,-  " Keywords for search and some commands, no wrap
-
+set breakat=\ \	;:,!?
 "-----------------------------------------------------------
 """ ClipBoard
 "-----------------------------------------------------------
-set clipboard+=unnamed
+" Use clipboard register.
+" set clipboard+=unnamed
+if has('unnamedplus')
+  set clipboard& clipboard+=unnamedplus
+else
+  set clipboard& clipboard+=unnamed
+endif
+
 
 set list                        " list mode
 "set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
@@ -316,7 +330,6 @@ set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 
 set autochdir          " Change the current working dir whenever open a file,
                        " switch buffers, delete a buffer, open/close a window
-set matchpairs+=<:>
 
 "-----------------------------------------------------------
 """ Status Line
@@ -366,10 +379,13 @@ set incsearch       " Show the pattern when typing a search command
 set gdefault        " Replace all matched in a line, not just first one
 set showmatch       " Highlight matched pairs
 set matchtime=5     " Tenths of a second to show the matching paren
+set matchpairs+=<:>
 set ignorecase      " Ignore cases
 set smartcase       " 
 set nowrapscan      " Don't Searches wrap around the end of the file
 set magic           " Changes the special characters that can be used in search patterns
+" Use grep.
+set grepprg=grep\ -nH
 
 "-----------------------------------------------------------
 """ Folding Setting
@@ -409,6 +425,7 @@ set softtabstop=4           " Soft TAB width
 set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
 set expandtab               " use SPACE instead of TAB
 set smarttab                " use SPACE instead of TAB at start of line
+set shiftround              " Round indent by shiftwidth
 
 "-----------------------------------------------------------
 " Indent
@@ -428,10 +445,8 @@ set equalalways " Multiple windows, when created, are equal in size
 set splitbelow
 set splitright
 
-set virtualedit+=block
-
 set display+=lastline
-
+" CursorHold time
 set updatetime=1000
 
 "-----------------------------------------------------------
@@ -482,13 +497,21 @@ set complete-=u
 set complete-=i
 set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
 set complete+=k                 " scan the files given with the 'dictionary' option
-set completeopt=longest,menu    " Insert mode completetion
+set completeopt=longest,menuone    " Insert mode completetion
 " set wildmode=longest:full,full
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
 set wildmenu                    " command-line completion operates in an enhanced mode
 set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
+" Set popup menu max height.
+set pumheight=20
+
+set showtabline=2
+
+" Adjust window size of preview and help.
+set previewheight=10
+set helpheight=12
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -576,6 +599,9 @@ elseif MySys() == "linux"
     nmap ,v :e ~/.vimrc
 endif
 
+" Easily macro.
+nnoremap @@ @a
+
 " CTRL-A is Select All
 " noremap     <C-A>   gggH<C-O>G
 " inoremap    <C-A>   <C-O>gg<C-O>gH<C-O>G
@@ -631,6 +657,36 @@ map <leader>s? z=
 " "noremap * g*
 " "noremap # g#
 map <kMultiply> g*          " map * to g*
+" Smart word search."{{{
+" Search cursor word by word unit.
+" nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
+" Search cursor word.
+nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
+" Search from cursor to word end.
+" nnoremap <silent> #  :<C-u>call <SID>SetSearch('""ye')<CR>
+
+" Search selected text.
+xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
+xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
+
+""""""""""""""""""""""""""""""
+" Set search word.
+" If set additional parametar, search by word unit.
+""""""""""""""""""""""""""""""
+function! s:SetSearch(cmd, ...)
+  let saved_reg = @"
+  if a:cmd != ''
+    silent exec 'normal! '.a:cmd
+  endif
+  let pattern = escape(@", '\\/.*$^~[]')
+  let pattern = substitute(pattern, '\n$', '', '')
+  if a:0 > 0
+    let pattern = '\<'.pattern.'\>'
+  endif
+  let @/ = pattern
+  let @" = saved_reg
+  echo @/
+endfunction "}}}
 
 " repeat command for each line in selection
 vnoremap . :normal .<CR>
@@ -712,6 +768,7 @@ nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question
 
 "clearing highlighted search
 nmap <silent> <leader>\ :nohlsearch<CR>
+nnoremap <ESC><ESC> :nohlsearch<CR>
 
 inoremap <buffer> /*          /**/<Left><Left>
 inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
@@ -719,6 +776,135 @@ inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
 inoremap <buffer> <Leader>/*  /*
 
 map <Leader>p <C-^>     "Go back to previous file
+
+" Easy escape."{{{
+imap jj <Esc>
+onoremap jj           <ESC>
+inoremap j<Space>     j
+onoremap j<Space>     j
+"}}}
+
+" Jump mark can restore column."{{{
+nnoremap \  `
+" Useless command.
+nnoremap M  m
+"}}}
+
+" Smart <C-f>, <C-b>.
+nnoremap <silent> <C-f> <C-f>
+nnoremap <silent> <C-b> <C-b>
+
+" Like gv, but select the last changed text.
+nnoremap gc  `[v`]
+" Specify the last changed text as {motion}.
+vnoremap <silent> gc  :<C-u>normal gc<CR>
+onoremap <silent> gc  :<C-u>normal gc<CR>
+
+" Smart home and smart end."{{{
+nnoremap <silent> gh  :<C-u>call SmartHome("n")<CR>
+nnoremap <silent> gl  :<C-u>call SmartEnd("n")<CR>
+xnoremap <silent> gh  <ESC>:<C-u>call SmartHome("v")<CR>
+xnoremap <silent> gl  <ESC>:<C-u>call SmartEnd("v")<CR>
+nnoremap <expr> gm    (virtcol('$')/2).'\|'
+xnoremap <expr> gm    (virtcol('$')/2).'\|'
+" Smart home function"{{{
+function! SmartHome(mode)
+  let curcol = col('.')
+
+  if &wrap
+    normal! g^
+  else
+    normal! ^
+  endif
+  if col('.') == curcol
+    if &wrap
+      normal! g0
+    else
+      normal! 0
+    endif
+  endif
+
+  if a:mode == "v"
+    normal! msgv`s
+  endif
+
+  return ""
+endfunction "}}}
+" Smart end function"{{{
+function! SmartEnd(mode)
+  let curcol = col('.')
+  let lastcol = a:mode ==# 'i' ? col('$') : col('$') - 1
+
+  " Gravitate towards ending for wrapped lines
+  if curcol < lastcol - 1
+    call cursor(0, curcol + 1)
+  endif
+
+  if curcol < lastcol
+    if &wrap
+      normal! g$
+    else
+      normal! $
+    endif
+  else
+    normal! g_
+  endif
+
+  " Correct edit mode cursor position, put after current character
+  if a:mode == "i"
+    call cursor(0, col(".") + 1)
+  endif
+
+  if a:mode == "v"
+    normal! msgv`s
+  endif
+
+  return ""
+endfunction "}}}
+"}}}
+
+" Paste next line.
+nnoremap <silent> gp o<ESC>p^
+nnoremap <silent> gP O<ESC>P^
+xnoremap <silent> gp o<ESC>p^
+xnoremap <silent> gP O<ESC>P^
+
+" Jump to a line and the line of before and after of the same indent."{{{
+" Useful for Python.
+nnoremap <silent> g{ :<C-u>call search('^' . matchstr(getline(line('.') + 1), '\(\s*\)') .'\S', 'b')<CR>^
+nnoremap <silent> g} :<C-u>call search('^' . matchstr(getline(line('.')), '\(\s*\)') .'\S')<CR>^
+"}}}
+
+" Select rectangle.
+xnoremap r <C-v>
+" Select until end of current line in visual mode.
+xnoremap v $h
+
+" a>, i], etc... "{{{
+" <angle>
+onoremap aa  a>
+xnoremap aa  a>
+onoremap ia  i>
+xnoremap ia  i>
+
+" [rectangle]
+onoremap ar  a]
+xnoremap ar  a]
+onoremap ir  i]
+xnoremap ir  i]
+
+" 'quote'
+onoremap aq  a'
+xnoremap aq  a'
+onoremap iq  i'
+xnoremap iq  i'
+
+" "double quote"
+onoremap ad  a"
+xnoremap ad  a"
+onoremap id  i"
+xnoremap id  i"
+"}}}
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -891,6 +1077,9 @@ if pathogen#is_disabled('taglist') == 0
     elseif MySys() == "linux"
         let Tlist_Ctags_Cmd = '/usr/bin/ctags'
     endif
+    if !executable('ctags')
+        let loaded_taglist = 1
+    endif
     let Tlist_Use_Right_Window=1                " display at right side
     let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
     let Tlist_Sort_Type = "name"                " sort by name
@@ -1025,7 +1214,7 @@ if pathogen#is_disabled('netrw') == 0
     let g:netrw_winsize        = 25
     let g:netrw_keepdir        = 0
     " let g:netrw_preview        = 0
-    let g:netrw_liststyle      = 0
+    let g:netrw_liststyle      = 3
     let g:netrw_browse_split   = 0
     let g:netrw_cursor         = 3
     let g:netrw_banner         = 0
@@ -1035,6 +1224,10 @@ if pathogen#is_disabled('netrw') == 0
     let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
     let g:netrw_cursor         = 0
     let g:netrw_errorlvl       = 1
+    if executable('wget')
+      let g:netrw_http_cmd = 'wget'
+    endif
+
     map fe :Texplore<CR>            " open in new tab
     map vfe :Vexplore<CR>           " vertical split
     nmap <silent> <leader>fe :Sexplore!<cr>
@@ -1063,7 +1256,7 @@ if pathogen#is_disabled('nerdtree') == 0
 endif
 
 "-----------------------------------------------------------
-"Scope
+" Cscope
 "-----------------------------------------------------------
 if has("cscope")
     if MySys() == "linux"
@@ -1076,10 +1269,9 @@ if has("cscope")
     set nocsverb
     " add any database in current directory
     if filereadable("cscope.out")
-        cs add cscope.out
-    " else add database pointed to by environment
+        silent cscope add cscope.out
     elseif $CSCOPE_DB != ""
-    cs add $CSCOPE_DB
+        silent cscope add $CSCOPE_DB
     endif
     set csverb
     set cscopetag
@@ -1154,14 +1346,19 @@ endif
 "-----------------------------------------------------------
 if pathogen#is_disabled('ShowMarks') == 0
     " Enable ShowMarks
-    let showmarks_enable = 1
+    let g:showmarks_enable = 1
     " Show which marks
-    let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     " Ignore help, quickfix, non-modifiable buffers
-    let showmarks_ignore_type = "hqm"
+    let g:showmarks_ignore_type = "hqm"
     " Hilight lower & upper marks
-    let showmarks_hlline_lower = 1
-    let showmarks_hlline_upper = 1
+    let g:showmarks_hlline_lower = 1
+    let g:showmarks_hlline_upper = 1
+    let g:showmarks_textlower = "\t"
+    let g:showmarks_textupper = "\t"
+    let g:showmarks_textother = "\t"
+    let g:showmarks_no_mappings = 1
+    nmap mt <Plug>ShowMarksToggle
 endif
 
 
@@ -1210,6 +1407,7 @@ let g:timestamp_modelines = 20
 "   let autodate_format = ': %Y/%m/%d %H:%M:%S '
 let plugin_autodate_disable = 1     " disable
 let autodate_format = '%Y/%m/%d-%H:%M:%S '
+let autodate_keyword_pre = 'Last \%(Change\|Modified\):'
 """ Function: change last change time
 function! LastMod()
   if line("$") > 5
@@ -1338,7 +1536,8 @@ if pathogen#is_disabled('Vim-Support') == 0
         let g:plugin_dir = '$VIM/vimfiles/bundle/Vim-Support'
         let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
         let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
-        let g:Vim_LocalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
+        let g:Vim_LocalTemplateDir  = '$VIM/vimfiles/vim-support/templates'
+        let g:Vim_LocalTemplateFile = '$VIM/vimfiles/vim-support/templates/Templates'
     elseif MySys() == "linux"
         let g:Vim_GlobalTemplateDir = '~/.vim/bundle/Vim-Support/vim-support/templates'
         let g:Vim_GlobalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
@@ -1354,15 +1553,18 @@ endif
 " {{{
 if pathogen#is_disabled('tagbar') == 0
     if v:version > 700 && has('patch167')
-      let g:tagbar_width = 30
-      let g:tagbar_autofocus = 1
-      let g:tagbar_sort = 0
-      let g:tagbar_compact = 1
-      let g:tagbar_expand = 1
-      let g:tagbar_singleclick = 1
-      let g:tagbar_usearrows = 1
-
-      nnoremap <silent><leader>tt :TagbarToggle<CR>
+        if !executable('ctags')
+            let g:loaded_tagbar = 1
+        elseif
+            let g:tagbar_width = 30
+            let g:tagbar_autofocus = 1
+            let g:tagbar_sort = 0
+            let g:tagbar_compact = 1
+            let g:tagbar_expand = 1
+            let g:tagbar_singleclick = 1
+            let g:tagbar_usearrows = 1
+            nnoremap <silent><leader>tt :TagbarToggle<CR>
+        endif
     endif
 endif
 " }}}
@@ -1374,7 +1576,7 @@ if pathogen#is_disabled('neocomplcache') == 0
     if v:version > 702
       let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
       let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-      let g:neocomplcache_enable_auto_select = 1 
+      let g:neocomplcache_enable_auto_select = 1
       let g:neocomplcache_enable_smart_case = 1  " Use smartcase
       let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
       let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
@@ -1439,7 +1641,10 @@ endif
 " indent guides
 " {{{
 if pathogen#is_disabled('indent-guides') == 0
+    let g:indent_guides_enable_on_vim_startup = 0
     let g:indent_guides_auto_colors = 0
+    let g:indent_guides_guide_size = 1
+    let g:indent_guides_indent_levels = 30
     autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
     autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
@@ -1578,6 +1783,110 @@ endif
 let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 " }}}
 
+"-----------------------------------------------------------
+" vimfiler
+" {{{
+if pathogen#is_disabled('vimfiler') == 0
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_edit_action = 'tabopen'
+    let g:vimfiler_enable_clipboard = 0
+    let g:vimfiler_safe_mode_by_default = 0
+    let g:vimfiler_time_format = '%y-%m-%d %H:%M'
+endif
+" }}}
+
+"-----------------------------------------------------------
+" alignta
+" {{{
+if pathogen#is_disabled('vim-alignta') == 0
+    let g:alignta_default_arguments = '! \S\+'
+    xnoremap <silent> <LocalLeader>= :Alignta! \S\+<CR>
+    xnoremap <silent> <LocalLeader>A :Alignta! \S\+<CR>
+endif
+" }}}
+
+"-----------------------------------------------------------
+" unite
+" {{{
+if pathogen#is_disabled('unite') == 0
+    nnoremap [unite] <Nop>
+    xnoremap [unite] <Nop>
+    nmap <Leader>f [unite]
+    xmap <Leader>f [unite]
+
+    nnoremap [unite]S :<C-U>Unite source<CR>
+    nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
+    nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
+    nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search line<CR>
+
+    nnoremap <silent> [unite]d :<C-U>Unite -buffer-name=mru_dir -start-insert directory_mru<CR>
+    nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
+    nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=registers -start-insert register<CR>
+    xnoremap <silent> [unite]p "_d:<C-U>Unite -buffer-name=register register<CR>
+    nnoremap <silent> [unite]b :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
+    nnoremap <silent> [unite]m :<C-U>Unite mark<CR>
+    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps help<CR>
+    nnoremap <silent> [unite]o :<C-U>Unite outline<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
+    nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
+    nnoremap <silent> [unite]g :<C-u>Unite tab<CR>
+    " nnoremap <silent> [unite]G :<C-u>Unite grep -no-quit<CR>
+    nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
+    nnoremap <silent> [unite]c :<C-u>Unite change<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite poslist<CR>
+
+    let g:unite_update_time = 70
+    let g:unite_enable_split_vertically = 1
+    let g:unite_source_file_mru_time_format = "(%m/%d %T) "
+    let g:unite_source_file_rec_max_depth = 5
+    let g:unite_enable_ignore_case = 1
+    let g:unite_enable_smart_case = 1
+    let g:unite_enable_start_insert = 0
+    let g:unite_enable_short_source_names = 1
+    let g:unite_source_history_yank_enable = 1
+    let g:unite_winheight = 20
+    let g:unite_source_session_path = expand('~/.vim/session/')
+    let g:unite_cursor_line_highlight = 'TabLineSel'
+    let g:unite_source_file_mru_filename_format = ':~:.'
+    let g:unite_source_file_mru_limit = 300
+    " let g:unite_source_directory_mru_time_format = ''
+    let g:unite_source_directory_mru_limit = 300
+
+    function! s:unite_settings()
+      nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
+      nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
+      nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
+      nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
+      nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
+      nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
+
+      vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
+
+      imap <buffer> <C-J> <Plug>(unite_select_next_line)
+      imap <buffer> <C-K> <Plug>(unite_select_previous_line)
+      imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
+      imap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    endfunction
+endif
+" }}}
+
+" git.vim{{{
+let g:git_no_default_mappings = 1
+let g:git_use_vimproc = 1
+let g:git_command_edit = 'rightbelow vnew'
+nnoremap <silent> [Space]gd :<C-u>GitDiff --cached<CR>
+nnoremap <silent> [Space]gD :<C-u>GitDiff<CR>
+" nnoremap <silent> [Space]gs :<C-u>GitStatus<CR>
+nnoremap <silent> [Space]gl :<C-u>GitLog<CR>
+nnoremap <silent> [Space]gL :<C-u>GitLog -u \| head -10000<CR>
+nnoremap <silent> [Space]ga :<C-u>GitAdd<CR>
+nnoremap <silent> [Space]gA :<C-u>GitAdd <cfile><CR>
+" nnoremap <silent> [Space]gc :<C-u>GitCommit<CR>
+nnoremap <silent> [Space]gp q:Git push<Space>
+nnoremap <silent> [Space]gt q:Git tag<Space>
+"}}}
+
+
 " if pathogen#is_disabled('molokai') == 0
 "     echoerr "molokai enable"
 " endif
@@ -1585,3 +1894,5 @@ let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 ""if filereadable(expand("~/.vimrc.bundles.local"))
 ""    source ~/.vimrc.bundles.local
 ""endif
+
+set secure
