@@ -33,19 +33,52 @@ if !has('unix')
     set guioptions-=a
 endif
 
-" Font Setting
-if has('mac')
-    set guifont=Menlo\ Regular:h13
-elseif has('unix')
-    " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
-    set guifont=Monospace\ 12
-    set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
-else
-    " Windows platform
-    set guifont=DejaVu_Sans_Mono:h12:cANSI
-    " set guifont=Raize:h12:b:cANSI
-    set guifontwide=Courier_New:h12:cANSI
+" set default guifont
+if has("gui_running")
+    " check and determine the gui font after GUIEnter. 
+    " NOTE: getfontname function only works after GUIEnter.  
+    au GUIEnter * call s:SetGuiFont() 
 endif
+
+" set guifont
+function s:SetGuiFont()
+    if has('mac')
+        if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+            set guifont=Bitstream\ Vera\ Sans\ Mono:h12
+        elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
+            set guifont=DejaVu\ Sans\ Mono:h12
+        elseif getfontname( "Menlo\ Regular" ) != ""
+            set guifont=Menlo\ Regular:h12
+        endif
+    elseif has('unix')
+        " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
+        set guifont=Monospace\ 12
+        set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
+    elseif has("gui_win32")     " Windows platform
+        let font_name = ""
+        if getfontname( "DejaVu_Sans_Mono" ) != ""
+            set guifont=DejaVu_Sans_Mono:h11:cANSI
+            let font_name = "DejaVu_Sans_Mono" 
+        elseif getfontname( "Source_Code_Pro" ) != ""
+            set guifont=Source_Code_Pro:h12:cANSI
+            let font_name = "Source_Code_Pro" 
+        elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+            set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
+            let font_name = "Bitstream_Vera_Sans_Mono" 
+        elseif getfontname( "Consolas" ) != ""
+            set guifont=Consolas:h11:cANSI " this is the default visual studio font
+            let font_name = "Consolas" 
+        elseif getfontname( "Raize" ) != ""
+            set guifont=Raize:h12:b:cANSI
+            let font_name = "Raize" 
+        else
+            set guifont=Lucida_Console:h12:cANSI
+            let font_name = "Lucida_Console" 
+        endif
+        set guifontwide=Courier_New:h12:cANSI
+        silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
+    endif
+endfunction
 
 " set guifont=GulimChe:h13:cANSI
 " set guifont=MS_Gothic:h13:cANSI

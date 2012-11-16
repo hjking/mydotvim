@@ -456,10 +456,11 @@ set updatetime=1000
 set diffopt=context:3       " display 3 lines above and below the different place
 " set scrollbind      " 左右两侧的屏幕滚动是同步的
 set diffopt+=iwhite
-if MySys() == "windows"
+set diffopt+=filler
+" if MySys() == "windows"
     set diffexpr=MyDiff()
     function! MyDiff()
-        let opt = '-a --binary '
+        let opt = '-a --binary -w '
         if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
         if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
         let arg1 = v:fname_in
@@ -468,20 +469,21 @@ if MySys() == "windows"
         if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
         let arg3 = v:fname_out
         if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-        let eq = ''
-        if $VIMRUNTIME =~ ' '
-            if &sh =~ '\<cmd'
-            let cmd = '""' . $VIMRUNTIME . '\diff"'
-            let eq = '"'
-        else
-            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-        endif
-        else
-            let cmd = $VIMRUNTIME . '\diff'
-        endif
-        silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+        silent execute '!' . 'diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+        " let eq = ''
+        " if $VIMRUNTIME =~ ' '
+        "     if &sh =~ '\<cmd'
+        "     let cmd = '""' . $VIMRUNTIME . '\diff"'
+        "     let eq = '"'
+        " else
+        "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        " endif
+        " else
+        "     let cmd = $VIMRUNTIME . '\diff'
+        " endif
+        " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
     endfunction
-endif
+" endif
 
 
 "-----------------------------------------------------------
@@ -513,6 +515,10 @@ set showtabline=2
 " Adjust window size of preview and help.
 set previewheight=10
 set helpheight=12
+
+" programming related 
+set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find 
+set makeef=error.err " the errorfile for :make and :grep 
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -636,6 +642,9 @@ map ,fv     :set ft=verilog_systemverilog<CR>
 " Fold
 nmap <silent> <leader>zo zO
 vmap <silent> <leader>zo zO
+" Fold close & Fold open
+noremap <unique> <kPlus> zo
+noremap <unique> <kMinus> zc
 
 if version >= 600
   " Reduce folding
@@ -906,6 +915,24 @@ xnoremap ad  a"
 onoremap id  i"
 xnoremap id  i"
 "}}}
+
+" Move in fold
+noremap <unique> z<Up> zk
+noremap <unique> z<Down> zj
+if has("gui_running") "  the <alt> key is only available in gui mode.
+    noremap <unique> <M-Up> zk
+    noremap <unique> <M-Down> zj
+endif
+
+" Easy Diff goto
+noremap <unique> <C-Up> [c
+" noremap <unique> <C-k> [c
+noremap <unique> <C-Down> ]c
+" noremap <unique> <C-j> ]c
+
+" map Up & Down to gj & gk, helpful for wrap text edit
+noremap <unique> <Up> gk
+noremap <unique> <Down> gj
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -1872,7 +1899,9 @@ if pathogen#is_disabled('unite') == 0
 endif
 " }}}
 
-" git.vim{{{
+"-----------------------------------------------------------
+" git.vim
+" {{{
 let g:git_no_default_mappings = 1
 let g:git_use_vimproc = 1
 let g:git_command_edit = 'rightbelow vnew'
@@ -1886,6 +1915,20 @@ nnoremap <silent> [Space]gA :<C-u>GitAdd <cfile><CR>
 " nnoremap <silent> [Space]gc :<C-u>GitCommit<CR>
 nnoremap <silent> [Space]gp q:Git push<Space>
 nnoremap <silent> [Space]gt q:Git tag<Space>
+"}}}
+
+
+"-----------------------------------------------------------
+" EnhCommentify
+"{{{
+let g:EnhCommentifyFirstLineMode='yes'
+let g:EnhCommentifyRespectIndent='yes'
+let g:EnhCommentifyUseBlockIndent='yes'
+let g:EnhCommentifyAlignRight = 'yes'
+let g:EnhCommentifyPretty = 'yes'
+let g:EnhCommentifyBindInNormal = 'no'
+let g:EnhCommentifyBindInVisual = 'no'
+let g:EnhCommentifyBindInInsert = 'no'
 "}}}
 
 

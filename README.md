@@ -1,18 +1,24 @@
 mydotvim
 ========
 
-my dot vim folder
+## my dot vim folder
 
-* Get my dotvim
+1. Get my dotvim
+```shell
     git clone https://kinghom@github.com/kinghom/mydotvim.git
     git submodule init
     git submodule update
+```
 
-* Add a submodule
+2. Add a submodule
+```shell
     git submodule add URL bundle/NAME
     git add .
     git ci -m "some comment"
     git push
+```
 
-* Update submodule
+3. Update submodule
+```shell
     git submodule foreach git pull origin master
+```
