@@ -944,6 +944,9 @@ noremap <unique> <C-Down> ]c
 noremap <unique> <Up> gk
 noremap <unique> <Down> gj
 
+nnoremap <space> 10jzz
+nnoremap <backspace> 10kzz
+
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
