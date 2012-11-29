@@ -1597,7 +1597,7 @@ if pathogen#is_disabled('tagbar') == 0
     if v:version > 700 && has('patch167')
         if !executable('ctags')
             let g:loaded_tagbar = 1
-        elseif
+        else
             let g:tagbar_width = 30
             let g:tagbar_autofocus = 1
             let g:tagbar_sort = 0
