@@ -359,13 +359,15 @@ if has('statusline')
     " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
     set statusline=
     set statusline+=[%f]                " file name
-    set statusline+=[Format=%{&ff}]     " file format
+    set statusline+=[%{&ff}]            " file format
     set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
     set statusline+=%y                  " file type
     set statusline+=%6*%m%*             " modified flag
     set statusline+=%r                  " readonly flag
     set statusline+=%h                  " 
     set statusline+=%w
+    " set statusline+=\ [%{getcwd()}] " current directory
+    set statusline+=%#warningmsg#
     set statusline+=%=                  " left/right separator
     set statusline+=%b(0X%B)
     set statusline+=[Pos=%l,%c%V]
@@ -460,7 +462,7 @@ set diffopt+=filler
 " if MySys() == "windows"
     set diffexpr=MyDiff()
     function! MyDiff()
-        let opt = '-a --binary -w '
+        let opt = '-a --binary '
         if &diffopt =~ 'icase'
             let opt = opt . '-i '
         endif
@@ -479,7 +481,8 @@ set diffopt+=filler
         if arg3 =~ ' '
             let arg3 = '"' . arg3 . '"'
         endif
-        silent execute '!' . 'diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+        let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+        silent execute cmd
         " let eq = ''
         " if $VIMRUNTIME =~ ' '
         "     if &sh =~ '\<cmd'
@@ -529,6 +532,19 @@ set helpheight=12
 " programming related 
 set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find 
 set makeef=error.err " the errorfile for :make and :grep 
+
+" Specify the behavior when switching buffers
+try
+    set switchbuf=useopen,usetab,newtab
+    set showtabline=2
+   catch
+endtry
+
+" Scroll options
+set scrolloff=8
+set sidescrolloff=10
+set sidescroll=1
+
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -721,10 +737,6 @@ inoremap <C-c> <Esc>
 vnoremap > >gv
 vnoremap < <gv
 
-" autocomplete search history in command mode
-cnoremap <C-n> <Up>
-cnoremap <C-p> <Down>
-
 " ,/, F2 - remove highlighted search
 " "nnoremap <silent> ,/ :noh<CR>
 nnoremap <silent> <F2> :noh<CR>
@@ -743,6 +755,9 @@ nnoremap <silent> ,9 :b9<CR>
 " Allow insert mode editing like emacs
 imap <C-a>  <Home>
 imap <C-e>  <End>
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+
 imap <C-k>  <C-o>d$
 imap <M-d>  <C-o>dw
 
@@ -946,6 +961,23 @@ noremap <unique> <Down> gj
 
 nnoremap <space> 10jzz
 nnoremap <backspace> 10kzz
+
+noremap j gjzz
+noremap k gkzz
+noremap gj j
+noremap gk k
+noremap G Gzz
+noremap gg ggzz
+noremap <C-d> <C-d>zz
+noremap <C-u> <C-u>zz
+noremap n nzz
+noremap N Nzz
+" noremap * *zz
+" noremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+
+nnoremap <C-h> :<C-u>help<Space>
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -1498,8 +1530,10 @@ cnoremap $q <C-\>eDeleteTillSlash()<cr>
 cnoremap <C-A>      <Home>
 cnoremap <C-E>      <End>
 cnoremap <C-K>      <C-U>
-cnoremap <C-P> <Up>
-cnoremap <C-N> <Down>
+
+" autocomplete search history in command mode
+cnoremap <C-P>      <Up>
+cnoremap <C-N>      <Down>
 
 
 """" vis
@@ -1527,6 +1561,7 @@ if pathogen#is_disabled('powerline') == 0
     let g:Powerline_cache_enabled = 1
     " override the dividers
     let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
+    let g:Powerline_stl_path_style = 'short'
     " let Powerline_theme = 'skwp'
     " let Powerline_colorscheme = 'skwp'
     " Insert the charcode segment after the filetype segment
@@ -1834,6 +1869,8 @@ if pathogen#is_disabled('vimfiler') == 0
     let g:vimfiler_enable_clipboard = 0
     let g:vimfiler_safe_mode_by_default = 0
     let g:vimfiler_time_format = '%y-%m-%d %H:%M'
+    let g:vimfiler_split_command = 'vertical rightbelow vsplit'
+    let g:vimfiler_min_filename_width = 20
 endif
 " }}}
 
