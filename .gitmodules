@@ -314,3 +314,6 @@
 	path = bundle/vimfiler
 	url = https://github.com/Shougo/vimfiler.git
     ignore = dirty
+[submodule "bundle/colorschemes"]
+	path = bundle/colorschemes
+	url = https://github.com/flazz/vim-colorschemes.git
