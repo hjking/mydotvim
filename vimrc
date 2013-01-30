@@ -97,6 +97,7 @@ endif
 
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
+    call add(g:pathogen_disabled, 'solarized')
 endif
 
 " Disable on purpose
@@ -205,7 +206,7 @@ let g:solarized_termcolors=256
 let g:solarized_contrast="high"
 let g:solarized_visibility="high"
 set background=dark
-colorscheme solarized
+" colorscheme solarized
 
 " Set augroup
 augroup MyAutoCmd
@@ -227,6 +228,10 @@ highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
 highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
 highlight LineNr ctermbg=0
 highlight FoldColumn ctermbg=0
+highlight ShowMarksHLl ctermbg=0
+highlight ShowMarksHLu ctermbg=0
+highlight ShowMarksHLo ctermbg=0
+highlight ShowMarksHLm ctermbg=0
 
 ":match OverLength '\%200v.*'
 
@@ -365,7 +370,7 @@ if has('statusline')
     set statusline+=%y                  " file type
     set statusline+=%6*%m%*             " modified flag
     set statusline+=%r                  " readonly flag
-    set statusline+=%h                  " 
+    set statusline+=%h                  "
     set statusline+=%w
     set statusline+=%=                  " left/right separator
     set statusline+=%b(0X%B)
@@ -383,7 +388,7 @@ set showmatch       " Highlight matched pairs
 set matchtime=5     " Tenths of a second to show the matching paren
 set matchpairs+=<:>
 set ignorecase      " Ignore cases
-set smartcase       " 
+set smartcase       "
 set nowrapscan      " Don't Searches wrap around the end of the file
 set magic           " Changes the special characters that can be used in search patterns
 " Use grep.
@@ -527,9 +532,9 @@ set showtabline=2
 set previewheight=10
 set helpheight=12
 
-" programming related 
-set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find 
-set makeef=error.err " the errorfile for :make and :grep 
+" programming related
+set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
+set makeef=error.err " the errorfile for :make and :grep
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -785,7 +790,8 @@ noremap <leader>w :call DeleteTrailingWS()<CR>
 " nnoremap <silent> <leader>w :write<CR>
 
 " ,W - clear trailing whitespace
-nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
+" nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
+nnoremap <silent> <leader>W :%s=\s\+$==<CR>
 
 "clearing highlighted search
 nmap <silent> <leader>\ :nohlsearch<CR>
@@ -951,7 +957,7 @@ nnoremap <backspace> 10kzz
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
-if has("autocmd") 
+if has("autocmd")
     autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
     autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
     autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
@@ -964,7 +970,7 @@ if has("autocmd")
     autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
     autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
-    autocmd BufReadPost * 
+    autocmd BufReadPost *
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal g`\"" |
       \ endif
@@ -976,6 +982,8 @@ if has("autocmd")
     elseif MySys() == "linux"
         autocmd! BufWritePost .vimrc source %
     endif
+    " remove all trailing whitespace in a file
+    autocmd BufWritePre * :%s/\s\+$//e
 endif " has("autocmd")
 
 "-----------------------------------------------------------
@@ -1131,7 +1139,7 @@ if pathogen#is_disabled('taglist') == 0
     let Tlist_Enable_Fold_Column=0            " Do not show folding tree
     " let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
     " let Tlist_Show_Menu=1                     " show taglist menu
-    " let Tlist_Show_One_File=1           
+    " let Tlist_Show_One_File=1
     " let Tlist_Auto_Update=1                   " auto update
     " let Tlist_Process_File_Always             " 始终解析文件中的tag
     " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
@@ -1169,10 +1177,10 @@ endif
 if pathogen#is_disabled('winmanager') == 0
     " let loaded_winmanager = 1
     "nmap <silent> <leader>wm :WMToggle<cr>
-    let g:winManagerWindowLayout='NERDTree|BufExplorer'  
+    let g:winManagerWindowLayout='NERDTree|BufExplorer'
     "let g:winManagerWindowLayout='FileExplorer|TagList' "what windows CTRL-N 切换
-    "let g:winManagerWindowLayout = 'FileExplorer|TagList'  
-    "let g:winManagerWindowLayout = 'FileExplorer'  
+    "let g:winManagerWindowLayout = 'FileExplorer|TagList'
+    "let g:winManagerWindowLayout = 'FileExplorer'
     let g:winManagerWidth = 25               " How wide should it be( pixels)
     let g:defaultExplorer = 0
     nmap wm :WMToggle<cr>
