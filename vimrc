@@ -207,6 +207,7 @@ let g:solarized_contrast="high"
 let g:solarized_visibility="high"
 set background=dark
 " colorscheme solarized
+colorscheme jhdark
 
 " Set augroup
 augroup MyAutoCmd
@@ -1398,7 +1399,8 @@ if pathogen#is_disabled('ShowMarks') == 0
     " Enable ShowMarks
     let g:showmarks_enable = 1
     " Show which marks
-    let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    " let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let g:showmarks_include = "abcdefghijklmnopqrstuvwxyz"
     " Ignore help, quickfix, non-modifiable buffers
     let g:showmarks_ignore_type = "hqm"
     " Hilight lower & upper marks
