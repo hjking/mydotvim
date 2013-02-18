@@ -98,6 +98,7 @@ endif
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
     call add(g:pathogen_disabled, 'solarized')
+    call add(g:pathogen_disabled, 'YouCompleteMe')
 endif
 
 " Disable on purpose
@@ -1087,6 +1088,33 @@ map <F9> :!python.exe
    " \   exe :"normal g`\"" |
    " \ endif
 " endif :"" has("autocmd")
+
+""" python-mode
+" Disable pylint checking every save
+let g:pymode_lint_write = 0
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pyflakes,pep8"
+
+" Set key 'R' for run python code
+" let g:pymode_run_key = 'R'
+let g:pymode_run_key = '<leader>r'
+
+" Support virtualenv
+let g:pymode_virtualenv = 1
+
+" Enable breakpoints plugin
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_key = '<leader>b'
+
+" syntax highlighting
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+" Don't autofold code
+let g:pymode_folding = 0
+
 
 "-----------------------------------------------------------
 "Java
