@@ -103,6 +103,7 @@ endif
 
 " Disable on purpose
 if exists('g:pathogen_not_loaded_plugin')
+    call add(g:pathogen_disabled, 'python-mode')
 endif
 
 call pathogen#runtime_append_all_bundles()
