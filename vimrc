@@ -13,6 +13,9 @@
 "
 "******************************************************************************/
 
+
+"-------------------------------------------------------------------------------
+"  1 important
 "-------------------------------------------------------------------------------
 " Get out of VI's compatible mode
 " Use Vim settings, rather then Vi settings.
@@ -116,44 +119,6 @@ call pathogen#helptags()
 " }}}
 
 
-"-----------------------------------------------------------
-" Encoding Setting
-"-----------------------------------------------------------
-if has("multi_byte")
-    if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
-        set ambiwidth=double
-    endif
-    " Set fileencoding priority
-    if getfsize(expand("%")) > 0
-        set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
-    else
-        set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
-    endif
-    " CJK environment detection and corresponding setting
-    if v:lang =~ "^zh_CN"
-    " Use cp936 to support GBK, euc-cn == gb2312
-        " set encoding=chinese
-        set encoding=utf-8
-        set fileencoding=chinese
-    elseif v:lang =~ "^zh_TW"
-        set encoding=taiwan
-        set fileencoding=taiwan
-    elseif v:lang =~ "^ko"
-        set encoding=euc-kr
-        set fileencoding=euc-kr
-    elseif v:lang =~ "^ja_JP"
-        set encoding=cp932                  " euc-jp
-        set fileencoding=cp932              " euc-jp
-    elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
-        " Detect UTF-8 locale, and replace CJK setting if needed
-        set encoding=utf-8
-        set fileencoding=utf-8
-    endif
-    let &termencoding = &encoding
-else
-    echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
-endif
-
 if MySys() == "windows"
     language message en                   " message language
     " language message en_US                   " message language
@@ -162,17 +127,6 @@ if MySys() == "windows"
 elseif MySys() == "linux"
     language message C
 endif
-"set langmenu=zh_CN.UTF-8
-set langmenu=none               " menu language
-
-if MySys() == "windows"
-    if exists('+shellslash')
-        set shellslash      " Exchange path separator
-    endif
-endif
-
-set history=200                 " save cmd number in history
-set viminfo='50,<1000,:50,n$VIM/viminfo     " save session
 
 source $VIMRUNTIME/vimrc_example.vim
 if MySys() == "windows"
@@ -181,8 +135,6 @@ endif
 
 runtime! ftplugin/man.vim
 runtime! macros/matchit.vim
-
-set helplang& helplang=en                 " use Chinese help
 
 "-----------------------------------------------------------
 " Switch syntax highlighting on.
@@ -201,114 +153,16 @@ syntax on
 filetype plugin indent on              " load filetype plugin
 ""filetype indent on              " load indent
 
-" Solarized
-set t_Co=256
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
-let g:solarized_contrast="high"
-let g:solarized_visibility="high"
-set background=dark
-" colorscheme solarized
-colorscheme jhdark
 
-" Set augroup
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-if exists("&autoread")
-    set autoread                    " autoload when file changed outside vim
-endif
-set autowrite                   " write a modified buffer on each :next
-
-set lazyredraw                  " Don't redraw while executing macros
-
-" HighLight Character
-highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-" highlight pop menu
-highlight Pmenu ctermbg=8 guibg=#606060
-highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
-highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
-highlight LineNr ctermbg=0
-highlight FoldColumn ctermbg=0
-highlight ShowMarksHLl ctermbg=0
-highlight ShowMarksHLu ctermbg=0
-highlight ShowMarksHLo ctermbg=0
-highlight ShowMarksHLm ctermbg=0
-
-":match OverLength '\%200v.*'
-
-"-----------------------------------------------------------
-" Backup
-"-----------------------------------------------------------
-"set directory=E:\bak
-"set backupdir=E:\bak
-set nobackup                    " no backup file
-set nowritebackup               " no backup before rewrite file
-set noswapfile
-
-"-----------------------------------------------------------
-" Mouse
-"-----------------------------------------------------------
-if MySys() == "windows"
-    set mouse=a
-elseif MySys() == "linux"
-    set mouse=v
-endif
-set selection=inclusive         " defines the behavior of the selection
-set selectmode=mouse            " when use mouse, launch SELECT mode
-set keymodel=startsel           " Shift + arrow key
-" set mousemodel=extend
-set nomousehide                 " Hide the mouse when typing text
-" set selectmode=key
-
-"-----------------------------------------------------------
-"Performance
-"-----------------------------------------------------------
-" Line Number
-set number                      " display line number
-set numberwidth=1
-
+"-------------------------------------------------------------------------------
+"  2 moving around, searching and patterns
+"-------------------------------------------------------------------------------
+" set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
 if MySys() == "windows"
     set path+=D:\cygwin\bin
 elseif MySys() == "linux"
     set path+=/usr/bin
 endif
-
-set cmdheight=1                 " heighth of CMD line
-" set columns=1000                " max column number
-" set title                       " display title
-set shortmess+=atoOIT           " To avoid some hint messages
-set report=0                    " Threshold for reporting number of lines changed
-set noerrorbells                " No bell for error messages
-" set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
-set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
-set novisualbell                " Use visual bell instead of beeping
-set browsedir=current           " which directory to use for the file browser
-set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
-" set virtualedit=onemore         " allow for cursor beyond last character
-set virtualedit+=block          " Enable virtualedit in visual block mode
-
-" Set keyword help.
-set keywordprg=:help
-
-" Check timestamp more for 'autoread'.
-autocmd MyAutoCmd WinEnter * checktime
-
-"-----------------------------------------------------------
-""" Line Feed
-"-----------------------------------------------------------
-" Default fileformat
-set fileformat=unix
-" Automatic recognition of a new line cord
-set fileformats=unix,dos,mac
-nmap <leader>fd :se ff=dos<cr>
-nmap <leader>fu :se ff=unix<cr>
-
-"-----------------------------------------------------------
-""" Wrap Line
-"-----------------------------------------------------------
-" set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
 if has("gui_running")
     if has("gui_win32")     " Win OS
         set wrap            " Wrap line
@@ -318,38 +172,82 @@ if has("gui_running")
 else
     set wrap
 endif
-set linebreak               " wrap at the right place
-set showbreak=>
-set iskeyword+=_,$,@,%,#,-  " Keywords for search and some commands, no wrap
-set breakat=\ \	;:,!?
-"-----------------------------------------------------------
-""" ClipBoard
-"-----------------------------------------------------------
-" Use clipboard register.
-" set clipboard+=unnamed
-if has('unnamedplus')
-  set clipboard& clipboard+=unnamedplus
-else
-  set clipboard& clipboard+=unnamed
-endif
-
-
-set list                        " list mode
-"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 
 set autochdir          " Change the current working dir whenever open a file,
                        " switch buffers, delete a buffer, open/close a window
 
+set nowrapscan      " Don't Searches wrap around the end of the file
+
+"-----------------------------------------------------------
+"Replace/Search
+"-----------------------------------------------------------
+set hlsearch        " Highlight matched result when searching
+set incsearch       " Show the pattern when typing a search command
+set gdefault        " Replace all matched in a line, not just first one
+set ignorecase      " Ignore cases
+set smartcase       "
+set magic           " Changes the special characters that can be used in search patterns
+" Use grep.
+
+
+"-------------------------------------------------------------------------------
+"  3 tags
+"-------------------------------------------------------------------------------
+set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
+
+" Cscope
+"-----------------------------------------------------------
+if has("cscope")
+    if MySys() == "linux"
+        set csprg=/usr/bin/cscope
+    else
+        set csprg=cscope
+    endif
+    set csto=1
+    set cst
+    set nocsverb
+    " add any database in current directory
+    if filereadable("cscope.out")
+        silent cscope add cscope.out
+    elseif $CSCOPE_DB != ""
+        silent cscope add $CSCOPE_DB
+    endif
+    set csverb
+    set cscopetag
+    set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
+endif
+
+
+"-------------------------------------------------------------------------------
+"  4 displaying text
+"-------------------------------------------------------------------------------
+set linebreak               " wrap at the right place
+set breakat=\ \	;:,!?
+set showbreak=>
+set display+=lastline
+" set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
+set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
+set cmdheight=1                 " heighth of CMD line
+" set columns=1000                " max column number
+set list                        " list mode
+"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
+set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+set number                      " display line number
+set numberwidth=1
+set lazyredraw                  " Don't redraw while executing macros
+
+
+"-------------------------------------------------------------------------------
+"  5 syntax, highlighting and spelling
+"-------------------------------------------------------------------------------
+set background=dark
+
+"-------------------------------------------------------------------------------
+"  6 multiple windows
+"-------------------------------------------------------------------------------
 "-----------------------------------------------------------
 """ Status Line
 "-----------------------------------------------------------
-if has('cmdline_info')
-    set ruler                     " Show the line and column number of the cursor position
-    " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
-    set showcmd                     " display incomplete commands
-endif
 " Color of Status Line
 if has('statusline')
     "highlight StatusLine guifg=SlateBlue guibg=Yellow
@@ -381,55 +279,104 @@ if has('statusline')
     set statusline+=[%l/%L(%p%%)]       " cursor position
 endif
 
+set equalalways " Multiple windows, when created, are equal in size
+set splitbelow
+set splitright
+" Adjust window size of preview and help.
+set previewheight=10
+set helpheight=12
+
+
+"-------------------------------------------------------------------------------
+"  7 multiple tab pages
+"-------------------------------------------------------------------------------
+set showtabline=2
+
+"-------------------------------------------------------------------------------
+"  8 terminal
+"-------------------------------------------------------------------------------
+" set title                       " display title
+
+"-------------------------------------------------------------------------------
+"  9 using the mouse
+"-------------------------------------------------------------------------------
 "-----------------------------------------------------------
-"Replace/Search
+" Mouse
 "-----------------------------------------------------------
-set hlsearch        " Highlight matched result when searching
-set incsearch       " Show the pattern when typing a search command
-set gdefault        " Replace all matched in a line, not just first one
+if MySys() == "windows"
+    set mouse=a
+elseif MySys() == "linux"
+    set mouse=v
+endif
+" set mousemodel=extend
+set nomousehide                 " Hide the mouse when typing text
+
+"-------------------------------------------------------------------------------
+" 10 GUI
+"-------------------------------------------------------------------------------
+set browsedir=current           " which directory to use for the file browser
+
+"-------------------------------------------------------------------------------
+" 11 printing
+"-------------------------------------------------------------------------------
+
+"-------------------------------------------------------------------------------
+" 12 messages and info
+"-------------------------------------------------------------------------------
+set shortmess+=atoOIT           " To avoid some hint messages
+if has('cmdline_info')
+    set ruler                     " Show the line and column number of the cursor position
+    " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+    set showcmd                     " display incomplete commands
+endif
+set report=0                    " Threshold for reporting number of lines changed
+set noerrorbells                " No bell for error messages
+set novisualbell                " Use visual bell instead of beeping
+set helplang& helplang=en                 " use Chinese help
+
+"-------------------------------------------------------------------------------
+" 13 selecting text
+"-------------------------------------------------------------------------------
+set selection=inclusive         " defines the behavior of the selection
+set selectmode=mouse            " when use mouse, launch SELECT mode
+set keymodel=startsel           " Shift + arrow key
+" set selectmode=key
+"-----------------------------------------------------------
+""" ClipBoard
+"-----------------------------------------------------------
+" Use clipboard register.
+" set clipboard+=unnamed
+if has('unnamedplus')
+  set clipboard& clipboard+=unnamedplus
+else
+  set clipboard& clipboard+=unnamed
+endif
+
+
+"-------------------------------------------------------------------------------
+" 14 editing text
+"-------------------------------------------------------------------------------
+set backspace=indent,start  " same effect with above line
+set formatoptions+=mM       " describes how automatic formatting is to be done
 set showmatch       " Highlight matched pairs
 set matchtime=5     " Tenths of a second to show the matching paren
 set matchpairs+=<:>
-set ignorecase      " Ignore cases
-set smartcase       "
-set nowrapscan      " Don't Searches wrap around the end of the file
-set magic           " Changes the special characters that can be used in search patterns
-" Use grep.
-set grepprg=grep\ -nH
+"-----------------------------------------------------------
+" Auto Complete Word
+"-----------------------------------------------------------
+" options
+set complete-=u
+set complete-=i
+set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
+set complete+=k                 " scan the files given with the 'dictionary' option
+set completeopt=longest,menuone    " Insert mode completetion
+" Set popup menu max height.
+set pumheight=20
 
-"-----------------------------------------------------------
-""" Folding Setting
-"-----------------------------------------------------------
-" set foldenable              " turn on folding
-set nofoldenable            " disable folding
-if exists("&foldlevel")
-    set foldlevel=999           " make it really high, so they're not displayed by default
-endif
-set foldmarker={,}
-set foldmethod=indent       " Make folding indent sensitive  // syntax
-set foldnestmax=5
-set foldcolumn=2            " width for fold
-set foldlevel=5             " Don't autofold anything (but I can still fold manually)
-set foldlevelstart=1000     " fdls:  fold level start
-set foldopen-=search        " don't open folds when you search into them
-"set foldopen-=undo         " don't open folds when you undo stuff
-""" Code folding options
-nmap <leader>f0 :set foldlevel=0<CR>
-nmap <leader>f1 :set foldlevel=1<CR>
-nmap <leader>f2 :set foldlevel=2<CR>
-nmap <leader>f3 :set foldlevel=3<CR>
-nmap <leader>f4 :set foldlevel=4<CR>
-nmap <leader>f5 :set foldlevel=5<CR>
-nmap <leader>f6 :set foldlevel=6<CR>
-nmap <leader>f7 :set foldlevel=7<CR>
-nmap <leader>f8 :set foldlevel=8<CR>
-nmap <leader>f9 :set foldlevel=9<CR>
-
-"-----------------------------------------------------------
-" File Format
-"-----------------------------------------------------------
-set backspace=indent,start  " same effect with above line
-set formatoptions+=mM       " describes how automatic formatting is to be done
+"-------------------------------------------------------------------------------
+" 15 tabs and indenting
+"-------------------------------------------------------------------------------
 set tabstop=4               " TAB width
 set softtabstop=4           " Soft TAB width
 set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
@@ -444,24 +391,27 @@ set autoindent              " Copy indent from current line when starting a new 
 set smartindent             " Do smart autoindenting when starting a new line
 set cindent                 " Enables automatic C program indenting
 
-if v:version > 703
-    set cryptmethod=blowfish
+
+"-------------------------------------------------------------------------------
+" 16 folding
+"-------------------------------------------------------------------------------
+" set foldenable              " turn on folding
+set nofoldenable            " disable folding
+if exists("&foldlevel")
+    set foldlevel=999           " make it really high, so they're not displayed by default
 endif
+set foldmarker={,}
+set foldmethod=indent       " Make folding indent sensitive  // syntax
+set foldnestmax=5
+set foldcolumn=2            " width for fold
+set foldlevel=5             " Don't autofold anything (but I can still fold manually)
+set foldlevelstart=1000     " fdls:  fold level start
+set foldopen-=search        " don't open folds when you search into them
+"set foldopen-=undo         " don't open folds when you undo stuff
 
-"-----------------------------------------------------------
-" Windows
-"-----------------------------------------------------------
-set equalalways " Multiple windows, when created, are equal in size
-set splitbelow
-set splitright
-
-set display+=lastline
-" CursorHold time
-set updatetime=1000
-
-"-----------------------------------------------------------
-" Diff
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
+" 17 diff mode
+"-------------------------------------------------------------------------------
 set diffopt=context:3       " display 3 lines above and below the different place
 " set scrollbind      " 左右两侧的屏幕滚动是同步的
 set diffopt+=iwhite
@@ -504,40 +454,178 @@ set diffopt+=filler
     endfunction
 " endif
 
+"-------------------------------------------------------------------------------
+" 18 mapping
+"-------------------------------------------------------------------------------
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
+" 19 reading and writing files
+"-------------------------------------------------------------------------------
+set nobackup                    " no backup file
+set nowritebackup               " no backup before rewrite file
+"set backupdir=E:\bak
+if exists("&autoread")
+    set autoread                    " autoload when file changed outside vim
+endif
+set autowrite                   " write a modified buffer on each :next
+" Default fileformat
+set fileformat=unix
+" Automatic recognition of a new line cord
+set fileformats=unix,dos,mac
+nmap <leader>fd :se ff=dos<cr>
+nmap <leader>fu :se ff=unix<cr>
+
+
+"-------------------------------------------------------------------------------
+" 20 the swap file
+"-------------------------------------------------------------------------------
+"set directory=E:\bak
+set noswapfile
+" CursorHold time
+set updatetime=1000
+
+
+"-------------------------------------------------------------------------------
+" 21 command line editing
+"-------------------------------------------------------------------------------
+set history=200                 " save cmd number in history
+" set wildmode=longest:full,full
+set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
+set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
+set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
+set wildmenu                    " command-line completion operates in an enhanced mode
+
+"-------------------------------------------------------------------------------
+" 22 executing external commands
+"-------------------------------------------------------------------------------
+" Set keyword help.
+set keywordprg=:help
+
+"-------------------------------------------------------------------------------
+" 23 running make and jumping to errors
+"-------------------------------------------------------------------------------
+" programming related
+set makeef=error.err " the errorfile for :make and :grep
+set grepprg=grep\ -nH
+
+"-------------------------------------------------------------------------------
+" 24 system specific
+"-------------------------------------------------------------------------------
+if MySys() == "windows"
+    if exists('+shellslash')
+        set shellslash      " Exchange path separator
+    endif
+endif
+
+"-------------------------------------------------------------------------------
+" 25 language specific
+"-------------------------------------------------------------------------------
+set iskeyword+=_,$,@,%,#,-  " Keywords for search and some commands, no wrap
+set isfname-==  " remove = from filename characters
+
+"-------------------------------------------------------------------------------
+" 26 multi-byte characters
+"-------------------------------------------------------------------------------
+if has("multi_byte")
+    if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+        set ambiwidth=double
+    endif
+    " Set fileencoding priority
+    if getfsize(expand("%")) > 0
+        set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
+    else
+        set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
+    endif
+    " CJK environment detection and corresponding setting
+    if v:lang =~ "^zh_CN"
+    " Use cp936 to support GBK, euc-cn == gb2312
+        " set encoding=chinese
+        set encoding=utf-8
+        set fileencoding=chinese
+    elseif v:lang =~ "^zh_TW"
+        set encoding=taiwan
+        set fileencoding=taiwan
+    elseif v:lang =~ "^ko"
+        set encoding=euc-kr
+        set fileencoding=euc-kr
+    elseif v:lang =~ "^ja_JP"
+        set encoding=cp932                  " euc-jp
+        set fileencoding=cp932              " euc-jp
+    elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
+        " Detect UTF-8 locale, and replace CJK setting if needed
+        set encoding=utf-8
+        set fileencoding=utf-8
+    endif
+    let &termencoding = &encoding
+else
+    echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
+endif
+
+
+"-------------------------------------------------------------------------------
+" 27 various
+"-------------------------------------------------------------------------------
+" set virtualedit=onemore         " allow for cursor beyond last character
+set virtualedit+=block          " Enable virtualedit in visual block mode
+" set viminfo='50,<1000,:50,n$VIM/.viminfo     " save session
+set viminfo='50,<1000,:50     " save session
+set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
+
 " Session options
 "-----------------------------------------------------------
 set sessionoptions-=curdir
 set sessionoptions+=sesdir
 
-"-----------------------------------------------------------
-" Auto Complete Word
-"-----------------------------------------------------------
-" options
-set complete-=u
-set complete-=i
-set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
-set complete+=k                 " scan the files given with the 'dictionary' option
-set completeopt=longest,menuone    " Insert mode completetion
-" set wildmode=longest:full,full
-set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
-set wildmenu                    " command-line completion operates in an enhanced mode
-set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
-" Set popup menu max height.
-set pumheight=20
 
-set showtabline=2
+" Solarized
+set t_Co=256
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+let g:solarized_contrast="high"
+let g:solarized_visibility="high"
+" colorscheme solarized
+colorscheme jhdark
 
-" Adjust window size of preview and help.
-set previewheight=10
-set helpheight=12
+" Set augroup
+augroup MyAutoCmd
+  autocmd!
+augroup END
 
-" programming related
-set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
-set makeef=error.err " the errorfile for :make and :grep
+" HighLight Character
+highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+" highlight pop menu
+highlight Pmenu ctermbg=8 guibg=#606060
+highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
+highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
+highlight LineNr ctermbg=0
+highlight FoldColumn ctermbg=0
+highlight ShowMarksHLl ctermbg=0
+highlight ShowMarksHLu ctermbg=0
+highlight ShowMarksHLo ctermbg=0
+highlight ShowMarksHLm ctermbg=0
+
+":match OverLength '\%200v.*'
+
+" Check timestamp more for 'autoread'.
+autocmd MyAutoCmd WinEnter * checktime
+
+""" Code folding options
+nmap <leader>f0 :set foldlevel=0<CR>
+nmap <leader>f1 :set foldlevel=1<CR>
+nmap <leader>f2 :set foldlevel=2<CR>
+nmap <leader>f3 :set foldlevel=3<CR>
+nmap <leader>f4 :set foldlevel=4<CR>
+nmap <leader>f5 :set foldlevel=5<CR>
+nmap <leader>f6 :set foldlevel=6<CR>
+nmap <leader>f7 :set foldlevel=7<CR>
+nmap <leader>f8 :set foldlevel=8<CR>
+nmap <leader>f9 :set foldlevel=9<CR>
+
+if v:version > 703
+    set cryptmethod=blowfish
+endif
+
 
 "-----------------------------------------------------------------------------
 " Custom mappings
@@ -860,6 +948,7 @@ function! SmartHome(mode)
 
   return ""
 endfunction "}}}
+
 " Smart end function"{{{
 function! SmartEnd(mode)
   let curcol = col('.')
@@ -1335,28 +1424,6 @@ if pathogen#is_disabled('nerdtree') == 0
     let NERDTreeMouseMode = 2
 endif
 
-"-----------------------------------------------------------
-" Cscope
-"-----------------------------------------------------------
-if has("cscope")
-    if MySys() == "linux"
-        set csprg=/usr/bin/cscope
-    else
-        set csprg=cscope
-    endif
-    set csto=1
-    set cst
-    set nocsverb
-    " add any database in current directory
-    if filereadable("cscope.out")
-        silent cscope add cscope.out
-    elseif $CSCOPE_DB != ""
-        silent cscope add $CSCOPE_DB
-    endif
-    set csverb
-    set cscopetag
-    set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
-endif
 
 "-----------------------------------------------------------
 "Calendar
@@ -1510,8 +1577,6 @@ if pathogen#is_disabled('yankring') == 0
     map <leader>yr :YRShow<cr>
 endif
 " }}}
-
-set isfname-==  " remove = from filename characters
 
 "-----------------------------------------------------------
 " Rainbow Parentheses
@@ -1994,3 +2059,4 @@ let g:EnhCommentifyBindInInsert = 'no'
 ""endif
 
 set secure
+
