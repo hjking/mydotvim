@@ -58,11 +58,11 @@ let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
     " set rtp+=$VIM/vimfiles/bundle
     source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
-    call pathogen#infect()
+    execute pathogen#infect()
 elseif MySys() == "linux"
-    " set rtp+=~/.vim/bundle
-    runtime bundle/vim-pathogen/autoload/pathogen.vim
-    call pathogen#infect('')
+    source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
+    " runtime bundle/vim-pathogen/autoload/pathogen.vim
+    execute pathogen#infect('/{}')
 endif
 let g:pathogen_disabled = []
 
@@ -110,7 +110,8 @@ if v:version < 703 || !has('patch584')
     call add(g:pathogen_disabled, 'python-mode')
 endif
 
-call pathogen#runtime_append_all_bundles()
+" call pathogen#runtime_append_all_bundles()
+call pathogen#incubate()
 call pathogen#helptags()
 
 " pathogen 管理vba格式的插件
