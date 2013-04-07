@@ -334,3 +334,7 @@
 	path = bundle/vim-snippets
 	url = https://github.com/honza/vim-snippets.git
     ignore = dirty
+[submodule "bundle/vim-orgmode"]
+	path = bundle/vim-orgmode
+	url = https://github.com/jceb/vim-orgmode.git
+    ignore = dirty
