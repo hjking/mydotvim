@@ -13,7 +13,7 @@ let g:gvimrc_loaded = 1
 set background=dark
 let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af', 'solarized',
             \ 'billw', 'blacksea', 'blackbeauty', 'blugrine', 'brookstream',
-            \ 'candy', 'calmar256-dark', 'candycode', 'colorer', 'badwolf',
+            \ 'candy', 'calmar256-dark', 'colorer', 'badwolf',
             \ 'dante', 'fnaqevan', 'fruity', 'koehler', 'molokai', 'metacosm',
             \ 'winter', 'desert256', 'bluechia', 'galaxy',
             \ 'desertink', 'diablo3', 'luinnar', 'manxome','ir_black']

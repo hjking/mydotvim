@@ -105,7 +105,8 @@ if v:version < 703 || !has('python')
 endif
 
 " Disable on purpose
-if exists('g:pathogen_not_loaded_plugin')
+" if exists('g:pathogen_not_loaded_plugin')
+if v:version < 703 || !has('patch584')
     call add(g:pathogen_disabled, 'python-mode')
 endif
 
