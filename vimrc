@@ -1458,6 +1458,9 @@ if pathogen#is_disabled('nerdtree') == 0
     let NERDTreeMouseMode = 2
 endif
 
+if pathogen#is_disabled('nerdtree-tabs') == 0
+    map <Leader>ntt <plug>NERDTreeTabsToggle<CR>
+endif
 
 "-----------------------------------------------------------
 "Calendar

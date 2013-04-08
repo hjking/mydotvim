@@ -338,3 +338,7 @@
 	path = bundle/vim-orgmode
 	url = https://github.com/jceb/vim-orgmode.git
     ignore = dirty
+[submodule "bundle/nerdtree-tabs"]
+	path = bundle/nerdtree-tabs
+	url = https://github.com/jistr/vim-nerdtree-tabs.git
+    ignore = dirty
