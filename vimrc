@@ -1871,6 +1871,9 @@ if pathogen#is_disabled('ctrlp') == 0
         \ }
     let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
     let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
+    " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+    " let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
     ""let g:ctrlp_user_command = {
     ""        \ 'types': {
     ""            \ 1: ['.git', 'cd %s && git ls-files'],

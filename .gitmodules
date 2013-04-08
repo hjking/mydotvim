@@ -94,10 +94,6 @@
 	path = bundle/vimwiki
 	url = https://github.com/vim-scripts/vimwiki.git
     ignore = dirty
-[submodule "bundle/command-t"]
-	path = bundle/command-t
-	url = https://github.com/wincent/Command-T.git
-    ignore = dirty
 [submodule "bundle/Decho"]
 	path = bundle/Decho
 	url = https://github.com/vim-scripts/Decho.git
