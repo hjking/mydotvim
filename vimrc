@@ -77,12 +77,12 @@ endif
 if v:version < 702
     call add(g:pathogen_disabled, 'Zoomwin')
     call add(g:pathogen_disabled, 'Vimball')
-    call add(g:pathogen_disabled, 'neocomplcache')
     call add(g:pathogen_disabled, 'cscope_win')
     call add(g:pathogen_disabled, 'syntastic')
     call add(g:pathogen_disabled, 'unite')
     call add(g:pathogen_disabled, 'ColorV')
     call add(g:pathogen_disabled, 'galaxy')
+    call add(g:pathogen_disabled, 'neocomplcache')
     call add(g:pathogen_disabled, 'neosnippet')
     call add(g:pathogen_disabled, 'AutoComplPop')
     call add(g:pathogen_disabled, 'netrw')
@@ -1953,14 +1953,6 @@ if pathogen#is_disabled('neosnippet') == 0
     elseif MySys() == "linux"
         let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
     endif
-endif
-" }}}
-
-"-----------------------------------------------------------
-" vim-snippet
-" {{{
-if pathogen#is_disabled('vim-snipmate') == 0
-    let g:snips_trigger_key='<c-space>'
 endif
 " }}}
 
