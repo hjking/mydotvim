@@ -82,10 +82,6 @@
 	path = bundle/winmanager
 	url = https://github.com/vim-scripts/winmanager.git
     ignore = dirty
-[submodule "bundle/Zoomwin"]
-	path = bundle/Zoomwin
-	url = https://github.com/vim-scripts/ZoomWin.git
-    ignore = dirty
 [submodule "bundle/vimwiki"]
 	path = bundle/vimwiki
 	url = https://github.com/vim-scripts/vimwiki.git
