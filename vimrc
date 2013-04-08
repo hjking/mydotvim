@@ -1459,6 +1459,8 @@ endif
 
 if pathogen#is_disabled('nerdtree-tabs') == 0
     map <Leader>ntt <plug>NERDTreeTabsToggle<CR>
+    let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
+    let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
 endif
 
 "-----------------------------------------------------------
