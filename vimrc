@@ -57,11 +57,11 @@ endif
 let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
     " set rtp+=$VIM/vimfiles/bundle
-    source $VIM/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim
+    source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
     execute pathogen#infect()
 elseif MySys() == "linux"
-    source ~/.vim/bundle/vim-pathogen/autoload/pathogen.vim
-    " runtime bundle/vim-pathogen/autoload/pathogen.vim
+    source ~/.vim/bundle/pathogen/autoload/pathogen.vim
+    " runtime bundle/pathogen/autoload/pathogen.vim
     execute pathogen#infect('/{}')
 endif
 let g:pathogen_disabled = []
