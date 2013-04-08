@@ -588,8 +588,9 @@ let g:solarized_termtrans=1
 let g:solarized_termcolors=256
 let g:solarized_contrast="high"
 let g:solarized_visibility="high"
-" colorscheme solarized
-colorscheme jhdark
+colorscheme solarized
+" colorscheme jhdark
+" colorscheme vividchalk
 
 " Set augroup
 augroup MyAutoCmd
@@ -1770,6 +1771,9 @@ if pathogen#is_disabled('neocomplcache') == 0
       let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
       " Set minimum syntax keyword length.
       let g:neocomplcache_min_syntax_length = 3
+      let g:neocomplcache_max_list = 5
+      let g:neocomplcache_enable_fuzzy_completion = 1
+      let g:neocomplcache_fuzzy_completion_start_length = 3
       let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
       let g:neocomplcache_source_disable = {
@@ -1866,6 +1870,14 @@ endif
 if pathogen#is_disabled('ctrlp') == 0
     " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     let g:ctrlp_map = '<Leader>p'
+    " Set Ctrl-P to show match at top of list instead of at bottom, which is so
+    " stupid that it's not default
+    let g:ctrlp_match_window_reversed = 0
+
+    " Tell Ctrl-P to keep the current VIM working directory when starting a
+    " search, another really stupid non default
+    let g:ctrlp_working_path_mode = 0
+
     let g:ctrlp_custom_ignore = {
         \ 'dir':  '\v[\/]\.(git|hg|svn)$',
         \ 'file': '\v\.(exe|so|dll)$'
@@ -1882,6 +1894,8 @@ if pathogen#is_disabled('ctrlp') == 0
     ""            \ },
     ""        \ 'fallback': 'find %s -type f'
     ""        \ }
+    " Open multiplely selected files in a tab by default
+    let g:ctrlp_open_multi = '10t'
 endif
 
 "-----------------------------------------------------------
