@@ -1980,6 +1980,12 @@ endif
 let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 " }}}
 
+" delimitMate
+" {{{
+let loaded_delimitMate = 1
+au FileType mail let b:loaded_delimitMate = 1
+" }}}
+
 "-----------------------------------------------------------
 " vimfiler
 " {{{
