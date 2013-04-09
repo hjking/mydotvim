@@ -84,7 +84,6 @@ if v:version < 702
     call add(g:pathogen_disabled, 'galaxy')
     call add(g:pathogen_disabled, 'neocomplcache')
     call add(g:pathogen_disabled, 'neosnippet')
-    call add(g:pathogen_disabled, 'AutoComplPop')
     call add(g:pathogen_disabled, 'netrw')
     call add(g:pathogen_disabled, 'vimfiler')
 endif
