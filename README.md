@@ -5,7 +5,8 @@ mydotvim
 
 1. Get my dotvim
 ```shell
-    git clone https://kinghom@github.com/kinghom/mydotvim.git
+    git clone https://kinghom@github.com/kinghom/mydotvim.git ~/.vim
+    cd ~/.vim
     git submodule init
     git submodule update
 ```
