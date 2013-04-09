@@ -321,3 +321,6 @@
 [submodule "bundle/pathogen"]
 	path = bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git
+[submodule "bundle/skittles_berry"]
+	path = bundle/skittles_berry
+	url = https://github.com/shawncplus/skittles_berry.git
