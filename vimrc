@@ -1109,6 +1109,7 @@ if has("autocmd")
     endif
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
+    autocmd BufRead,BufNewFile *.mw setfiletype mediawiki
 endif " has("autocmd")
 
 "-----------------------------------------------------------
