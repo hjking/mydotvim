@@ -326,3 +326,15 @@
 	path = bundle/skittles_berry
 	url = https://github.com/shawncplus/skittles_berry.git
     ignore = dirty
+[submodule "bundle/mediawiki"]
+	path = bundle/mediawiki
+	url = https://github.com/chikamichi/mediawiki.vim.git
+    ignore = dirty
+[submodule "bundle/tabular"]
+	path = bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
+    ignore = dirty
+[submodule "bundle/table-mode"]
+	path = bundle/table-mode
+	url = https://github.com/dhruvasagar/vim-table-mode.git
+    ignore = dirty
