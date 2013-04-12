@@ -334,3 +334,7 @@
 	path = bundle/table-mode
 	url = https://github.com/dhruvasagar/vim-table-mode.git
     ignore = dirty
+[submodule "bundle/Trinity"]
+	path = bundle/Trinity
+	url = https://github.com/wesleyche/Trinity.git
+    ignore = dirty
