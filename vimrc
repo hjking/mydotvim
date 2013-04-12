@@ -2115,5 +2115,22 @@ let g:EnhCommentifyBindInInsert = 'no'
 ""    source ~/.vimrc.bundles.local
 ""endif
 
+
+"-----------------------------------------------------------
+" Trinity
+"{{{
+" Open and close all the three plugins on the same time
+" nmap <F8>  :TrinityToggleAll<CR>
+"
+" " Open and close the Source Explorer separately
+" nmap <F9>  :TrinityToggleSourceExplorer<CR>
+"
+" " Open and close the Taglist separately
+" nmap <F10> :TrinityToggleTagList<CR>
+"
+" " Open and close the NERD Tree separately
+" nmap <F11> :TrinityToggleNERDTree<CR>
+"}}}
+
 set secure
 
