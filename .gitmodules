@@ -338,3 +338,7 @@
 	path = bundle/Trinity
 	url = https://github.com/wesleyche/Trinity.git
     ignore = dirty
+[submodule "bundle/multiple-cursors"]
+	path = bundle/multiple-cursors
+	url = https://github.com/terryma/vim-multiple-cursors.git
+    ignore = dirty
