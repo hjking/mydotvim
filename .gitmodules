@@ -62,10 +62,6 @@
 	path = bundle/powerline
 	url = git://github.com/Lokaltog/vim-powerline.git
     ignore = dirty
-[submodule "bundle/rails"]
-	path = bundle/rails
-	url = https://github.com/tpope/vim-rails.git
-    ignore = dirty
 [submodule "bundle/speeddating"]
 	path = bundle/speeddating
 	url = https://github.com/tpope/vim-speeddating.git
