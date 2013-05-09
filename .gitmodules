@@ -338,3 +338,7 @@
 	path = bundle/multiple-cursors
 	url = https://github.com/terryma/vim-multiple-cursors.git
     ignore = dirty
+[submodule "bundle/auto-pairs"]
+	path = bundle/auto-pairs
+	url = https://github.com/jiangmiao/auto-pairs.git
+    ignore = dirty
