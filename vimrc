@@ -1088,6 +1088,7 @@ if has("autocmd")
     autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
     autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,sv,vimwiki set textwidth=80
     autocmd FileType lisp set ts=2
+    autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
     autocmd FileType lisp set softtabstop=2
     autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
@@ -1102,11 +1103,11 @@ if has("autocmd")
     autocmd BufEnter * :syntax sync fromstart
     autocmd BufEnter * :lchdir %:p:h
     " auto load vimrc when editing it
-    if MySys() == "windows"
-        autocmd! bufwritepost _vimrc source $VIM/_vimrc
-    elseif MySys() == "linux"
-        autocmd! BufWritePost .vimrc source %
-    endif
+    " if MySys() == "windows"
+    "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
+    " elseif MySys() == "linux"
+    "     autocmd! BufWritePost .vimrc source %
+    " endif
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
     autocmd BufRead,BufNewFile *.mw setfiletype mediawiki
