@@ -1621,7 +1621,7 @@ endif
 "-----------------------------------------------------------
 " Rainbow Parentheses
 " {{{
-if pathogen#is_disabled('Rainbow-Parentheses-Improved') == 0
+if pathogen#is_disabled('Rainbow-Parentheses-Improved-and2') == 0
     let g:rainbow_active = 1
     let g:rainbow_load_separately = [
         \   [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],

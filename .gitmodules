@@ -334,3 +334,7 @@
 	path = bundle/auto-pairs
 	url = https://github.com/jiangmiao/auto-pairs.git
     ignore = dirty
+[submodule "bundle/Rainbow-Parentheses-Improved-and2"]
+	path = bundle/Rainbow-Parentheses-Improved-and2
+	url = https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2.git
+    ignore = dirty
