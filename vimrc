@@ -1820,7 +1820,7 @@ endif
 "-----------------------------------------------------------
 " conque
 " {{{
-if pathogen#is_disabled('conque') == 0
+if pathogen#is_disabled('Conque-Shell') == 0
   autocmd FileType conque_term match none
   let g:ConqueTerm_StartMessages = 0
 
