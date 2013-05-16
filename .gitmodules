@@ -130,10 +130,6 @@
 	path = bundle/neocomplcache
 	url = https://github.com/Shougo/neocomplcache.git
     ignore = dirty
-[submodule "bundle/conque"]
-	path = bundle/conque
-	url = https://github.com/rson/vim-conque.git
-    ignore = dirty
 [submodule "bundle/indent-guides"]
 	path = bundle/indent-guides
 	url = https://github.com/nathanaelkane/vim-indent-guides.git
