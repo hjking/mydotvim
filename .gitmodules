@@ -334,3 +334,7 @@
 	path = bundle/Rainbow-Parentheses-Improved-and2
 	url = https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2.git
     ignore = dirty
+[submodule "bundle/Conque-Shell"]
+	path = bundle/Conque-Shell
+	url = https://github.com/vim-scripts/Conque-Shell.git
+    ignore = dirty
