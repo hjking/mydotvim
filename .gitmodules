@@ -142,10 +142,6 @@
 	path = bundle/puppet
 	url = https://github.com/rodjek/vim-puppet.git
     ignore = dirty
-[submodule "bundle/Rainbow-Parentheses-Improved"]
-	path = bundle/Rainbow-Parentheses-Improved
-	url = https://github.com/hcwndbyw/Rainbow-Parentheses-Improved.git
-    ignore = dirty
 [submodule "bundle/L9"]
 	path = bundle/L9
 	url = https://github.com/vim-scripts/L9.git
