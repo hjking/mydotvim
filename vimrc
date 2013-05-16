@@ -2134,5 +2134,13 @@ let g:EnhCommentifyBindInInsert = 'no'
 " nmap <F11> :TrinityToggleNERDTree<CR>
 "}}}
 
+"-----------------------------------------------------------
+" AuthorInfo
+let g:vimrc_author='Jin Hong'
+let g:vimrc_email='jin.hong@linksprite.com'
+let g:vimrc_homepage='http://www.linksprite.com'
+
+
+
 set secure
 
