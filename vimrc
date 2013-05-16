@@ -1661,7 +1661,7 @@ let g:loaded_vis = 1
 " _ Powerline {{{
 " {{{
 " Powerline and neocomplcache require Vim 7.2
-if pathogen#is_disabled('powerline') == 0
+if pathogen#is_disabled('vim-powerline') == 0
     if has('win32') || has('win64')
       ""let g:Powerline_symbols = 'compatible'
       let g:Powerline_symbols = 'unicode'
