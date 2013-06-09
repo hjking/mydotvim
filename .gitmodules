@@ -338,3 +338,7 @@
 	path = bundle/Conque-Shell
 	url = https://github.com/vim-scripts/Conque-Shell.git
     ignore = dirty
+[submodule "bundle/neatstatus"]
+	path = bundle/neatstatus
+	url = https://github.com/maciakl/vim-neatstatus.git
+    ignore = dirty
