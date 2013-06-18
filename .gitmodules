@@ -342,3 +342,7 @@
 	path = bundle/neatstatus
 	url = https://github.com/maciakl/vim-neatstatus.git
     ignore = dirty
+[submodule "bundle/vim-hybrid"]
+	path = bundle/vim-hybrid
+	url = https://github.com/w0ng/vim-hybrid.git
+    ignore = dirty
