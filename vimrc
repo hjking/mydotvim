@@ -1743,16 +1743,22 @@ endif
 " {{{
 if pathogen#is_disabled('tagbar') == 0
     if v:version > 700 && has('patch167')
+        if MySys() == "windows"
+            let g:tagbar_ctags_bin = './vimfiles/ctags58/ctags.exe'
+        elseif MySys() == "linux"
+            let g:tagbar_ctags_bin = '/usr/bin/ctags'
+        endif
         if !executable('ctags')
             let g:loaded_tagbar = 1
         else
             let g:tagbar_width = 30
             let g:tagbar_autofocus = 1
-            let g:tagbar_sort = 0
+            let g:tagbar_sort = 1
             let g:tagbar_compact = 1
             let g:tagbar_expand = 1
             let g:tagbar_singleclick = 1
             let g:tagbar_usearrows = 1
+            let g:tagbar_autoshowtag = 1
             nnoremap <silent><leader>tt :TagbarToggle<CR>
         endif
     endif
