@@ -62,7 +62,7 @@ if MySys() == "windows"
 elseif MySys() == "linux"
     source ~/.vim/bundle/pathogen/autoload/pathogen.vim
     " runtime bundle/pathogen/autoload/pathogen.vim
-    execute pathogen#infect('/{}')
+    " execute pathogen#infect('/{}')
 endif
 let g:pathogen_disabled = []
 
@@ -88,9 +88,9 @@ if v:version < 702
     call add(g:pathogen_disabled, 'vimfiler')
 endif
 
-if v:version < 702 || !has('gui_running')
-    call add(g:pathogen_disabled, 'powerline')
-endif
+" if v:version < 702 || !has('gui_running')
+"     call add(g:pathogen_disabled, 'powerline')
+" endif
 
 if v:version < 702 || !has('float')
     call add(g:pathogen_disabled, 'L9')
