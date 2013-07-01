@@ -1377,7 +1377,7 @@ endfunction
 "MiniBufExplorer
 "-----------------------------------------------------------
 if pathogen#is_disabled('minibufexpl') == 0
-    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
+"    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplMapWindowNavVim = 1
     let g:miniBufExplMapWindowNavArrows = 1
