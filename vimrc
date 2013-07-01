@@ -2001,7 +2001,7 @@ if pathogen#is_disabled('unite') == 0
                 \ '\.git/',
                 \ 'git5/.*/review/',
                 \ 'google/obj/',
-                \], '\|')
+                \], '\|'))
     nnoremap [unite] <Nop>
     xnoremap [unite] <Nop>
     nmap <Leader>f [unite]
