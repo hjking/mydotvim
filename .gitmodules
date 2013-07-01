@@ -62,10 +62,6 @@
 	path = bundle/speeddating
 	url = https://github.com/tpope/vim-speeddating.git
     ignore = dirty
-[submodule "bundle/Vim-Support"]
-	path = bundle/Vim-Support
-	url = https://github.com/vim-scripts/Vim-Support.git
-    ignore = dirty
 [submodule "bundle/surround"]
 	path = bundle/surround
 	url = https://github.com/tpope/vim-surround.git

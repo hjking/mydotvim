@@ -35,6 +35,8 @@ function! MySys()
     if has("win16") || has("win32") || has("win64") || has("win95")
     "   runtime mswin.vim
         return "windows"
+    elseif has('win32unix')
+        return "cygwin"
     else
         return "linux"
     endif
@@ -2021,6 +2023,17 @@ endif
 " unite
 " {{{
 if pathogen#is_disabled('unite') == 0
+    " Use the fuzzy matcher for everything
+    call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    " Use the rank sorter for everything
+    call unite#filters#sorter_default#use(['sorter_rank'])
+    " Set up some custom ignores
+    call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+                \ 'ignore_pattern', join([
+                \ '\.git/',
+                \ 'git5/.*/review/',
+                \ 'google/obj/',
+                \], '\|')
     nnoremap [unite] <Nop>
     xnoremap [unite] <Nop>
     nmap <Leader>f [unite]
@@ -2030,11 +2043,10 @@ if pathogen#is_disabled('unite') == 0
     nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
     nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
     nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search line<CR>
-
     nnoremap <silent> [unite]d :<C-U>Unite -buffer-name=mru_dir -start-insert directory_mru<CR>
     nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
     nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=registers -start-insert register<CR>
-    xnoremap <silent> [unite]p "_d:<C-U>Unite -buffer-name=register register<CR>
+    xnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register<CR>
     nnoremap <silent> [unite]b :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
     nnoremap <silent> [unite]m :<C-U>Unite mark<CR>
     nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps help<CR>
@@ -2046,6 +2058,8 @@ if pathogen#is_disabled('unite') == 0
     nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
     nnoremap <silent> [unite]c :<C-u>Unite change<CR>
     nnoremap <silent> [unite]q :<C-u>Unite poslist<CR>
+    nnoremap <space>y :Unite history/yank<cr>
+    nnoremap <space>s :Unite -quick-match buffer<cr>
 
     let g:unite_update_time = 70
     let g:unite_enable_split_vertically = 1
@@ -2063,6 +2077,7 @@ if pathogen#is_disabled('unite') == 0
     let g:unite_source_file_mru_limit = 300
     " let g:unite_source_directory_mru_time_format = ''
     let g:unite_source_directory_mru_limit = 300
+    let g:unite_split_rule = "botright"                     " Open in bottom right
 
     function! s:unite_settings()
       nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)

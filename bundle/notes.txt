@@ -9,3 +9,6 @@ netrw vs NERDTree
 autocomplpop vs neocompletecache
 
 align vs alignta
+
+@ 2013-07-01 10:57
+remove vim-support
