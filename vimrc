@@ -1386,19 +1386,7 @@ if pathogen#is_disabled('minibufexpl') == 0
     let g:miniBufExplMaxSize = 2
     let g:miniBufExplUseSingleClick = 1    " select by single click
     autocmd BufRead,BufNew :call UMiniBufExplorer
-endif
-
-"-----------------------------------------------------------
-"BufExplorer
-"-----------------------------------------------------------
-if pathogen#is_disabled('bufexplorer') == 0
-    map ,be :BufExplorerHorizontalSplit<CR> " set hotkey for BufExplorer
-    let g:bufExplorerDefaultHelp=1          " Show default help.
-    let g:bufExplorerDetailedHelp=0         " Show detailed help
-    let g:bufExplorerShowRelativePath=1     " Show relative paths.
-    let g:bufExplorerSortBy='name'          " Sort by name.
-    let g:bufExplorerSplitBelow=0           " Split new window above current.
-    let g:bufExplorerShowDirectories=1      " Show directories
+    map ,be :MBEOpen<CR>
 endif
 
 "-----------------------------------------------------------
@@ -1717,26 +1705,6 @@ if pathogen#is_disabled('headlights') == 0
     let g:headlights_show_files = 0         " (Disabled)
     let g:headlights_show_load_order = 0    " (Disabled)
     let g:headlights_debug_mode = 0         " (Disabled)
-endif
-" }}}
-
-" ------------------------------------------------------------
-"  vim-support
-" {{{
-if pathogen#is_disabled('Vim-Support') == 0
-    if MySys() == "windows"
-        let g:plugin_dir = '$VIM/vimfiles/bundle/Vim-Support'
-        let g:Vim_GlobalTemplateDir = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates'
-        let g:Vim_GlobalTemplateFile = '$VIM/vimfiles/bundle/Vim-Support/vim-support/templates/Templates'
-        let g:Vim_LocalTemplateDir  = '$VIM/vimfiles/vim-support/templates'
-        let g:Vim_LocalTemplateFile = '$VIM/vimfiles/vim-support/templates/Templates'
-    elseif MySys() == "linux"
-        let g:Vim_GlobalTemplateDir = '~/.vim/bundle/Vim-Support/vim-support/templates'
-        let g:Vim_GlobalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
-        let g:Vim_LocalTemplateFile = '~/.vim/bundle/Vim-Support/vim-support/templates/Templates'
-    endif
-    let g:Vim_MapLeader  = ','
-    let g:Vim_RootMenu = "&Plugin"
 endif
 " }}}
 
