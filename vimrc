@@ -266,6 +266,10 @@ if has('statusline')
     " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
     " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
     " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " %([%R%M]%)   read-only, modified and modifiable flags between braces
+    " %{'$'[!&list]}  shows a '$' if in list mode
+    " %{'~'[&pm=='']} shows a '~' if in patchmode
+    " #%n    buffer number
     set statusline=
     set statusline+=[%f]                " file name
     set statusline+=[%{&ff}]            " file format
