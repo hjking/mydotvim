@@ -2145,5 +2145,15 @@ function! SetColorColumn()
     endif
 endfunction
 
+" lightline for statusline
+"
+" let g:lightline = {
+"       \ 'colorscheme': 'landscape',
+"       \ 'mode_map': { 'c': 'NORMAL' },
+"       \ 'active': {
+"       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+"       \ },
+"       \ }
+
 set secure
 
