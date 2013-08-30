@@ -11,12 +11,9 @@ let g:gvimrc_loaded = 1
 " colo adrian          "molokai fruity blackbeauty adaryn fnaqevan myColor_1
 "set colorscheme randomly
 set background=dark
-let colorscheme_list = ['adam', 'adrian', 'asu1dark', 'af', 'solarized',
-            \ 'billw', 'blacksea', 'blackbeauty', 'blugrine', 'brookstream',
-            \ 'candy', 'calmar256-dark', 'colorer', 'badwolf',
-            \ 'dante', 'fnaqevan', 'fruity', 'koehler', 'molokai', 'metacosm',
-            \ 'winter', 'desert256', 'bluechia', 'galaxy',
-            \ 'desertink', 'diablo3', 'luinnar', 'manxome', 'ir_black', 'vividchalk']
+let colorscheme_list = ['solarized', 'calmar256-dark', 'badwolf', 'koehler', 'molokai',
+            \ 'galaxy', 'gruvbox', 'jellybeans', 'desertink', 'ir_black', 'vividchalk',
+            \ 'inkpot', 'skittles_berry', 'hybrid', 'zenburn', 'vombato']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
 " Display Settings

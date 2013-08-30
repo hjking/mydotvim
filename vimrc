@@ -594,8 +594,7 @@ let g:solarized_termtrans=1
 let g:solarized_termcolors=256
 let g:solarized_contrast="high"
 let g:solarized_visibility="high"
-" colorscheme solarized
-colorscheme jhdark
+colorscheme solarized
 " colorscheme vividchalk
 
 " Set augroup
@@ -1617,15 +1616,14 @@ endif
 "-----------------------------------------------------------
 " Rainbow Parentheses
 " {{{
-if pathogen#is_disabled('Rainbow-Parentheses-Improved-and2') == 0
-    let g:rainbow_active = 1
-    let g:rainbow_load_separately = [
-        \   [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-        \   [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
-        \   [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-        \   [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
-        \   ]
-    let g:rainbow_guifgs = ['RoyalBlue3', 'SeaGreen3', 'DarkOrange3', 'FireBrick',]
+if pathogen#is_disabled('rainbow_parentheses') == 0
+    let g:rbpt_max = 16
+    let g:rbpt_loadcmd_toggle = 0
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound     "()
+    au Syntax * RainbowParenthesesLoadSquare    "[]
+    au Syntax * RainbowParenthesesLoadBraces    "{}
+    au Syntax * RainbowParenthesesLoadChevrons  "<>
 endif
 " }}}
 

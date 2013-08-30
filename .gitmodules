@@ -6,14 +6,6 @@
 	path = bundle/c
 	url = https://github.com/vim-scripts/c.vim.git
     ignore = dirty
-[submodule "bundle/closetag"]
-	path = bundle/closetag
-	url = https://github.com/vim-scripts/closetag.vim.git
-    ignore = dirty
-[submodule "bundle/cucumber"]
-	path = bundle/cucumber
-	url = https://github.com/vim-scripts/cucumber.zip.git
-    ignore = dirty
 [submodule "bundle/nerdcommenter"]
 	path = bundle/nerdcommenter
 	url = https://github.com/scrooloose/nerdcommenter.git
@@ -21,10 +13,6 @@
 [submodule "bundle/nerdtree"]
 	path = bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
-    ignore = dirty
-[submodule "bundle/project"]
-	path = bundle/project
-	url = https://github.com/vim-scripts/project.tar.gz.git
     ignore = dirty
 [submodule "bundle/repeat"]
 	path = bundle/repeat
@@ -333,3 +321,4 @@
 [submodule "bundle/cs-gruvbox"]
 	path = bundle/cs-gruvbox
 	url = https://github.com/morhetz/gruvbox
+	ignore = dirty
