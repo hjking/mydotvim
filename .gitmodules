@@ -306,10 +306,6 @@
 	path = bundle/auto-pairs
 	url = https://github.com/jiangmiao/auto-pairs.git
     ignore = dirty
-[submodule "bundle/Rainbow-Parentheses-Improved-and2"]
-	path = bundle/Rainbow-Parentheses-Improved-and2
-	url = https://github.com/vim-scripts/Rainbow-Parentheses-Improved-and2.git
-    ignore = dirty
 [submodule "bundle/Conque-Shell"]
 	path = bundle/Conque-Shell
 	url = https://github.com/vim-scripts/Conque-Shell.git
@@ -325,6 +321,15 @@
 [submodule "bundle/vim-vombato"]
 	path = bundle/vim-vombato
 	url = https://github.com/molok/vim-vombato-colorscheme.git
+	ignore = dirty
 [submodule "bundle/niceblock"]
 	path = bundle/niceblock
 	url = https://github.com/kana/vim-niceblock.git
+	ignore = dirty
+[submodule "bundle/rainbow_parentheses"]
+	path = bundle/rainbow_parentheses
+	url = https://github.com/kien/rainbow_parentheses.vim.git
+    ignore = dirty
+[submodule "bundle/cs-gruvbox"]
+	path = bundle/cs-gruvbox
+	url = https://github.com/morhetz/gruvbox
