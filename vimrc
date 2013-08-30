@@ -17,6 +17,8 @@
 "-------------------------------------------------------------------------------
 "  1 important
 "-------------------------------------------------------------------------------
+filetype off
+
 " Get out of VI's compatible mode
 " Use Vim settings, rather then Vi settings.
 " This must be first, because it changes other options as a side effect.
@@ -25,9 +27,6 @@ set nocompatible                " not use vi keyboard mode
 let g:vimrc_loaded = 1
 let g:vimrc_disable_setting = 1
 
-" set mapleader
-let mapleader=","
-let g:mapleader=","
 "-----------------------------------------------------------
 " Platform
 "-----------------------------------------------------------
@@ -110,9 +109,9 @@ if v:version < 703 || !has('patch584')
     call add(g:pathogen_disabled, 'YouCompleteMe')
 endif
 
-" call pathogen#runtime_append_all_bundles()
-call pathogen#incubate()
-call pathogen#helptags()
+call pathogen#infect()
+" execute pathogen#infect()
+" call pathogen#helptags()
 
 " pathogen 管理vba格式的插件
 "   :e name.vba
@@ -138,12 +137,14 @@ endif
 runtime! ftplugin/man.vim
 runtime! macros/matchit.vim
 
+" set mapleader
+let mapleader=","
+let g:mapleader=","
+
 "-----------------------------------------------------------
 " Switch syntax highlighting on.
 "-----------------------------------------------------------
 syntax enable
-
-filetype off
 
 syntax on
 
@@ -731,9 +732,9 @@ imap <m-$> <esc>$a
 imap <m-0> <esc>0i
 
 if MySys() == "windows"
-    nmap ,v :e $VIM/_vimrc<CR> " key mapping for editing vimrc
+    nmap <leader>v :e $VIM/_vimrc<CR> " key mapping for editing vimrc
 elseif MySys() == "linux"
-    nmap ,v :e ~/.vimrc
+    nmap <leader>v :e ~/.vimrc
 endif
 
 " Easily macro.
@@ -767,7 +768,7 @@ inoremap    <C-Z> <C-O>u
 
 " set filetype to verilog
 "map ,fv     :set ft=verilog<CR>
-map ,fv     :set ft=verilog_systemverilog<CR>
+map <leader>fv     :set ft=verilog_systemverilog<CR>
 
 " Fold
 nmap <silent> <leader>zo zO
@@ -846,15 +847,15 @@ vnoremap < <gv
 nnoremap <silent> <F2> :noh<CR>
 
 " ,1-9 - quick buffer switching
-nnoremap <silent> ,1 :b1<CR>
-nnoremap <silent> ,2 :b2<CR>
-nnoremap <silent> ,3 :b3<CR>
-nnoremap <silent> ,4 :b4<CR>
-nnoremap <silent> ,5 :b5<CR>
-nnoremap <silent> ,6 :b6<CR>
-nnoremap <silent> ,7 :b7<CR>
-nnoremap <silent> ,8 :b8<CR>
-nnoremap <silent> ,9 :b9<CR>
+nnoremap <silent> <leader>1 :b1<CR>
+nnoremap <silent> <leader>2 :b2<CR>
+nnoremap <silent> <leader>3 :b3<CR>
+nnoremap <silent> <leader>4 :b4<CR>
+nnoremap <silent> <leader>5 :b5<CR>
+nnoremap <silent> <leader>6 :b6<CR>
+nnoremap <silent> <leader>7 :b7<CR>
+nnoremap <silent> <leader>8 :b8<CR>
+nnoremap <silent> <leader>9 :b9<CR>
 
 " Allow insert mode editing like emacs
 imap <C-a>  <Home>
@@ -1440,7 +1441,8 @@ endif
 " x     close the current nodes parent      " X     Recursively close all children of the current node
 " e     open a netrw for the current dir
 if pathogen#is_disabled('nerdtree') == 0
-    map ne :NERDTree<CR>
+    map <leader>nt :NERDTreeToggle<CR>
+    nmap <leader>nf :NERDTreeFind<CR>
     let NERDChristmasTree=1                     " more colorful
     let NERDTreeWinPos="left"                   " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
@@ -1454,7 +1456,7 @@ if pathogen#is_disabled('nerdtree') == 0
 endif
 
 if pathogen#is_disabled('nerdtree-tabs') == 0
-    map <Leader>ntt <plug>NERDTreeTabsToggle<CR>
+    map <leader>ntt <plug>NERDTreeTabsToggle<CR>
     let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
     let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
 endif
@@ -2008,8 +2010,8 @@ if pathogen#is_disabled('unite') == 0
                 \], '\|'))
     nnoremap [unite] <Nop>
     xnoremap [unite] <Nop>
-    nmap <Leader>f [unite]
-    xmap <Leader>f [unite]
+    nmap <leader>f [unite]
+    xmap <leader>f [unite]
 
     nnoremap [unite]S :<C-U>Unite source<CR>
     nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
@@ -2130,8 +2132,8 @@ let g:EnhCommentifyBindInInsert = 'no'
 "-----------------------------------------------------------
 " AuthorInfo
 let g:vimrc_author='Jin Hong'
-let g:vimrc_email='jin.hong@linksprite.com'
-let g:vimrc_homepage='http://www.linksprite.com'
+let g:vimrc_email='hon9jin@gmail.com'
+let g:vimrc_homepage='http://about.me/hongjin'
 
 
 map <Leader>ch :call SetColorColum()<CR>
