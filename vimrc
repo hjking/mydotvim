@@ -36,6 +36,8 @@ function! MySys()
         return "windows"
     elseif has('win32unix')
         return "cygwin"
+    elseif has('gui_macvim')
+        return "mac"
     else
         return "linux"
     endif
@@ -551,22 +553,18 @@ if has("multi_byte")
     if v:lang =~ "^zh_CN"
     " Use cp936 to support GBK, euc-cn == gb2312
         " set encoding=chinese
-        set encoding=utf-8
         set fileencoding=chinese
     elseif v:lang =~ "^zh_TW"
-        set encoding=taiwan
         set fileencoding=taiwan
     elseif v:lang =~ "^ko"
-        set encoding=euc-kr
         set fileencoding=euc-kr
     elseif v:lang =~ "^ja_JP"
-        set encoding=cp932                  " euc-jp
         set fileencoding=cp932              " euc-jp
     elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
         " Detect UTF-8 locale, and replace CJK setting if needed
-        set encoding=utf-8
         set fileencoding=utf-8
     endif
+    set encoding=utf-8
     let &termencoding = &encoding
 else
     echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
@@ -2145,15 +2143,6 @@ function! SetColorColumn()
     endif
 endfunction
 
-" lightline for statusline
-"
-" let g:lightline = {
-"       \ 'colorscheme': 'landscape',
-"       \ 'mode_map': { 'c': 'NORMAL' },
-"       \ 'active': {
-"       \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
-"       \ },
-"       \ }
 
 set secure
 

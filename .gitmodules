@@ -298,10 +298,6 @@
 	path = bundle/Conque-Shell
 	url = https://github.com/vim-scripts/Conque-Shell.git
     ignore = dirty
-[submodule "bundle/neatstatus"]
-	path = bundle/neatstatus
-	url = https://github.com/maciakl/vim-neatstatus.git
-    ignore = dirty
 [submodule "bundle/vim-hybrid"]
 	path = bundle/vim-hybrid
 	url = https://github.com/w0ng/vim-hybrid.git
@@ -321,4 +317,12 @@
 [submodule "bundle/cs-gruvbox"]
 	path = bundle/cs-gruvbox
 	url = https://github.com/morhetz/gruvbox
+	ignore = dirty
+[submodule "bundle/airline"]
+	path = bundle/airline
+	url = https://github.com/bling/vim-airline.git
+	ignore = dirty
+[submodule "bundle/cs-kolor"]
+	path = bundle/cs-kolor
+	url = https://github.com/zeis/vim-kolor.git
 	ignore = dirty
