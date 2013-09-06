@@ -783,6 +783,9 @@ if version >= 600
     map <S-F3> zM
 endif
 
+" Quick yanking to the end of the line
+nmap Y ^y$
+
 "-----------------------------------------------------------
 " Spell checking
 "-----------------------------------------------------------
