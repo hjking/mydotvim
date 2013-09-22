@@ -6,10 +6,35 @@ Sparkup vs ZenCoding
 
 netrw vs NERDTree
 
-autocomplpop vs neocompletecache
+Autocomplete and Snippets: Snipmate/UltiSnips + SuperTab + AutoComplPop
+	neocompletecache + neosnippet
+	YouCompleteMe(compiled YCM), neocomplete(lua)
 
-align vs alignta
+Alignment:tabular, align, alignta
+
+Plugin Management: Pathogen, Vundle, NeoBundle
+File Searching: CommandT(In Ruby), CtrlP, FuzzyFinder
 
 @ 2013-07-01 10:57
 remove vim-support
 remove bufexplorer
+
+unites.vim: this is an extremely powerful plugin that lets you build up lists from arbitrary sources
+
+easymotion: easily jumps to any character on the screen
+
+fugitive: git wrapper
+
+gitv: nice log history viewer for git
+
+unimpaired: many additional bracket [] maps
+
+nerdtree: file browser
+
+ctrlp: fuzzy file searching
+
+tabular: easily aligns code
+
+neocomplcache/neosnippet: autocomplete/snippet support as a fallback choice when YCM and/or python is unavailable
+	<Tab> to select the next match, or expand if the keyword is a snippet
+	if you have lua installed, it will use neocomplete instead
