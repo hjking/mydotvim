@@ -38,3 +38,16 @@ tabular: easily aligns code
 neocomplcache/neosnippet: autocomplete/snippet support as a fallback choice when YCM and/or python is unavailable
 	<Tab> to select the next match, or expand if the keyword is a snippet
 	if you have lua installed, it will use neocomplete instead
+
+multiple-cursors:  select all matching words and lets you concurrently change all matches at the same time
+
+surround: makes for quick work of surrounds
+repeat: repeat plugin commands
+speeddating: Ctrl+A and Ctrl+X for dates
+matchit: makes your % more awesome
+syntastic: awesome syntax checking for a variety of languages
+bufferline: simple plugin which prints all your open buffers in the command bar
+indent-guides: vertical lines
+signify: adds + and - to the signs column when changes are detected to source control files (supports git/hg/svn)
+delimitmate: automagically adds closing quotes and braces
+startify: gives you a better start screen

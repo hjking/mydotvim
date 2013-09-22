@@ -73,10 +73,6 @@ if v:version < 700 || !has('patch167')
     call add(g:pathogen_disabled, 'tagbar')
 endif
 
-if v:version < 701
-    call add(g:pathogen_disabled, 'vim-alignta')
-endif
-
 if v:version < 702
     call add(g:pathogen_disabled, 'Zoomwin')
     call add(g:pathogen_disabled, 'Vimball')
@@ -1983,6 +1979,8 @@ endif
 " }}}
 
 "-----------------------------------------------------------
+" Alignment
+
 " alignta
 " {{{
 if pathogen#is_disabled('vim-alignta') == 0
@@ -1991,6 +1989,15 @@ if pathogen#is_disabled('vim-alignta') == 0
     xnoremap <silent> <LocalLeader>A :Alignta! \S\+<CR>
 endif
 " }}}
+
+" Tabular
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
+
 
 "-----------------------------------------------------------
 " unite
