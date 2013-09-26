@@ -1114,6 +1114,7 @@ if has("autocmd")
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
     autocmd BufRead,BufNewFile *.mw setfiletype mediawiki
+    autocmd FileType qf wincmd J " Open QuickFix horizontally
 endif " has("autocmd")
 
 "-----------------------------------------------------------
