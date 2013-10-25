@@ -1742,55 +1742,62 @@ endif
 " {{{
 if pathogen#is_disabled('neocomplcache') == 0
     if v:version > 702
-      let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
-      let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-      let g:neocomplcache_enable_auto_select = 1
-      let g:neocomplcache_enable_smart_case = 1  " Use smartcase
-      let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
-      let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
-      " Set minimum syntax keyword length.
-      let g:neocomplcache_min_syntax_length = 3
-      let g:neocomplcache_max_list = 5
-      let g:neocomplcache_enable_fuzzy_completion = 1
-      let g:neocomplcache_fuzzy_completion_start_length = 3
-      let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+        let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
+        let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
+        let g:neocomplcache_enable_auto_select = 1
+        let g:neocomplcache_enable_smart_case = 1  " Use smartcase
+        let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
 
-      let g:neocomplcache_source_disable = {
-        \ 'syntax_complete': 1,
-        \ }
+        " Enable heavy features.
+        " Use camel case completion.
+        let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
+        let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
-      let g:neocomplcache_auto_completion_start_length = 2
-      " Define keyword.
-      if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
-      endif
-      let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+        let g:neocomplcache_max_list = 5
+        let g:neocomplcache_enable_fuzzy_completion = 1
+        let g:neocomplcache_fuzzy_completion_start_length = 3
+        let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-      if !exists('g:neocomplcache_omni_patterns')
-        let g:neocomplcache_omni_patterns = {}
-      endif
+        let g:neocomplcache_source_disable = {
+          \ 'syntax_complete': 1,
+          \ }
 
-      let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-      let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-      let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-      let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+        let g:neocomplcache_auto_completion_start_length = 2
+        " Define keyword.
+        if !exists('g:neocomplcache_keyword_patterns')
+          let g:neocomplcache_keyword_patterns = {}
+        endif
+        let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-      " Plugin key-mappings.
-      imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-      smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-      inoremap <expr><C-g>     neocomplcache#undo_completion()
-      inoremap <expr><C-l>     neocomplcache#complete_common_string()
+        if !exists('g:neocomplcache_omni_patterns')
+          let g:neocomplcache_omni_patterns = {}
+        endif
 
-      " Recommended key-mappings.
-      " <CR>: cancel popup and save indent.
-      " inoremap <expr><CR>  neocomplcache#cancel_popup() . "\<CR>"
-      " " <C-h>, <BS>: close popup and delete backword char.
-      " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-      " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-      " inoremap <expr><C-y>  neocomplcache#close_popup()
-      " inoremap <expr><C-e>  neocomplcache#cancel_popup()
+        let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+        let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+        let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+        let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
-      " use <Tab> to complete words, and also handle snippets
+        " Plugin key-mappings.
+        imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        inoremap <expr><C-g>     neocomplcache#undo_completion()
+        inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+        " Recommended key-mappings.
+        " <CR>: cancel popup and save indent.
+        " inoremap <expr><CR>  neocomplcache#cancel_popup() . "\<CR>"
+        " " <C-h>, <BS>: close popup and delete backword char.
+        " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+        " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+        " inoremap <expr><C-y>  neocomplcache#close_popup()
+        " inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+        " use <Tab> to complete words, and also handle snippets
+        "
+        " Close popup by <Space>.
+        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+
     endif
 endif
 " }}}
@@ -1799,12 +1806,12 @@ endif
 " conque
 " {{{
 if pathogen#is_disabled('Conque-Shell') == 0
-  autocmd FileType conque_term match none
-  let g:ConqueTerm_StartMessages = 0
+    autocmd FileType conque_term match none
+    let g:ConqueTerm_StartMessages = 0
 
-  command! Sh ConqueTermSplit bash --login
-  command! Irb ConqueTermSplit irb
-  command! Py ConqueTermSplit ipython
+    command! Sh ConqueTermSplit bash --login
+    command! Irb ConqueTermSplit irb
+    command! Py ConqueTermSplit ipython
 endif
 " }}}
 
@@ -1934,6 +1941,7 @@ if pathogen#is_disabled('neosnippet') == 0
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
     smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
 
     "" " SuperTab like snippets behavior
     "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -1946,9 +1954,9 @@ if pathogen#is_disabled('neosnippet') == 0
 
     " use a different collection of snippets other than the built-in ones
     if MySys() == "windows"
-        let g:neosnippet#snippets_directory='$VIM/vimfiles/bundle/snipmate-snippets/snippets'
+        let g:neosnippet#snippets_directory='$VIM/vimfiles/bundle/vim-snippets/snippets'
     elseif MySys() == "linux"
-        let g:neosnippet#snippets_directory='~/.vim/bundle/snipmate-snippets/snippets'
+        let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
     endif
 endif
 " }}}
