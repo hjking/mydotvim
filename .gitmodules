@@ -318,3 +318,7 @@
 	path = bundle/cs-kolor
 	url = https://github.com/zeis/vim-kolor.git
 	ignore = dirty
+[submodule "bundle/verilog_systemverilog"]
+	path = bundle/verilog_systemverilog
+	url = https://github.com/kinghom/verilog_systemverilog.vim.git
+	ignore = dirty
