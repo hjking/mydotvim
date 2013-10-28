@@ -182,10 +182,6 @@
 	path = bundle/unite
 	url = https://github.com/Shougo/unite.vim.git
     ignore = dirty
-[submodule "bundle/verilog_systemverilog"]
-	path = bundle/verilog_systemverilog
-	url = https://github.com/kshenoy/verilog_systemverilog.vim.git
-    ignore = dirty
 [submodule "bundle/vim-cycle"]
 	path = bundle/vim-cycle
 	url = https://github.com/bootleq/vim-cycle.git

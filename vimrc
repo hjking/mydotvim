@@ -694,7 +694,7 @@ imap  ^T            <ESC>:tabnew<CR>i
 " Buffer - reverse everything ... :)
 map <F8> ggVGg?     " rot-13
 " map <F9> :!python.exe %
-" map <F10>
+map <F10> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
 " map <F11>
 map     <F12>   a<C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
 imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
@@ -1806,12 +1806,12 @@ endif
 " conque
 " {{{
 if pathogen#is_disabled('Conque-Shell') == 0
-    autocmd FileType conque_term match none
-    let g:ConqueTerm_StartMessages = 0
+  autocmd FileType conque_term match none
+  let g:ConqueTerm_StartMessages = 0
 
-    command! Sh ConqueTermSplit bash --login
-    command! Irb ConqueTermSplit irb
-    command! Py ConqueTermSplit ipython
+  command! Sh ConqueTermSplit bash --login
+  command! Irb ConqueTermSplit irb
+  command! Py ConqueTermSplit ipython
 endif
 " }}}
 
@@ -2147,12 +2147,12 @@ let g:EnhCommentifyBindInInsert = 'no'
 "-----------------------------------------------------------
 " AuthorInfo
 let g:vimrc_author='Jin Hong'
-let g:vimrc_email='hon9jin@gmail.com'
+let g:vimrc_email='hongjin@fiberhome.com.cn'
 let g:vimrc_homepage='http://about.me/hongjin'
 
 
 map <Leader>ch :call SetColorColum()<CR>
-function! SetColorColumn()
+function! SetColorColum()
     let col_num = virtcol(".")
     let cc_list = split(&cc, ',')
     if count(cc_list, string(col_num)) <= 0
@@ -2162,6 +2162,45 @@ function! SetColorColumn()
     endif
 endfunction
 
+map <Leader>fh :call FHHeader()<CR>
+function! FHHeader()
+  let s:comment = "//"
+  let s:commentline = s:comment . "----------------------------------------------------------------------"
+  let s:company = s:comment .    " Copyright (c) 2013, Fiberhome Telecommunication Technology Co., Ltd."
+  let s:department = s:comment . " Microelectronics Dept. Verification Group. UVF Team."
+  let s:copyright = s:comment . " All rights reserved."
+  let s:file = s:comment .      " File     : " . expand("%:t")
+  let s:author = s:comment .    " Author   : " . g:vimrc_author
+  let s:email= s:comment .      " EMail    : " . g:vimrc_email
+  let s:created = s:comment .   " Created  : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:modified = s:comment .  " Modified : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:description= s:comment . " Description :"
+  let s:history= s:comment .    " History"
+  let s:history_author= s:comment .    "     Author   :"
+  let s:history_date= s:comment .      "     Date     :"
+  let s:history_rev= s:comment .       "     Revision :"
+
+  call append (0, s:commentline)
+  call append (1, s:company)
+  call append (2, s:department)
+  call append (3, s:copyright)
+  call append (4, s:comment)
+  call append (5, s:file)
+  call append (6, s:author)
+  call append (7, s:email)
+  call append (8, s:created)
+  call append (9, s:modified)
+  call append (10, s:description)
+  call append (11, s:commentline)
+  call append (12, s:history)
+  call append (13, s:history_author)
+  call append (14, s:history_date)
+  call append (15, s:history_rev)
+  call append (16, s:commentline)
+
+  unlet s:comment
+
+endfunction
 
 set secure
 
