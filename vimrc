@@ -96,6 +96,10 @@ if v:version < 702 || !has('float')
     call add(g:pathogen_disabled, 'FuzzyFinder')
 endif
 
+if v:version < 703
+    call add(g:pathogen_disabled, 'numbers')
+endif
+
 if v:version < 703 || !has('python')
     call add(g:pathogen_disabled, 'gundo')
     call add(g:pathogen_disabled, 'solarized')
@@ -1887,8 +1891,9 @@ endif
 "-----------------------------------------------------------
 " numbers
 if pathogen#is_disabled('numbers') == 0
-    ""nnoremap <leader>nt :NumbersToggle<CR>
-    nnoremap <F10> :NumbersToggle<CR>
+    " nnoremap <leader>nt :NumbersToggle<CR>
+    " nnoremap <F10> :NumbersToggle<CR>
+    " let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 endif
 
 "-----------------------------------------------------------
@@ -2149,6 +2154,17 @@ let g:EnhCommentifyBindInInsert = 'no'
 let g:vimrc_author='Jin Hong'
 let g:vimrc_email='hongjin@fiberhome.com.cn'
 let g:vimrc_homepage='http://about.me/hongjin'
+
+"-----------------------------------------------------------
+" Grep
+if MySys() == "windows"
+    let g:Grep_Path = './vimfiles/gnu/grep.exe'
+    let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
+    let g:Egrep_Path  = './vimfiles/gnu/egrep.exe'
+    let g:Grep_Find_Path = './vimfiles/gnu/find.exe'
+    let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
+endif
+let Grep_Default_Options = '-i'
 
 
 map <Leader>ch :call SetColorColum()<CR>
