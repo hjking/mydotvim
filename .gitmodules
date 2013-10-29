@@ -174,10 +174,6 @@
 	path = bundle/headlights
 	url = https://github.com/mbadran/headlights.git
     ignore = dirty
-[submodule "bundle/jellybeans"]
-	path = bundle/jellybeans
-	url = https://github.com/nanotech/jellybeans.vim.git
-    ignore = dirty
 [submodule "bundle/unite"]
 	path = bundle/unite
 	url = https://github.com/Shougo/unite.vim.git
