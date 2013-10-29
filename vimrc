@@ -61,6 +61,7 @@ let g:pathogen_not_loaded_plugin = 1
 if MySys() == "windows"
     " set rtp+=$VIM/vimfiles/bundle
     source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
+    " source $HOME/vimfiles/bundle/pathogen/autoload/pathogen.vim
     execute pathogen#infect()
 elseif MySys() == "linux"
     source ~/.vim/bundle/pathogen/autoload/pathogen.vim
@@ -1973,13 +1974,17 @@ endif
 "-----------------------------------------------------------
 " Auto Pairs
 " {{{
+let g:AutoPairsLoaded = 1
 let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 " }}}
 
 " delimitMate
 " {{{
-let loaded_delimitMate = 1
-au FileType mail let b:loaded_delimitMate = 1
+" let loaded_delimitMate = 1
+" au FileType mail let b:loaded_delimitMate = 1
+let delimitMate_matchpairs = "(:),[:],{:},<:>"
+au FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
+au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:},':',\":\""
 " }}}
 
 "-----------------------------------------------------------

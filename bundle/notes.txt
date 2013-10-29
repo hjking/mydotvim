@@ -14,6 +14,7 @@ Alignment:tabular, align, alignta
 
 Plugin Management: Pathogen, Vundle, NeoBundle
 File Searching: CommandT(In Ruby), CtrlP, FuzzyFinder
+auto bracket: auto-pairs, delimitMate
 
 @ 2013-07-01 10:57
 remove vim-support

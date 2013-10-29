@@ -12,7 +12,7 @@ let g:gvimrc_loaded = 1
 "set colorscheme randomly
 set background=dark
 let colorscheme_list = ['solarized', 'calmar256-dark', 'badwolf', 'koehler', 'molokai',
-            \ 'galaxy', 'gruvbox', 'jellybeans', 'desertink', 'ir_black', 'vividchalk',
+            \ 'galaxy', 'gruvbox', 'desertink', 'ir_black', 'vividchalk',
             \ 'inkpot', 'skittles_berry', 'hybrid', 'zenburn', 'vombato', 'kolor']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
