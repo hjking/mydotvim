@@ -51,3 +51,6 @@ indent-guides: vertical lines
 signify: adds + and - to the signs column when changes are detected to source control files (supports git/hg/svn)
 delimitmate: automagically adds closing quotes and braces
 startify: gives you a better start screen
+commentary: nice comment
+ColorV: is a color view/pick/edit/design/scheme tool
+Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer

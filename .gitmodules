@@ -62,10 +62,6 @@
 	path = bundle/vimwiki
 	url = https://github.com/vim-scripts/vimwiki.git
     ignore = dirty
-[submodule "bundle/Decho"]
-	path = bundle/Decho
-	url = https://github.com/vim-scripts/Decho.git
-    ignore = dirty
 [submodule "bundle/molokai"]
 	path = bundle/molokai
 	url = https://github.com/tomasr/molokai.git

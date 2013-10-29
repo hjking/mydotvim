@@ -1860,20 +1860,24 @@ endif
 if pathogen#is_disabled('ctrlp') == 0
     " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
     let g:ctrlp_map = '<Leader>p'
+    let g:ctrlp_cmd = 'CtrlP'
     " Set Ctrl-P to show match at top of list instead of at bottom, which is so
     " stupid that it's not default
     let g:ctrlp_match_window_reversed = 0
 
     " Tell Ctrl-P to keep the current VIM working directory when starting a
     " search, another really stupid non default
-    let g:ctrlp_working_path_mode = 0
+    let g:ctrlp_working_path_mode = 'ra'
 
     let g:ctrlp_custom_ignore = {
         \ 'dir':  '\v[\/]\.(git|hg|svn)$',
         \ 'file': '\v\.(exe|so|dll)$'
         \ }
-    let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
-    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    if MySys() == "windows"
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    elseif MySys() == "linux"
+        let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+    endif
     " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
     " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
     " let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
