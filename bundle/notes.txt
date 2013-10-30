@@ -15,6 +15,9 @@ Alignment:tabular, align, alignta
 Plugin Management: Pathogen, Vundle, NeoBundle
 File Searching: CommandT(In Ruby), CtrlP, FuzzyFinder
 auto bracket: auto-pairs, delimitMate
+tag sidebar: taglist, tagbar
+comment: commentary, EnhCommentify
+
 
 @ 2013-07-01 10:57
 remove vim-support
@@ -54,4 +57,5 @@ delimitmate: automagically adds closing quotes and braces
 startify: gives you a better start screen
 commentary: nice comment
 ColorV: is a color view/pick/edit/design/scheme tool
+ScrollColor, csExplorer: explorer colorschemes
 Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer

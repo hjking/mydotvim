@@ -13,10 +13,10 @@ if exists("b:vlog_plugin")
 endif
 let b:vlog_plugin = 1
 
-"iabbrev <= <= #`FFD
+iabbrev <= <= #`FFD
 
 if exists("b:vlog_company") == 0
-   let b:vlog_company = "Founder International Software (Wuhan)"
+   let b:vlog_company = $USER
 endif
 if exists("b:vlog_max_col") == 0
    let b:vlog_max_col = 40
@@ -33,39 +33,44 @@ else
    let b:vlog_ind = 4
 endif
 
-amenu Veri&log.&Header          :call AddHeader()<CR>
-amenu Veri&log.&Comment         :call AddComment()<CR>
-amenu Veri&log.-Automatic-      :
-amenu Veri&log.Auto&Argument    :call AutoArg()<CR>
-amenu Veri&log.Auto&Instance    :call AutoInst()<CR>
-amenu Veri&log.Auto&Define      :call AutoDef()<CR>
-amenu Veri&log.Auto&Sense       :call AutoSense()<CR>
-amenu Veri&log.Auto&Reg         :call AutoReg()<CR>
-amenu Veri&log.-QuickCheck-	:
-amenu Veri&log.Report\ No\ Loading/Driving\ nets :call AutoCheck()<CR>
-amenu Veri&log.-Kill-           :
-amenu Veri&log.&KillAuto        :call KillAuto()<CR>
-amenu Veri&log.KillAutoArg      :call KillAutoArg()<CR>
-amenu Veri&log.KillAutoInst     :call KillAutoInst()<CR>
-amenu Veri&log.KillAutoDef      :call KillAutoDef()<CR>
-amenu Veri&log.KillAutoSense    :call KillAutoSense()<CR>
-amenu Veri&log.KillAutoReg      :call KillAutoReg()<CR>
-amenu Veri&log.-Add\ Always\ Block-                              :
-amenu Veri&log.Always\ with\ posedge\ clock\ and\ posedge\ reset :call AddAlways("posedge", "posedge")<CR>
-amenu Veri&log.Always\ with\ posedge\ clock\ and\ negedge\ reset :call AddAlways("posedge", "negedge")<CR>
-amenu Veri&log.Always\ with\ negedge\ clock\ and\ posedge\ reset :call AddAlways("negedge", "posedge")<CR>
-amenu Veri&log.Always\ with\ negedge\ clock\ and\ negedge\ reset :call AddAlways("negedge", "negedge")<CR>
-amenu Veri&log.Always\ with\ posedge\ clock :call AddAlways("posedge", "")<CR>
-amenu Veri&log.Always\ with\ negedge\ clock :call AddAlways("negedge", "")<CR>
-amenu Veri&log.Combinational\ Always :call AddAlways("", "")<CR>
+if has("gui_running") && has("menu")
+    if !exists("g:PluginTopLvlMenu")
+        let g:PluginTopLvlMenu= "Plugin"
+    endif
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.&Header          :call AddHeader()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.&Comment         :call AddComment()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.-Automatic-      :'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Auto&Argument    :call AutoArg()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Auto&Instance    :call AutoInst()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Auto&Define      :call AutoDef()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Auto&Sense       :call AutoSense()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Auto&Reg         :call AutoReg()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.-QuickCheck-	:'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Report\ No\ Loading/Driving\ nets :call AutoCheck()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.-Kill-           :'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.&KillAuto        :call KillAuto()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.KillAutoArg      :call KillAutoArg()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.KillAutoInst     :call KillAutoInst()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.KillAutoDef      :call KillAutoDef()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.KillAutoSense    :call KillAutoSense()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.KillAutoReg      :call KillAutoReg()<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.-Add\ Always\ Block-                              :'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ posedge\ clock\ and\ posedge\ reset :call AddAlways("posedge", "posedge")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ posedge\ clock\ and\ negedge\ reset :call AddAlways("posedge", "negedge")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ negedge\ clock\ and\ posedge\ reset :call AddAlways("negedge", "posedge")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ negedge\ clock\ and\ negedge\ reset :call AddAlways("negedge", "negedge")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ posedge\ clock :call AddAlways("posedge", "")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Always\ with\ negedge\ clock :call AddAlways("negedge", "")<CR>'
+    exe "amenu  ".g:PluginTopLvlMenu.'.&Verilog.Combinational\ Always :call AddAlways("", "")<CR>'
 
-command Alpp :call AddAlways("posedge", "posedge")
-command Alpn :call AddAlways("posedge", "negedge")
-command Alnp :call AddAlways("negedge", "posedge")
-command Alnn :call AddAlways("negedge", "negedge")
-command Alp :call AddAlways("posedge", "")
-command Aln :call AddAlways("negedge", "")
-command Al :call AddAlways("", "")
+    command Alpp :call AddAlways("posedge", "posedge")
+    command Alpn :call AddAlways("posedge", "negedge")
+    command Alnp :call AddAlways("negedge", "posedge")
+    command Alnn :call AddAlways("negedge", "negedge")
+    command Alp :call AddAlways("posedge", "")
+    command Aln :call AddAlways("negedge", "")
+    command Al :call AddAlways("", "")
+endif
 
 "===============================================================
 "        Add File Header
@@ -315,7 +320,7 @@ function KillAutoArg()
    let aft_kill = []
    let line_index = 1
    let line = ""
-   while line_index <= line("$") 
+   while line_index <= line("$")
       let line = getline(line_index)
       if line =~ '^\s*\<module\>' && line =~ '\<\(autoarg\|AUTOARG\)\>\*/\s*$'
          call add(aft_kill, line.");")
@@ -807,7 +812,7 @@ function AutoDef()
                endif
                let line = lines[line_index-1]
             endif
-         endwhile 
+         endwhile
          let line_index = line_index + 1
          let line = lines[line_index-1]
       elseif line =~ '^\s*\<endmodule\>'
@@ -920,7 +925,7 @@ function KillAutoSense()
       for line_index in range(1, len(aft_kill), 1)
          call setline(line_index, aft_kill[line_index-1])
       endfor
-   endif      
+   endif
 endfunction
 
 function GetPars()
@@ -1019,7 +1024,7 @@ function AutoSense()
             let line = substitute(line, '\[[^\[\]]*\]', "", "g")
             " Remove Verilog Defines, Constants, Key Words and Operators
 	    let line = substitute(line, pars_express, " ", "g")
-            let line = substitute(line, vlog_opts, " ", "g")            
+            let line = substitute(line, vlog_opts, " ", "g")
             let line = substitute(line, vlog_const0, " ", "g")
             let line = substitute(line, vlog_const1, " ", "g")
             let line = substitute(line, "\\s\\+`\\w\\+", " ", "g")
@@ -1247,7 +1252,7 @@ function GetLoading(lines, loading_nets, driving_nets, insts, insts_express, par
          while line !~ ';\.*$'
             let line = substitute(line, a:pars_express, "  ", "g")
             " Remove Verilog Defines, Constants, Key Words and Operators
-            let line = substitute(line, vlog_opts, "  ", "g")            
+            let line = substitute(line, vlog_opts, "  ", "g")
             let line = substitute(line, vlog_const0, "  ", "g")
             let line = substitute(line, vlog_const1, "  ", "g")
             let line = substitute(line, "\\s\\+`\\w\\+\\s\\+", "  ", "g")
@@ -1266,7 +1271,7 @@ function GetLoading(lines, loading_nets, driving_nets, insts, insts_express, par
          endwhile
          let line = substitute(line, a:pars_express, " ", "g")
          " Remove Verilog Defines, Constants, Key Words and Operators
-         let line = substitute(line, vlog_opts, " ", "g")            
+         let line = substitute(line, vlog_opts, " ", "g")
          let line = substitute(line, vlog_const0, " ", "g")
          let line = substitute(line, vlog_const1, " ", "g")
          let line = substitute(line, "\\s\\+`\\w\\+\\s\\+", " ", "g")

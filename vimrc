@@ -86,6 +86,7 @@ if v:version < 702
     call add(g:pathogen_disabled, 'neosnippet')
     call add(g:pathogen_disabled, 'netrw')
     call add(g:pathogen_disabled, 'vimfiler')
+    call add(g:pathogen_disabled, 'easymotion')
 endif
 
 " if v:version < 702 || !has('gui_running')
@@ -1565,6 +1566,7 @@ vmap <silent> <leader>hr <Plug>MarkRegex
 " Vimwiki
 " {{{
 if pathogen#is_disabled('vimwiki') == 0
+    let g:vimwiki_menu = 'Plugin.Vimwiki'
     let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
@@ -1721,7 +1723,7 @@ endif
 if pathogen#is_disabled('tagbar') == 0
     if v:version > 700 && has('patch167')
         if MySys() == "windows"
-            let g:tagbar_ctags_bin = './vimfiles/ctags58/ctags.exe'
+            let g:tagbar_ctags_bin = '$VIM\vimfiles\ctags58\ctags.exe'
         elseif MySys() == "linux"
             let g:tagbar_ctags_bin = '/usr/bin/ctags'
         endif
@@ -1752,6 +1754,7 @@ if pathogen#is_disabled('neocomplcache') == 0
         let g:neocomplcache_enable_auto_select = 1
         let g:neocomplcache_enable_smart_case = 1  " Use smartcase
         let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
+        let g:neocomplcache_enable_quick_match = 1
 
         " Enable heavy features.
         " Use camel case completion.
@@ -1801,7 +1804,7 @@ if pathogen#is_disabled('neocomplcache') == 0
         " use <Tab> to complete words, and also handle snippets
         "
         " Close popup by <Space>.
-        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() . "\<SPACE>" : "\<Space>"
 
     endif
 endif
@@ -2176,6 +2179,50 @@ endif
 let Grep_Default_Options = '-i'
 
 
+"-----------------------------------------------------------
+" airline
+" enable fugitive integration >
+let g:airline#extensions#branch#enabled = 1
+" enable syntastic integration >
+let g:airline#extensions#syntastic#enabled = 1
+" enable/disable tagbar integration >
+let g:airline#extensions#tagbar#enabled = 1
+" change how tags are displayed (:help tagbar-statusline) >
+let g:airline#extensions#tagbar#flags = ''  "default
+let g:airline#extensions#tagbar#flags = 'f'
+let g:airline#extensions#tagbar#flags = 's'
+let g:airline#extensions#tagbar#flags = 'p'
+" enable/disable detection of whitespace errors. >
+let g:airline#extensions#whitespace#enabled = 1
+" configure which whitespace checks to enable. >
+let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+
+"-----------------------------------------------------------
+" easymotion
+" triggered with `<Leader><Leader>`
+" `<Leader><Leader>w` to find the beginning of a word
+" `<Leader><Leader>f` to find the character
+" `<Leader><Leader>b  to Beginning of word backward
+" `<Leader><Leader>e  to End of word forward
+" `<Leader><Leader>j  to Line downward
+" `<Leader><Leader>k  to Line upward
+if pathogen#is_disabled('easymotion') == 0
+  " change the target keys
+  " let g:EasyMotion_keys = '1234567890'
+  " disable shading : 0
+  let g:EasyMotion_do_shade = 1
+endif
+
+" verilog root menu
+let g:PluginTopLvlMenu = 'Plugin'
+
+"  Color Scheme Explorer
+let g:scroll_colors = 1
+let loaded_csExplorer = 1
+
+
+"-----------------------------------------------------------
+" Functions
 map <Leader>ch :call SetColorColum()<CR>
 function! SetColorColum()
     let col_num = virtcol(".")
@@ -2229,3 +2276,4 @@ endfunction
 
 set secure
 
+" vim: et ts=2 sts=2 sw=2
