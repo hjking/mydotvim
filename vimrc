@@ -1582,32 +1582,12 @@ endif
 "-----------------------------------------------------------
 " timestamp
 " {{{
-"let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified)\s*:\s+)@<=.*$|2010-08-13 09:49:39'
-let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
+" let loaded_timestamp = 1
+" let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified)\s*:\s+)@<=.*$|2010-08-13 09:49:39'
+" let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
+let g:timestamp_regexp = '\v\C%(<%([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
 let g:timestamp_rep = '%Y-%m-%d %H:%M:%S'
 let g:timestamp_modelines = 20
-" }}}
-
-"-----------------------------------------------------------
-" Auto Change Date
-" {{{
-" autodate.vim: include "Last Changed: ."
-"   let autodate_keyword_pre =
-"   let autodate_keyword_pre  = '\$Date'            : default: '\cLast Changed:'
-"   let autodate_keyword_post = '\$'                " default: '\.'
-"   let autodate_format = ': %Y/%m/%d %H:%M:%S '
-let plugin_autodate_disable = 1     " disable
-let autodate_format = '%Y/%m/%d-%H:%M:%S '
-let autodate_keyword_pre = 'Last \%(Change\|Modified\):'
-""" Function: change last change time
-function! LastMod()
-  if line("$") > 5
-    let l = 5
-  else
-    let l = line("$")
-  endif
-  exe "1," . l . "s/[Ll]ast [Mm]odified: .*/Last modified: " . strftime("%c") . " [" . hostname() . "]/e"
-endfunction
 " }}}
 
 "-----------------------------------------------------------
@@ -2223,6 +2203,10 @@ let g:PluginTopLvlMenu = 'Plugin'
 let g:scroll_colors = 1
 let loaded_csExplorer = 1
 
+
+" uvm_gen
+let g:uvm_author    = "Hong Jin"
+let g:uvm_email     = "hongjin@fiberhome.com.cn"
 
 "-----------------------------------------------------------
 " Functions
