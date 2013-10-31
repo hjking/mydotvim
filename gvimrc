@@ -6,6 +6,7 @@ let g:gvimrc_loaded = 1
 
 " Max width
 " set columns=9999
+set columns=90
 
 " Color Setting
 " colo adrian          "molokai fruity blackbeauty adaryn fnaqevan myColor_1

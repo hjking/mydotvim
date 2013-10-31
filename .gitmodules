@@ -314,3 +314,6 @@
 	path = bundle/verilog_systemverilog
 	url = https://github.com/kinghom/verilog_systemverilog.vim.git
 	ignore = dirty
+[submodule "bundle/uvm_gen"]
+	path = bundle/uvm_gen
+	url = https://github.com/kinghom/uvm_gen.git

@@ -235,7 +235,6 @@ set display+=lastline
 " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
-" set columns=1000                " max column number
 set list                        " list mode
 "set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB£¬EOL,etc
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
@@ -346,7 +345,11 @@ endif
 set report=0                    " Threshold for reporting number of lines changed
 set noerrorbells                " No bell for error messages
 set novisualbell                " Use visual bell instead of beeping
-set helplang& helplang=en                 " use Chinese help
+" set helplang& helplang=en
+" use Chinese help, support in vimcdoc.vim plugin
+if version >= 603
+  set helplang=cn
+endif
 
 "-------------------------------------------------------------------------------
 " 13 selecting text
