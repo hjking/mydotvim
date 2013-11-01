@@ -59,3 +59,5 @@ commentary: nice comment
 ColorV: is a color view/pick/edit/design/scheme tool
 ScrollColor, csExplorer: explorer colorschemes
 Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer
+file-line: open the file under cursor, and goto the line specified after the filename
+gundo: Graph your undo tree

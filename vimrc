@@ -1453,7 +1453,7 @@ if pathogen#is_disabled('nerdtree') == 0
     let NERDTreeWinPos="left"                   " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
     let NERDTreeShowLineNumbers=0               " show line number
-    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
+    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS','\.git']
     " setting root dir in NT also sets VIM's cd"
     let NERDTreeChDirMode=2
     let NERDTreeShowHidden=1
@@ -1838,8 +1838,8 @@ endif
 "-----------------------------------------------------------
 " gundo
 " Gundo requires Vim 7.3 and Python
-if index(g:pathogen_disabled, 'gundo') == -1
-    nnoremap <silent> ,u :GundoToggle<CR>
+if pathogen#is_disabled('gundo') == 0
+    nnoremap <silent> <Leader>u :GundoToggle<CR>
 endif
 
 "-----------------------------------------------------------
@@ -1948,6 +1948,7 @@ if pathogen#is_disabled('neosnippet') == 0
           set conceallevel=2 concealcursor=i
     endif"
 
+    let g:neosnippet#enable_snipmate_compatibility = 1
     " use a different collection of snippets other than the built-in ones
     if MySys() == "windows"
         let g:neosnippet#snippets_directory='$VIM/vimfiles/bundle/vim-snippets/snippets'

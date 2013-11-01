@@ -19,7 +19,8 @@ exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
 " Display Settings
 " {{{
-set guioptions+=grTt
+" set guioptions+=grTt
+set guioptions-=T
 " don't use autoselect on OS X
 if has('mac')
     set guioptions-=a
