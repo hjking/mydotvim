@@ -126,10 +126,6 @@
 	path = bundle/markdown
 	url = https://github.com/hallison/vim-markdown.git
     ignore = dirty
-[submodule "bundle/commentary"]
-	path = bundle/commentary
-	url = https://github.com/tpope/vim-commentary.git
-    ignore = dirty
 [submodule "bundle/cscope_macros"]
 	path = bundle/cscope_macros
 	url = https://github.com/vim-scripts/cscope_macros.vim.git
