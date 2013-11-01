@@ -7,7 +7,7 @@ Sparkup vs ZenCoding
 netrw vs NERDTree
 
 Autocomplete and Snippets: Snipmate/UltiSnips + SuperTab + AutoComplPop
-	neocompletecache + neosnippet
+	neocomplcache + neosnippet
 	YouCompleteMe(compiled YCM), neocomplete(lua)
 
 Alignment:tabular, align, alignta
@@ -16,7 +16,7 @@ Plugin Management: Pathogen, Vundle, NeoBundle
 File Searching: CommandT(In Ruby), CtrlP, FuzzyFinder
 auto bracket: auto-pairs, delimitMate
 tag sidebar: taglist, tagbar
-comment: commentary, EnhCommentify
+comment: commentary, EnhCommentify, nerdcommenter, tcomment
 
 
 @ 2013-07-01 10:57
@@ -61,3 +61,5 @@ ScrollColor, csExplorer: explorer colorschemes
 Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer
 file-line: open the file under cursor, and goto the line specified after the filename
 gundo: Graph your undo tree
+headlights: add a menu to vim, revealing all plugins used
+indent-guides: is a plugin for visually displaying indent levels

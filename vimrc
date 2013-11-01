@@ -42,7 +42,6 @@ function! MySys()
         return "linux"
     endif
 endfunction
-let s:is_windows = has('win32') || has('win64')
 
 " Windows Compatible {
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
@@ -58,20 +57,21 @@ endif
 " auto load all plugins
 "-----------------------------------------------------------
 let g:pathogen_not_loaded_plugin = 1
+let g:path_of_vimrc_tmp = expand('<sfile>:h')
+let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 if MySys() == "windows"
-    " set rtp+=$VIM/vimfiles/bundle
     source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
-    " source $HOME/vimfiles/bundle/pathogen/autoload/pathogen.vim
-    execute pathogen#infect()
 elseif MySys() == "linux"
     source ~/.vim/bundle/pathogen/autoload/pathogen.vim
-    " runtime bundle/pathogen/autoload/pathogen.vim
-    " execute pathogen#infect('/{}')
 endif
 let g:pathogen_disabled = []
 
 if v:version < 700 || !has('patch167')
     call add(g:pathogen_disabled, 'tagbar')
+endif
+
+if v:version < 700 || !has('python')
+    call add(g:pathogen_disabled, 'headlights')
 endif
 
 if v:version < 702
@@ -87,6 +87,7 @@ if v:version < 702
     call add(g:pathogen_disabled, 'netrw')
     call add(g:pathogen_disabled, 'vimfiler')
     call add(g:pathogen_disabled, 'easymotion')
+    call add(g:pathogen_disabled, 'indent_guides')
 endif
 
 " if v:version < 702 || !has('gui_running')
@@ -593,11 +594,13 @@ set sessionoptions+=sesdir
 
 " Solarized
 set t_Co=256
-let g:solarized_termtrans=1
-let g:solarized_termcolors=256
-let g:solarized_contrast="high"
-let g:solarized_visibility="high"
-colorscheme solarized
+if pathogen#is_disabled('solarized') == 0
+  let g:solarized_termtrans=1
+  let g:solarized_termcolors=256
+  let g:solarized_contrast="high"
+  let g:solarized_visibility="high"
+  colorscheme solarized
+endif
 " colorscheme vividchalk
 
 " Set augroup
@@ -1686,7 +1689,8 @@ let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
 "  Setting for headlighes
 " {{{
 if pathogen#is_disabled('headlights') == 0
-    let g:loaded_headlights = 1             " (Disable)
+"if(count(g:pathogen_disabled, 'headlights')) == 1
+    " let g:loaded_headlights = 1             " (Disable)
     let g:headlights_use_plugin_menu = 0    " (Disabled)
     let g:headlights_smart_menus = 1        " (Enabled)
     let g:headlights_show_commands = 1      " (Enabled)
@@ -1776,18 +1780,24 @@ if pathogen#is_disabled('neocomplcache') == 0
         inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
         " Recommended key-mappings.
-        " <CR>: cancel popup and save indent.
-        " inoremap <expr><CR>  neocomplcache#cancel_popup() . "\<CR>"
-        " " <C-h>, <BS>: close popup and delete backword char.
-        " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-        " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-        " inoremap <expr><C-y>  neocomplcache#close_popup()
-        " inoremap <expr><C-e>  neocomplcache#cancel_popup()
+        " <CR>: close popup and save indent.
+        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        function! s:my_cr_function()
+          return neocomplcache#smart_close_popup() . "\<CR>"
+          " For no inserting <CR> key.
+          "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+        endfunction
+        " <TAB>: completion.
+        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        " <C-h>, <BS>: close popup and delete backword char.
+        inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><C-y>  neocomplcache#close_popup()
+        inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-        " use <Tab> to complete words, and also handle snippets
         "
         " Close popup by <Space>.
-        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() . "\<SPACE>" : "\<Space>"
+        " inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
     endif
 endif
@@ -1807,17 +1817,18 @@ endif
 " }}}
 
 "-----------------------------------------------------------
-" indent guides
+" indent-guides
 " {{{
 if pathogen#is_disabled('indent-guides') == 0
     let g:indent_guides_enable_on_vim_startup = 0
-    let g:indent_guides_auto_colors = 0
+    let g:indent_guides_auto_colors = 1
     let g:indent_guides_guide_size = 1
     let g:indent_guides_indent_levels = 30
+    let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
     autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
     autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
-    nnoremap <silent> ,i :IndentGuidesToggle<CR>
+    " nnoremap <silent> ,i :IndentGuidesToggle<CR>
 endif
 " }}}
 
@@ -1932,7 +1943,6 @@ endif
 "-----------------------------------------------------------
 " Neosnippet
 " {{{
-""if index(g:pathogen_disabled, 'Neosnippet') == -1
 if pathogen#is_disabled('neosnippet') == 0
     " Plugin key-mappings.
     imap <C-k>     <Plug>(neosnippet_expand_or_jump)
@@ -1942,6 +1952,12 @@ if pathogen#is_disabled('neosnippet') == 0
     "" " SuperTab like snippets behavior
     "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
     "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: "\<TAB>"
 
     " For snippet_complete marker.
     if has('conceal')
@@ -2208,6 +2224,12 @@ let loaded_csExplorer = 1
 " uvm_gen
 let g:uvm_author    = "Hong Jin"
 let g:uvm_email     = "hongjin@fiberhome.com.cn"
+
+"-----------------------------------------------------------
+" multi_cursor
+let g:multi_cursor_use_default_mapping=1
+
+
 
 "-----------------------------------------------------------
 " Functions
