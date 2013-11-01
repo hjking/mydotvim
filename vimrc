@@ -1277,9 +1277,9 @@ map             <leader>cv      :Acontent<CR>
 "=====================================================================
 " Plugin Setting
 "=====================================================================
+
 "-----------------------------------------------------------
 "Tag List
-"-----------------------------------------------------------
 ":TlistOpen”打开taglist窗口，           ":TlistClose”关闭taglist窗口
 "或者使用“:TlistToggle”在打开和关闭间切换       " 使用" tl"键就可以打开/关闭taglist窗口
 "map <silent> <leader>tl :TlistToogle<cr>       " <CR>  跳到光标下tag所定义的位置，用鼠标双击此tag功能也一样
@@ -1343,7 +1343,6 @@ endif
 
 "-----------------------------------------------------------
 "WinManager
-"-----------------------------------------------------------
 if pathogen#is_disabled('winmanager') == 0
     " let loaded_winmanager = 1
     "nmap <silent> <leader>wm :WMToggle<cr>
@@ -1389,7 +1388,6 @@ endfunction
 
 "-----------------------------------------------------------
 "MiniBufExplorer
-"-----------------------------------------------------------
 if pathogen#is_disabled('minibufexpl') == 0
 "    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
     let g:miniBufExplMapCTabSwitchBufs = 1
@@ -1405,12 +1403,10 @@ endif
 
 "-----------------------------------------------------------
 "Matchit
-"-----------------------------------------------------------
 "let b:match_ignorecase=1
 
 "-----------------------------------------------------------
 " Netrw  File Explorer :e <PATH>
-"-----------------------------------------------------------
 ":Explore    等Ex命令来打开文件浏览器           "<F1>        显示帮助
 "<cr>        如果光标下为目录，则进入该目录；如果光标下是文件，则用VIM打开该文件
 "-           返回上级目录               "c    切换VIM的当前工作目录为正在浏览的目录
@@ -1443,7 +1439,6 @@ endif
 
 "-----------------------------------------------------------
 " NERD Tree  File Manager
-"-----------------------------------------------------------
 " o     open file                           " t     open file in new tab
 " go    open file,but cursor in NERDtree    " T     same as t, but focus on the current tab
 " tab   open file in a split window         " !     execute current file
@@ -1482,7 +1477,6 @@ map ca :Calendar<CR>
 
 "-----------------------------------------------------------
 " lookupfile setting
-"-----------------------------------------------------------
 if v:version < 701
     let g:loaded_lookupfile = 1
 else
@@ -1521,7 +1515,6 @@ endif
 
 "-----------------------------------------------------------
 " SVN Command
-"-----------------------------------------------------------
 if pathogen#is_disabled('vcscommand') == 0
     " let SVNCommandSplit='vertical'
     " let SVNCommandDiffSplit='vertical'
@@ -1535,7 +1528,6 @@ endif
 
 "-----------------------------------------------------------
 " showmarks setting
-"-----------------------------------------------------------
 if pathogen#is_disabled('ShowMarks') == 0
     " Enable ShowMarks
     let g:showmarks_enable = 1
@@ -1633,17 +1625,16 @@ cnoremap <C-K>      <C-U>
 cnoremap <C-P>      <Up>
 cnoremap <C-N>      <Down>
 
-
-"""" vis
+"-----------------------------------------------------------
+" vis
 let g:loaded_vis = 1
 
-
-"""" mrswin
+"-----------------------------------------------------------
+" mrswin
 " let g:mrswin = 1
-"
 
 "-----------------------------------------------------------
-" _ Powerline {{{
+" Powerline
 " {{{
 " Powerline and neocomplcache require Vim 7.2
 if pathogen#is_disabled('vim-powerline') == 0
@@ -1679,8 +1670,7 @@ endif
 " }}}
 
 " ------------------------------------------------------------
-"  Setting for Align
-" ------------------------------------------------------------
+" Draw It
 " {{{
 let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
 " }}}
@@ -1981,6 +1971,7 @@ let g:AutoPairsLoaded = 1
 let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
 " }}}
 
+"-----------------------------------------------------------
 " delimitMate
 " {{{
 " let loaded_delimitMate = 1
@@ -2016,13 +2007,16 @@ if pathogen#is_disabled('vim-alignta') == 0
 endif
 " }}}
 
+"-----------------------------------------------------------
 " Tabular
+" {{{
 if exists(":Tabularize")
   nmap <Leader>a= :Tabularize /=<CR>
   vmap <Leader>a= :Tabularize /=<CR>
   nmap <Leader>a: :Tabularize /:\zs<CR>
   vmap <Leader>a: :Tabularize /:\zs<CR>
 endif
+" }}}
 
 
 "-----------------------------------------------------------
@@ -2123,18 +2117,10 @@ nnoremap <silent> [Space]gt q:Git tag<Space>
 
 
 "-----------------------------------------------------------
-" EnhCommentify
+" NerdComment
 "{{{
-let g:EnhCommentifyFirstLineMode='yes'
-let g:EnhCommentifyRespectIndent='yes'
-let g:EnhCommentifyUseBlockIndent='yes'
-let g:EnhCommentifyAlignRight = 'yes'
-let g:EnhCommentifyPretty = 'yes'
-let g:EnhCommentifyBindInNormal = 'no'
-let g:EnhCommentifyBindInVisual = 'no'
-let g:EnhCommentifyBindInInsert = 'no'
+let g:NERDSpaceDelims = 1   " add extra space
 "}}}
-
 
 " if pathogen#is_disabled('molokai') == 0
 "     echoerr "molokai enable"
@@ -2181,6 +2167,7 @@ let Grep_Default_Options = '-i'
 
 "-----------------------------------------------------------
 " airline
+"{{{
 " enable fugitive integration >
 let g:airline#extensions#branch#enabled = 1
 " enable syntastic integration >
@@ -2196,6 +2183,7 @@ let g:airline#extensions#tagbar#flags = 'p'
 let g:airline#extensions#whitespace#enabled = 1
 " configure which whitespace checks to enable. >
 let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+"}}}
 
 "-----------------------------------------------------------
 " easymotion
@@ -2216,11 +2204,13 @@ endif
 " verilog root menu
 let g:PluginTopLvlMenu = 'Plugin'
 
+"-----------------------------------------------------------
 "  Color Scheme Explorer
 let g:scroll_colors = 1
 let loaded_csExplorer = 1
 
 
+"-----------------------------------------------------------
 " uvm_gen
 let g:uvm_author    = "Hong Jin"
 let g:uvm_email     = "hongjin@fiberhome.com.cn"
@@ -2279,8 +2269,6 @@ function! FHHeader()
   call append (14, s:history_date)
   call append (15, s:history_rev)
   call append (16, s:commentline)
-
-  unlet s:comment
 
 endfunction
 
