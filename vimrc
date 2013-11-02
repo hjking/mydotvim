@@ -1528,6 +1528,11 @@ endif
 
 "-----------------------------------------------------------
 " showmarks setting
+" <Leader>mt  - Toggle whether marks are displayed or not.
+" <Leader>mo  - Turn ShowMarks on, and displays marks.
+" <Leader>mh  - Clear mark on current line.
+" <Leader>ma  - Clear all marks.
+" <Leader>mm  - Places next available mark.
 if pathogen#is_disabled('ShowMarks') == 0
     " Enable ShowMarks
     let g:showmarks_enable = 1
@@ -1542,8 +1547,8 @@ if pathogen#is_disabled('ShowMarks') == 0
     let g:showmarks_textlower = "\t"
     let g:showmarks_textupper = "\t"
     let g:showmarks_textother = "\t"
-    let g:showmarks_no_mappings = 1
-    nmap mt <Plug>ShowMarksToggle
+    let g:showmarks_no_mappings = 0
+    " nmap mt <Plug>ShowMarksToggle
 endif
 
 
