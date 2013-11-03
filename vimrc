@@ -1341,23 +1341,6 @@ endif
 " "Hide the help thing..
 " let g:explDetailedHelp=0
 
-"-----------------------------------------------------------
-"WinManager
-if pathogen#is_disabled('winmanager') == 0
-    " let loaded_winmanager = 1
-    "nmap <silent> <leader>wm :WMToggle<cr>
-    let g:winManagerWindowLayout='NERDTree|BufExplorer'
-    "let g:winManagerWindowLayout='FileExplorer|TagList' "what windows CTRL-N ÇÐ»»
-    "let g:winManagerWindowLayout = 'FileExplorer|TagList'
-    "let g:winManagerWindowLayout = 'FileExplorer'
-    let g:winManagerWidth = 25               " How wide should it be( pixels)
-    let g:defaultExplorer = 0
-    nmap wm :WMToggle<cr>
-    nmap <C-W><C-F> :FirstExplorerWindow<cr>
-    nmap <C-W><C-B> :BottomExplorerWindow<cr>
-    autocmd BufWinEnter \[Buf\ List\] setl nonumber
-endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Switch to buffer according to file name
 function! SwitchToBuf(filename)
