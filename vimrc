@@ -1125,7 +1125,6 @@ if has("autocmd")
     " endif
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
-    autocmd BufRead,BufNewFile *.mw setfiletype mediawiki
     autocmd FileType qf wincmd J " Open QuickFix horizontally
 endif " has("autocmd")
 
@@ -1554,6 +1553,8 @@ vmap <silent> <leader>hr <Plug>MarkRegex
 if pathogen#is_disabled('vimwiki') == 0
     let g:vimwiki_menu = 'Plugin.Vimwiki'
     let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
+                         \ 'syntax': 'markdown',
+                         \ 'ext': '.md',
                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
                          \ 'diary_rel_path': 'diary/'}]
