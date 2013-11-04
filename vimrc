@@ -375,7 +375,7 @@ endif
 "-------------------------------------------------------------------------------
 " 14 editing text
 "-------------------------------------------------------------------------------
-set backspace=indent,start  " same effect with above line
+set backspace=indent,start,eol  " BACKSPACE behavior
 set formatoptions+=mM       " describes how automatic formatting is to be done
 set showmatch       " Highlight matched pairs
 set matchtime=5     " Tenths of a second to show the matching paren
@@ -1102,7 +1102,7 @@ if has("autocmd")
     autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
     autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
     autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
-    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,sv,vimwiki set textwidth=80
+    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,vimwiki set textwidth=80
     autocmd FileType lisp set ts=2
     autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
@@ -1557,12 +1557,15 @@ if pathogen#is_disabled('vimwiki') == 0
     let g:vimwiki_menu = 'Plugin.Vimwiki'
     let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
                          \ 'syntax': 'markdown',
-                         \ 'ext': '.md',
                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
                          \ 'diary_rel_path': 'diary/'}]
     let g:vimwiki_badsyms = ' '
     let g:vimwiki_camel_case = 0
+"    let g:vimwiki_ext2syntax = {'.md': 'markdown',
+"                    \ '.mkd': 'markdown',
+"                    \ '.markdown': 'markdown',
+"                    \ '.wiki': 'media'}
 endif
 " }}}
 
