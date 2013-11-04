@@ -1125,7 +1125,6 @@ if has("autocmd")
     " endif
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
-    autocmd BufRead,BufNewFile *.mw setfiletype mediawiki
     autocmd FileType qf wincmd J " Open QuickFix horizontally
 endif " has("autocmd")
 
@@ -1341,23 +1340,6 @@ endif
 " "Hide the help thing..
 " let g:explDetailedHelp=0
 
-"-----------------------------------------------------------
-"WinManager
-if pathogen#is_disabled('winmanager') == 0
-    " let loaded_winmanager = 1
-    "nmap <silent> <leader>wm :WMToggle<cr>
-    let g:winManagerWindowLayout='NERDTree|BufExplorer'
-    "let g:winManagerWindowLayout='FileExplorer|TagList' "what windows CTRL-N ÇÐ»»
-    "let g:winManagerWindowLayout = 'FileExplorer|TagList'
-    "let g:winManagerWindowLayout = 'FileExplorer'
-    let g:winManagerWidth = 25               " How wide should it be( pixels)
-    let g:defaultExplorer = 0
-    nmap wm :WMToggle<cr>
-    nmap <C-W><C-F> :FirstExplorerWindow<cr>
-    nmap <C-W><C-B> :BottomExplorerWindow<cr>
-    autocmd BufWinEnter \[Buf\ List\] setl nonumber
-endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Switch to buffer according to file name
 function! SwitchToBuf(filename)
@@ -1528,6 +1510,11 @@ endif
 
 "-----------------------------------------------------------
 " showmarks setting
+" <Leader>mt  - Toggle whether marks are displayed or not.
+" <Leader>mo  - Turn ShowMarks on, and displays marks.
+" <Leader>mh  - Clear mark on current line.
+" <Leader>ma  - Clear all marks.
+" <Leader>mm  - Places next available mark.
 if pathogen#is_disabled('ShowMarks') == 0
     " Enable ShowMarks
     let g:showmarks_enable = 1
@@ -1542,8 +1529,8 @@ if pathogen#is_disabled('ShowMarks') == 0
     let g:showmarks_textlower = "\t"
     let g:showmarks_textupper = "\t"
     let g:showmarks_textother = "\t"
-    let g:showmarks_no_mappings = 1
-    nmap mt <Plug>ShowMarksToggle
+    let g:showmarks_no_mappings = 0
+    " nmap mt <Plug>ShowMarksToggle
 endif
 
 
@@ -1566,6 +1553,8 @@ vmap <silent> <leader>hr <Plug>MarkRegex
 if pathogen#is_disabled('vimwiki') == 0
     let g:vimwiki_menu = 'Plugin.Vimwiki'
     let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
+                         \ 'syntax': 'markdown',
+                         \ 'ext': '.md',
                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
                          \ 'diary_rel_path': 'diary/'}]
