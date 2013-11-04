@@ -1957,20 +1957,16 @@ endif
 " }}}
 
 "-----------------------------------------------------------
-" Auto Pairs
-" {{{
-let g:AutoPairsLoaded = 1
-let g:AutoPairs = {'(':')', '[':']', '{':'}',"'":"'",'"':'"'}
-" }}}
-
-"-----------------------------------------------------------
 " delimitMate
 " {{{
 " let loaded_delimitMate = 1
 " au FileType mail let b:loaded_delimitMate = 1
 let delimitMate_matchpairs = "(:),[:],{:},<:>"
 au FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
-au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:},':',\":\""
+au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:}"
+let delimitMate_quotes = "\" ' ` *"
+au FileType vim let b:delimitMate_quotes = "' `"
+au FileType verilog_systemverilog let b:delimitMate_quotes = "' \""
 " }}}
 
 "-----------------------------------------------------------
