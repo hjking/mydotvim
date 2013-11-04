@@ -101,6 +101,7 @@ endif
 
 if v:version < 703
     call add(g:pathogen_disabled, 'numbers')
+    call add(g:pathogen_disabled, 'niceblock')
 endif
 
 if v:version < 703 || !has('python')
@@ -1441,10 +1442,12 @@ if pathogen#is_disabled('nerdtree') == 0
     let NERDTreeMouseMode = 2
 endif
 
+"-----------------------------------------------------------
+" NERDTree-tabs
 if pathogen#is_disabled('nerdtree-tabs') == 0
-    map <leader>ntt <plug>NERDTreeTabsToggle<CR>
-    let g:nerdtree_tabs_open_on_console_startup=1   " NOT Open NERDTree on console vim startup
-    let g:nerdtree_tabs_open_on_gui_startup=1       " Open NERDTree on gvim/macvim startup
+    map <leader>nn <plug>NERDTreeTabsToggle<CR>
+    let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
+    let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
 endif
 
 "-----------------------------------------------------------
@@ -1529,8 +1532,8 @@ if pathogen#is_disabled('ShowMarks') == 0
     let g:showmarks_textlower = "\t"
     let g:showmarks_textupper = "\t"
     let g:showmarks_textother = "\t"
-    let g:showmarks_no_mappings = 0
-    " nmap mt <Plug>ShowMarksToggle
+    let g:showmarks_no_mappings = 1
+    nmap mt <Plug>ShowMarksToggle
 endif
 
 
