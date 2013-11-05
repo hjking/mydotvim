@@ -166,10 +166,6 @@
 	path = bundle/AnsiEsc
 	url = https://github.com/jakar/vim-AnsiEsc.git
     ignore = dirty
-[submodule "bundle/netrw"]
-	path = bundle/netrw
-	url = https://github.com/vim-scripts/netrw.vim.git
-    ignore = dirty
 [submodule "bundle/ShowMarks"]
 	path = bundle/ShowMarks
 	url = https://github.com/bootleq/ShowMarks.git
