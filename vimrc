@@ -70,9 +70,9 @@ endif
   endif
   let g:pathogen_disabled = []
 
-  if v:version < 700 || !has('patch167')
-      call add(g:pathogen_disabled, 'tagbar')
-  endif
+  " if v:version < 700 || !has('patch167')
+  "     call add(g:pathogen_disabled, 'tagbar')
+  " endif
 
   if v:version < 700 || !has('python')
       call add(g:pathogen_disabled, 'headlights')
@@ -1484,7 +1484,7 @@ endfunction
 let g:calendar_wruler = '日 一 二 三 四 五 六'
 let g:calendar_mark = 'left-fit'
 let g:calendar_focus_today = 1
-map ca :Calendar<CR>
+map <Leader>ca :Calendar<CR>
 
 "-----------------------------------------------------------
 " lookupfile setting
@@ -1614,7 +1614,7 @@ endif
 " {{{
   if pathogen#is_disabled('yankring') == 0
       let g:yankring_enabled=0
-      let g:yankring_history_file = '.yankring'
+      let g:yankring_history_file = '.vim-cache/yankring_history'
       map <leader>yr :YRShow<cr>
   endif
 " }}}
@@ -1647,14 +1647,6 @@ cnoremap <C-K>      <C-U>
 " autocomplete search history in command mode
 cnoremap <C-P>      <Up>
 cnoremap <C-N>      <Down>
-
-"-----------------------------------------------------------
-" vis
-let g:loaded_vis = 1
-
-"-----------------------------------------------------------
-" mrswin
-" let g:mrswin = 1
 
 "-----------------------------------------------------------
 " Powerline
@@ -1721,26 +1713,21 @@ let g:loaded_vis = 1
 " tagbar
 " {{{
   if pathogen#is_disabled('tagbar') == 0
-      if v:version > 700 && has('patch167')
-          if MySys() == "windows"
-              let g:tagbar_ctags_bin = '$VIM\vimfiles\ctags58\ctags.exe'
-          elseif MySys() == "linux"
-              let g:tagbar_ctags_bin = '/usr/bin/ctags'
-          endif
-          if !executable('ctags')
-              let g:loaded_tagbar = 1
-          else
-              let g:tagbar_width = 30
-              let g:tagbar_autofocus = 1
-              let g:tagbar_sort = 1
-              let g:tagbar_compact = 1
-              let g:tagbar_expand = 1
-              let g:tagbar_singleclick = 1
-              let g:tagbar_usearrows = 1
-              let g:tagbar_autoshowtag = 1
-              nnoremap <silent><leader>tt :TagbarToggle<CR>
-          endif
-      endif
+    if MySys() == "windows"
+        let g:tagbar_ctags_bin = '$VIM\vimfiles\ctags58\ctags.exe'
+    elseif MySys() == "linux"
+        let g:tagbar_ctags_bin = '/usr/bin/ctags'
+    endif
+    let g:tagbar_width = 20
+    let g:tagbar_autofocus = 1
+    let g:tagbar_sort = 1
+    let g:tagbar_compact = 1
+    let g:tagbar_expand = 1
+    let g:tagbar_singleclick = 1
+    let g:tagbar_usearrows = 1
+    let g:tagbar_autoshowtag = 1
+    " let g:tagbar_autoclose = 1    " auto close after open tag
+    nnoremap <silent><leader>tb :TagbarToggle<CR>
   endif
 " }}}
 
@@ -1755,7 +1742,7 @@ let g:loaded_vis = 1
           let g:neocomplcache_enable_smart_case = 1  " Use smartcase
           let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
           let g:neocomplcache_enable_quick_match = 1
-
+          let g:neocomplcache_temporary_dir = '~/.vim-cache/neocomplcache'
           " Enable heavy features.
           " Use camel case completion.
           let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
@@ -1861,12 +1848,13 @@ let g:loaded_vis = 1
 " {{{
 " FuzzyFinder/L9 require Vim 7.2 and floating-point support
   if pathogen#is_disabled('FuzzyFinder') == 0
+      let g:fuf_dataDir = '~/.vim-cache/fuzzyfinder-data'
       ""call add(g:pathogen_disabled, 'l9')
       ""call add(g:pathogen_disabled, 'fuzzyfinder')
-      nnoremap <silent> ,b :FufBuffer<CR>
-      nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
-      nnoremap <silent> ,j :FufJumpList<CR>
-      nnoremap <silent> ,l :FufLine<CR>
+      nnoremap <Leader>ffb :FufBuffer<CR>
+      nnoremap <Leader>fff :FufFileWithCurrentBufferDir<CR>
+      nnoremap <Leader>ffj :FufJumpList<CR>
+      nnoremap <Leader>ffl :FufLine<CR>
   endif
 " }}}
 
@@ -1890,6 +1878,7 @@ let g:loaded_vis = 1
       " stupid that it's not default
       let g:ctrlp_match_window_reversed = 0
 
+      let g:ctrlp_cache_dir = $HOME.'/.vim-cache/ctrlp'
       " Tell Ctrl-P to keep the current VIM working directory when starting a
       " search, another really stupid non default
       let g:ctrlp_working_path_mode = 'ra'
@@ -2069,10 +2058,10 @@ let g:loaded_vis = 1
                   \ 'git5/.*/review/',
                   \ 'google/obj/',
                   \], '\|'))
-      nnoremap [unite] <Nop>
-      xnoremap [unite] <Nop>
-      nmap <leader>f [unite]
-      xmap <leader>f [unite]
+      " nnoremap [unite] <Nop>
+      " xnoremap [unite] <Nop>
+      " nmap <leader>f [unite]
+      " xmap <leader>f [unite]
 
       nnoremap [unite]S :<C-U>Unite source<CR>
       nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
@@ -2097,22 +2086,21 @@ let g:loaded_vis = 1
       nnoremap <space>s :Unite -quick-match buffer<cr>
 
       let g:unite_update_time = 70
-      let g:unite_enable_split_vertically = 1
-      let g:unite_source_file_mru_time_format = "(%m/%d %T) "
-      let g:unite_source_file_rec_max_depth = 5
+      let g:unite_enable_split_vertically = 0   " split horizontally
       let g:unite_enable_ignore_case = 1
       let g:unite_enable_smart_case = 1
-      let g:unite_enable_start_insert = 0
-      let g:unite_enable_short_source_names = 1
-      let g:unite_source_history_yank_enable = 1
-      let g:unite_winheight = 20
-      let g:unite_source_session_path = expand('~/.vim/session/')
+      let g:unite_enable_start_insert = 1   " start INSERT mode
+      let g:unite_enable_use_short_source_names = 1
+      let g:unite_source_history_yank_enable = 1  " search through yank history
+      let g:unite_winheight = 10
+      let g:unite_data_directory = expand('~/.vim-cache/unite')
       let g:unite_cursor_line_highlight = 'TabLineSel'
+      " let g:unite_source_file_mru_time_format = "(%m/%d %T) "
       let g:unite_source_file_mru_filename_format = ':~:.'
       let g:unite_source_file_mru_limit = 300
       " let g:unite_source_directory_mru_time_format = ''
       let g:unite_source_directory_mru_limit = 300
-      let g:unite_split_rule = "botright"                     " Open in bottom right
+      let g:unite_split_rule = "botright"   " Open in bottom right
 
       function! s:unite_settings()
         nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
@@ -2173,12 +2161,15 @@ let g:loaded_vis = 1
 
 "-----------------------------------------------------------
 " AuthorInfo
+"{{{
   let g:vimrc_author='Jin Hong'
   let g:vimrc_email='hongjin@fiberhome.com.cn'
   let g:vimrc_homepage='http://about.me/hongjin'
+"}}}
 
 "-----------------------------------------------------------
 " Grep
+"{{{
   if MySys() == "windows"
       let g:Grep_Path = './vimfiles/gnu/grep.exe'
       let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
@@ -2187,6 +2178,7 @@ let g:loaded_vis = 1
       let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
   endif
   let Grep_Default_Options = '-i'
+"}}}
 
 
 "-----------------------------------------------------------
@@ -2197,7 +2189,7 @@ let g:loaded_vis = 1
   " enable syntastic integration >
   let g:airline#extensions#syntastic#enabled = 0
   " enable/disable tagbar integration >
-  let g:airline#extensions#tagbar#enabled = 0
+  let g:airline#extensions#tagbar#enabled = 1
   " change how tags are displayed (:help tagbar-statusline) >
   let g:airline#extensions#tagbar#flags = ''  "default
   let g:airline#extensions#tagbar#flags = 'f'
@@ -2218,20 +2210,24 @@ let g:loaded_vis = 1
 " `<Leader><Leader>e  to End of word forward
 " `<Leader><Leader>j  to Line downward
 " `<Leader><Leader>k  to Line upward
+"{{{
   if pathogen#is_disabled('easymotion') == 0
     " change the target keys
     " let g:EasyMotion_keys = '1234567890'
     " disable shading : 0
     let g:EasyMotion_do_shade = 1
   endif
+"}}}
 
 " verilog root menu
   let g:PluginTopLvlMenu = 'Plugin'
 
 "-----------------------------------------------------------
 "  Color Scheme Explorer
+"{{{
   let g:scroll_colors = 1
   let loaded_csExplorer = 1
+"}}}
 
 "-----------------------------------------------------------
 " uvm_gen
@@ -2244,7 +2240,22 @@ let g:loaded_vis = 1
 
 "-----------------------------------------------------------
 " multi_cursor
+"{{{
   let g:multi_cursor_use_default_mapping=1
+"}}}
+
+"-----------------------------------------------------------
+" ColorV
+"{{{
+  let g:colorv_cache_file = '$HOME/.vim-cache/vim_colorv_cache'
+  let g:colorv_cache_fav = '$HOME/.vim-cache/vim_colorv_cache_fav'
+"}}}
+
+"-----------------------------------------------------------
+" galaxy
+"{{{
+  let g:galaxy_cache_file = '$HOME/.vim-cache/vim_galaxy_cache'
+"}}}
 
 
 "-----------------------------------------------------------
