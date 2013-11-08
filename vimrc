@@ -601,7 +601,6 @@ if pathogen#is_disabled('solarized') == 0
   let g:solarized_termcolors=256
   let g:solarized_contrast="high"
   let g:solarized_visibility="high"
-  colorscheme solarized
 endif
 " colorscheme vividchalk
 
