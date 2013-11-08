@@ -150,10 +150,6 @@
 	path = bundle/galaxy
 	url = https://github.com/Rykka/galaxy.vim.git
     ignore = dirty
-[submodule "bundle/headlights"]
-	path = bundle/headlights
-	url = https://github.com/mbadran/headlights.git
-    ignore = dirty
 [submodule "bundle/unite"]
 	path = bundle/unite
 	url = https://github.com/Shougo/unite.vim.git

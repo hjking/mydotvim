@@ -74,10 +74,6 @@ endif
   "     call add(g:pathogen_disabled, 'tagbar')
   " endif
 
-  if v:version < 700 || !has('python')
-      call add(g:pathogen_disabled, 'headlights')
-  endif
-
   if v:version < 702
       call add(g:pathogen_disabled, 'Zoomwin')
       call add(g:pathogen_disabled, 'Vimball')
@@ -1688,25 +1684,6 @@ cnoremap <C-N>      <Down>
 " Draw It
 " {{{
   let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
-" }}}
-
-" ------------------------------------------------------------
-"  headlights
-" {{{
-  if pathogen#is_disabled('headlights') == 0
-  "if(count(g:pathogen_disabled, 'headlights')) == 1
-      " let g:loaded_headlights = 1             " (Disable)
-      let g:headlights_use_plugin_menu = 0    " (Disabled)
-      let g:headlights_smart_menus = 1        " (Enabled)
-      let g:headlights_show_commands = 1      " (Enabled)
-      let g:headlights_show_mappings = 1      " (Enabled)
-      let g:headlights_show_abbreviations = 0 " (Disabled)
-      let g:headlights_show_functions = 0     " (Disabled)
-      let g:headlights_show_highlights = 0    " (Disabled)
-      let g:headlights_show_files = 0         " (Disabled)
-      let g:headlights_show_load_order = 0    " (Disabled)
-      let g:headlights_debug_mode = 0         " (Disabled)
-  endif
 " }}}
 
 "-----------------------------------------------------------
