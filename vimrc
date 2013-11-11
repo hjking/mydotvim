@@ -18,12 +18,12 @@
 "-------------------------------------------------------------------------------
 "  1 important
 "-------------------------------------------------------------------------------
-filetype off
-
 " Get out of VI's compatible mode
 " Use Vim settings, rather then Vi settings.
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
+
+filetype off
 
 let g:vimrc_loaded = 1
 let g:vimrc_disable_setting = 1
@@ -75,6 +75,7 @@ endif
   " endif
 
   if v:version < 702
+      call add(g:pathogen_disabled, 'airline')
       call add(g:pathogen_disabled, 'Zoomwin')
       call add(g:pathogen_disabled, 'Vimball')
       call add(g:pathogen_disabled, 'cscope_win')
@@ -792,8 +793,8 @@ if version >= 600
     map <S-F3> zM
 endif
 
-" Quick yanking to the end of the line
-nmap Y ^y$
+" Yank from the cursor to the end of the line, to be consistent with C and D
+nmap Y y$
 
 "-----------------------------------------------------------
 " Spell checking
@@ -898,7 +899,7 @@ nnoremap <silent> <leader>p :bprevious<CR>
 
 " ,s - split horizontally
 nnoremap <silent> <leader>s :split<CR>
-:noremap <Leader>h :split^M^W^W<cr>
+nnoremap <silent> <Leader>h :split^M^W^W<cr>
 
 " ,v - split vertically
 nnoremap <silent> <leader>v :vsplit<CR>
@@ -1088,8 +1089,11 @@ nnoremap <backspace> 10kzz
 
 noremap j gjzz
 noremap k gkzz
-noremap gj j
-noremap gk k
+" noremap gj j
+" noremap gk k
+" Wrapped lines goes down/up to next row, rather than next line in file
+" nnoremap j gj
+" nnoremap k gk
 noremap G Gzz
 noremap gg ggzz
 noremap <C-d> <C-d>zz
@@ -1101,7 +1105,12 @@ noremap N Nzz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-nnoremap <C-h> :<C-u>help<Space>
+nnoremap ; :
+" Use Q for formatting the current paragraph (or selection)
+vmap Q gq
+nmap Q gqap
+
+" nnoremap <C-h> :<C-u>help<Space>
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -1861,7 +1870,7 @@ cnoremap <C-N>      <Down>
 
       let g:ctrlp_custom_ignore = {
           \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-          \ 'file': '\v\.(exe|so|dll)$'
+          \ 'file': '\v\.(exe|so|dll|pyc)$'
           \ }
       if MySys() == "windows"
           let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
@@ -1978,7 +1987,7 @@ cnoremap <C-N>      <Down>
   au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:}"
   let delimitMate_quotes = "\" ' ` *"
   au FileType vim let b:delimitMate_quotes = "' `"
-  au FileType verilog_systemverilog let b:delimitMate_quotes = "' \""
+  au FileType verilog_systemverilog let b:delimitMate_quotes = "\""
 " }}}
 
 "-----------------------------------------------------------
@@ -2013,8 +2022,16 @@ cnoremap <C-N>      <Down>
   if exists(":Tabularize")
     nmap <Leader>a= :Tabularize /=<CR>
     vmap <Leader>a= :Tabularize /=<CR>
-    nmap <Leader>a: :Tabularize /:\zs<CR>
-    vmap <Leader>a: :Tabularize /:\zs<CR>
+    nmap <Leader>a: :Tabularize /:<CR>
+    vmap <Leader>a: :Tabularize /:<CR>
+    nmap <Leader>a:: :Tabularize /:\zs<CR>
+    vmap <Leader>a:: :Tabularize /:\zs<CR>
+    nmap <Leader>a,  :Tabularize /,<CR>
+    vmap <Leader>a,  :Tabularize /,<CR>
+    nmap <Leader>a,, :Tabularize /,\zs<CR>
+    vmap <Leader>a,, :Tabularize /,\zs<CR>
+    nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+    vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
   endif
 " }}}
 
