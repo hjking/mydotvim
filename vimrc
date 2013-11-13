@@ -107,7 +107,6 @@ endif
 
   if v:version < 703 || !has('python')
       call add(g:pathogen_disabled, 'gundo')
-      call add(g:pathogen_disabled, 'solarized')
   endif
 
   " Disable on purpose
@@ -604,6 +603,8 @@ if pathogen#is_disabled('solarized') == 0
   let g:solarized_visibility="high"
 endif
 " colorscheme vividchalk
+" colorscheme molokai
+colorscheme solarized
 
 " Set augroup
 augroup MyAutoCmd
@@ -1144,6 +1145,9 @@ if has("autocmd")
     " remove all trailing whitespace in a file
     autocmd BufWritePre * :%s/\s\+$//e
     autocmd FileType qf wincmd J " Open QuickFix horizontally
+    " Automatically resize vertical splits
+    autocmd WinEnter * :set winfixheight
+    autocmd WinEnter * :wincmd =
 endif " has("autocmd")
 
 "-----------------------------------------------------------
