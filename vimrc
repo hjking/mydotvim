@@ -70,9 +70,9 @@ endif
   endif
   let g:pathogen_disabled = []
 
-  " if v:version < 700 || !has('patch167')
-  "     call add(g:pathogen_disabled, 'tagbar')
-  " endif
+  if v:version < 700 || !has('patch167')
+      call add(g:pathogen_disabled, 'tagbar')
+  endif
 
   if v:version < 702
       call add(g:pathogen_disabled, 'airline')
@@ -81,7 +81,6 @@ endif
       call add(g:pathogen_disabled, 'cscope_win')
       call add(g:pathogen_disabled, 'syntastic')
       call add(g:pathogen_disabled, 'unite')
-      call add(g:pathogen_disabled, 'ColorV')
       call add(g:pathogen_disabled, 'galaxy')
       call add(g:pathogen_disabled, 'neocomplcache')
       call add(g:pathogen_disabled, 'neosnippet')
@@ -101,7 +100,6 @@ endif
   endif
 
   if v:version < 703
-      call add(g:pathogen_disabled, 'numbers')
       call add(g:pathogen_disabled, 'niceblock')
   endif
 
@@ -1858,16 +1856,6 @@ cnoremap <C-N>      <Down>
 " }}}
 
 "-----------------------------------------------------------
-" numbers
-" {{{
-  if pathogen#is_disabled('numbers') == 0
-      " nnoremap <leader>nt :NumbersToggle<CR>
-      " nnoremap <F10> :NumbersToggle<CR>
-      " let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
-  endif
-" }}}
-
-"-----------------------------------------------------------
 " vim-cycle
 " {{{
   if pathogen#is_disabled('vim-cycle') == 0
@@ -2200,13 +2188,6 @@ cnoremap <C-N>      <Down>
 " multi_cursor
 "{{{
   let g:multi_cursor_use_default_mapping=1
-"}}}
-
-"-----------------------------------------------------------
-" ColorV
-"{{{
-  let g:colorv_cache_file = '$HOME/.vim-cache/vim_colorv_cache'
-  let g:colorv_cache_fav = '$HOME/.vim-cache/vim_colorv_cache_fav'
 "}}}
 
 "-----------------------------------------------------------

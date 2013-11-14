@@ -142,10 +142,6 @@
 	path = bundle/DrawIt
 	url = https://github.com/vim-scripts/DrawIt.git
     ignore = dirty
-[submodule "bundle/ColorV"]
-	path = bundle/ColorV
-	url = https://github.com/Rykka/colorv.vim.git
-    ignore = dirty
 [submodule "bundle/galaxy"]
 	path = bundle/galaxy
 	url = https://github.com/Rykka/galaxy.vim.git
