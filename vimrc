@@ -2289,6 +2289,18 @@ if has('statusline')
     set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
 endif
 
+"-----------------------------------------------------------
+" CamelCaseMotion
+"{{{
+" Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
+  map <silent> w <Plug>CamelCaseMotion_w
+  map <silent> b <Plug>CamelCaseMotion_b
+  map <silent> e <Plug>CamelCaseMotion_e
+  sunmap w
+  sunmap b
+  sunmap e
+"}}}
+
 set secure
 
 " vim: et ts=2 sts=2 sw=2
