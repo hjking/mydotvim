@@ -81,7 +81,6 @@ endif
       call add(g:pathogen_disabled, 'cscope_win')
       call add(g:pathogen_disabled, 'syntastic')
       call add(g:pathogen_disabled, 'unite')
-      call add(g:pathogen_disabled, 'galaxy')
       call add(g:pathogen_disabled, 'neocomplcache')
       call add(g:pathogen_disabled, 'neosnippet')
       call add(g:pathogen_disabled, 'netrw')
@@ -2189,13 +2188,6 @@ cnoremap <C-N>      <Down>
 "{{{
   let g:multi_cursor_use_default_mapping=1
 "}}}
-
-"-----------------------------------------------------------
-" galaxy
-"{{{
-  let g:galaxy_cache_file = '$HOME/.vim-cache/vim_galaxy_cache'
-"}}}
-
 
 "-----------------------------------------------------------
 " Functions

@@ -51,7 +51,7 @@ function s:SetGuiFont()
         endif
     elseif has('unix')
         " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
-        set guifont=Monospace\ 12
+        set guifont=Monospace\ 10
         set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
     elseif has("gui_win32")     " Windows platform
         let font_name = ""
