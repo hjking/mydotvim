@@ -253,45 +253,6 @@ set background=dark
 "-------------------------------------------------------------------------------
 "  6 multiple windows
 "-------------------------------------------------------------------------------
-"-----------------------------------------------------------
-""" Status Line
-"-----------------------------------------------------------
-" Color of Status Line
-if has('statusline')
-    "highlight StatusLine guifg=SlateBlue guibg=Yellow
-    "highlight StatusLine guifg=SlateBlue guibg=#008800
-    highlight StatusLine guifg=orange guibg=#008800 gui=underline
-    highlight StatusLineNC guifg=Gray guibg=White
-    set laststatus=2           " always show the status line
-    hi User1 guifg=yellow
-    hi User2 guifg=lightblue
-    hi User3 guifg=red
-    hi User4 guifg=cyan
-    hi User5 guifg=lightgreen
-    hi User6 gui=bold,inverse guifg=red term=bold,inverse cterm=bold,inverse ctermfg=red
-    " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
-    " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-    " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-    " %([%R%M]%)   read-only, modified and modifiable flags between braces
-    " %{'$'[!&list]}  shows a '$' if in list mode
-    " %{'~'[&pm=='']} shows a '~' if in patchmode
-    " #%n    buffer number
-    set statusline=
-    set statusline+=[%f]                " file name
-    set statusline+=[%{&ff}]            " file format
-    set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
-    set statusline+=%y                  " file type
-    set statusline+=%6*%m%*             " modified flag
-    set statusline+=%r                  " readonly flag
-    set statusline+=%h                  "
-    set statusline+=%w
-    " set statusline+=\ [%{getcwd()}] " current directory
-    set statusline+=%#warningmsg#
-    set statusline+=%=                  " left/right separator
-    set statusline+=%b(0X%B)
-    set statusline+=[Pos=%l,%c%V]
-    set statusline+=[%l/%L(%p%%)]       " cursor position
-endif
 
 set equalalways " Multiple windows, when created, are equal in size
 set splitbelow
@@ -2307,6 +2268,53 @@ function! FHHeader()
 
 endfunction
 "}}}
+
+"-----------------------------------------------------------
+""" Status Line
+"-----------------------------------------------------------
+" Color of Status Line
+if has('statusline')
+    set laststatus=2           " always show the status line
+    "highlight StatusLine guifg=SlateBlue guibg=Yellow
+    "highlight StatusLine guifg=SlateBlue guibg=#008800
+    highlight StatusLine NONE
+    highlight StatusLineNC NONE
+    " current window
+    highlight StatusLine guifg=orange guibg=#008800 gui=underline ctermfg=yellow
+    " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
+    " not current window
+    highlight StatusLineNC guifg=Gray guibg=white ctermfg=lightgrey
+    " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
+    highlight User1 guifg=yellow
+    highlight User2 guifg=lightblue
+    highlight User3 guifg=red
+    highlight User4 guifg=cyan
+    highlight User5 guifg=lightgreen
+    highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue " ctermbg=brown
+    highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " %([%R%M]%)   read-only, modified and modifiable flags between braces
+    " %{'$'[!&list]}  shows a '$' if in list mode
+    " %{'~'[&pm=='']} shows a '~' if in patchmode
+    " #%n    buffer number
+    set statusline=
+    set statusline+=[%f]                " file name
+    set statusline+=[%{&ff}]            " file format
+    set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
+    set statusline+=%y                  " file type
+    set statusline+=%7*%m%*             " modified flag
+    set statusline+=%r                  " readonly flag
+    set statusline+=%h                  "
+    set statusline+=%w
+    " set statusline+=\ [%{getcwd()}] " current directory
+    set statusline+=%#warningmsg#
+    set statusline+=%=                  " left/right separator
+    set statusline+=%6*%b(0X%B)
+    " set statusline+=[Pos=%l,%c%V]
+    set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
+endif
 
 set secure
 
