@@ -228,7 +228,7 @@ endif
 "  4 displaying text
 "-------------------------------------------------------------------------------
 set linebreak               " wrap at the right place
-set breakat=\ \	;:,!?
+set breakat=\ \ ;:,!?
 set showbreak=>
 set display+=lastline
 " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
@@ -560,9 +560,12 @@ if pathogen#is_disabled('solarized') == 0
   let g:solarized_contrast="high"
   let g:solarized_visibility="high"
 endif
+try
+  colorscheme solarized
+catch
+  colorscheme molokai
 " colorscheme vividchalk
-" colorscheme molokai
-colorscheme solarized
+endtry
 
 " Set augroup
 augroup MyAutoCmd
@@ -1586,17 +1589,13 @@ endif
 " }}}
 
 "-----------------------------------------------------------
-" Rainbow Parentheses
+" Colorful Parentheses
+
+" vim-niji
 " {{{
-  if pathogen#is_disabled('rainbow_parentheses') == 0
-      let g:rbpt_max = 16
-      let g:rbpt_loadcmd_toggle = 0
-      au VimEnter * RainbowParenthesesToggle
-      au Syntax * RainbowParenthesesLoadRound     "()
-      au Syntax * RainbowParenthesesLoadSquare    "[]
-      au Syntax * RainbowParenthesesLoadBraces    "{}
-      au Syntax * RainbowParenthesesLoadChevrons  "<>
-  endif
+  " let g:niji_matching_filetypes = ['lisp', 'ruby', 'python']
+  " let g:niji_match_all_filetypes = 1
+  let g:niji_always_match = [['(', ')'], ['\[', '\]'], ['{', '}']]
 " }}}
 
 """""""""""""""""""""""""""""""""""
