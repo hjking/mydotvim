@@ -63,3 +63,7 @@ file-line: open the file under cursor, and goto the line specified after the fil
 gundo: Graph your undo tree
 headlights: add a menu to vim, revealing all plugins used
 indent-guides: is a plugin for visually displaying indent levels
+easy-align: easily aligns code
+over: substitute preview
+lightline: statusline
+airline: statusline

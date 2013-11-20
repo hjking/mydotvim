@@ -24,6 +24,20 @@ mydotvim
     git submodule foreach git pull origin master
 ```
 
+4. Remove a submodule
+```shell
+    git submodule deinit --force [path to submodule]
+    git rm --cached [path to submodule]
+```
+    Delete the relevant line from the '.gitmodules' file.
+    Commit the superproject.
+
+    OR
+
+    Delete the relevant line from the '.gitmodules' and .git/config file.
+    git rm --cached [path to submodule]
+    Commit the superproject.
+
 
 ## Plugins I'm using
 neocomplete.vim : autocompletion with fuzzy matching and faster than neocomplcache.vim.
