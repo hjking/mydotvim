@@ -1590,12 +1590,14 @@ endif
 
 "-----------------------------------------------------------
 " Colorful Parentheses
-
-" vim-niji
+" rainbow_parentheses
 " {{{
-  " let g:niji_matching_filetypes = ['lisp', 'ruby', 'python']
-  " let g:niji_match_all_filetypes = 1
-  let g:niji_always_match = [['(', ')'], ['\[', '\]'], ['{', '}']]
+  let g:rbpt_max = 16
+  let g:rbpt_loadcmd_toggle = 0
+  au VimEnter * RainbowParenthesesToggle
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
 " }}}
 
 """""""""""""""""""""""""""""""""""
@@ -2128,6 +2130,7 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " airline
 "{{{
+  let g:loaded_airline = 1
   " enable fugitive integration >
   let g:airline#extensions#branch#enabled = 1
   " enable syntastic integration >
@@ -2144,6 +2147,15 @@ cnoremap <C-N>      <Down>
   " configure which whitespace checks to enable. >
   let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
 "}}}
+
+" lightline
+" {{{
+" let g:loaded_lightline = 1
+  let g:lightline = {
+      \ 'colorscheme': 'solarized_dark',
+      \ }
+
+" }}}
 
 "-----------------------------------------------------------
 " easymotion
