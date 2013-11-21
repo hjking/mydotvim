@@ -468,9 +468,12 @@ set updatetime=1000
 set history=200                 " save cmd number in history
 " set wildmode=longest:full,full
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
-set wildignore+=.svn,CVS,.git,.hg,*.bak,*.o,*.e,*~,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.dat,*.,tmp,*.mdb,*~,~* " wildmenu: ignore these extensions
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux"
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe
+set wildignore+=.svn,CVS,.git,.hg,*.bak,*.e,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.mdb,*~,~*,*.so " wildmenu: ignore these extensions
+if MySys() == "windows"
+  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
+else
+  set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
+endif
 set wildmenu                    " command-line completion operates in an enhanced mode
 
 "-------------------------------------------------------------------------------
@@ -663,6 +666,7 @@ map  <F6>           :tabprevious<CR>
 map  <F7>           :tabnext<CR>
 map  <leader>tn     :tabnew<CR>
 map  <leader>tc     :tabclose<CR>
+map  <leader>to     :tabonly<cr>
 imap  <F6>          <ESC>:tabprevious<CR>i
 imap  <F7>          <ESC>:tabnext<CR>i
 imap  ^T            <ESC>:tabnew<CR>i
@@ -781,6 +785,31 @@ nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
 " Search selected text.
 xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
 xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
+
+" Visual mode pressing * or # searches for the current selection
+" Super useful! From an idea by Michael Naumann
+vnoremap <silent> * :call VisualSelection('f', '')<CR>
+vnoremap <silent> # :call VisualSelection('b', '')<CR>
+function! VisualSelection(direction, extra_filter) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.' . a:extra_filter)
+    elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
 
 """"""""""""""""""""""""""""""
 " Set search word.
@@ -1091,6 +1120,7 @@ if has("autocmd")
     autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
     autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
+    " Return to last edit position when opening files
     autocmd BufReadPost *
       \ if line("'\"") > 0 && line("'\"") <= line("$") |
       \   exe "normal g`\"" |
@@ -1165,7 +1195,6 @@ vnoremap <silent> # :call VisualSearch('b')<CR>
 " Python
 "---------------
 " auto complete
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 map <F9> :!python.exe
 " Only do this part when compiled with support for autocommands.
 " if has("autocmd")
@@ -2124,6 +2153,7 @@ cnoremap <C-N>      <Down>
       let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
   endif
   let Grep_Default_Options = '-i'
+  let Grep_Skip_Dirs = 'RCS CVS .svn .git'
 "}}}
 
 

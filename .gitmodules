@@ -293,3 +293,7 @@
 	path = bundle/over
 	url = https://github.com/osyo-manga/vim-over.git
 	ignore = dirty
+[submodule "bundle/cs-peaksea"]
+	path = bundle/cs-peaksea
+	url = https://github.com/vim-scripts/peaksea.git
+	ignore = dirty
