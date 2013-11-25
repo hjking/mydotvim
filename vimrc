@@ -308,7 +308,11 @@ set novisualbell                " Use visual bell instead of beeping
 " set helplang& helplang=en
 " use Chinese help, support in vimcdoc.vim plugin
 if version >= 603
-  set helplang=cn
+  if MySys() == "windows"
+    set helplang=cn
+  else
+    set helplang=en
+  endif
 endif
 
 "-------------------------------------------------------------------------------
@@ -1096,7 +1100,7 @@ noremap N Nzz
 nnoremap g* g*zz
 nnoremap g# g#zz
 
-nnoremap ; :
+" nnoremap ; :
 " Use Q for formatting the current paragraph (or selection)
 vmap Q gq
 nmap Q gqap
@@ -1137,8 +1141,8 @@ if has("autocmd")
     autocmd BufWritePre * :%s/\s\+$//e
     autocmd FileType qf wincmd J " Open QuickFix horizontally
     " Automatically resize vertical splits
-    autocmd WinEnter * :set winfixheight
-    autocmd WinEnter * :wincmd =
+    " autocmd WinEnter * :set winfixheight
+    " autocmd WinEnter * :wincmd =
 endif " has("autocmd")
 
 "-----------------------------------------------------------
@@ -1434,8 +1438,8 @@ endfunction
         let g:netrw_http_cmd = 'wget'
       endif
 
-      map fe :Texplore<CR>            " open in new tab
-      map vfe :Vexplore<CR>           " vertical split
+      map <leader>fte :Texplore<CR>            " open in new tab
+      map <leader>fve :Vexplore<CR>           " vertical split
       nmap <silent> <leader>fe :Sexplore!<cr>
   endif
 " }}}
@@ -2181,9 +2185,9 @@ cnoremap <C-N>      <Down>
 " lightline
 " {{{
 " let g:loaded_lightline = 1
-  let g:lightline = {
-      \ 'colorscheme': 'solarized_dark',
-      \ }
+let g:lightline = {
+    \ 'colorscheme': 'solarized_dark',
+    \ }
 
 " }}}
 
