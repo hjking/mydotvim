@@ -70,23 +70,19 @@ endif
   endif
   let g:pathogen_disabled = []
 
-  if v:version < 700 || !has('patch167')
+  if v:version < 700 || (v:version == 700 && !has('patch167'))
       call add(g:pathogen_disabled, 'tagbar')
   endif
 
   if v:version < 702
       call add(g:pathogen_disabled, 'airline')
-      call add(g:pathogen_disabled, 'Zoomwin')
-      call add(g:pathogen_disabled, 'Vimball')
-      call add(g:pathogen_disabled, 'cscope_win')
-      call add(g:pathogen_disabled, 'syntastic')
+      " call add(g:pathogen_disabled, 'syntastic')
       call add(g:pathogen_disabled, 'unite')
       call add(g:pathogen_disabled, 'neocomplcache')
       call add(g:pathogen_disabled, 'neosnippet')
-      call add(g:pathogen_disabled, 'netrw')
       call add(g:pathogen_disabled, 'vimfiler')
       call add(g:pathogen_disabled, 'easymotion')
-      call add(g:pathogen_disabled, 'indent_guides')
+      call add(g:pathogen_disabled, 'indent-guides')
   endif
 
   " if v:version < 702 || !has('gui_running')
@@ -99,10 +95,10 @@ endif
   endif
 
   if v:version < 703
-      call add(g:pathogen_disabled, 'niceblock')
+  "    call add(g:pathogen_disabled, 'niceblock')
   endif
 
-  if v:version < 703 || !has('python')
+  if v:version < 703 || (v:version == 703 && !has('python'))
       call add(g:pathogen_disabled, 'gundo')
   endif
 
