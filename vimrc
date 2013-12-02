@@ -301,6 +301,7 @@ endif
 set report=0                    " Threshold for reporting number of lines changed
 set noerrorbells                " No bell for error messages
 set novisualbell                " Use visual bell instead of beeping
+set t_vb=                       " Disable screen flash on error
 " set helplang& helplang=en
 " use Chinese help, support in vimcdoc.vim plugin
 if version >= 603
@@ -570,11 +571,6 @@ catch
 " colorscheme vividchalk
 endtry
 
-" Set augroup
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
 " HighLight Character
 highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
 " highlight pop menu
@@ -589,9 +585,6 @@ highlight ShowMarksHLo ctermbg=0
 highlight ShowMarksHLm ctermbg=0
 
 ":match OverLength '\%200v.*'
-
-" Check timestamp more for 'autoread'.
-autocmd MyAutoCmd WinEnter * checktime
 
 """ Code folding options
 nmap <leader>f0 :set foldlevel=0<CR>
@@ -625,22 +618,8 @@ set sidescroll=1
 
 "-----------------------------------------------------------------------------
 " Custom mappings
-"-----------------------------------------------------------------------------
-"
 " Key Mapping Setting
-"
-"        Normal  Visual  Select  Operator-pending    Insert  Command-line    Lang-Arg
-" :map    yes    yes      yes        yes              -          -            -
-" :nmap   yes    -         -         -                -          -            -
-" :vmap    -     yes      yes        -                -          -            -
-" :xmap    -     yes       -         -                -          -            -
-" :smap    -      -       yes        -                -          -            -
-" :omap    -      -        -         yes              -          -            -
-" :map!    -      -        -         -               yes        yes           -
-" :imap    -      -        -         -               yes         -            -
-" :cmap    -      -        -         -                -         yes           -
-" :lmap    -      -        -         -               yes*       yes*          yes*
-"-----------------------------------------------------------
+"-----------------------------------------------------------------------------
 
 " map <F1> :call ToggleSketch()<CR>
 " map <F2> zr
@@ -703,12 +682,6 @@ nmap <C-l> <C-W>l
 "Moving fast to front, back and 2 sides ;)
 imap <m-$> <esc>$a
 imap <m-0> <esc>0i
-
-if MySys() == "windows"
-    nmap <leader>v :e $VIM/_vimrc<CR> " key mapping for editing vimrc
-elseif MySys() == "linux"
-    nmap <leader>v :e ~/.vimrc
-endif
 
 " Easily macro.
 nnoremap @@ @a
@@ -843,9 +816,8 @@ inoremap <C-c> <Esc>
 vnoremap > >gv
 vnoremap < <gv
 
-" ,/, F2 - remove highlighted search
-" "nnoremap <silent> ,/ :noh<CR>
-nnoremap <silent> <F2> :noh<CR>
+" ,/ - remove highlighted search
+" nnoremap <silent> ,/ :noh<CR>
 
 " ,1-9 - quick buffer switching
 nnoremap <silent> <leader>1 :b1<CR>
@@ -870,7 +842,7 @@ imap <M-d>  <C-o>dw
 " Buffer commands
 nmap <silent> <Leader>bd :bd<CR>
 
-" Edit the vimrc file
+" ,e* - Edit the vimrc file
 nmap <silent> <Leader>ev :e $MYVIMRC<CR>
 nmap <silent> <Leader>sv :so $MYVIMRC<CR>
 nmap <silent> <Leader>egv :e $MYGVIMRC<CR>
@@ -888,12 +860,15 @@ nnoremap <silent> <leader>n :bnext<CR>
 " ,p - previous buffer
 nnoremap <silent> <leader>p :bprevious<CR>
 
-" ,s - split horizontally
-nnoremap <silent> <leader>s :split<CR>
-nnoremap <silent> <Leader>h :split^M^W^W<cr>
+" ,P - Go back to previous file
+map <Leader>P <C-^>
 
-" ,v - split vertically
-nnoremap <silent> <leader>v :vsplit<CR>
+" ,s - split horizontally
+" nnoremap <silent> <leader>s :split<CR>
+nnoremap <silent> <leader>h :split^M^W^W<cr>
+
+" ,v - Reselect text that was just pasted
+nnoremap <leader>v V`]
 
 " ,w - write file
 func! DeleteTrailingWS()
@@ -902,13 +877,12 @@ func! DeleteTrailingWS()
   exe "normal `z"
 endfunc
 noremap <leader>w :call DeleteTrailingWS()<CR>
-" nnoremap <silent> <leader>w :write<CR>
 
 " ,W - clear trailing whitespace
-" nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
-nnoremap <silent> <leader>W :%s=\s\+$==<CR>
+" nnoremap <silent> <leader>W :%s=\s\+$==<CR>
+nnoremap <leader>W :%s/\s\+$//<cr>
 
-"clearing highlighted search
+" clearing highlighted search
 nmap <silent> <leader>\ :nohlsearch<CR>
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
@@ -916,8 +890,6 @@ inoremap <buffer> /*          /**/<Left><Left>
 inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
 inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
 inoremap <buffer> <Leader>/*  /*
-
-map <Leader>p <C-^>     "Go back to previous file
 
 " Easy escape."{{{
 imap jj <Esc>
@@ -1100,45 +1072,67 @@ nnoremap g# g#zz
 " Use Q for formatting the current paragraph (or selection)
 vmap Q gq
 nmap Q gqap
+nnoremap Q gqap
 
 " nnoremap <C-h> :<C-u>help<Space>
+
+" Thanks to Steve Losh for this liberating tip
+" See http://stevelosh.com/blog/2010/09/coming-home-to-vim
+nnoremap / /\v
+vnoremap / /\v
+
+" Jump to matching pairs easily, with Tab
+nnoremap <Tab> %
+vnoremap <Tab> %
+
+" Use shift-H and shift-L for move to beginning/end
+nnoremap H 0
+nnoremap L $
 
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
 if has("autocmd")
-    autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
-    autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
-    autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
-    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,vimwiki set textwidth=80
-    autocmd FileType lisp set ts=2
-    autocmd FileType bash,shell set ts=2
-    autocmd FileType help set nonu
-    autocmd FileType lisp set softtabstop=2
-    autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
-"    autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
-    autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
-    autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
-    autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
-    " Return to last edit position when opening files
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
-      \ endif
-    autocmd BufEnter * :syntax sync fromstart
-    autocmd BufEnter * :lchdir %:p:h
-    " auto load vimrc when editing it
-    " if MySys() == "windows"
-    "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
-    " elseif MySys() == "linux"
-    "     autocmd! BufWritePost .vimrc source %
-    " endif
-    " remove all trailing whitespace in a file
-    autocmd BufWritePre * :%s/\s\+$//e
-    autocmd FileType qf wincmd J " Open QuickFix horizontally
-    " Automatically resize vertical splits
-    " autocmd WinEnter * :set winfixheight
-    " autocmd WinEnter * :wincmd =
+  " Set augroup
+  augroup MyAutoCmd
+    autocmd!
+  augroup END
+
+  " Check timestamp more for 'autoread'.
+  autocmd MyAutoCmd WinEnter * checktime
+
+  autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
+  autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
+  autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
+  autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,vimwiki set textwidth=80
+  autocmd FileType lisp set ts=2
+  autocmd FileType bash,shell set ts=2
+  autocmd FileType help set nonu
+  autocmd FileType lisp set softtabstop=2
+  autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
+"  autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
+  autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
+  autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
+  autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
+  " Return to last edit position when opening files
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+  autocmd BufEnter * :syntax sync fromstart
+  autocmd BufEnter * :lchdir %:p:h
+  " auto load vimrc when editing it
+  " if MySys() == "windows"
+  "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
+  " elseif MySys() == "linux"
+  "     autocmd! BufWritePost .vimrc source %
+  " endif
+  " remove all trailing whitespace in a file
+  autocmd BufWritePre * :%s/\s\+$//e
+  autocmd FileType qf wincmd J " Open QuickFix horizontally
+  " Automatically resize vertical splits
+  " autocmd WinEnter * :set winfixheight
+  " autocmd WinEnter * :wincmd =
 endif " has("autocmd")
 
 "-----------------------------------------------------------
