@@ -916,9 +916,9 @@ onoremap <silent> gc  :<C-u>normal gc<CR>
 
 " Smart home and smart end."{{{
 nnoremap <silent> gh  :<C-u>call SmartHome("n")<CR>
-nnoremap <silent> gl  :<C-u>call SmartEnd("n")<CR>
+nnoremap <silent> ge  :<C-u>call SmartEnd("n")<CR>
 xnoremap <silent> gh  <ESC>:<C-u>call SmartHome("v")<CR>
-xnoremap <silent> gl  <ESC>:<C-u>call SmartEnd("v")<CR>
+xnoremap <silent> ge  <ESC>:<C-u>call SmartEnd("v")<CR>
 nnoremap <expr> gm    (virtcol('$')/2).'\|'
 xnoremap <expr> gm    (virtcol('$')/2).'\|'
 " Smart home function"{{{

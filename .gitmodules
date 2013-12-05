@@ -308,3 +308,11 @@
 	path = bundle/commentary
 	url = https://github.com/tpope/vim-commentary.git
 	ignore = dirty
+[submodule "bundle/lion"]
+	path = bundle/lion
+	url = https://github.com/tommcdo/vim-lion.git
+	ignore = dirty
+[submodule "bundle/vim-vertical-move"]
+	path = bundle/vim-vertical-move
+	url = https://github.com/bruno-/vim-vertical-move.git
+	ignore = dirty

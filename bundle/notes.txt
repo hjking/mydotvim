@@ -12,6 +12,7 @@ Alignment:
     easy-align: easily aligns code
     align
     alignta
+    vim-lion: use `gl` and `gL` to insert space
 
 statusline:
     lightline
@@ -31,7 +32,8 @@ File Searching:
     CommandT(In Ruby)
     CtrlP: fuzzy file searching
     FuzzyFinder
-    unite: search and display information from arbitrary sources, like files, buffers, recently used files or registers
+    unite: search and display information from arbitrary sources, like files, 
+        buffers, recently used files or registers
     lookupfile: opening files by typing a pattern
 
 parenthes:
@@ -51,11 +53,18 @@ comment:
 
 buffer:
     minibufexpl
+    eunuch: Delete or rename a buffer
 
 motion: easily jumps to any character on the screen
     CamelCaseMotion
     easymotion
     sneak
+    vim-vertical-move: `,[`, `,]` for visual up and down select
+
+Search and Replace:    
+    multiple-cursors:  select all matching words and lets you concurrently
+        change all matches at the same time
+    over: substitute preview
 
 git:
     fugitive: git wrapper
@@ -100,7 +109,6 @@ library:
     tlib_vim
 
 unimpaired: many additional bracket [] maps
-multiple-cursors:  select all matching words and lets you concurrently change all matches at the same time
 surround: makes for quick work of surrounds
 repeat: repeat plugin commands
 speeddating: Ctrl+A and Ctrl+X for dates
@@ -112,8 +120,6 @@ ScrollColor, csExplorer: explorer colorschemes
 Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer
 file-line: open the file under cursor, and goto the line specified after the filename
 headlights: add a menu to vim, revealing all plugins used
-over: substitute preview
-eunuch: Delete or rename a buffer
 indent-guides: visually displaying indent levels in Vim
 
 AnsiEsc
