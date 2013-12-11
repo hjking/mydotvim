@@ -300,10 +300,6 @@
 	path = bundle/sneak
 	url = https://github.com/justinmk/vim-sneak.git
 	ignore = dirty
-[submodule "bundle/startify"]
-	path = bundle/startify
-	url = https://github.com/mhinz/vim-startify.git
-	ignore = dirty
 [submodule "bundle/commentary"]
 	path = bundle/commentary
 	url = https://github.com/tpope/vim-commentary.git
