@@ -1458,6 +1458,7 @@ endfunction
       let NERDTreeShowHidden=1
       " single click to open directory
       let NERDTreeMouseMode = 2
+      let NERDTreeHijackNetrw = 1
   endif
 " }}}
 
