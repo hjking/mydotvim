@@ -663,6 +663,8 @@ imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
 nmap <silent> <leader>wr :w<cr>
 nmap <silent> <leader>wf :w!<cr>
 nmap <silent> <leader>w :w!<cr>
+" Force Saving Files that Require Root Permission
+cmap w!! %!sudo tee > /dev/null %
 " Fast quiting
 nmap <silent> <leader>qw :wq<cr>
 nmap <silent> <leader>qf :q!<cr>
@@ -1133,6 +1135,7 @@ if has("autocmd")
   " Automatically resize vertical splits
   " autocmd WinEnter * :set winfixheight
   " autocmd WinEnter * :wincmd =
+  au BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
 endif " has("autocmd")
 
 "-----------------------------------------------------------
