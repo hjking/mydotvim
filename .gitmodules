@@ -304,3 +304,7 @@
 	path = bundle/vim-vertical-move
 	url = https://github.com/bruno-/vim-vertical-move.git
 	ignore = dirty
+[submodule "bundle/seek"]
+	path = bundle/seek
+	url = https://github.com/goldfeld/vim-seek.git
+	ignore = dirty
