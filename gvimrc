@@ -55,12 +55,12 @@ function s:SetGuiFont()
         set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
     elseif has("gui_win32")     " Windows platform
         let font_name = ""
-        if getfontname( "DejaVu_Sans_Mono" ) != ""
+        if getfontname( "Source_Code_Pro" ) != ""
+            set guifont=Source_Code_Pro:h11:cANSI
+            let font_name = "Source_Code_Pro"
+        elseif getfontname( "DejaVu_Sans_Mono" ) != ""
             set guifont=DejaVu_Sans_Mono:h11:cANSI
             let font_name = "DejaVu_Sans_Mono"
-        elseif getfontname( "Source_Code_Pro" ) != ""
-            set guifont=Source_Code_Pro:h12:cANSI
-            let font_name = "Source_Code_Pro"
         elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
             set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
             let font_name = "Bitstream_Vera_Sans_Mono"
