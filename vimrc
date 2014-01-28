@@ -839,7 +839,8 @@ inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 
 imap <C-k>  <C-o>d$
-imap <M-d>  <C-o>dw
+map <M-d>  <C-o>diW   " delete word
+map <M-y>  <C-o>yiW   " yank word
 
 " Buffer commands
 nmap <silent> <Leader>bd :bd<CR>
@@ -1447,6 +1448,7 @@ endfunction
 " {{{
   if pathogen#is_disabled('nerdtree') == 0
       map <leader>nt :NERDTreeToggle<CR>
+      " Opens current file heiarchy in Nerdtree
       nmap <leader>nf :NERDTreeFind<CR>
       let NERDChristmasTree=1                     " more colorful
       let NERDTreeWinPos="left"                   " put NERDTree at left
@@ -1459,6 +1461,16 @@ endfunction
       " single click to open directory
       let NERDTreeMouseMode = 2
       let NERDTreeHijackNetrw = 1
+
+      " Only open nerdtree if no file was specified on startup
+      function! StartUpNerdtree()
+          if 0 == argc()
+              NERDTree $HOME
+          end
+      endfunction
+
+      autocmd VimEnter * call StartUpNerdtree()
+
   endif
 " }}}
 
@@ -1701,8 +1713,20 @@ cnoremap <C-N>      <Down>
     let g:tagbar_singleclick = 1
     let g:tagbar_usearrows = 1
     let g:tagbar_autoshowtag = 1
+    let g:tagbar_show_visibility = 1
     " let g:tagbar_autoclose = 1    " auto close after open tag
     nnoremap <silent><leader>tb :TagbarToggle<CR>
+    "Open Tagbar or jump to it if already open (useful for split windows)
+    nmap <leader>to :TagbarOpen j<CR>
+
+    " Same as nerdtree, only open if no file was specified
+    function! StartUpTagbar()
+        if 0 == argc()
+           TagbarOpen
+        end
+    endfunction
+
+    autocmd VimEnter * call StartUpTagbar()
   endif
 " }}}
 
@@ -2200,6 +2224,8 @@ let g:lightline = {
     " let g:EasyMotion_keys = '1234567890'
     " disable shading : 0
     let g:EasyMotion_do_shade = 1
+    hi link EasyMotionTarget ErrorMsg
+    hi link EasyMotionShade Comment
   endif
 "}}}
 
