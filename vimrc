@@ -2202,10 +2202,10 @@ cnoremap <C-N>      <Down>
 
 " lightline
 " {{{
-" let g:loaded_lightline = 1
-let g:lightline = {
-    \ 'colorscheme': 'solarized_dark',
-    \ }
+  " let g:loaded_lightline = 1
+  let g:lightline = {
+      \ 'colorscheme': 'solarized_dark',
+      \ }
 
 " }}}
 
@@ -2364,6 +2364,20 @@ endif
   sunmap w
   sunmap b
   sunmap e
+"}}}
+
+"-----------------------------------------------------------
+" anzu
+" display the current match index number and total match number of search pattern
+"{{{
+" mapping
+  nmap n <Plug>(anzu-n-with-echo)
+  nmap N <Plug>(anzu-N-with-echo)
+  " nmap * <Plug>(anzu-star-with-echo)
+  " nmap # <Plug>(anzu-sharp-with-echo)
+
+  " clear status
+  " nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 "}}}
 
 set secure

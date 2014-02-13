@@ -308,3 +308,7 @@
 	path = bundle/calendar.vim
 	url = https://github.com/itchyny/calendar.vim.git
 	ignore = dirty
+[submodule "bundle/anzu"]
+	path = bundle/anzu
+	url = https://github.com/osyo-manga/vim-anzu.git
+	ignore = dirty
