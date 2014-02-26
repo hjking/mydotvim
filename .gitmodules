@@ -312,3 +312,7 @@
 	path = bundle/anzu
 	url = https://github.com/osyo-manga/vim-anzu.git
 	ignore = dirty
+[submodule "bundle/systemc"]
+	path = bundle/systemc
+	url = https://github.com/Kocha/vim-systemc.git
+	ignore = dirty
