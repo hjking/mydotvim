@@ -1396,8 +1396,8 @@ endfunction
       let g:miniBufExplSplitBelow = 1
       let g:miniBufExplMaxSize = 2
       let g:miniBufExplUseSingleClick = 1    " select by single click
-      autocmd BufRead,BufNew :call UMiniBufExplorer
-      map ,be :MBEOpen<CR>
+      " autocmd BufRead,BufNew :call UMiniBufExplorer
+      map ,be :MBEToggle<CR>
   endif
 " }}}
 
