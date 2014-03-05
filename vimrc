@@ -1971,13 +1971,22 @@ cnoremap <C-N>      <Down>
             set conceallevel=2 concealcursor=i
       endif"
 
-      let g:neosnippet#enable_snipmate_compatibility = 1
+      " Enable snipMate compatibility feature.
+      let g:neosnippet#enable_snipmate_compatibility = 0  " no
+      " Installing default snippets is optional
+      let g:neosnippet#disable_runtime_snippets = {
+                                                    \   '_' : 1,
+                                                    \ }
+      " Tell Neosnippet about the other snippets
       " use a different collection of snippets other than the built-in ones
       if MySys() == "windows"
-          let g:neosnippet#snippets_directory='$VIM/vimfiles/bundle/vim-snippets/snippets'
+          let g:neosnippet#snippets_directory=['$VIM/vimfiles/bundle/vim-snippets/snippets', '$VIM/vimfiles/snippets']
       elseif MySys() == "linux"
-          let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
+          let g:neosnippet#snippets_directory=['~/.vim/bundle/vim-snippets/snippets', '~/.vim/snippets']
       endif
+      " associating certain filetypes with other snippet files.
+      let g:neosnippet#scope_aliases = {}
+      let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
   endif
 " }}}
 
