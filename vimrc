@@ -1388,7 +1388,7 @@ endfunction
 " MiniBufExplorer
 " {{{
   if pathogen#is_disabled('minibufexpl') == 0
-  "    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
+      " let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
       let g:miniBufExplMapCTabSwitchBufs = 1
       let g:miniBufExplMapWindowNavVim = 1
       let g:miniBufExplMapWindowNavArrows = 1
@@ -2168,7 +2168,7 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " AuthorInfo
 "{{{
-  let g:vimrc_author='Jin Hong'
+  let g:vimrc_author='Hong Jin'
   let g:vimrc_email='hongjin@fiberhome.com.cn'
   let g:vimrc_homepage='http://about.me/hongjin'
 "}}}
@@ -2280,20 +2280,20 @@ endfunction
 map <Leader>fh :call FHHeader()<CR>
 function! FHHeader()
   let s:comment = "//"
-  let s:commentline = s:comment . "----------------------------------------------------------------------"
-  let s:company = s:comment .    " Copyright (c) 2013, Fiberhome Telecommunication Technology Co., Ltd."
-  let s:department = s:comment . " Microelectronics Dept. Verification Group. UVF Team."
-  let s:copyright = s:comment . " All rights reserved."
-  let s:file = s:comment .      " File     : " . expand("%:t")
-  let s:author = s:comment .    " Author   : " . g:vimrc_author
-  let s:email= s:comment .      " EMail    : " . g:vimrc_email
-  let s:created = s:comment .   " Created  : " . strftime ("%Y-%m-%d %H:%M:%S")
-  let s:modified = s:comment .  " Modified : " . strftime ("%Y-%m-%d %H:%M:%S")
-  let s:description= s:comment . " Description :"
-  let s:history= s:comment .    " History"
-  let s:history_author= s:comment .    "     Author   :"
-  let s:history_date= s:comment .      "     Date     :"
-  let s:history_rev= s:comment .       "     Revision :"
+  let s:commentline = s:comment .   "----------------------------------------------------------------------"
+  let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
+  let s:department = s:comment .    " Microelectronics Dept."
+  let s:copyright = s:comment .     " All rights reserved."
+  let s:file = s:comment .          " File        : " . expand("%:t")
+  let s:author = s:comment .        " Author      : " . g:vimrc_author
+  let s:email= s:comment .          " EMail       : " . g:vimrc_email
+  let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:description= s:comment .    " Description : "
+  let s:history= s:comment .        " History"
+  let s:history_author= s:comment . "     Author   :"
+  let s:history_date= s:comment .   "     Date     :"
+  let s:history_rev= s:comment .    "     Revision :"
 
   call append (0, s:commentline)
   call append (1, s:company)
@@ -2387,6 +2387,21 @@ endif
 
   " clear status
   " nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+"}}}
+
+"-----------------------------------------------------------
+" c-support
+" C/C++ IDE
+"{{{
+
+  if MySys() == "windows"
+    let g:C_GlobalTemplateFile = $VIM.'/vimfiles/bundle/c/c-support/templates/Templates'
+    let g:C_LocalTemplateFile  = $VIM.'/vimfiles/c-support/templates/Templates'
+  elseif MySys() == "linux"
+    let g:C_GlobalTemplateFile = $HOME.'/.vim/bundle/c/c-support/templates/Templates'
+    let g:C_LocalTemplateFile  = $HOME.'/.vim/c-support/templates/Templates'
+  endif
+  let g:C_Root = '&Plugin.&C\/C\+\+.'
 "}}}
 
 set secure
