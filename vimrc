@@ -50,11 +50,16 @@ let s:UNIX = has("unix")  || has("macunix") || has("win32unix")
 " Windows Compatible {
 " On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
 " across (heterogeneous) systems easier.
-if has('win32') || has('win64')
-    set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-endif
+"   if MySys() == "windows"
+"       set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+"   endif
 " }
 
+if MySys() == "windows"
+  let g:vimfiles = split(&runtimepath, ',')[1]
+elseif MySys() == "linux"
+  let g:vimfiles = split(&runtimepath, ',')[0]
+endif
 
 "-----------------------------------------------------------
 """ pathogen.vim {{{
@@ -85,6 +90,10 @@ endif
       call add(g:pathogen_disabled, 'indent-guides')
   endif
 
+  " if v:version >= 702
+  "     call add(g:pathogen_disabled, 'lightline')
+  " endif
+
   " if v:version < 702 || !has('gui_running')
   "     call add(g:pathogen_disabled, 'powerline')
   " endif
@@ -112,7 +121,7 @@ endif
   " execute pathogen#infect()
   " call pathogen#helptags()
 
-  " pathogen ¹ÜÀívba¸ñÊ½µÄ²å¼ş
+  " pathogen ç®¡ç†vbaæ ¼å¼çš„æ’ä»¶
   "   :e name.vba
   "   :!mkdir $VIM\vimfiles\bundle\name
   "   :UseVimball $VIM\vimfiles\bundle\name
@@ -123,7 +132,7 @@ if MySys() == "windows"
     language message en                   " message language
     " language message en_US                   " message language
     " language message zh_CN.UTF-8
-    " lang messages zh_CN.UTF-8 " ½â¾öconsleÊä³öÂÒÂë
+    " lang messages zh_CN.UTF-8 " è§£å†³consleè¾“å‡ºä¹±ç 
 elseif MySys() == "linux"
     language message C
 endif
@@ -231,7 +240,7 @@ set display+=lastline
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
 set list                        " list mode
-"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB£¬EOL,etc
+"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TABï¼ŒEOL,etc
 set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
 set number                      " display line number
 set numberwidth=1
@@ -390,7 +399,7 @@ set foldopen-=search        " don't open folds when you search into them
 " 17 diff mode
 "-------------------------------------------------------------------------------
 set diffopt=context:3       " display 3 lines above and below the different place
-" set scrollbind      " ×óÓÒÁ½²àµÄÆÁÄ»¹ö¶¯ÊÇÍ¬²½µÄ
+" set scrollbind      " å·¦å³ä¸¤ä¾§çš„å±å¹•æ»šåŠ¨æ˜¯åŒæ­¥çš„
 set diffopt+=iwhite
 set diffopt+=filler
 " if MySys() == "windows"
@@ -1293,21 +1302,21 @@ map <F9> :!python.exe
 
 "-----------------------------------------------------------
 "Tag List
-":TlistOpen¡±´ò¿ªtaglist´°¿Ú£¬           ":TlistClose¡±¹Ø±Õtaglist´°¿Ú
-"»òÕßÊ¹ÓÃ¡°:TlistToggle¡±ÔÚ´ò¿ªºÍ¹Ø±Õ¼äÇĞ»»       " Ê¹ÓÃ" tl"¼ü¾Í¿ÉÒÔ´ò¿ª/¹Ø±Õtaglist´°¿Ú
-"map <silent> <leader>tl :TlistToogle<cr>       " <CR>  Ìøµ½¹â±êÏÂtagËù¶¨ÒåµÄÎ»ÖÃ£¬ÓÃÊó±êË«»÷´Ëtag¹¦ÄÜÒ²Ò»Ñù
-" o   ÔÚÒ»¸öĞÂ´ò¿ªµÄ´°¿ÚÖĞÏÔÊ¾¹â±êÏÂtag         " <Space> ÏÔÊ¾¹â±êÏÂtagµÄÔ­ĞÍ¶¨Òå
-" u  ¸üĞÂtaglist´°¿ÚÖĞµÄtag                     " s  ¸ü¸ÄÅÅĞò·½Ê½£¬ÔÚ°´Ãû×ÖÅÅĞòºÍ°´³öÏÖË³ĞòÅÅĞò¼äÇĞ»»
-" x  taglist´°¿Ú·Å´óºÍËõĞ¡£¬·½±ã²é¿´½Ï³¤µÄtag
-" +  ´ò¿ªÒ»¸öÕÛµş£¬Í¬zo                 " -  ½«tagÕÛµşÆğÀ´£¬Í¬zc
-" *  ´ò¿ªËùÓĞµÄÕÛµş£¬Í¬zR               " =  ½«ËùÓĞtagÕÛµşÆğÀ´£¬Í¬zM
-" [[  Ìøµ½Ç°Ò»¸öÎÄ¼ş                    " ]]  Ìøµ½ºóÒ»¸öÎÄ¼ş
-" q   ¹Ø±Õtaglist´°¿Ú                   " <F1>  ÏÔÊ¾°ïÖú
+":TlistOpenâ€æ‰“å¼€taglistçª—å£ï¼Œ           ":TlistCloseâ€å…³é—­taglistçª—å£
+"æˆ–è€…ä½¿ç”¨â€œ:TlistToggleâ€åœ¨æ‰“å¼€å’Œå…³é—­é—´åˆ‡æ¢       " ä½¿ç”¨" tl"é”®å°±å¯ä»¥æ‰“å¼€/å…³é—­taglistçª—å£
+"map <silent> <leader>tl :TlistToogle<cr>       " <CR>  è·³åˆ°å…‰æ ‡ä¸‹tagæ‰€å®šä¹‰çš„ä½ç½®ï¼Œç”¨é¼ æ ‡åŒå‡»æ­¤tagåŠŸèƒ½ä¹Ÿä¸€æ ·
+" o   åœ¨ä¸€ä¸ªæ–°æ‰“å¼€çš„çª—å£ä¸­æ˜¾ç¤ºå…‰æ ‡ä¸‹tag         " <Space> æ˜¾ç¤ºå…‰æ ‡ä¸‹tagçš„åŸå‹å®šä¹‰
+" u  æ›´æ–°taglistçª—å£ä¸­çš„tag                     " s  æ›´æ”¹æ’åºæ–¹å¼ï¼Œåœ¨æŒ‰åå­—æ’åºå’ŒæŒ‰å‡ºç°é¡ºåºæ’åºé—´åˆ‡æ¢
+" x  taglistçª—å£æ”¾å¤§å’Œç¼©å°ï¼Œæ–¹ä¾¿æŸ¥çœ‹è¾ƒé•¿çš„tag
+" +  æ‰“å¼€ä¸€ä¸ªæŠ˜å ï¼ŒåŒzo                 " -  å°†tagæŠ˜å èµ·æ¥ï¼ŒåŒzc
+" *  æ‰“å¼€æ‰€æœ‰çš„æŠ˜å ï¼ŒåŒzR               " =  å°†æ‰€æœ‰tagæŠ˜å èµ·æ¥ï¼ŒåŒzM
+" [[  è·³åˆ°å‰ä¸€ä¸ªæ–‡ä»¶                    " ]]  è·³åˆ°åä¸€ä¸ªæ–‡ä»¶
+" q   å…³é—­taglistçª—å£                   " <F1>  æ˜¾ç¤ºå¸®åŠ©
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{
   if pathogen#is_disabled('taglist') == 0
       if MySys() == "windows"
-          let Tlist_Ctags_Cmd = './vimfiles/ctags58/ctags.exe'           "ÉèÖÃctagsµÄÂ·¾¶
+          let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'           "è®¾ç½®ctagsçš„è·¯å¾„
       elseif MySys() == "linux"
           let Tlist_Ctags_Cmd = '/usr/bin/ctags'
       endif
@@ -1325,10 +1334,10 @@ map <F9> :!python.exe
       " let Tlist_Show_Menu=1                     " show taglist menu
       " let Tlist_Show_One_File=1
       " let Tlist_Auto_Update=1                   " auto update
-      " let Tlist_Process_File_Always             " Ê¼ÖÕ½âÎöÎÄ¼şÖĞµÄtag
+      " let Tlist_Process_File_Always             " å§‹ç»ˆè§£ææ–‡ä»¶ä¸­çš„tag
       " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
-      " map to  :TlistOpen<CR>                    " ¼üÅÌÓ³Éä to ´ò¿ªtag´°¿Ú
-      " map tc  :TlistClose<CR>                   " tc ¹Ø±Õtag´°¿Ú
+      " map to  :TlistOpen<CR>                    " é”®ç›˜æ˜ å°„ to æ‰“å¼€tagçª—å£
+      " map tc  :TlistClose<CR>                   " tc å…³é—­tagçª—å£
       map tt  :TlistToggle<CR>
       nmap <silent> <leader>tl :Tlist<cr>
   endif
@@ -1407,12 +1416,12 @@ endfunction
 
 "-----------------------------------------------------------
 " Netrw  File Explorer :e <PATH>
-":Explore    µÈExÃüÁîÀ´´ò¿ªÎÄ¼şä¯ÀÀÆ÷           "<F1>        ÏÔÊ¾°ïÖú
-"<cr>        Èç¹û¹â±êÏÂÎªÄ¿Â¼£¬Ôò½øÈë¸ÃÄ¿Â¼£»Èç¹û¹â±êÏÂÊÇÎÄ¼ş£¬ÔòÓÃVIM´ò¿ª¸ÃÎÄ¼ş
-"-           ·µ»ØÉÏ¼¶Ä¿Â¼               "c    ÇĞ»»VIMµÄµ±Ç°¹¤×÷Ä¿Â¼ÎªÕıÔÚä¯ÀÀµÄÄ¿Â¼
-"d           ´´½¨Ä¿Â¼                   "D    É¾³ıÎÄ¼ş»òÄ¿Â¼
-"i           ÇĞ»»ÏÔÊ¾·½Ê½               "R    ¸ÄÃûÎÄ¼ş»òÄ¿Â¼
-"s           Ñ¡ÔñÅÅĞò·½Ê½               "x    ¶¨ÖÆä¯ÀÀ·½Ê½£¬Ê¹ÓÃÄãÖ¸¶¨µÄ³ÌĞò´ò¿ª¸ÃÎÄ¼ş
+":Explore    ç­‰Exå‘½ä»¤æ¥æ‰“å¼€æ–‡ä»¶æµè§ˆå™¨           "<F1>        æ˜¾ç¤ºå¸®åŠ©
+"<cr>        å¦‚æœå…‰æ ‡ä¸‹ä¸ºç›®å½•ï¼Œåˆ™è¿›å…¥è¯¥ç›®å½•ï¼›å¦‚æœå…‰æ ‡ä¸‹æ˜¯æ–‡ä»¶ï¼Œåˆ™ç”¨VIMæ‰“å¼€è¯¥æ–‡ä»¶
+"-           è¿”å›ä¸Šçº§ç›®å½•               "c    åˆ‡æ¢VIMçš„å½“å‰å·¥ä½œç›®å½•ä¸ºæ­£åœ¨æµè§ˆçš„ç›®å½•
+"d           åˆ›å»ºç›®å½•                   "D    åˆ é™¤æ–‡ä»¶æˆ–ç›®å½•
+"i           åˆ‡æ¢æ˜¾ç¤ºæ–¹å¼               "R    æ”¹åæ–‡ä»¶æˆ–ç›®å½•
+"s           é€‰æ‹©æ’åºæ–¹å¼               "x    å®šåˆ¶æµè§ˆæ–¹å¼ï¼Œä½¿ç”¨ä½ æŒ‡å®šçš„ç¨‹åºæ‰“å¼€è¯¥æ–‡ä»¶
 " {{{
   if pathogen#is_disabled('netrw') == 0
       let g:netrw_winsize        = 25
@@ -1486,10 +1495,10 @@ endfunction
 
 "-----------------------------------------------------------
 "Calendar
-" :Calendar         "Open calendar   " :CalendarH        "´ò¿ªË®Æ½µÄÈÕÀú´°¿Ú
+" :Calendar         "Open calendar   " :CalendarH        "æ‰“å¼€æ°´å¹³çš„æ—¥å†çª—å£
 "-----------------------------------------------------------
 "let g:calendar_diary=<PATH>
-let g:calendar_wruler = 'ÈÕ Ò» ¶ş Èı ËÄ Îå Áù'
+let g:calendar_wruler = 'æ—¥ ä¸€ äºŒ ä¸‰ å›› äº” å…­'
 let g:calendar_mark = 'left-fit'
 let g:calendar_focus_today = 1
 map <Leader>ca :Calendar<CR>
@@ -1659,7 +1668,7 @@ cnoremap <C-N>      <Down>
 " {{{
 " Powerline and neocomplcache require Vim 7.2
   if pathogen#is_disabled('vim-powerline') == 0
-      if has('win32') || has('win64')
+      if MySys() == "windows"
         ""let g:Powerline_symbols = 'compatible'
         let g:Powerline_symbols = 'unicode'
       elseif has('gui_macvim')
@@ -1685,8 +1694,10 @@ cnoremap <C-N>      <Down>
 " Syntastic
 " {{{
   if pathogen#is_disabled('syntastic') == 0
-      let g:syntastic_enable_signs=1
-      let g:syntastic_auto_loc_list=1
+      let g:syntastic_auto_loc_list = 1 " auto open error window
+      let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
+      let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
+      let g:syntastic_loc_list_height = 5 " height of the location lists
   endif
 " }}}
 
@@ -1701,7 +1712,7 @@ cnoremap <C-N>      <Down>
 " {{{
   if pathogen#is_disabled('tagbar') == 0
     if MySys() == "windows"
-        let g:tagbar_ctags_bin = '$VIM\vimfiles\ctags58\ctags.exe'
+        let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
     elseif MySys() == "linux"
         let g:tagbar_ctags_bin = '/usr/bin/ctags'
     endif
@@ -1934,13 +1945,13 @@ cnoremap <C-N>      <Down>
             \   [['exclude', 'include']],
             \   [['width', 'height']],
             \   [['asc', 'desc']],
-            \   [['ÊÇ', '·ñ']],
-            \   [['ÉÏ', 'ÏÂ']],
-            \   [['ÄĞ', 'Å®']],
+            \   [['æ˜¯', 'å¦']],
+            \   [['ä¸Š', 'ä¸‹']],
+            \   [['ç”·', 'å¥³']],
             \   [['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
             \     'Friday', 'Saturday'], ['hard_case', {'name': 'Days'}]],
             \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
-            \   [['£¨:£©', '¡¸:¡¹', '¡º:¡»'], 'sub_pairs'],
+            \   [['ï¼ˆ:ï¼‰', 'ã€Œ:ã€', 'ã€:ã€'], 'sub_pairs'],
             \ ]
       nmap <silent> <Leader>n <Plug>CycleNext
       vmap <silent> <Leader>n <Plug>CycleNext
@@ -1979,11 +1990,7 @@ cnoremap <C-N>      <Down>
                                                     \ }
       " Tell Neosnippet about the other snippets
       " use a different collection of snippets other than the built-in ones
-      if MySys() == "windows"
-          let g:neosnippet#snippets_directory=['$VIM/vimfiles/bundle/vim-snippets/snippets', '$VIM/vimfiles/snippets']
-      elseif MySys() == "linux"
-          let g:neosnippet#snippets_directory=['~/.vim/bundle/vim-snippets/snippets', '~/.vim/snippets']
-      endif
+      let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets', g:vimfiles . '/snippets']
       " associating certain filetypes with other snippet files.
       let g:neosnippet#scope_aliases = {}
       let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
@@ -2191,30 +2198,35 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " airline
 "{{{
-  let g:loaded_airline = 1
-  " enable fugitive integration >
-  let g:airline#extensions#branch#enabled = 1
-  " enable syntastic integration >
-  let g:airline#extensions#syntastic#enabled = 0
-  " enable/disable tagbar integration >
-  let g:airline#extensions#tagbar#enabled = 1
-  " change how tags are displayed (:help tagbar-statusline) >
-  let g:airline#extensions#tagbar#flags = ''  "default
-  let g:airline#extensions#tagbar#flags = 'f'
-  let g:airline#extensions#tagbar#flags = 's'
-  let g:airline#extensions#tagbar#flags = 'p'
-  " enable/disable detection of whitespace errors. >
-  let g:airline#extensions#whitespace#enabled = 0
-  " configure which whitespace checks to enable. >
-  let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+  if pathogen#is_disabled('airline') == 0
+    " let g:loaded_airline = 1
+    " enable fugitive integration >
+    let g:airline#extensions#branch#enabled = 1
+    let g:airline_inactive_collapse=1
+    " enable syntastic integration >
+    let g:airline#extensions#syntastic#enabled = 0
+    " enable/disable tagbar integration >
+    let g:airline#extensions#tagbar#enabled = 1
+    " change how tags are displayed (:help tagbar-statusline) >
+    let g:airline#extensions#tagbar#flags = ''  "default
+    let g:airline#extensions#tagbar#flags = 'f'
+    let g:airline#extensions#tagbar#flags = 's'
+    let g:airline#extensions#tagbar#flags = 'p'
+    " enable/disable detection of whitespace errors. >
+    let g:airline#extensions#whitespace#enabled = 1
+    " configure which whitespace checks to enable. >
+    let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+  endif
 "}}}
 
 " lightline
 " {{{
-  " let g:loaded_lightline = 1
-  let g:lightline = {
-      \ 'colorscheme': 'solarized_dark',
-      \ }
+  if pathogen#is_disabled('lightline') == 0
+    " let g:loaded_lightline = 1
+    let g:lightline = {
+        \ 'colorscheme': 'solarized_dark',
+        \ }
+  endif
 
 " }}}
 
@@ -2394,13 +2406,8 @@ endif
 " C/C++ IDE
 "{{{
 
-  if MySys() == "windows"
-    let g:C_GlobalTemplateFile = $VIM.'/vimfiles/bundle/c/c-support/templates/Templates'
-    let g:C_LocalTemplateFile  = $VIM.'/vimfiles/c-support/templates/Templates'
-  elseif MySys() == "linux"
-    let g:C_GlobalTemplateFile = $HOME.'/.vim/bundle/c/c-support/templates/Templates'
-    let g:C_LocalTemplateFile  = $HOME.'/.vim/c-support/templates/Templates'
-  endif
+  let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
+  let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
   let g:C_Root = '&Plugin.&C\/C\+\+.'
 "}}}
 

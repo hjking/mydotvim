@@ -1,9 +1,18 @@
 ## STL Collections
 ##
 
+snippet scifnd
+    #ifndef _${1:NAME}_H_
+    #define _$1_H_
+
+    #endif
+
+snippet scinc
+    #include "systemc.h"
+    #include "${1:`vim_snippets#Filename('$1', 'name')`}.h"
+
 # SystemC module
 snippet scmod
-    #include "systemc.h"
 
     SC_MODULE(${1:`vim_snippets#Filename('$1', 'name')`}){
 
