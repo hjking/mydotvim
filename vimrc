@@ -32,34 +32,27 @@ let g:vimrc_disable_setting = 1
 " Platform
 "-----------------------------------------------------------
 function! MySys()
-    if has("win16") || has("win32") || has("win64") || has("win95")
-    "   runtime mswin.vim
-        return "windows"
-    elseif has('win32unix')
-        return "cygwin"
-    elseif has('gui_macvim')
-        return "mac"
-    else
-        return "linux"
-    endif
+  if has("win16") || has("win32") || has("win64") || has("win95")
+    return "windows"
+  elseif has('win32unix')
+    return "cygwin"
+  elseif has('gui_macvim')
+    return "mac"
+  else
+    return "linux"
+  endif
 endfunction
 
 let s:MSWIN = has("win16") || has("win32")   || has("win64")    || has("win95")
 let s:UNIX = has("unix")  || has("macunix") || has("win32unix")
-
-" Windows Compatible {
-" On Windows, also use '.vim' instead of 'vimfiles'; this makes synchronization
-" across (heterogeneous) systems easier.
-"   if MySys() == "windows"
-"       set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-"   endif
-" }
 
 if MySys() == "windows"
   let g:vimfiles = split(&runtimepath, ',')[1]
 elseif MySys() == "linux"
   let g:vimfiles = split(&runtimepath, ',')[0]
 endif
+
+set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 
 "-----------------------------------------------------------
 """ pathogen.vim {{{
@@ -68,39 +61,40 @@ endif
   let g:pathogen_not_loaded_plugin = 1
   let g:path_of_vimrc_tmp = expand('<sfile>:h')
   let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-  if MySys() == "windows"
-      source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
-  elseif MySys() == "linux"
-      source ~/.vim/bundle/pathogen/autoload/pathogen.vim
-  endif
+  " if MySys() == "windows"
+  "   source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
+  " elseif MySys() == "linux"
+  "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
+  " endif
+  runtime! bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
   if v:version < 700 || (v:version == 700 && !has('patch167'))
-      call add(g:pathogen_disabled, 'tagbar')
+    call add(g:pathogen_disabled, 'tagbar')
+  endif
+
+  if v:version < 701
+    call add(g:pathogen_disabled, 'lookupfile')
   endif
 
   if v:version < 702
-      call add(g:pathogen_disabled, 'airline')
-      " call add(g:pathogen_disabled, 'syntastic')
-      call add(g:pathogen_disabled, 'unite')
-      call add(g:pathogen_disabled, 'neocomplcache')
-      call add(g:pathogen_disabled, 'neosnippet')
-      call add(g:pathogen_disabled, 'vimfiler')
-      call add(g:pathogen_disabled, 'easymotion')
-      call add(g:pathogen_disabled, 'indent-guides')
+    call add(g:pathogen_disabled, 'airline')
+    call add(g:pathogen_disabled, 'unite')
+    call add(g:pathogen_disabled, 'neocomplcache')
+    call add(g:pathogen_disabled, 'neosnippet')
+    call add(g:pathogen_disabled, 'vimfiler')
+    call add(g:pathogen_disabled, 'easymotion')
+    call add(g:pathogen_disabled, 'indent-guides')
   endif
 
-  " if v:version >= 702
-  "     call add(g:pathogen_disabled, 'lightline')
-  " endif
-
-  " if v:version < 702 || !has('gui_running')
-  "     call add(g:pathogen_disabled, 'powerline')
-  " endif
+  if v:version >= 702
+    call add(g:pathogen_disabled, 'lightline')
+    call add(g:pathogen_disabled, 'lightline-powerful')
+  endif
 
   if v:version < 702 || !has('float')
-      call add(g:pathogen_disabled, 'L9')
-      call add(g:pathogen_disabled, 'FuzzyFinder')
+    call add(g:pathogen_disabled, 'L9')
+    call add(g:pathogen_disabled, 'FuzzyFinder')
   endif
 
   if v:version < 703
@@ -108,13 +102,13 @@ endif
   endif
 
   if v:version < 703 || (v:version == 703 && !has('python'))
-      call add(g:pathogen_disabled, 'gundo')
+    call add(g:pathogen_disabled, 'gundo')
   endif
 
   " Disable on purpose
   " if exists('g:pathogen_not_loaded_plugin')
   if v:version < 703 || !has('patch584')
-      call add(g:pathogen_disabled, 'YouCompleteMe')
+    call add(g:pathogen_disabled, 'YouCompleteMe')
   endif
 
   call pathogen#infect()
@@ -129,17 +123,17 @@ endif
 
 
 if MySys() == "windows"
-    language message en                   " message language
-    " language message en_US                   " message language
-    " language message zh_CN.UTF-8
-    " lang messages zh_CN.UTF-8 " 解决consle输出乱码
+  language message en                   " message language
+  " language message en_US                   " message language
+  " language message zh_CN.UTF-8
+  " lang messages zh_CN.UTF-8 " 解决consle输出乱码
 elseif MySys() == "linux"
-    language message C
+  language message C
 endif
 
 source $VIMRUNTIME/vimrc_example.vim
 if MySys() == "windows"
-    " source $VIMRUNTIME/mswin.vim      " Win behaviour
+  " source $VIMRUNTIME/mswin.vim      " Win behaviour
 endif
 
 runtime! ftplugin/man.vim
@@ -170,18 +164,18 @@ filetype plugin indent on              " load filetype plugin
 "-------------------------------------------------------------------------------
 " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
 if MySys() == "windows"
-    set path+=D:\cygwin\bin
+  set path+=D:\cygwin\bin
 elseif MySys() == "linux"
-    set path+=/usr/bin
+  set path+=/usr/bin
 endif
 if has("gui_running")
-    if has("gui_win32")     " Win OS
-        set wrap            " Wrap line
+  if has("gui_win32")     " Win OS
+    set wrap            " Wrap line
 "   elseif has("x11")
 "   elseif has("gui_gtk2")
-    endif
+  endif
 else
-    set wrap
+  set wrap
 endif
 
 set autochdir          " Change the current working dir whenever open a file,
@@ -209,23 +203,23 @@ set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
 " Cscope
 "-----------------------------------------------------------
 if has("cscope")
-    if MySys() == "linux"
-        set csprg=/usr/bin/cscope
-    else
-        set csprg=cscope
-    endif
-    set csto=1
-    set cst
-    set nocsverb
-    " add any database in current directory
-    if filereadable("cscope.out")
-        silent cscope add cscope.out
-    elseif $CSCOPE_DB != ""
-        silent cscope add $CSCOPE_DB
-    endif
-    set csverb
-    set cscopetag
-    set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
+  if MySys() == "linux"
+    set csprg=/usr/bin/cscope
+  else
+    set csprg=cscope
+  endif
+  set csto=1
+  set cst
+  set nocsverb
+  " add any database in current directory
+  if filereadable("cscope.out")
+    silent cscope add cscope.out
+  elseif $CSCOPE_DB != ""
+    silent cscope add $CSCOPE_DB
+  endif
+  set csverb
+  set cscopetag
+  set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
 endif
 
 
@@ -281,9 +275,9 @@ set showtabline=2
 " Mouse
 "-----------------------------------------------------------
 if MySys() == "windows"
-    set mouse=a
+  set mouse=a
 elseif MySys() == "linux"
-    set mouse=v
+  set mouse=v
 endif
 " set mousemodel=extend
 set nomousehide                 " Hide the mouse when typing text
@@ -302,10 +296,10 @@ set browsedir=current           " which directory to use for the file browser
 "-------------------------------------------------------------------------------
 set shortmess+=atoOIT           " To avoid some hint messages
 if has('cmdline_info')
-    set ruler                     " Show the line and column number of the cursor position
-    " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
-    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
-    set showcmd                     " display incomplete commands
+  set ruler                     " Show the line and column number of the cursor position
+  " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+  set showcmd                     " display incomplete commands
 endif
 set report=0                    " Threshold for reporting number of lines changed
 set noerrorbells                " No bell for error messages
@@ -384,7 +378,7 @@ set cindent                 " Enables automatic C program indenting
 " set foldenable              " turn on folding
 set nofoldenable            " disable folding
 if exists("&foldlevel")
-    set foldlevel=999           " make it really high, so they're not displayed by default
+  set foldlevel=999           " make it really high, so they're not displayed by default
 endif
 set foldmarker={,}
 set foldmethod=indent       " Make folding indent sensitive  // syntax
@@ -403,42 +397,42 @@ set diffopt=context:3       " display 3 lines above and below the different plac
 set diffopt+=iwhite
 set diffopt+=filler
 " if MySys() == "windows"
-    set diffexpr=MyDiff()
-    function! MyDiff()
-        let opt = '-a --binary '
-        if &diffopt =~ 'icase'
-            let opt = opt . '-i '
-        endif
-        if &diffopt =~ 'iwhite'
-            let opt = opt . '-b '
-        endif
-        let arg1 = v:fname_in
-        if arg1 =~ ' '
-            let arg1 = '"' . arg1 . '"'
-        endif
-        let arg2 = v:fname_new
-        if arg2 =~ ' '
-            let arg2 = '"' . arg2 . '"'
-        endif
-        let arg3 = v:fname_out
-        if arg3 =~ ' '
-            let arg3 = '"' . arg3 . '"'
-        endif
-        let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-        silent execute cmd
-        " let eq = ''
-        " if $VIMRUNTIME =~ ' '
-        "     if &sh =~ '\<cmd'
-        "     let cmd = '""' . $VIMRUNTIME . '\diff"'
-        "     let eq = '"'
-        " else
-        "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-        " endif
-        " else
-        "     let cmd = $VIMRUNTIME . '\diff'
-        " endif
-        " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-    endfunction
+  set diffexpr=MyDiff()
+  function! MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase'
+      let opt = opt . '-i '
+    endif
+    if &diffopt =~ 'iwhite'
+      let opt = opt . '-b '
+    endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' '
+      let arg1 = '"' . arg1 . '"'
+    endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' '
+      let arg2 = '"' . arg2 . '"'
+    endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' '
+      let arg3 = '"' . arg3 . '"'
+    endif
+    let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+    silent execute cmd
+    " let eq = ''
+    " if $VIMRUNTIME =~ ' '
+    "     if &sh =~ '\<cmd'
+    "     let cmd = '""' . $VIMRUNTIME . '\diff"'
+    "     let eq = '"'
+    " else
+    "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    " endif
+    " else
+    "     let cmd = $VIMRUNTIME . '\diff'
+    " endif
+    " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+  endfunction
 " endif
 
 "-------------------------------------------------------------------------------
@@ -452,7 +446,7 @@ set nobackup                    " no backup file
 set nowritebackup               " no backup before rewrite file
 "set backupdir=E:\bak
 if exists("&autoread")
-    set autoread                    " autoload when file changed outside vim
+  set autoread                    " autoload when file changed outside vim
 endif
 set autowrite                   " write a modified buffer on each :next
 " Default fileformat
@@ -503,9 +497,9 @@ set grepprg=grep\ -nH
 " 24 system specific
 "-------------------------------------------------------------------------------
 if MySys() == "windows"
-    if exists('+shellslash')
-        set shellslash      " Exchange path separator
-    endif
+  if exists('+shellslash')
+    set shellslash      " Exchange path separator
+  endif
 endif
 
 "-------------------------------------------------------------------------------
@@ -518,34 +512,34 @@ set isfname-==  " remove = from filename characters
 " 26 multi-byte characters
 "-------------------------------------------------------------------------------
 if has("multi_byte")
-    if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
-        set ambiwidth=double
-    endif
-    " Set fileencoding priority
-    if getfsize(expand("%")) > 0
-        set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
-    else
-        set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
-    endif
-    " CJK environment detection and corresponding setting
-    if v:lang =~ "^zh_CN"
-    " Use cp936 to support GBK, euc-cn == gb2312
-        " set encoding=chinese
-        set fileencoding=chinese
-    elseif v:lang =~ "^zh_TW"
-        set fileencoding=taiwan
-    elseif v:lang =~ "^ko"
-        set fileencoding=euc-kr
-    elseif v:lang =~ "^ja_JP"
-        set fileencoding=cp932              " euc-jp
-    elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
-        " Detect UTF-8 locale, and replace CJK setting if needed
-        set fileencoding=utf-8
-    endif
-    set encoding=utf-8
-    let &termencoding = &encoding
+  if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+    set ambiwidth=double
+  endif
+  " Set fileencoding priority
+  if getfsize(expand("%")) > 0
+    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
+  else
+    set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
+  endif
+  " CJK environment detection and corresponding setting
+  if v:lang =~ "^zh_CN"
+  " Use cp936 to support GBK, euc-cn == gb2312
+    " set encoding=chinese
+    set fileencoding=chinese
+  elseif v:lang =~ "^zh_TW"
+    set fileencoding=taiwan
+  elseif v:lang =~ "^ko"
+    set fileencoding=euc-kr
+  elseif v:lang =~ "^ja_JP"
+    set fileencoding=cp932              " euc-jp
+  elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
+    " Detect UTF-8 locale, and replace CJK setting if needed
+    set fileencoding=utf-8
+  endif
+  set encoding=utf-8
+  let &termencoding = &encoding
 else
-    echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
+  echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
 endif
 
 
@@ -608,15 +602,15 @@ nmap <leader>f8 :set foldlevel=8<CR>
 nmap <leader>f9 :set foldlevel=9<CR>
 
 if v:version > 703
-    set cryptmethod=blowfish
+  set cryptmethod=blowfish
 endif
 
 
 " Specify the behavior when switching buffers
 try
-    set switchbuf=useopen,usetab,newtab
-    set showtabline=2
-   catch
+  set switchbuf=useopen,usetab,newtab
+  set showtabline=2
+  catch
 endtry
 
 " Scroll options
@@ -775,24 +769,24 @@ xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
 vnoremap <silent> * :call VisualSelection('f', '')<CR>
 vnoremap <silent> # :call VisualSelection('b', '')<CR>
 function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
+  let l:saved_reg = @"
+  execute "normal! vgvy"
 
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
+  let l:pattern = escape(@", '\\/.*$^~[]')
+  let l:pattern = substitute(l:pattern, "\n$", "", "")
 
-    if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.' . a:extra_filter)
-    elseif a:direction == 'replace'
-        call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-        execute "normal /" . l:pattern . "^M"
-    endif
+  if a:direction == 'b'
+    execute "normal ?" . l:pattern . "^M"
+  elseif a:direction == 'gv'
+    call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.' . a:extra_filter)
+  elseif a:direction == 'replace'
+    call CmdLine("%s" . '/'. l:pattern . '/')
+  elseif a:direction == 'f'
+    execute "normal /" . l:pattern . "^M"
+  endif
 
-    let @/ = l:pattern
-    let @" = l:saved_reg
+  let @/ = l:pattern
+  let @" = l:saved_reg
 endfunction
 
 """"""""""""""""""""""""""""""
@@ -1045,8 +1039,8 @@ xnoremap id  i"
 noremap <unique> z<Up> zk
 noremap <unique> z<Down> zj
 if has("gui_running") "  the <alt> key is only available in gui mode.
-    noremap <unique> <M-Up> zk
-    noremap <unique> <M-Down> zj
+  noremap <unique> <M-Up> zk
+  noremap <unique> <M-Down> zj
 endif
 
 " Easy Diff goto
@@ -1166,9 +1160,9 @@ iab #c2 <Space>***************************************************************/
 " Visual mode
 "-----------------------------------------------------------
 function! CmdLine(str)
-    exe "menu Foo.Bar :" . a:str
-    emenu Foo.Bar
-    unmenu Foo
+  exe "menu Foo.Bar :" . a:str
+  emenu Foo.Bar
+  unmenu Foo
 endfunction
 
 " From an idea by Michael Naumann
@@ -1178,9 +1172,9 @@ function! VisualSearch(direction) range
   let l:pattern = escape(@", '\\/.*$^~[]')
   let l:pattern = substitute(l:pattern, "\n$", "", "")
   if a:direction == 'b'
-        execute "normal ?" . l:pattern . "^M"
+    execute "normal ?" . l:pattern . "^M"
   elseif a:direction == 'gv'
-        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
   elseif a:direction == 'f'
     execute "normal /" . l:pattern . "^M"
   else
@@ -1193,7 +1187,7 @@ endfunction
 "Basically you press * or # to search for the current selection !! Really useful
 vnoremap <silent> * :call VisualSearch('f')<CR>
 vnoremap <silent> # :call VisualSearch('b')<CR>
-
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
 
 "-----------------------------------------------------------
 """"  Setting for Programming
@@ -1315,31 +1309,31 @@ map <F9> :!python.exe
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{
   if pathogen#is_disabled('taglist') == 0
-      if MySys() == "windows"
-          let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'           "设置ctags的路径
-      elseif MySys() == "linux"
-          let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-      endif
-      if !executable('ctags')
-          let loaded_taglist = 1
-      endif
-      let Tlist_Use_Right_Window=1                " display at right side
-      let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
-      let Tlist_Sort_Type = "name"                " sort by name
-      let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
-      let Tlist_Auto_Open=0                     " not auto open
-      let Tlist_Compact_Format=1                " compress
-      let Tlist_Enable_Fold_Column=0            " Do not show folding tree
-      " let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
-      " let Tlist_Show_Menu=1                     " show taglist menu
-      " let Tlist_Show_One_File=1
-      " let Tlist_Auto_Update=1                   " auto update
-      " let Tlist_Process_File_Always             " 始终解析文件中的tag
-      " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
-      " map to  :TlistOpen<CR>                    " 键盘映射 to 打开tag窗口
-      " map tc  :TlistClose<CR>                   " tc 关闭tag窗口
-      map tt  :TlistToggle<CR>
-      nmap <silent> <leader>tl :Tlist<cr>
+    if MySys() == "windows"
+      let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'           "设置ctags的路径
+    elseif MySys() == "linux"
+      let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+    endif
+    if !executable('ctags')
+      let loaded_taglist = 1
+    endif
+    let Tlist_Use_Right_Window=1                " display at right side
+    let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
+    let Tlist_Sort_Type = "name"                " sort by name
+    let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
+    let Tlist_Auto_Open=0                     " not auto open
+    let Tlist_Compact_Format=1                " compress
+    let Tlist_Enable_Fold_Column=0            " Do not show folding tree
+    " let tlist_actionscript_settings = 'actionscript;c:class;f:method;p:property;v:variable'
+    " let Tlist_Show_Menu=1                     " show taglist menu
+    " let Tlist_Show_One_File=1
+    " let Tlist_Auto_Update=1                   " auto update
+    " let Tlist_Process_File_Always             " 始终解析文件中的tag
+    " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
+    " map to  :TlistOpen<CR>                    " 键盘映射 to 打开tag窗口
+    " map tc  :TlistClose<CR>                   " tc 关闭tag窗口
+    map tt  :TlistToggle<CR>
+    nmap <silent> <leader>tl :Tlist<cr>
   endif
 " }}}
 
@@ -1368,45 +1362,45 @@ map <F9> :!python.exe
 "-----------------------------------------------------------
 " Switch to buffer according to file name
 function! SwitchToBuf(filename)
-    "let fullfn = substitute(a:filename, "^\\~/", $HOME . "/", "")
-    " find in current tab
-    let bufwinnr = bufwinnr(a:filename)
-    if bufwinnr != -1
+  "let fullfn = substitute(a:filename, "^\\~/", $HOME . "/", "")
+  " find in current tab
+  let bufwinnr = bufwinnr(a:filename)
+  if bufwinnr != -1
+    exec bufwinnr . "wincmd w"
+    return
+  else
+    " find in each tab
+    tabfirst
+    let tab = 1
+    while tab <= tabpagenr("$")
+      let bufwinnr = bufwinnr(a:filename)
+      if bufwinnr != -1
+        exec "normal " . tab . "gt"
         exec bufwinnr . "wincmd w"
         return
-    else
-        " find in each tab
-        tabfirst
-        let tab = 1
-        while tab <= tabpagenr("$")
-            let bufwinnr = bufwinnr(a:filename)
-            if bufwinnr != -1
-                exec "normal " . tab . "gt"
-                exec bufwinnr . "wincmd w"
-                return
-            endif
-            tabnext
-            let tab = tab + 1
-        endwhile
-        " not exist, new tab
-        exec "tabnew " . a:filename
-    endif
+      endif
+      tabnext
+      let tab = tab + 1
+    endwhile
+    " not exist, new tab
+    exec "tabnew " . a:filename
+  endif
 endfunction
 
 "-----------------------------------------------------------
 " MiniBufExplorer
 " {{{
   if pathogen#is_disabled('minibufexpl') == 0
-      " let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
-      let g:miniBufExplMapCTabSwitchBufs = 1
-      let g:miniBufExplMapWindowNavVim = 1
-      let g:miniBufExplMapWindowNavArrows = 1
-      let g:miniBufExplModSelTarget = 1
-      let g:miniBufExplSplitBelow = 1
-      let g:miniBufExplMaxSize = 2
-      let g:miniBufExplUseSingleClick = 1    " select by single click
-      " autocmd BufRead,BufNew :call UMiniBufExplorer
-      map ,be :MBEToggle<CR>
+    " let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
+    let g:miniBufExplMapCTabSwitchBufs = 1
+    let g:miniBufExplMapWindowNavVim = 1
+    let g:miniBufExplMapWindowNavArrows = 1
+    let g:miniBufExplModSelTarget = 1
+    let g:miniBufExplSplitBelow = 1
+    let g:miniBufExplMaxSize = 2
+    let g:miniBufExplUseSingleClick = 1    " select by single click
+    " autocmd BufRead,BufNew :call UMiniBufExplorer
+    map ,be :MBEToggle<CR>
   endif
 " }}}
 
@@ -1424,26 +1418,26 @@ endfunction
 "s           选择排序方式               "x    定制浏览方式，使用你指定的程序打开该文件
 " {{{
   if pathogen#is_disabled('netrw') == 0
-      let g:netrw_winsize        = 25
-      let g:netrw_keepdir        = 0
-      " let g:netrw_preview        = 0
-      let g:netrw_liststyle      = 3
-      let g:netrw_browse_split   = 0
-      let g:netrw_cursor         = 3
-      let g:netrw_banner         = 0
-      let g:netrw_mousemaps      = 0
-      let g:netrw_special_syntax = 1
-      let g:netrw_timefmt        = "%y-%m-%d  %H-%M-%S"
-      let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
-      let g:netrw_cursor         = 0
-      let g:netrw_errorlvl       = 1
-      if executable('wget')
-        let g:netrw_http_cmd = 'wget'
-      endif
+    let g:netrw_winsize        = 25
+    let g:netrw_keepdir        = 0
+    " let g:netrw_preview        = 0
+    let g:netrw_liststyle      = 3
+    let g:netrw_browse_split   = 0
+    let g:netrw_cursor         = 3
+    let g:netrw_banner         = 0
+    let g:netrw_mousemaps      = 0
+    let g:netrw_special_syntax = 1
+    let g:netrw_timefmt        = "%y-%m-%d  %H-%M-%S"
+    let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
+    let g:netrw_cursor         = 0
+    let g:netrw_errorlvl       = 1
+    if executable('wget')
+      let g:netrw_http_cmd = 'wget'
+    endif
 
-      map <leader>fte :Texplore<CR>            " open in new tab
-      map <leader>fve :Vexplore<CR>           " vertical split
-      nmap <silent> <leader>fe :Sexplore!<cr>
+    map <leader>fte :Texplore<CR>            " open in new tab
+    map <leader>fve :Vexplore<CR>           " vertical split
+    nmap <silent> <leader>fe :Sexplore!<cr>
   endif
 " }}}
 
@@ -1456,29 +1450,29 @@ endfunction
 " e     open a netrw for the current dir
 " {{{
   if pathogen#is_disabled('nerdtree') == 0
-      map <leader>nt :NERDTreeToggle<CR>
-      " Opens current file heiarchy in Nerdtree
-      nmap <leader>nf :NERDTreeFind<CR>
-      let NERDChristmasTree=1                     " more colorful
-      let NERDTreeWinPos="left"                   " put NERDTree at left
-      let NERDTreeWinSize=25                      " set size
-      let NERDTreeShowLineNumbers=0               " show line number
-      let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS','\.git']
-      " setting root dir in NT also sets VIM's cd"
-      let NERDTreeChDirMode=2
-      let NERDTreeShowHidden=1
-      " single click to open directory
-      let NERDTreeMouseMode = 2
-      let NERDTreeHijackNetrw = 1
+    map <leader>nt :NERDTreeToggle<CR>
+    " Opens current file heiarchy in Nerdtree
+    nmap <leader>nf :NERDTreeFind<CR>
+    let NERDChristmasTree=1                     " more colorful
+    let NERDTreeWinPos="left"                   " put NERDTree at left
+    let NERDTreeWinSize=25                      " set size
+    let NERDTreeShowLineNumbers=0               " show line number
+    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS','\.git']
+    " setting root dir in NT also sets VIM's cd"
+    let NERDTreeChDirMode=2
+    let NERDTreeShowHidden=1
+    " single click to open directory
+    let NERDTreeMouseMode = 2
+    let NERDTreeHijackNetrw = 1
 
-      " Only open nerdtree if no file was specified on startup
-      function! StartUpNerdtree()
-          if 0 == argc()
-              NERDTree $HOME
-          end
-      endfunction
+    " Only open nerdtree if no file was specified on startup
+    function! StartUpNerdtree()
+      if 0 == argc()
+        NERDTree $HOME
+      end
+    endfunction
 
-      autocmd VimEnter * call StartUpNerdtree()
+    autocmd VimEnter * call StartUpNerdtree()
 
   endif
 " }}}
@@ -1487,9 +1481,9 @@ endfunction
 " NERDTree-tabs
 " {{{
   if pathogen#is_disabled('nerdtree-tabs') == 0
-      map <leader>nn <plug>NERDTreeTabsToggle<CR>
-      let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
-      let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
+    map <leader>nn <plug>NERDTreeTabsToggle<CR>
+    let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
+    let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
   endif
 " }}}
 
@@ -1505,16 +1499,15 @@ map <Leader>ca :Calendar<CR>
 
 "-----------------------------------------------------------
 " lookupfile setting
-if v:version < 701
-    let g:loaded_lookupfile = 1
-else
+" {{{
+  if pathogen#is_disabled('lookupfile') == 0
     let g:LookupFile_MinPatLength = 2
     let g:LookupFile_PreserveLastPattern = 0
     let g:LookupFile_PreservePatternHistory = 0
     let g:LookupFile_AlwaysAcceptFirst = 1
     let g:LookupFile_AllowNewFiles = 0
     if filereadable("./filenametags")
-        let g:LookupFile_TagExpr = '"./filenametags"'
+      let g:LookupFile_TagExpr = '"./filenametags"'
     endif
     map lf :LookupFile<cr>
     map lb :LUBufs<cr>
@@ -1522,37 +1515,38 @@ else
 
     " lookup file with ignore case
     function! LookupFile_IgnoreCaseFunc(pattern)
-        let _tags = &tags
-        try
-            let &tags = eval(g:LookupFile_TagExpr)
-            let newpattern = '\c' . a:pattern
-            let tags = taglist(newpattern)
-        catch
-            echohl ErrorMsg | echo "Exception: " . v:exception | echohl NONE
-            return ""
-        finally
-            let &tags = _tags
-        endtry
+      let _tags = &tags
+      try
+        let &tags = eval(g:LookupFile_TagExpr)
+        let newpattern = '\c' . a:pattern
+        let tags = taglist(newpattern)
+      catch
+        echohl ErrorMsg | echo "Exception: " . v:exception | echohl NONE
+        return ""
+      finally
+        let &tags = _tags
+      endtry
 
-        " Show the matches for what is typed so far.
-        let files = map(tags, 'v:val["filename"]')
-        return files
+      " Show the matches for what is typed so far.
+      let files = map(tags, 'v:val["filename"]')
+      return files
     endfunction
     let g:LookupFile_LookupFunc = 'LookupFile_IgnoreCaseFunc'
-endif
+  endif
+" }}}
 
 "-----------------------------------------------------------
 " SVN Command
 " {{{
   if pathogen#is_disabled('vcscommand') == 0
-      " let SVNCommandSplit='vertical'
-      " let SVNCommandDiffSplit='vertical'
-      let SVNCommandEnableBufferSetup=1
-      let SVNCommandEdit='split'
-      let SVNCommandNameResultBuffers=1
-      " let SVNAutoCommitDiff='1'
-      let SVNCommandCommitOnWrite=1
-      let SVNCommandAutoSVK='svk'
+    " let SVNCommandSplit='vertical'
+    " let SVNCommandDiffSplit='vertical'
+    let SVNCommandEnableBufferSetup=1
+    let SVNCommandEdit='split'
+    let SVNCommandNameResultBuffers=1
+    " let SVNAutoCommitDiff='1'
+    let SVNCommandCommitOnWrite=1
+    let SVNCommandAutoSVK='svk'
   endif
 " }}}
 
@@ -1565,21 +1559,21 @@ endif
 " <Leader>mm  - Places next available mark.
 " {{{
   if pathogen#is_disabled('ShowMarks') == 0
-      " Enable ShowMarks
-      let g:showmarks_enable = 1
-      " Show which marks
-      " let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      let g:showmarks_include = "abcdefghijklmnopqrstuvwxyz"
-      " Ignore help, quickfix, non-modifiable buffers
-      let g:showmarks_ignore_type = "hqm"
-      " Hilight lower & upper marks
-      let g:showmarks_hlline_lower = 1
-      let g:showmarks_hlline_upper = 1
-      let g:showmarks_textlower = "\t"
-      let g:showmarks_textupper = "\t"
-      let g:showmarks_textother = "\t"
-      let g:showmarks_no_mappings = 1
-      nmap mt <Plug>ShowMarksToggle
+    " Enable ShowMarks
+    let g:showmarks_enable = 1
+    " Show which marks
+    " let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let g:showmarks_include = "abcdefghijklmnopqrstuvwxyz"
+    " Ignore help, quickfix, non-modifiable buffers
+    let g:showmarks_ignore_type = "hqm"
+    " Hilight lower & upper marks
+    let g:showmarks_hlline_lower = 1
+    let g:showmarks_hlline_upper = 1
+    let g:showmarks_textlower = "\t"
+    let g:showmarks_textupper = "\t"
+    let g:showmarks_textother = "\t"
+    let g:showmarks_no_mappings = 1
+    nmap mt <Plug>ShowMarksToggle
   endif
 " }}}
 
@@ -1600,14 +1594,14 @@ endif
 " Vimwiki
 " {{{
   if pathogen#is_disabled('vimwiki') == 0
-      let g:vimwiki_menu = 'Plugin.Vimwiki'
-      let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
-                          \ 'syntax': 'markdown',
-                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
-                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
-                          \ 'diary_rel_path': 'diary/'}]
-      let g:vimwiki_badsyms = ' '
-      let g:vimwiki_camel_case = 0
+    let g:vimwiki_menu = 'Plugin.Vimwiki'
+    let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
+                        \ 'syntax': 'markdown',
+                        \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
+                        \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
+                        \ 'diary_rel_path': 'diary/'}]
+    let g:vimwiki_badsyms = ' '
+    let g:vimwiki_camel_case = 0
   "    let g:vimwiki_ext2syntax = {'.md': 'markdown',
   "                    \ '.mkd': 'markdown',
   "                    \ '.markdown': 'markdown',
@@ -1630,9 +1624,9 @@ endif
 " yankring.vim
 " {{{
   if pathogen#is_disabled('yankring') == 0
-      let g:yankring_enabled=0
-      let g:yankring_history_file = '.vim-cache/yankring_history'
-      map <leader>yr :YRShow<cr>
+    let g:yankring_enabled=0
+    let g:yankring_history_file = '.vim-cache/yankring_history'
+    map <leader>yr :YRShow<cr>
   endif
 " }}}
 
@@ -1668,25 +1662,25 @@ cnoremap <C-N>      <Down>
 " {{{
 " Powerline and neocomplcache require Vim 7.2
   if pathogen#is_disabled('vim-powerline') == 0
-      if MySys() == "windows"
-        ""let g:Powerline_symbols = 'compatible'
-        let g:Powerline_symbols = 'unicode'
-      elseif has('gui_macvim')
-        let g:Powerline_symbols = 'fancy'
-      else
-        let g:Powerline_symbols = 'unicode'
-      endif
+    if MySys() == "windows"
+      ""let g:Powerline_symbols = 'compatible'
+      let g:Powerline_symbols = 'unicode'
+    elseif has('gui_macvim')
+      let g:Powerline_symbols = 'fancy'
+    else
+      let g:Powerline_symbols = 'unicode'
+    endif
 
-      let g:Powerline_cache_enabled = 1
-      " override the dividers
-      let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
-      let g:Powerline_stl_path_style = 'short'
-      " let Powerline_theme = 'skwp'
-      " let Powerline_colorscheme = 'skwp'
-      " Insert the charcode segment after the filetype segment
-      " call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
-      " Replace the scrollpercent segment with the charcode segment
-      " call Pl#Theme#ReplaceSegment('scrollpercent', 'fileinfo')
+    let g:Powerline_cache_enabled = 1
+    " override the dividers
+    let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
+    let g:Powerline_stl_path_style = 'short'
+    " let Powerline_theme = 'skwp'
+    " let Powerline_colorscheme = 'skwp'
+    " Insert the charcode segment after the filetype segment
+    " call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
+    " Replace the scrollpercent segment with the charcode segment
+    " call Pl#Theme#ReplaceSegment('scrollpercent', 'fileinfo')
   endif
 " }}}
 
@@ -1694,10 +1688,10 @@ cnoremap <C-N>      <Down>
 " Syntastic
 " {{{
   if pathogen#is_disabled('syntastic') == 0
-      let g:syntastic_auto_loc_list = 1 " auto open error window
-      let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
-      let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
-      let g:syntastic_loc_list_height = 5 " height of the location lists
+    let g:syntastic_auto_loc_list = 1 " auto open error window
+    let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
+    let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
+    let g:syntastic_loc_list_height = 5 " height of the location lists
   endif
 " }}}
 
@@ -1712,9 +1706,9 @@ cnoremap <C-N>      <Down>
 " {{{
   if pathogen#is_disabled('tagbar') == 0
     if MySys() == "windows"
-        let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
+      let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
     elseif MySys() == "linux"
-        let g:tagbar_ctags_bin = '/usr/bin/ctags'
+      let g:tagbar_ctags_bin = '/usr/bin/ctags'
     endif
     let g:tagbar_width = 20
     let g:tagbar_autofocus = 1
@@ -1732,9 +1726,9 @@ cnoremap <C-N>      <Down>
 
     " Same as nerdtree, only open if no file was specified
     function! StartUpTagbar()
-        if 0 == argc()
-           TagbarOpen
-        end
+      if 0 == argc()
+        TagbarOpen
+      end
     endfunction
 
     autocmd VimEnter * call StartUpTagbar()
@@ -1745,82 +1739,82 @@ cnoremap <C-N>      <Down>
 " neocomplcache
 " {{{
   if pathogen#is_disabled('neocomplcache') == 0
-      if v:version > 702
-          let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
-          let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-          let g:neocomplcache_enable_auto_select = 1
-          let g:neocomplcache_enable_smart_case = 1  " Use smartcase
-          let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
-          let g:neocomplcache_enable_quick_match = 1
-          let g:neocomplcache_temporary_dir = '~/.vim-cache/neocomplcache'
-          " Enable heavy features.
-          " Use camel case completion.
-          let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
-          let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
+    if v:version > 702
+      let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
+      let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
+      let g:neocomplcache_enable_auto_select = 1
+      let g:neocomplcache_enable_smart_case = 1  " Use smartcase
+      let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
+      let g:neocomplcache_enable_quick_match = 1
+      let g:neocomplcache_temporary_dir = '~/.vim-cache/neocomplcache'
+      " Enable heavy features.
+      " Use camel case completion.
+      let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
+      let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
-          let g:neocomplcache_max_list = 5
-          let g:neocomplcache_enable_fuzzy_completion = 1
-          let g:neocomplcache_fuzzy_completion_start_length = 3
-          let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+      let g:neocomplcache_max_list = 5
+      let g:neocomplcache_enable_fuzzy_completion = 1
+      let g:neocomplcache_fuzzy_completion_start_length = 3
+      let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-          let g:neocomplcache_source_disable = {
-            \ 'syntax_complete': 1,
-            \ }
+      let g:neocomplcache_source_disable = {
+        \ 'syntax_complete': 1,
+        \ }
 
-          let g:neocomplcache_auto_completion_start_length = 2
-          " Define keyword.
-          if !exists('g:neocomplcache_keyword_patterns')
-            let g:neocomplcache_keyword_patterns = {}
-          endif
-          let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-          if !exists('g:neocomplcache_omni_patterns')
-            let g:neocomplcache_omni_patterns = {}
-          endif
-
-          let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-          let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-          let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-          let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-
-          " Plugin key-mappings.
-          imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-          smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-          inoremap <expr><C-g>     neocomplcache#undo_completion()
-          inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-          " Recommended key-mappings.
-          " <CR>: close popup and save indent.
-          inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-          function! s:my_cr_function()
-            return neocomplcache#smart_close_popup() . "\<CR>"
-            " For no inserting <CR> key.
-            "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-          endfunction
-          " <TAB>: completion.
-          inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-          " <C-h>, <BS>: close popup and delete backword char.
-          inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-          inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-          inoremap <expr><C-y>  neocomplcache#close_popup()
-          inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-          "
-          " Close popup by <Space>.
-          " inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
-
-          " Enable omni completion.
-          autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-          autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-          autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-          autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-          autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-          " Enable heavy omni completion.
-          if !exists('g:neocomplcache_omni_patterns')
-            let g:neocomplcache_omni_patterns = {}
-          endif
+      let g:neocomplcache_auto_completion_start_length = 2
+      " Define keyword.
+      if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
       endif
+      let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+      if !exists('g:neocomplcache_omni_patterns')
+        let g:neocomplcache_omni_patterns = {}
+      endif
+
+      let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+      let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+      let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+      let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+      " Plugin key-mappings.
+      imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      inoremap <expr><C-g>     neocomplcache#undo_completion()
+      inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+      " Recommended key-mappings.
+      " <CR>: close popup and save indent.
+      inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+      function! s:my_cr_function()
+        return neocomplcache#smart_close_popup() . "\<CR>"
+        " For no inserting <CR> key.
+        "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+      endfunction
+      " <TAB>: completion.
+      inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+      " <C-h>, <BS>: close popup and delete backword char.
+      inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+      inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+      inoremap <expr><C-y>  neocomplcache#close_popup()
+      inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+      "
+      " Close popup by <Space>.
+      " inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+
+      " Enable omni completion.
+      autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+      autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+      autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+      autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+      autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+      " Enable heavy omni completion.
+      if !exists('g:neocomplcache_omni_patterns')
+        let g:neocomplcache_omni_patterns = {}
+      endif
+    endif
   endif
 " }}}
 
@@ -1841,15 +1835,13 @@ cnoremap <C-N>      <Down>
 " indent-guides
 " {{{
   if pathogen#is_disabled('indent-guides') == 0
-      let g:indent_guides_enable_on_vim_startup = 0
-      let g:indent_guides_auto_colors = 1
-      let g:indent_guides_guide_size = 1
-      let g:indent_guides_indent_levels = 30
-      let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
-      autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
-      autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
+    let g:indent_guides_enable_on_vim_startup = 1
+    let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
+    let g:indent_guides_guide_size = 4        " customize the size of the indent guide
+    let g:indent_guides_indent_levels = 30    " default
+    let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
 
-      " nnoremap <silent> ,i :IndentGuidesToggle<CR>
+    nnoremap <silent> ,ig :IndentGuidesToggle<CR>
   endif
 " }}}
 
@@ -1858,13 +1850,13 @@ cnoremap <C-N>      <Down>
 " {{{
 " FuzzyFinder/L9 require Vim 7.2 and floating-point support
   if pathogen#is_disabled('FuzzyFinder') == 0
-      let g:fuf_dataDir = '~/.vim-cache/fuzzyfinder-data'
-      ""call add(g:pathogen_disabled, 'l9')
-      ""call add(g:pathogen_disabled, 'fuzzyfinder')
-      nnoremap <Leader>ffb :FufBuffer<CR>
-      nnoremap <Leader>fff :FufFileWithCurrentBufferDir<CR>
-      nnoremap <Leader>ffj :FufJumpList<CR>
-      nnoremap <Leader>ffl :FufLine<CR>
+    let g:fuf_dataDir = '~/.vim-cache/fuzzyfinder-data'
+    ""call add(g:pathogen_disabled, 'l9')
+    ""call add(g:pathogen_disabled, 'fuzzyfinder')
+    nnoremap <Leader>ffb :FufBuffer<CR>
+    nnoremap <Leader>fff :FufFileWithCurrentBufferDir<CR>
+    nnoremap <Leader>ffj :FufJumpList<CR>
+    nnoremap <Leader>ffl :FufLine<CR>
   endif
 " }}}
 
@@ -1873,7 +1865,7 @@ cnoremap <C-N>      <Down>
 " Gundo requires Vim 7.3 and Python
 " {{{
   if pathogen#is_disabled('gundo') == 0
-      nnoremap <silent> <Leader>u :GundoToggle<CR>
+    nnoremap <silent> <Leader>u :GundoToggle<CR>
   endif
 " }}}
 
@@ -1881,39 +1873,39 @@ cnoremap <C-N>      <Down>
 " ctrlp
 " {{{
   if pathogen#is_disabled('ctrlp') == 0
-      " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-      let g:ctrlp_map = '<Leader>p'
-      let g:ctrlp_cmd = 'CtrlP'
-      " Set Ctrl-P to show match at top of list instead of at bottom, which is so
-      " stupid that it's not default
-      let g:ctrlp_match_window_reversed = 0
+    " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+    let g:ctrlp_map = '<Leader>p'
+    let g:ctrlp_cmd = 'CtrlP'
+    " Set Ctrl-P to show match at top of list instead of at bottom, which is so
+    " stupid that it's not default
+    let g:ctrlp_match_window_reversed = 0
 
-      let g:ctrlp_cache_dir = $HOME.'/.vim-cache/ctrlp'
-      " Tell Ctrl-P to keep the current VIM working directory when starting a
-      " search, another really stupid non default
-      let g:ctrlp_working_path_mode = 'ra'
+    let g:ctrlp_cache_dir = $HOME.'/.vim-cache/ctrlp'
+    " Tell Ctrl-P to keep the current VIM working directory when starting a
+    " search, another really stupid non default
+    let g:ctrlp_working_path_mode = 'ra'
 
-      let g:ctrlp_custom_ignore = {
-          \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-          \ 'file': '\v\.(exe|so|dll|pyc)$'
-          \ }
-      if MySys() == "windows"
-          let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
-      elseif MySys() == "linux"
-          let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
-      endif
-      " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
-      " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-      " let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
-      ""let g:ctrlp_user_command = {
-      ""        \ 'types': {
-      ""            \ 1: ['.git', 'cd %s && git ls-files'],
-      ""            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-      ""            \ },
-      ""        \ 'fallback': 'find %s -type f'
-      ""        \ }
-      " Open multiplely selected files in a tab by default
-      let g:ctrlp_open_multi = '10t'
+    let g:ctrlp_custom_ignore = {
+        \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+        \ 'file': '\v\.(exe|so|dll|pyc)$'
+        \ }
+    if MySys() == "windows"
+      let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    elseif MySys() == "linux"
+      let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+    endif
+    " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
+    " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+    " let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
+    ""let g:ctrlp_user_command = {
+    ""        \ 'types': {
+    ""            \ 1: ['.git', 'cd %s && git ls-files'],
+    ""            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    ""            \ },
+    ""        \ 'fallback': 'find %s -type f'
+    ""        \ }
+    " Open multiplely selected files in a tab by default
+    let g:ctrlp_open_multi = '10t'
   endif
 " }}}
 
@@ -1921,40 +1913,40 @@ cnoremap <C-N>      <Down>
 " vim-cycle
 " {{{
   if pathogen#is_disabled('vim-cycle') == 0
-      let g:cycle_default_groups = [
-            \   [['true', 'false']],
-            \   [['yes', 'no']],
-            \   [['on', 'off']],
-            \   [['+', '-']],
-            \   [['>', '<']],
-            \   [['"', "'"]],
-            \   [['==', '!=']],
-            \   [['0', '1']],
-            \   [['and', 'or']],
-            \   [['in', 'out']],
-            \   [['up', 'down']],
-            \   [['min', 'max']],
-            \   [['get', 'set']],
-            \   [['add', 'remove']],
-            \   [['to', 'from']],
-            \   [['read', 'write']],
-            \   [['save', 'load', 'restore']],
-            \   [['next', 'previous', 'prev']],
-            \   [['only', 'except']],
-            \   [['without', 'with']],
-            \   [['exclude', 'include']],
-            \   [['width', 'height']],
-            \   [['asc', 'desc']],
-            \   [['是', '否']],
-            \   [['上', '下']],
-            \   [['男', '女']],
-            \   [['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-            \     'Friday', 'Saturday'], ['hard_case', {'name': 'Days'}]],
-            \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
-            \   [['（:）', '「:」', '『:』'], 'sub_pairs'],
-            \ ]
-      nmap <silent> <Leader>n <Plug>CycleNext
-      vmap <silent> <Leader>n <Plug>CycleNext
+    let g:cycle_default_groups = [
+          \   [['true', 'false']],
+          \   [['yes', 'no']],
+          \   [['on', 'off']],
+          \   [['+', '-']],
+          \   [['>', '<']],
+          \   [['"', "'"]],
+          \   [['==', '!=']],
+          \   [['0', '1']],
+          \   [['and', 'or']],
+          \   [['in', 'out']],
+          \   [['up', 'down']],
+          \   [['min', 'max']],
+          \   [['get', 'set']],
+          \   [['add', 'remove']],
+          \   [['to', 'from']],
+          \   [['read', 'write']],
+          \   [['save', 'load', 'restore']],
+          \   [['next', 'previous', 'prev']],
+          \   [['only', 'except']],
+          \   [['without', 'with']],
+          \   [['exclude', 'include']],
+          \   [['width', 'height']],
+          \   [['asc', 'desc']],
+          \   [['是', '否']],
+          \   [['上', '下']],
+          \   [['男', '女']],
+          \   [['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+          \     'Friday', 'Saturday'], ['hard_case', {'name': 'Days'}]],
+          \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
+          \   [['（:）', '「:」', '『:』'], 'sub_pairs'],
+          \ ]
+    nmap <silent> <Leader>n <Plug>CycleNext
+    vmap <silent> <Leader>n <Plug>CycleNext
   endif
 " }}}
 
@@ -1962,38 +1954,38 @@ cnoremap <C-N>      <Down>
 " Neosnippet
 " {{{
   if pathogen#is_disabled('neosnippet') == 0
-      " Plugin key-mappings.
-      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      xmap <C-k>     <Plug>(neosnippet_expand_target)
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-      "" " SuperTab like snippets behavior
-      "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-      "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-      imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)"
-        \: pumvisible() ? "\<C-n>" : "\<TAB>"
-      smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)"
-        \: "\<TAB>"
+    "" " SuperTab like snippets behavior
+    "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+    "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      \ "\<Plug>(neosnippet_expand_or_jump)"
+      \: "\<TAB>"
 
-      " For snippet_complete marker.
-      if has('conceal')
-            set conceallevel=2 concealcursor=i
-      endif"
+    " For snippet_complete marker.
+    if has('conceal')
+      set conceallevel=2 concealcursor=i
+    endif"
 
-      " Enable snipMate compatibility feature.
-      let g:neosnippet#enable_snipmate_compatibility = 0  " no
-      " Installing default snippets is optional
-      let g:neosnippet#disable_runtime_snippets = {
-                                                    \   '_' : 1,
-                                                    \ }
-      " Tell Neosnippet about the other snippets
-      " use a different collection of snippets other than the built-in ones
-      let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets', g:vimfiles . '/snippets']
-      " associating certain filetypes with other snippet files.
-      let g:neosnippet#scope_aliases = {}
-      let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
+    " Enable snipMate compatibility feature.
+    let g:neosnippet#enable_snipmate_compatibility = 0  " no
+    " Installing default snippets is optional
+    let g:neosnippet#disable_runtime_snippets = {
+                                                  \   '_' : 1,
+                                                  \ }
+    " Tell Neosnippet about the other snippets
+    " use a different collection of snippets other than the built-in ones
+    let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets', g:vimfiles . '/snippets']
+    " associating certain filetypes with other snippet files.
+    let g:neosnippet#scope_aliases = {}
+    let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
   endif
 " }}}
 
@@ -2014,13 +2006,13 @@ cnoremap <C-N>      <Down>
 " vimfiler
 " {{{
   if pathogen#is_disabled('vimfiler') == 0
-      let g:vimfiler_as_default_explorer = 1
-      let g:vimfiler_edit_action = 'tabopen'
-      let g:vimfiler_enable_clipboard = 0
-      let g:vimfiler_safe_mode_by_default = 0
-      let g:vimfiler_time_format = '%y-%m-%d %H:%M'
-      let g:vimfiler_split_command = 'vertical rightbelow vsplit'
-      let g:vimfiler_min_filename_width = 20
+    let g:vimfiler_as_default_explorer = 1
+    let g:vimfiler_edit_action = 'tabopen'
+    let g:vimfiler_enable_clipboard = 0
+    let g:vimfiler_safe_mode_by_default = 0
+    let g:vimfiler_time_format = '%y-%m-%d %H:%M'
+    let g:vimfiler_split_command = 'vertical rightbelow vsplit'
+    let g:vimfiler_min_filename_width = 20
   endif
 " }}}
 
@@ -2030,9 +2022,9 @@ cnoremap <C-N>      <Down>
 " alignta
 " {{{
   if pathogen#is_disabled('vim-alignta') == 0
-      let g:alignta_default_arguments = '! \S\+'
-      xnoremap <silent> <LocalLeader>= :Alignta! \S\+<CR>
-      xnoremap <silent> <LocalLeader>A :Alignta! \S\+<CR>
+    let g:alignta_default_arguments = '! \S\+'
+    xnoremap <silent> <LocalLeader>= :Alignta! \S\+<CR>
+    xnoremap <silent> <LocalLeader>A :Alignta! \S\+<CR>
   endif
 " }}}
 
@@ -2040,18 +2032,18 @@ cnoremap <C-N>      <Down>
 " Tabular
 " {{{
   if exists(":Tabularize")
-    nmap <Leader>a= :Tabularize /=<CR>
-    vmap <Leader>a= :Tabularize /=<CR>
-    nmap <Leader>a: :Tabularize /:<CR>
-    vmap <Leader>a: :Tabularize /:<CR>
-    nmap <Leader>a:: :Tabularize /:\zs<CR>
-    vmap <Leader>a:: :Tabularize /:\zs<CR>
-    nmap <Leader>a,  :Tabularize /,<CR>
-    vmap <Leader>a,  :Tabularize /,<CR>
-    nmap <Leader>a,, :Tabularize /,\zs<CR>
-    vmap <Leader>a,, :Tabularize /,\zs<CR>
-    nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
-    vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+    nnoremap <Leader>a= :Tabularize /=<CR>
+    vnoremap <Leader>a= :Tabularize /=<CR>
+    nnoremap <Leader>a: :Tabularize /:<CR>
+    vnoremap <Leader>a: :Tabularize /:<CR>
+    nnoremap <Leader>a:: :Tabularize /:\zs<CR>
+    vnoremap <Leader>a:: :Tabularize /:\zs<CR>
+    nnoremap <Leader>a,  :Tabularize /,<CR>
+    vnoremap <Leader>a,  :Tabularize /,<CR>
+    nnoremap <Leader>a,, :Tabularize /,\zs<CR>
+    vnoremap <Leader>a,, :Tabularize /,\zs<CR>
+    nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
+    vnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
   endif
 " }}}
 
@@ -2060,76 +2052,76 @@ cnoremap <C-N>      <Down>
 " unite
 " {{{
   if pathogen#is_disabled('unite') == 0
-      " Use the fuzzy matcher for everything
-      call unite#filters#matcher_default#use(['matcher_fuzzy'])
-      " Use the rank sorter for everything
-      call unite#filters#sorter_default#use(['sorter_rank'])
-      " Set up some custom ignores
-      call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-                  \ 'ignore_pattern', join([
-                  \ '\.git/',
-                  \ 'git5/.*/review/',
-                  \ 'google/obj/',
-                  \], '\|'))
-      " nnoremap [unite] <Nop>
-      " xnoremap [unite] <Nop>
-      " nmap <leader>f [unite]
-      " xmap <leader>f [unite]
+    " Use the fuzzy matcher for everything
+    call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    " Use the rank sorter for everything
+    call unite#filters#sorter_default#use(['sorter_rank'])
+    " Set up some custom ignores
+    call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
+                \ 'ignore_pattern', join([
+                \ '\.git/',
+                \ 'git5/.*/review/',
+                \ 'google/obj/',
+                \], '\|'))
+    " nnoremap [unite] <Nop>
+    " xnoremap [unite] <Nop>
+    " nmap <leader>f [unite]
+    " xmap <leader>f [unite]
 
-      nnoremap [unite]S :<C-U>Unite source<CR>
-      nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-      nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-      nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search line<CR>
-      nnoremap <silent> [unite]d :<C-U>Unite -buffer-name=mru_dir -start-insert directory_mru<CR>
-      nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-      nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=registers -start-insert register<CR>
-      xnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register<CR>
-      nnoremap <silent> [unite]b :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-      nnoremap <silent> [unite]m :<C-U>Unite mark<CR>
-      nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps help<CR>
-      nnoremap <silent> [unite]o :<C-U>Unite outline<CR>
-      nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
-      nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-      nnoremap <silent> [unite]g :<C-u>Unite tab<CR>
-      " nnoremap <silent> [unite]G :<C-u>Unite grep -no-quit<CR>
-      nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
-      nnoremap <silent> [unite]c :<C-u>Unite change<CR>
-      nnoremap <silent> [unite]q :<C-u>Unite poslist<CR>
-      nnoremap <space>y :Unite history/yank<cr>
-      nnoremap <space>s :Unite -quick-match buffer<cr>
+    nnoremap [unite]S :<C-U>Unite source<CR>
+    nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
+    nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
+    nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search line<CR>
+    nnoremap <silent> [unite]d :<C-U>Unite -buffer-name=mru_dir -start-insert directory_mru<CR>
+    nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
+    nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=registers -start-insert register<CR>
+    xnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register<CR>
+    nnoremap <silent> [unite]b :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
+    nnoremap <silent> [unite]m :<C-U>Unite mark<CR>
+    nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps help<CR>
+    nnoremap <silent> [unite]o :<C-U>Unite outline<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
+    nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
+    nnoremap <silent> [unite]g :<C-u>Unite tab<CR>
+    " nnoremap <silent> [unite]G :<C-u>Unite grep -no-quit<CR>
+    nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
+    nnoremap <silent> [unite]c :<C-u>Unite change<CR>
+    nnoremap <silent> [unite]q :<C-u>Unite poslist<CR>
+    nnoremap <space>y :Unite history/yank<cr>
+    nnoremap <space>s :Unite -quick-match buffer<cr>
 
-      let g:unite_update_time = 70
-      let g:unite_enable_split_vertically = 0   " split horizontally
-      let g:unite_enable_ignore_case = 1
-      let g:unite_enable_smart_case = 1
-      let g:unite_enable_start_insert = 1   " start INSERT mode
-      let g:unite_enable_use_short_source_names = 1
-      let g:unite_source_history_yank_enable = 1  " search through yank history
-      let g:unite_winheight = 10
-      let g:unite_data_directory = expand('~/.vim-cache/unite')
-      let g:unite_cursor_line_highlight = 'TabLineSel'
-      " let g:unite_source_file_mru_time_format = "(%m/%d %T) "
-      let g:unite_source_file_mru_filename_format = ':~:.'
-      let g:unite_source_file_mru_limit = 300
-      " let g:unite_source_directory_mru_time_format = ''
-      let g:unite_source_directory_mru_limit = 300
-      let g:unite_split_rule = "botright"   " Open in bottom right
+    let g:unite_update_time = 70
+    let g:unite_enable_split_vertically = 0   " split horizontally
+    let g:unite_enable_ignore_case = 1
+    let g:unite_enable_smart_case = 1
+    let g:unite_enable_start_insert = 1   " start INSERT mode
+    let g:unite_enable_use_short_source_names = 1
+    let g:unite_source_history_yank_enable = 1  " search through yank history
+    let g:unite_winheight = 10
+    let g:unite_data_directory = expand('~/.vim-cache/unite')
+    let g:unite_cursor_line_highlight = 'TabLineSel'
+    " let g:unite_source_file_mru_time_format = "(%m/%d %T) "
+    let g:unite_source_file_mru_filename_format = ':~:.'
+    let g:unite_source_file_mru_limit = 300
+    " let g:unite_source_directory_mru_time_format = ''
+    let g:unite_source_directory_mru_limit = 300
+    let g:unite_split_rule = "botright"   " Open in bottom right
 
-      function! s:unite_settings()
-        nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
-        nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
-        nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
-        nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
-        nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-        nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    function! s:unite_settings()
+      nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
+      nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
+      nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
+      nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
+      nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
+      nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
 
-        vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
+      vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
 
-        imap <buffer> <C-J> <Plug>(unite_select_next_line)
-        imap <buffer> <C-K> <Plug>(unite_select_previous_line)
-        imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-        imap <buffer> <LocalLeader>q <Plug>(unite_exit)
-      endfunction
+      imap <buffer> <C-J> <Plug>(unite_select_next_line)
+      imap <buffer> <C-K> <Plug>(unite_select_previous_line)
+      imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
+      imap <buffer> <LocalLeader>q <Plug>(unite_exit)
+    endfunction
   endif
 " }}}
 
@@ -2184,11 +2176,11 @@ cnoremap <C-N>      <Down>
 " Grep
 "{{{
   if MySys() == "windows"
-      let g:Grep_Path = './vimfiles/gnu/grep.exe'
-      let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
-      let g:Egrep_Path  = './vimfiles/gnu/egrep.exe'
-      let g:Grep_Find_Path = './vimfiles/gnu/find.exe'
-      let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
+    let g:Grep_Path = './vimfiles/gnu/grep.exe'
+    let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
+    let g:Egrep_Path  = './vimfiles/gnu/egrep.exe'
+    let g:Grep_Find_Path = './vimfiles/gnu/find.exe'
+    let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
   endif
   let Grep_Default_Options = '-i'
   let Grep_Skip_Dirs = 'RCS CVS .svn .git'
@@ -2222,7 +2214,6 @@ cnoremap <C-N>      <Down>
 " lightline
 " {{{
   if pathogen#is_disabled('lightline') == 0
-    " let g:loaded_lightline = 1
     let g:lightline = {
         \ 'colorscheme': 'solarized_dark',
         \ }
@@ -2283,9 +2274,9 @@ function! SetColorColum()
     let col_num = virtcol(".")
     let cc_list = split(&cc, ',')
     if count(cc_list, string(col_num)) <= 0
-        execute "set cc+=".col_num
+      execute "set cc+=".col_num
     else
-        execute "set cc-=".col_num
+      execute "set cc-=".col_num
     endif
 endfunction
 
@@ -2333,46 +2324,46 @@ endfunction
 "-----------------------------------------------------------
 " Color of Status Line
 if has('statusline')
-    set laststatus=2           " always show the status line
-    "highlight StatusLine guifg=SlateBlue guibg=Yellow
-    "highlight StatusLine guifg=SlateBlue guibg=#008800
-    highlight StatusLine NONE
-    highlight StatusLineNC NONE
-    " current window
-    highlight StatusLine guifg=orange guibg=#008800 gui=underline ctermfg=yellow
-    " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
-    " not current window
-    highlight StatusLineNC guifg=Gray guibg=white ctermfg=lightgrey
-    " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
-    highlight User1 guifg=yellow
-    highlight User2 guifg=lightblue
-    highlight User3 guifg=red
-    highlight User4 guifg=cyan
-    highlight User5 guifg=lightgreen
-    highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue " ctermbg=brown
-    highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
-    " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
-    " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-    " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-    " %([%R%M]%)   read-only, modified and modifiable flags between braces
-    " %{'$'[!&list]}  shows a '$' if in list mode
-    " %{'~'[&pm=='']} shows a '~' if in patchmode
-    " #%n    buffer number
-    set statusline=
-    set statusline+=[%f]                " file name
-    set statusline+=[%{&ff}]            " file format
-    set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
-    set statusline+=%y                  " file type
-    set statusline+=%7*%m%*             " modified flag
-    set statusline+=%r                  " readonly flag
-    set statusline+=%h                  "
-    set statusline+=%w
-    " set statusline+=\ [%{getcwd()}] " current directory
-    set statusline+=%#warningmsg#
-    set statusline+=%=                  " left/right separator
-    set statusline+=%6*%b(0X%B)
-    " set statusline+=[Pos=%l,%c%V]
-    set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
+  set laststatus=2           " always show the status line
+  "highlight StatusLine guifg=SlateBlue guibg=Yellow
+  "highlight StatusLine guifg=SlateBlue guibg=#008800
+  highlight StatusLine NONE
+  highlight StatusLineNC NONE
+  " current window
+  highlight StatusLine guifg=orange guibg=#008800 gui=underline ctermfg=yellow
+  " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
+  " not current window
+  highlight StatusLineNC guifg=Gray guibg=white ctermfg=lightgrey
+  " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
+  highlight User1 guifg=yellow
+  highlight User2 guifg=lightblue
+  highlight User3 guifg=red
+  highlight User4 guifg=cyan
+  highlight User5 guifg=lightgreen
+  highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue " ctermbg=brown
+  highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+  " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
+  " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+  " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+  " %([%R%M]%)   read-only, modified and modifiable flags between braces
+  " %{'$'[!&list]}  shows a '$' if in list mode
+  " %{'~'[&pm=='']} shows a '~' if in patchmode
+  " #%n    buffer number
+  set statusline=
+  set statusline+=[%f]                " file name
+  set statusline+=[%{&ff}]            " file format
+  set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
+  set statusline+=%y                  " file type
+  set statusline+=%7*%m%*             " modified flag
+  set statusline+=%r                  " readonly flag
+  set statusline+=%h                  "
+  set statusline+=%w
+  " set statusline+=\ [%{getcwd()}] " current directory
+  set statusline+=%#warningmsg#
+  set statusline+=%=                  " left/right separator
+  set statusline+=%6*%b(0X%B)
+  " set statusline+=[Pos=%l,%c%V]
+  set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
 endif
 
 "-----------------------------------------------------------
@@ -2405,7 +2396,6 @@ endif
 " c-support
 " C/C++ IDE
 "{{{
-
   let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
   let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
   let g:C_Root = '&Plugin.&C\/C\+\+.'
