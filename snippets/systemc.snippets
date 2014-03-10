@@ -47,7 +47,6 @@ snippet scmain
         return 0;
     }
 
-
 # SystemC trace file
 # Create VCD trace file
 snippet sctrvcd
@@ -61,3 +60,38 @@ snippet sctrvcd
 
     sc_close_vcd_trace_file($1);
 
+snippet   scme
+abbr      SC_METHOD( process )
+    SC_METHOD( ${1:process} );${0}
+
+snippet   scth
+abbr      SC_THREAD( process )
+    SC_THREAD( ${1:process} );${0}
+
+# Signals {{{
+snippet   scin
+abbr      sc_in< data_type > name;
+    sc_in <${1:data_types} > ${2:name};${0}
+
+snippet   scout
+abbr      sc_out< data_type > name;
+    sc_out<${1:data_types} > ${2:name};${0}
+
+snippet   scio
+abbr      sc_inout< data_type > name;
+    sc_inout<${1:data_types} > ${2:name};${0}
+# }}}
+
+snippet sc_fifo
+    sc_fifo<${1:element_type}> ${2:name}(${3:size});
+    $2.write(${4:value});
+    $2.READ(${5:reference});
+    $0 = $2.read()
+    if($2.nb_read($5)){ // non-blocking
+
+    }
+
+    if($2.num_available() == 0)
+        wait($2.data_written_event());
+    if($2.num_free() == 0)
+        next_trigger($2.data_read_event());

@@ -1837,11 +1837,7 @@ cnoremap <C-N>      <Down>
   if pathogen#is_disabled('indent-guides') == 0
     let g:indent_guides_enable_on_vim_startup = 1
     let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
-    let g:indent_guides_guide_size = 4        " customize the size of the indent guide
-    let g:indent_guides_indent_levels = 30    " default
     let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
-
-    nnoremap <silent> ,ig :IndentGuidesToggle<CR>
   endif
 " }}}
 
@@ -1982,7 +1978,9 @@ cnoremap <C-N>      <Down>
                                                   \ }
     " Tell Neosnippet about the other snippets
     " use a different collection of snippets other than the built-in ones
-    let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets', g:vimfiles . '/snippets']
+    let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets',
+                                        \ g:vimfiles . '/snippets',
+                                        \ g:vimfiles . '/bundle/systemc/snippets']
     " associating certain filetypes with other snippet files.
     let g:neosnippet#scope_aliases = {}
     let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
