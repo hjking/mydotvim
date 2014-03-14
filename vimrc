@@ -3,15 +3,6 @@
 " Author:            Hong Jin - bestkindy@gmail.com
 " Description:       Vim configuration file
 "
-" Revision History:
-" Date          Auther      Revision        Description
-" ------------------------------------------------------------------------------
-" 2010.08.13    Hong Jin    0.1             1. Initial revision
-" 2010.12.01    Hong Jin    0.2             1. Change coloscheme to randomly
-" 2012.11.01    Hong Jin    0.3             1. Change structure
-" 2013.11.05    Hong Jin    0.4             1. Add fold
-" ------------------------------------------------------------------------------
-"
 "******************************************************************************/
 
 
@@ -26,7 +17,6 @@ set nocompatible                " not use vi keyboard mode
 filetype off
 
 let g:vimrc_loaded = 1
-let g:vimrc_disable_setting = 1
 
 "-----------------------------------------------------------
 " Platform
@@ -113,7 +103,7 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
 
   call pathogen#infect()
   " execute pathogen#infect()
-  " call pathogen#helptags()
+  call pathogen#helptags()
 
   " pathogen 管理vba格式的插件
   "   :e name.vba
@@ -740,9 +730,8 @@ endif
 " Yank from the cursor to the end of the line, to be consistent with C and D
 nmap Y y$
 
-"-----------------------------------------------------------
+"-----------------------------
 " Spell checking
-"-----------------------------------------------------------
 map <leader>sn ]s
 map <leader>sp [s
 map <leader>sa zg
@@ -1094,6 +1083,11 @@ vnoremap <Tab> %
 " Use shift-H and shift-L for move to beginning/end
 nnoremap H 0
 nnoremap L $
+
+" cd to the directory containing the file in the buffer
+nmap <silent> <leader>cd :lcd %:h<CR>
+nmap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
+nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -1688,7 +1682,7 @@ cnoremap <C-N>      <Down>
 " Syntastic
 " {{{
   if pathogen#is_disabled('syntastic') == 0
-    let g:syntastic_auto_loc_list = 1 " auto open error window
+    let g:syntastic_auto_loc_list = 0 " auto open error window
     let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
     let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
     let g:syntastic_loc_list_height = 5 " height of the location lists
@@ -2402,3 +2396,4 @@ endif
 set secure
 
 " vim: et ts=2 sts=2 sw=2
+

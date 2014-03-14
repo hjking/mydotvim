@@ -79,22 +79,6 @@ function s:SetGuiFont()
     endif
 endfunction
 
-" set guifont=GulimChe:h13:cANSI
-" set guifont=MS_Gothic:h13:cANSI
-" set guifont=monofur:h13:b:cANSI
-" set guifont=Raize:h11:b:cANSI    " Raize:h12:b:cANSI
-" set guifont=Bitstream_Vera_Sans_Mono:h11:cANSI
-"   if MySys() == "mac"
-"     set gfn=Menlo:h14
-"     set shell=/bin/bash
-"   elseif MySys() == "windows"
-"     set gfn=Bitstream\ Vera\ Sans\ Mono:h10
-"   elseif MySys() == "linux"
-"     set gfn=Monospace\ 10
-"     set shell=/bin/bash
-"   endif
-"
-
 "-----------------------------------------------------------
 " Tab Setting
 "-----------------------------------------------------------
@@ -124,6 +108,16 @@ set sidescrolloff=2
 " autocmd
 autocmd BufWritePost .vimrc source % source ~/.gvimrc
 autocmd BufWritePost .gvimrc source %
+
+if !exists("g:vimrcloaded")
+  " winpos 0 0
+  if !&diff
+      winsize 90 30
+  else
+      winsize 120 30
+  endif
+  let g:vimrcloaded = 1
+endif
 
 "-----------------------------------------------------------
 "gvim max size when open

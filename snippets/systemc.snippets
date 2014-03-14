@@ -95,3 +95,9 @@ snippet sc_fifo
         wait($2.data_written_event());
     if($2.num_free() == 0)
         next_trigger($2.data_read_event());
+
+snippet sc_port_in
+    sc_port<sc_fifo_in_if<${1:type}> > $0;
+
+snippet sc_port_out
+    sc_port<sc_fifo_out_if<${1:type}> > $0;
