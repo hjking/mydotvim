@@ -1702,7 +1702,7 @@ cnoremap <C-N>      <Down>
     if MySys() == "windows"
       let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
     elseif MySys() == "linux"
-      let g:tagbar_ctags_bin = '/usr/bin/ctags'
+      let g:tagbar_ctags_bin = 'ctags'
     endif
     let g:tagbar_width = 20
     let g:tagbar_autofocus = 1

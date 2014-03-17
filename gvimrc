@@ -56,7 +56,7 @@ function s:SetGuiFont()
     elseif has("gui_win32")     " Windows platform
         let font_name = ""
         if getfontname( "Source_Code_Pro" ) != ""
-            set guifont=Source_Code_Pro:h11:cANSI
+            set guifont=Source_Code_Pro:h10:cANSI
             let font_name = "Source_Code_Pro"
         elseif getfontname( "DejaVu_Sans_Mono" ) != ""
             set guifont=DejaVu_Sans_Mono:h11:cANSI
