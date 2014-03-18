@@ -83,18 +83,7 @@ abbr      sc_inout< data_type > name;
 # }}}
 
 snippet sc_fifo
-    sc_fifo<${1:element_type}> ${2:name}(${3:size});
-    $2.write(${4:value});
-    $2.READ(${5:reference});
-    $0 = $2.read()
-    if($2.nb_read($5)){ // non-blocking
-
-    }
-
-    if($2.num_available() == 0)
-        wait($2.data_written_event());
-    if($2.num_free() == 0)
-        next_trigger($2.data_read_event());
+    sc_fifo<${1:element_type}> ${2:name}(${3:size});$0
 
 snippet sc_port_in
     sc_port<sc_fifo_in_if<${1:type}> > $0;

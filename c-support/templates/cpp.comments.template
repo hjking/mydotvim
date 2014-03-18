@@ -31,15 +31,17 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 //       Filename:  |FILENAME|
 //
-//    Description:  <CURSOR>
-//
 //        Version:  1.0
 //        Created:  |DATE| |TIME|
+//        Updated:  |DATE| |TIME|
 //       Revision:  none
 //       Compiler:  g++
 //
 //         Author:  |AUTHOR| (|EMAIL|)
 //        Company:  |ORGANIZATION|
+//
+//    Description:  <CURSOR>
+//      Hierarchy:
 //
 // =============================================================================
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -48,15 +50,17 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 //       Filename:  |FILENAME|
 //
-//    Description:  <CURSOR>
-//
 //        Version:  1.0
 //        Created:  |DATE| |TIME|
+//        Updated:  |DATE| |TIME|
 //       Revision:  none
 //       Compiler:  g++
 //
 //         Author:  |AUTHOR| (|EMAIL|)
 //        Company:  |ORGANIZATION|
+//
+//    Description:  <CURSOR>
+//      Hierarchy:
 //
 // =============================================================================
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

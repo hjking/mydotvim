@@ -2368,6 +2368,12 @@ endif
   sunmap w
   sunmap b
   sunmap e
+  omap <silent> iw <Plug>CamelCaseMotion_iw
+  xmap <silent> iw <Plug>CamelCaseMotion_iw
+  omap <silent> ib <Plug>CamelCaseMotion_ib
+  xmap <silent> ib <Plug>CamelCaseMotion_ib
+  omap <silent> ie <Plug>CamelCaseMotion_ie
+  xmap <silent> ie <Plug>CamelCaseMotion_ie
 "}}}
 
 "-----------------------------------------------------------
@@ -2391,6 +2397,8 @@ endif
   let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
   let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
   let g:C_Root = '&Plugin.&C\/C\+\+.'
+  let g:C_FormatDate         = '%Y-%m-%d'
+  let g:C_FormatTime         = '%H:%M:%S'
 "}}}
 
 set secure

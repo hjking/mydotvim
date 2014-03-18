@@ -13,7 +13,7 @@ set columns=90
 "set colorscheme randomly
 set background=dark
 let colorscheme_list = ['solarized', 'calmar256-dark', 'badwolf', 'koehler',
-            \ 'molokai', 'gruvbox', 'desertink', 'ir_black', 'vividchalk',
+            \ 'molokai', 'gruvbox', 'desertink', 'ir_black', 'vividchalk', 'elflord',
             \ 'inkpot', 'skittles_berry', 'hybrid', 'zenburn', 'vombato', 'kolor']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 
@@ -55,18 +55,21 @@ function s:SetGuiFont()
         set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
     elseif has("gui_win32")     " Windows platform
         let font_name = ""
-        if getfontname( "Source_Code_Pro" ) != ""
+        if getfontname( "Consolas" ) != ""
+            set guifont=Consolas:h11:cANSI " this is the default visual studio font
+            let font_name = "Consolas"
+        elseif getfontname( "Source_Code_Pro" ) != ""
             set guifont=Source_Code_Pro:h10:cANSI
             let font_name = "Source_Code_Pro"
+        elseif getfontname( "Droid_Sans_Mono" ) != ""
+            set guifont=Droid_Sans_Mono:h10:cANSI
+            let font_name = "Droid_Sans_Mono"
         elseif getfontname( "DejaVu_Sans_Mono" ) != ""
             set guifont=DejaVu_Sans_Mono:h11:cANSI
             let font_name = "DejaVu_Sans_Mono"
         elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
             set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
             let font_name = "Bitstream_Vera_Sans_Mono"
-        elseif getfontname( "Consolas" ) != ""
-            set guifont=Consolas:h11:cANSI " this is the default visual studio font
-            let font_name = "Consolas"
         elseif getfontname( "Raize" ) != ""
             set guifont=Raize:h12:b:cANSI
             let font_name = "Raize"
