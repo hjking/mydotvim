@@ -90,3 +90,13 @@ snippet sc_port_in
 
 snippet sc_port_out
     sc_port<sc_fifo_out_if<${1:type}> > $0;
+
+snippet tlm_fifo
+    tlm::tlm_fifo<${1:element_type}> ${2:name}(${3:size});$0
+
+snippet tlm_port_in
+    sc_port<tlm::tlm_fifo_get_if<${1:type}> > $0;
+
+snippet sc_port_out
+    sc_port<tlm::tlm_fifo_put_if<${1:type}> > $0;
+

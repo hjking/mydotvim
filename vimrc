@@ -1385,7 +1385,7 @@ endfunction
 " MiniBufExplorer
 " {{{
   if pathogen#is_disabled('minibufexpl') == 0
-    " let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
+    let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplMapWindowNavVim = 1
     let g:miniBufExplMapWindowNavArrows = 1
@@ -2185,7 +2185,7 @@ cnoremap <C-N>      <Down>
   if pathogen#is_disabled('airline') == 0
     " let g:loaded_airline = 1
     " enable fugitive integration >
-    let g:airline#extensions#branch#enabled = 1
+    let g:airline#extensions#branch#enabled = 0
     let g:airline_inactive_collapse=1
     " enable syntastic integration >
     let g:airline#extensions#syntastic#enabled = 0
@@ -2196,8 +2196,10 @@ cnoremap <C-N>      <Down>
     let g:airline#extensions#tagbar#flags = 'f'
     let g:airline#extensions#tagbar#flags = 's'
     let g:airline#extensions#tagbar#flags = 'p'
+    " bufferline
+    let g:airline#extensions#bufferline#enabled = 0
     " enable/disable detection of whitespace errors. >
-    let g:airline#extensions#whitespace#enabled = 1
+    let g:airline#extensions#whitespace#enabled = 0
     " configure which whitespace checks to enable. >
     let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
   endif

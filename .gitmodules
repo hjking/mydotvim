@@ -316,3 +316,6 @@
 	path = bundle/systemc
 	url = https://github.com/Kocha/vim-systemc.git
 	ignore = dirty
+[submodule "bundle/bufferline"]
+	path = bundle/bufferline
+	url = https://github.com/bling/vim-bufferline.git
