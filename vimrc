@@ -267,7 +267,7 @@ set showtabline=2
 if MySys() == "windows"
   set mouse=a
 elseif MySys() == "linux"
-  set mouse=v
+  set mouse=va
 endif
 " set mousemodel=extend
 set nomousehide                 " Hide the mouse when typing text
