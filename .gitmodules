@@ -288,10 +288,6 @@
 	path = bundle/sneak
 	url = https://github.com/justinmk/vim-sneak.git
 	ignore = dirty
-[submodule "bundle/commentary"]
-	path = bundle/commentary
-	url = https://github.com/tpope/vim-commentary.git
-	ignore = dirty
 [submodule "bundle/lion"]
 	path = bundle/lion
 	url = https://github.com/tommcdo/vim-lion.git
