@@ -35,43 +35,59 @@ $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == comment.file-description == start ==
 /*
  * =============================================================================
+ * |COPYRIGHT| |ORGANIZATION|
+ * |DEPARTMENT|
  *
  *       Filename:  |FILENAME|
  *
  *        Version:  1.0
  *        Created:  |DATE| |TIME|
- *       Revision:  none
+ *        Updated:  |DATE| |TIME|
  *       Compiler:  gcc
  *
  *         Author:  |AUTHOR| (|EMAIL|)
- *   Organization:  |ORGANIZATION|
  *
  *    Description:  <CURSOR>
  *      Hierarchy:
  *
+ * History
+ *      Author:
+ *        Date:
+ *    Revision:
  * =============================================================================
  */
+
+ /* CODE ENTRY */
+
 #include <stdlib.h>
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == comment.file-description-header == start ==
 /*
  * =============================================================================
+ * |COPYRIGHT| |ORGANIZATION|
+ * |DEPARTMENT|
  *
  *       Filename:  |FILENAME|
  *
  *        Version:  1.0
  *        Created:  |DATE| |TIME|
- *       Revision:  none
+ *        Updated:  |DATE| |TIME|
  *       Compiler:  gcc
  *
  *         Author:  |AUTHOR| (|EMAIL|)
- *   Organization:  |ORGANIZATION|
  *
  *    Description:  <CURSOR>
  *      Hierarchy:
  *
+ * History
+ *      Author:
+ *        Date:
+ *    Revision:
  * =============================================================================
  */
+
+ /* CODE ENTRY */
+
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == comment.file-section-cpp-header-includes  ==
 /* #####   HEADER FILE INCLUDES   ########################################### */
