@@ -1686,6 +1686,14 @@ cnoremap <C-N>      <Down>
     let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
     let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
     let g:syntastic_loc_list_height = 5 " height of the location lists
+    " Check C/C++
+    let g:syntastic_cpp_check_header = 1 " check header file
+    let g:syntastic_cpp_auto_refresh_includes = 1 " enable header files being re-checked in every filw write
+    if MySys() == "windows"
+      let g:syntastic_cpp_include_dirs = [ 'd:\DEV\systemc_inc\' ]
+    elseif MySys() == "linux"
+      let g:syntastic_cpp_include_dirs = [ '/storage/home/hongjin/app/systemc-2.3.0/include' ]
+    endif
   endif
 " }}}
 
@@ -1989,7 +1997,8 @@ cnoremap <C-N>      <Down>
   let delimitMate_matchpairs = "(:),[:],{:},<:>"
   au FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
   au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:}"
-  let delimitMate_quotes = "\" ' ` *"
+  au FileType c,cpp let b:delimitMate_matchpairs = "(:),[:],{:}"
+  let delimitMate_quotes = "\" ' `"
   au FileType vim let b:delimitMate_quotes = "' `"
   au FileType verilog_systemverilog let b:delimitMate_quotes = "\""
 " }}}

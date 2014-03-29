@@ -7,9 +7,10 @@ $
 |AUTHORREF| =
 |EMAIL|     = hongjin@fiberhome.com.cn
 |COMPANY|   = FiberHome
-|COPYRIGHT| = Copyright (c) |YEAR|, |AUTHOR|
+|COPYRIGHT| = Copyright (c) |YEAR|,
 |STYLE|     = default
-|ORGANIZATION| = FiberHome
+|ORGANIZATION| = Home Fiberhome Telecommunication Technology Co., Ltd.
+|DEPARTMENT| = Microelectronics Dept.
 $
 $ =============================================================
 $ ========== FILE INCLUDES ====================================
