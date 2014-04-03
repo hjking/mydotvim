@@ -320,3 +320,7 @@
 	path = bundle/expand-region
 	url = https://github.com/terryma/vim-expand-region.git
 	ignore = dirty
+[submodule "bundle/wildfire"]
+	path = bundle/wildfire
+	url = https://github.com/gcmt/wildfire.vim.git
+	ignore = dirty

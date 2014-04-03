@@ -1112,7 +1112,7 @@ if has("autocmd")
   autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
 "  autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
   autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
-  autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt
+  autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
   autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
   " Return to last edit position when opening files
   autocmd BufReadPost *
@@ -2410,6 +2410,23 @@ endif
   let g:C_Root = '&Plugin.&C\/C\+\+.'
   let g:C_FormatDate         = '%Y-%m-%d'
   let g:C_FormatTime         = '%H:%M:%S'
+"}}}
+
+"-----------------------------------------------------------
+" expand-region
+"{{{
+  let g:expand_region_text_objects = {
+      \ 'iw'  :1,
+      \ 'iW'  :1,
+      \ 'i"'  :1,
+      \ 'i''' :1,
+      \ 'i]'  :1,
+      \ 'ib'  :1,
+      \ 'iB'  :1,
+      \ 'il'  :0,
+      \ 'ip'  :1,
+      \ 'ie'  :1,
+      \ }
 "}}}
 
 set secure
