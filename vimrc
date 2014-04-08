@@ -2211,6 +2211,8 @@ cnoremap <C-N>      <Down>
     let g:airline#extensions#whitespace#enabled = 0
     " configure which whitespace checks to enable. >
     let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+    " anzu-mode
+    let g:airline#extensions#anzu#enabled = 0
   endif
 "}}}
 
