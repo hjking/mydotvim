@@ -1837,7 +1837,7 @@ cnoremap <C-N>      <Down>
 " indent-guides
 " {{{
   if pathogen#is_disabled('indent-guides') == 0
-    let g:indent_guides_enable_on_vim_startup = 1
+    let g:indent_guides_enable_on_vim_startup = 0
     let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
     let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
   endif

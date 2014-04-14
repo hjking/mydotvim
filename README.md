@@ -40,35 +40,104 @@ mydotvim
 
 
 ## Plugins I'm using
-neocomplete.vim : autocompletion with fuzzy matching and faster than neocomplcache.vim.
-unite.vim : creates new interface with your customization.
-vimfiler.vim : better file manager with tree feature.
-neosnippet.vim : snippet plugin with auto completion.
-Pathogen: allows me to install plugins in a cleaner manner.
-AutoComplPop: provides autocompletion.
-Commentary: gives me painless commenting.
-CtrlP: provides a uniform fuzzy matching interface for files, buffers, tags, quickfix entries, recent files, changes¡­
-Snipmate: gives me lovely snippet-expansion.
-Sparkup: allows me to generate large blocks of HTML with very simple CSS one-liners.
-Surround: adds/changes/deletes pairs like ""''(){}[]<h1></h1>.
-Syntastic: gives me syntax checking for many languages.
-Tabular: allows me to align blocks of code.
-grep.vim: grep buffers (should be part of core IMHO)
-Align: align stuff, very powerful
-vim-niceblock: better editing in visual mode
-FuzzyFinder: I use it mostly for switching buffer, it can do a lot more
-gundo.vim: undo history and more
-tagbar: better than taglist
-colorizer: colorize all text in the form #rrggbb or #rgb
-smartusline: color statusbar according to mode (insert/normal/etc)
-ultisnips.git: very powerful snippet manager
-hybrid: good support for most langs, also don't find it distracting
-vim-multiple-cursors: can come in really handy... some learning curve here
-powerline: it's a purrty status line. actually find things like filetype, git branch and % useful, too.
-YouCompleteMe: - awesome Johnny on the Spot autocompletion for everything... the best
-easymotion: bit weird at first, but my flow has now gone to /[Class] || [Method] --> ,w --> char. Super fast. Hint: stare down where you want to go, then ,w
-NerdCommenter: (un)coment easily
-EasyTags: Tag search, better dan Ctags
-supertab: for autocomplete
-markdown: for markdown
+
+- AnsiEsc
+- anzu: display matching pattern in command line
+- bufferline: display buffer name in command line
+- c: support for c/c++
+- CamelCaseMotion
+- Conque-Shell
+- calendar.vim: nice calendar
+- cscope_macros
+- ctrlp
+
+    provides a uniform fuzzy matching interface for files, buffers, tags, quickfix entries, recent files, changes
+
+- delimitMate: auto insert brackets
+- DrawIt
+- easy-align
+- easymotion
+    bit weird at first, but my flow has now gone to /[Class] || [Method] --> ,w --> char. Super fast. Hint: stare down where you want to go, then ,w
+- eunuch
+- expand-region
+- FencView
+- file-line
+- FuzzyFinder
+    I use it mostly for switching buffer, it can do a lot more
+- genutils
+- gitv
+- gundo
+    undo history and more
+- indent-guides: use colorful block to display indent
+- L9
+- lion
+- lookupfile
+- mark
+- markdown
+    for markdown
+- minibufexpl
+- multiple-cursors
+    can come in really handy... some learning curve here
+- neocomplcache
+- neosnippet : snippet plugin with auto completion.
+- nerdcommenter
+    (un)coment easily
+- nerdtree
+- nerdtree-tabs
+- niceblock
+    better editing in visual mode
+- over
+- Pathogen: allows me to install plugins in a cleaner manner.
+- rainbow_parentheses
+- repeat
+- seek
+- ShowMarks
+- sneak
+- speeddating
+- SrcExpl
+- surround
+    adds/changes/deletes pairs like ""''(){}[] and html tags
+- syntastic
+    gives me syntax checking for many languages.
+- systemc
+- table-mode
+- Tabular: allows me to align blocks of code.
+- tagbar: better than taglist
+- taglist
+- tlib_vim
+- unimpaired
+- unite.vim : creates new interface with your customization.
+- utl
+- uvm_gen
+- vcscommand
+- verilog_systemverilog
+- vim-addon-mw-utils
+- vim-cycle
+- vim-fugitive
+- vim-perl
+- vim-snippets
+- vim-vertical-move
+- vimwiki
+- vis
+- VisIncr
+- yankring
+- Statusline
+    * airline
+    * lightline: sometimes I'm using Vim 7.2, use this to subsitute airline
+    * lightline-powerful: powerful setting for lightline
+- ColorScheme
+    * badwolf
+    * cs-gruvbox
+    * cs-kolor
+    * cs-peaksea
+    * desertink
+    * inkpot
+    * irblack
+    * molokai
+    * solarized
+    * skittles_berry
+    * vim-hybrid
+    * vim-vombato
+    * vividchalk
+    * zenburn
 
