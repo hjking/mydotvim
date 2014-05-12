@@ -1628,6 +1628,24 @@ map <Leader>ca :Calendar<CR>
 " Colorful Parentheses
 " rainbow_parentheses
 " {{{
+  let g:rbpt_colorpairs = [
+      \ ['White',       'Gray'],
+      \ ['Darkblue',    'RoyalBlue3'],
+      \ ['darkgray',    'Magenta'],
+      \ ['darkmagenta', 'Cyan'],
+      \ ['darkgreen',   'Purple'],
+      \ ['darkcyan',    'Red'],
+      \ ['darkred',     'Violet'],
+      \ ['darkmagenta', 'DarkYellow'],
+      \ ['darkgreen',   'SlateBlue'],
+      \ ['darkcyan',    'Orange'],
+      \ ['darkred',     'Brown'],
+      \ ['green',       'Green'],
+      \ ['cyan',        'Yellow'],
+      \ ['yellow',      'DarkOrchid3'],
+      \ ['brown',       'SeaGreen3'],
+      \ ['red',         'firebrick3'],
+      \ ]
   let g:rbpt_max = 16
   let g:rbpt_loadcmd_toggle = 0
   au VimEnter * RainbowParenthesesToggle
@@ -1684,7 +1702,7 @@ cnoremap <C-N>      <Down>
   if pathogen#is_disabled('syntastic') == 0
     let g:syntastic_auto_loc_list = 0 " auto open error window
     let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
-    let g:syntastic_auto_jump = 1     " auto jump to the first issue detected
+    let g:syntastic_auto_jump = 0     " auto jump to the first issue detected
     let g:syntastic_loc_list_height = 5 " height of the location lists
     " Check C/C++
     let g:syntastic_cpp_check_header = 1 " check header file
