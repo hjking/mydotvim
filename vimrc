@@ -73,7 +73,6 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
     call add(g:pathogen_disabled, 'neocomplcache')
     call add(g:pathogen_disabled, 'neosnippet')
     call add(g:pathogen_disabled, 'vimfiler')
-    call add(g:pathogen_disabled, 'easymotion')
     call add(g:pathogen_disabled, 'indent-guides')
   endif
 
@@ -89,6 +88,7 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
 
   if v:version < 703
   "    call add(g:pathogen_disabled, 'niceblock')
+    call add(g:pathogen_disabled, 'easymotion')
   endif
 
   if v:version < 703 || (v:version == 703 && !has('python'))
