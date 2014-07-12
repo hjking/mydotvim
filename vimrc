@@ -1089,6 +1089,12 @@ nmap <silent> <leader>cd :lcd %:h<CR>
 nmap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
 nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
 
+" Get off my lawn
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>
+
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
