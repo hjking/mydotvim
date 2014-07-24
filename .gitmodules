@@ -312,3 +312,7 @@
 	path = bundle/wildfire
 	url = https://github.com/gcmt/wildfire.vim.git
 	ignore = dirty
+[submodule "bundle/css-color"]
+	path = bundle/css-color
+	url = https://github.com/skammer/vim-css-color.git
+    ignore = dirty
