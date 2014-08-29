@@ -146,7 +146,10 @@ syntax on
 " Also load indent files, to automatically do language-dependent indenting.
 "-----------------------------------------------------------
 filetype plugin indent on              " load filetype plugin
-""filetype indent on              " load indent
+
+"" allow plugins by file type
+filetype on
+filetype plugin on
 
 
 "-------------------------------------------------------------------------------
@@ -1199,6 +1202,9 @@ vnoremap <silent> gv :call VisualSearch('gv')<CR>
 map <F9> :!python.exe
 " Only do this part when compiled with support for autocommands.
 " if has("autocmd")
+autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
+    \ formatoptions+=croq softtabstop=4 smartindent
+    \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
   " 'cindent' is on in C files, etc.
@@ -1212,12 +1218,6 @@ map <F9> :!python.exe
   " zope dtml
   "autocmd BufNewFile,BufRead *.dtml setf dtml
 
-  " python, not use <tab>
-  "autocmd FileType python setlocal et | setlocal sta | setlocal sw=4
-  " Python Unittest setting
-  "autocmd FileType python compiler pyunit | setlocal makeprg=python\ %
-  "autocmd FileType python setlocal makeprg=python\ ./alltests.py
-  "autocmd BufNewFile,BufRead test*.py setlocal makeprg=python\ %
   " skeleton file
   " use template
   "autocmd BufNewFile test*.py 0r ~/.vim/skeleton/test.py
