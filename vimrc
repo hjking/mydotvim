@@ -2223,7 +2223,7 @@ cnoremap <C-N>      <Down>
     " enable syntastic integration >
     let g:airline#extensions#syntastic#enabled = 0
     " enable/disable tagbar integration >
-    let g:airline#extensions#tagbar#enabled = 1
+    let g:airline#extensions#tagbar#enabled = 0
     " change how tags are displayed (:help tagbar-statusline) >
     let g:airline#extensions#tagbar#flags = ''  "default
     let g:airline#extensions#tagbar#flags = 'f'
