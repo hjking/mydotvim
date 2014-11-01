@@ -264,10 +264,6 @@
 	path = bundle/lightline
 	url = https://github.com/itchyny/lightline.vim.git
 	ignore = dirty
-[submodule "bundle/easy-align"]
-	path = bundle/easy-align
-	url = https://github.com/junegunn/vim-easy-align.git
-	ignore = dirty
 [submodule "bundle/rainbow_parentheses"]
 	path = bundle/rainbow_parentheses
 	url = https://github.com/kien/rainbow_parentheses.vim.git
@@ -291,10 +287,6 @@
 [submodule "bundle/vim-vertical-move"]
 	path = bundle/vim-vertical-move
 	url = https://github.com/bruno-/vim-vertical-move.git
-	ignore = dirty
-[submodule "bundle/seek"]
-	path = bundle/seek
-	url = https://github.com/goldfeld/vim-seek.git
 	ignore = dirty
 [submodule "bundle/calendar.vim"]
 	path = bundle/calendar.vim
@@ -320,3 +312,7 @@
 	path = bundle/wildfire
 	url = https://github.com/gcmt/wildfire.vim.git
 	ignore = dirty
+[submodule "bundle/css-color"]
+	path = bundle/css-color
+	url = https://github.com/skammer/vim-css-color.git
+    ignore = dirty
