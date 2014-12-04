@@ -136,7 +136,9 @@ let g:mapleader=","
 "-----------------------------------------------------------
 " Switch syntax highlighting on.
 "-----------------------------------------------------------
-syntax enable
+if has('syntax')
+  syntax enable
+endif
 
 syntax on
 
@@ -145,7 +147,9 @@ syntax on
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
 "-----------------------------------------------------------
-filetype plugin indent on              " load filetype plugin
+if has('autocmd')
+  filetype plugin indent on              " load filetype plugin
+endif
 
 "" allow plugins by file type
 filetype on
@@ -1417,7 +1421,7 @@ endfunction
 "i           切换显示方式               "R    改名文件或目录
 "s           选择排序方式               "x    定制浏览方式，使用你指定的程序打开该文件
 " {{{
-  if pathogen#is_disabled('netrw') == 0
+"  if pathogen#is_disabled('netrw') == 0
     let g:netrw_winsize        = 25
     let g:netrw_keepdir        = 0
     " let g:netrw_preview        = 0
@@ -1438,7 +1442,7 @@ endfunction
     map <leader>fte :Texplore<CR>            " open in new tab
     map <leader>fve :Vexplore<CR>           " vertical split
     nmap <silent> <leader>fe :Sexplore!<cr>
-  endif
+"  endif
 " }}}
 
 "-----------------------------------------------------------
