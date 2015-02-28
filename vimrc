@@ -130,7 +130,6 @@ runtime! ftplugin/man.vim
 runtime! macros/matchit.vim
 
 " set mapleader
-let mapleader=","
 let g:mapleader=","
 
 "-----------------------------------------------------------
@@ -231,8 +230,9 @@ set display+=lastline
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
 set list                        " list mode
-"set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
-set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+" set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
+" set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
+set listchars=tab:\>\ ,trail:-,extends:>,precedes:<,nbsp:+
 set number                      " display line number
 set numberwidth=1
 set lazyredraw                  " Don't redraw while executing macros
@@ -462,6 +462,10 @@ set noswapfile
 " CursorHold time
 set updatetime=1000
 
+set nrformats-=octal
+
+set ttimeout
+set ttimeoutlen=100
 
 "-------------------------------------------------------------------------------
 " 21 command line editing
@@ -1109,44 +1113,44 @@ if has("autocmd")
   " Set augroup
   augroup MyAutoCmd
     autocmd!
+
+    " Check timestamp more for 'autoread'.
+    autocmd WinEnter * checktime
+
+    autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
+    autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
+    autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
+    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,vimwiki set textwidth=80
+    autocmd FileType lisp set ts=2
+    autocmd FileType bash,shell set ts=2
+    autocmd FileType help set nonu
+    autocmd FileType lisp set softtabstop=2
+    autocmd BufReadPre,BufNewFile,BufRead *.vp,*.sva setfiletype verilog_systemverilog
+    "  autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
+    autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
+    autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
+    autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
+    " Return to last edit position when opening files
+    autocmd BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
+    autocmd BufEnter * :syntax sync fromstart
+    autocmd BufEnter * :lchdir %:p:h
+    " auto load vimrc when editing it
+    " if MySys() == "windows"
+    "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
+    " elseif MySys() == "linux"
+    "     autocmd! BufWritePost .vimrc source %
+    " endif
+    " remove all trailing whitespace in a file
+    autocmd BufWritePre * :%s/\s\+$//e
+    autocmd FileType qf wincmd J " Open QuickFix horizontally
+    " Automatically resize vertical splits
+    " autocmd WinEnter * :set winfixheight
+    " autocmd WinEnter * :wincmd =
+    autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
   augroup END
-
-  " Check timestamp more for 'autoread'.
-  autocmd MyAutoCmd WinEnter * checktime
-
-  autocmd FileType xml,html,c,cs,java,perl,shell,bash,cpp,python,vim,php,ruby,verilog_systemverilog,sv set number
-  autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
-  autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
-  autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,python,verilog_systemverilog,vimwiki set textwidth=80
-  autocmd FileType lisp set ts=2
-  autocmd FileType bash,shell set ts=2
-  autocmd FileType help set nonu
-  autocmd FileType lisp set softtabstop=2
-  autocmd BufReadPre,BufNewFile,BufRead *.vp setfiletype verilog_systemverilog
-"  autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
-  autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
-  autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
-  autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
-  " Return to last edit position when opening files
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-  autocmd BufEnter * :syntax sync fromstart
-  autocmd BufEnter * :lchdir %:p:h
-  " auto load vimrc when editing it
-  " if MySys() == "windows"
-  "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
-  " elseif MySys() == "linux"
-  "     autocmd! BufWritePost .vimrc source %
-  " endif
-  " remove all trailing whitespace in a file
-  autocmd BufWritePre * :%s/\s\+$//e
-  autocmd FileType qf wincmd J " Open QuickFix horizontally
-  " Automatically resize vertical splits
-  " autocmd WinEnter * :set winfixheight
-  " autocmd WinEnter * :wincmd =
-  au BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
 endif " has("autocmd")
 
 "-----------------------------------------------------------
@@ -1206,9 +1210,12 @@ vnoremap <silent> gv :call VisualSearch('gv')<CR>
 map <F9> :!python.exe
 " Only do this part when compiled with support for autocommands.
 " if has("autocmd")
-autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
+augroup ft_python
+  autocmd!
+  autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8 colorcolumn=79
     \ formatoptions+=croq softtabstop=4 smartindent
     \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+augroup END
   " Enable file type detection.
   " Use the default filetype settings, so that mail gets 'tw' set to 72,
   " 'cindent' is on in C files, etc.
@@ -1476,7 +1483,13 @@ endfunction
       end
     endfunction
 
-    autocmd VimEnter * call StartUpNerdtree()
+    augroup my_nerdtree
+      autocmd!
+      autocmd Filetype nerdtree setlocal nolist
+      autocmd Filetype nerdtree nnoremap <buffer> H :vertical resize -10<cr>
+      autocmd Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
+      autocmd VimEnter * call StartUpNerdtree()
+    augroup END
 
   endif
 " }}}
@@ -1658,10 +1671,14 @@ map <Leader>ca :Calendar<CR>
       \ ]
   let g:rbpt_max = 16
   let g:rbpt_loadcmd_toggle = 0
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
+
+  augroup my_rainbow
+    autocmd!
+    autocmd VimEnter * RainbowParenthesesToggle
+    autocmd Syntax * RainbowParenthesesLoadRound
+    autocmd Syntax * RainbowParenthesesLoadSquare
+    autocmd Syntax * RainbowParenthesesLoadBraces
+  augroup END
 " }}}
 
 """""""""""""""""""""""""""""""""""
@@ -1761,7 +1778,10 @@ cnoremap <C-N>      <Down>
       end
     endfunction
 
-    autocmd VimEnter * call StartUpTagbar()
+    augroup my_tagbar
+      autocmd!
+      autocmd VimEnter * call StartUpTagbar()
+    augroup END
   endif
 " }}}
 
@@ -1834,11 +1854,14 @@ cnoremap <C-N>      <Down>
       " inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
       " Enable omni completion.
+      augroup my_complete
+        autocmd!
       autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
       autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
       autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
       autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
       autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+      augroup END
 
       " Enable heavy omni completion.
       if !exists('g:neocomplcache_omni_patterns')
@@ -2023,12 +2046,15 @@ cnoremap <C-N>      <Down>
 " let loaded_delimitMate = 1
 " au FileType mail let b:loaded_delimitMate = 1
   let delimitMate_matchpairs = "(:),[:],{:},<:>"
-  au FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
-  au FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:}"
-  au FileType c,cpp let b:delimitMate_matchpairs = "(:),[:],{:}"
   let delimitMate_quotes = "\" ' `"
-  au FileType vim let b:delimitMate_quotes = "' `"
-  au FileType verilog_systemverilog let b:delimitMate_quotes = "\""
+  augroup my_delimiMate
+    autocmd!
+    autocmd FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
+    autocmd FileType verilog_systemverilog let b:delimitMate_matchpairs = "(:),[:],{:}"
+    autocmd FileType c,cpp let b:delimitMate_matchpairs = "(:),[:],{:}"
+    autocmd FileType vim let b:delimitMate_quotes = "' `"
+    autocmd FileType verilog_systemverilog let b:delimitMate_quotes = "\""
+  augroup END
 " }}}
 
 "-----------------------------------------------------------
@@ -2197,8 +2223,7 @@ cnoremap <C-N>      <Down>
 " AuthorInfo
 "{{{
   let g:vimrc_author='Hong Jin'
-  let g:vimrc_email='hongjin@fiberhome.com.cn'
-  let g:vimrc_homepage='http://about.me/hongjin'
+  let g:vimrc_email='hongjin@fiberhome.com'
 "}}}
 
 "-----------------------------------------------------------
@@ -2289,8 +2314,8 @@ cnoremap <C-N>      <Down>
 "{{{
   let g:uvm_author    = "Hong Jin"
   let g:uvm_email     = "hongjin@fiberhome.com.cn"
-  let g:uvm_company   = "Copyright (c) 2013, Fiberhome Telecommunication Technology Co., Ltd."
-  let g:uvm_department = "Microelectronics Dept. Verification Group."
+  let g:uvm_company   = "Copyright (c) 2015, Fiberhome Telecommunication Technology Co., Ltd."
+  let g:uvm_department = "Microelectronics Dept. Logic Development Group."
 "}}}
 
 "-----------------------------------------------------------
@@ -2313,6 +2338,11 @@ function! SetColorColum()
     endif
 endfunction
 
+augroup my_fileheader
+  autocmd!
+  autocmd BufNewFile *.spec call FHHeader()
+augroup END
+
 map <Leader>fh :call FHHeader()<CR>
 function! FHHeader()
   let s:comment = "//"
@@ -2320,35 +2350,38 @@ function! FHHeader()
   let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
   let s:department = s:comment .    " Microelectronics Dept."
   let s:copyright = s:comment .     " All rights reserved."
-  let s:file = s:comment .          " File        : " . expand("%:t")
+  let s:file = s:comment .          " FileName    : " . expand("%:t")
   let s:author = s:comment .        " Author      : " . g:vimrc_author
   let s:email= s:comment .          " EMail       : " . g:vimrc_email
+  let s:version = s:comment .       " Version     : 1.0"
   let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
   let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
   let s:description= s:comment .    " Description : "
+  let s:hierarchy= s:comment .      " Hierarchy   : "
   let s:history= s:comment .        " History"
   let s:history_author= s:comment . "     Author   :"
   let s:history_date= s:comment .   "     Date     :"
   let s:history_rev= s:comment .    "     Revision :"
 
-  call append (0, s:commentline)
-  call append (1, s:company)
-  call append (2, s:department)
-  call append (3, s:copyright)
-  call append (4, s:comment)
-  call append (5, s:file)
-  call append (6, s:author)
-  call append (7, s:email)
-  call append (8, s:created)
-  call append (9, s:modified)
-  call append (10, s:description)
-  call append (11, s:commentline)
-  call append (12, s:history)
-  call append (13, s:history_author)
-  call append (14, s:history_date)
-  call append (15, s:history_rev)
-  call append (16, s:commentline)
-
+  call append (0, [s:commentline,
+                  \ s:company,
+                  \ s:department,
+                  \ s:copyright,
+                  \ s:comment,
+                  \ s:file,
+                  \ s:author,
+                  \ s:email,
+                  \ s:version,
+                  \ s:created,
+                  \ s:modified,
+                  \ s:description,
+                  \ s:hierarchy,
+                  \ s:commentline,
+                  \ s:history,
+                  \ s:history_author,
+                  \ s:history_date,
+                  \ s:history_rev,
+                  \ s:commentline])
 endfunction
 "}}}
 
@@ -2458,6 +2491,23 @@ endif
       \ 'ie'  :1,
       \ }
 "}}}
+
+au GUIEnter * call libcallnr("vimtweak.dll", "SetAlpha", 230)
+
+" retab
+fu! Retab()
+  :retab
+  :%s/\s\+$//
+endfunction
+
+" Make sure Vim returns to the same line when you reopen a file.
+augroup line_return
+    au!
+    au BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+augroup END
 
 set secure
 
