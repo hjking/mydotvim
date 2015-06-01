@@ -563,6 +563,12 @@ set sessionoptions+=sesdir
 "-----------------------------------------------------------
 set t_Co=256
 if pathogen#is_disabled('solarized') == 0
+  let hour = strftime("%H")
+  if 6 <= hour && hour < 18
+    set background=light
+  else
+    set background=dark
+  endif
   let g:solarized_termtrans=1
   let g:solarized_termcolors=256
   let g:solarized_contrast="high"
