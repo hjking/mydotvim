@@ -1107,10 +1107,10 @@ nmap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
 nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
 
 " Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
+" nnoremap <Left> :echoe "Use h"<CR>
+" nnoremap <Right> :echoe "Use l"<CR>
+" nnoremap <Up> :echoe "Use k"<CR>
+" nnoremap <Down> :echoe "Use j"<CR>
 
 "-----------------------------------------------------------
 " AutoCommands
@@ -2319,7 +2319,7 @@ cnoremap <C-N>      <Down>
 " uvm_gen
 "{{{
   let g:uvm_author    = "Hong Jin"
-  let g:uvm_email     = "hongjin@fiberhome.com.cn"
+  let g:uvm_email     = "hongjin@fiberhome.com"
   let g:uvm_company   = "Copyright (c) 2015, Fiberhome Telecommunication Technology Co., Ltd."
   let g:uvm_department = "Microelectronics Dept. Logic Development Group."
 "}}}
