@@ -12,7 +12,7 @@ set columns=90
 " colo adrian          "molokai fruity blackbeauty adaryn fnaqevan myColor_1
 "set colorscheme randomly
 set background=dark
-let colorscheme_list = ['solarized', 'calmar256-dark', 'badwolf',   'koehler',
+let colorscheme_list = ['solarized', 'badwolf',   'koehler',
                         \ 'molokai', 'gruvbox',        'desertink', 'ir_black', 'vividchalk', 'elflord',
                         \ 'inkpot',  'skittles_berry', 'hybrid',    'zenburn',  'vombato',    'kolor']
 exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
