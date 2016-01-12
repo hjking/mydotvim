@@ -450,8 +450,8 @@ set autowrite                   " write a modified buffer on each :next
 set fileformat=unix
 " Automatic recognition of a new line cord
 set fileformats=unix,dos,mac
-nmap <leader>fd :se ff=dos<cr>
-nmap <leader>fu :se ff=unix<cr>
+nnoremap <leader>fd :se ff=dos<cr>
+nnoremap <leader>fu :se ff=unix<cr>
 
 
 "-------------------------------------------------------------------------------
@@ -597,16 +597,16 @@ highlight ShowMarksHLm ctermbg=0
 ":match OverLength '\%200v.*'
 
 """ Code folding options
-nmap <leader>f0 :set foldlevel=0<CR>
-nmap <leader>f1 :set foldlevel=1<CR>
-nmap <leader>f2 :set foldlevel=2<CR>
-nmap <leader>f3 :set foldlevel=3<CR>
-nmap <leader>f4 :set foldlevel=4<CR>
-nmap <leader>f5 :set foldlevel=5<CR>
-nmap <leader>f6 :set foldlevel=6<CR>
-nmap <leader>f7 :set foldlevel=7<CR>
-nmap <leader>f8 :set foldlevel=8<CR>
-nmap <leader>f9 :set foldlevel=9<CR>
+nnoremap <leader>f0 :set foldlevel=0<CR>
+nnoremap <leader>f1 :set foldlevel=1<CR>
+nnoremap <leader>f2 :set foldlevel=2<CR>
+nnoremap <leader>f3 :set foldlevel=3<CR>
+nnoremap <leader>f4 :set foldlevel=4<CR>
+nnoremap <leader>f5 :set foldlevel=5<CR>
+nnoremap <leader>f6 :set foldlevel=6<CR>
+nnoremap <leader>f7 :set foldlevel=7<CR>
+nnoremap <leader>f8 :set foldlevel=8<CR>
+nnoremap <leader>f9 :set foldlevel=9<CR>
 
 if v:version > 703
   set cryptmethod=blowfish
@@ -637,7 +637,7 @@ set sidescroll=1
 " map <F4> :call TitleDet()
 " map <F4>    :q<CR>
 " imap <F4>    <ESC>:q<CR>
-imap <silent> <F4> <C-o><F4>
+inoremap <silent> <F4> <C-o><F4>
 " map <F5> LookUp File
 " imap <silent> <F5> <C-o><F5>
 " F4 / F5 - change window height
@@ -670,30 +670,30 @@ imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
 " insert time    strftime("%c")
 
 " Fast saving
-nmap <silent> <leader>wr :w<cr>
-nmap <silent> <leader>wf :w!<cr>
-nmap <silent> <leader>w :w!<cr>
+nnoremap <silent> <leader>wr :w<cr>
+nnoremap <silent> <leader>wf :w!<cr>
+nnoremap <silent> <leader>w :w!<cr>
 " Force Saving Files that Require Root Permission
-cmap w!! %!sudo tee > /dev/null %
+cnoremap w!! %!sudo tee > /dev/null %
 " Fast quiting
-nmap <silent> <leader>qw :wq<cr>
-nmap <silent> <leader>qf :q!<cr>
-nmap <silent> <leader>qq :q<cr>
-nmap <silent> <leader>qa :qa<cr>
+nnoremap <silent> <leader>qw :wq<cr>
+nnoremap <silent> <leader>qf :q!<cr>
+nnoremap <silent> <leader>qq :q<cr>
+nnoremap <silent> <leader>qa :qa<cr>
 " Fast remove highlight search
-nmap <silent> <leader><cr> :noh<cr>
+nnoremap <silent> <leader><cr> :noh<cr>
 " Fast redraw
-nmap <silent> <leader>rr :redraw!<cr>
+nnoremap <silent> <leader>rr :redraw!<cr>
 
 "Smart way to move btw. windows
 " nmap <C-j> <C-W>j
-nmap <C-k> <C-W>k
-nmap <C-h> <C-W>h
-nmap <C-l> <C-W>l
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
 
 "Moving fast to front, back and 2 sides ;)
-imap <m-$> <esc>$a
-imap <m-0> <esc>0i
+inoremap <m-$> <esc>$a
+inoremap <m-0> <esc>0i
 
 " Easily macro.
 nnoremap @@ @a
@@ -726,11 +726,11 @@ inoremap    <C-Z> <C-O>u
 
 " set filetype to verilog
 "map ,fv     :set ft=verilog<CR>
-map <leader>fv     :set ft=verilog_systemverilog<CR>
+noremap <leader>fv     :set ft=verilog_systemverilog<CR>
 
 " Fold
-nmap <silent> <leader>zo zO
-vmap <silent> <leader>zo zO
+nnoremap <silent> <leader>zo zO
+vnoremap <silent> <leader>zo zO
 " Fold close & Fold open
 noremap <unique> <kPlus> zo
 noremap <unique> <kMinus> zc
@@ -745,19 +745,19 @@ if version >= 600
 endif
 
 " Yank from the cursor to the end of the line, to be consistent with C and D
-nmap Y y$
+nnoremap Y y$
 
 "-----------------------------
 " Spell checking
-map <leader>sn ]s
-map <leader>sp [s
-map <leader>sa zg
-map <leader>s? z=
+noremap <leader>sn ]s
+noremap <leader>sp [s
+noremap <leader>sa zg
+noremap <leader>s? z=
 
 " don't use exact searches for */#
 " "noremap * g*
 " "noremap # g#
-map <kMultiply> g*          " map * to g*
+noremap <kMultiply> g*          " map * to g*
 " Smart word search."{{{
 " Search cursor word by word unit.
 " nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
@@ -842,29 +842,29 @@ nnoremap <silent> <leader>8 :b8<CR>
 nnoremap <silent> <leader>9 :b9<CR>
 
 " Allow insert mode editing like emacs
-imap <C-a>  <Home>
-imap <C-e>  <End>
+inoremap <C-a>  <Home>
+inoremap <C-e>  <End>
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 
-imap <C-k>  <C-o>d$
-map <M-d>  <C-o>diW   " delete word
-map <M-y>  <C-o>yiW   " yank word
+inoremap <C-k>  <C-o>d$
+noremap <M-d>  <C-o>diW   " delete word
+noremap <M-y>  <C-o>yiW   " yank word
 
 " Buffer commands
-nmap <silent> <Leader>bd :bd<CR>
+nnoremap <silent> <Leader>bd :bd<CR>
 
 " ,e* - Edit the vimrc file
-nmap <silent> <Leader>ev :e $MYVIMRC<CR>
-nmap <silent> <Leader>sv :so $MYVIMRC<CR>
-nmap <silent> <Leader>egv :e $MYGVIMRC<CR>
-nmap <silent> <Leader>sgv :so $MYGVIMRC<CR>
+nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
+nnoremap <silent> <Leader>sv :so $MYVIMRC<CR>
+nnoremap <silent> <Leader>egv :e $MYGVIMRC<CR>
+nnoremap <silent> <Leader>sgv :so $MYGVIMRC<CR>
 
 " ,c - close current window
 " nnoremap <silent> <leader>c :silent! close<CR>
 
 " ,d - open definition in new window
-nmap <silent> <leader>d <C-w>f
+nnoremap <silent> <leader>d <C-w>f
 
 " ,n - next buffer
 nnoremap <silent> <leader>n :bnext<CR>
@@ -873,7 +873,7 @@ nnoremap <silent> <leader>n :bnext<CR>
 nnoremap <silent> <leader>p :bprevious<CR>
 
 " ,P - Go back to previous file
-map <Leader>P <C-^>
+noremap <Leader>P <C-^>
 
 " ,s - split horizontally
 " nnoremap <silent> <leader>s :split<CR>
@@ -895,7 +895,7 @@ noremap <leader>w :call DeleteTrailingWS()<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>
 
 " clearing highlighted search
-nmap <silent> <leader>\ :nohlsearch<CR>
+nnoremap <silent> <leader>\ :nohlsearch<CR>
 nnoremap <ESC><ESC> :nohlsearch<CR>
 
 inoremap <buffer> /*          /**/<Left><Left>
@@ -904,7 +904,7 @@ inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
 inoremap <buffer> <Leader>/*  /*
 
 " Easy escape."{{{
-imap jj <Esc>
+inoremap jj           <Esc>
 onoremap jj           <ESC>
 inoremap j<Space>     j
 onoremap j<Space>     j
@@ -1082,8 +1082,7 @@ nnoremap g# g#zz
 
 " nnoremap ; :
 " Use Q for formatting the current paragraph (or selection)
-vmap Q gq
-nmap Q gqap
+vnoremap Q gq
 nnoremap Q gqap
 
 " nnoremap <C-h> :<C-u>help<Space>
@@ -1102,9 +1101,9 @@ nnoremap H 0
 nnoremap L $
 
 " cd to the directory containing the file in the buffer
-nmap <silent> <leader>cd :lcd %:h<CR>
-nmap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
-nmap <silent> <leader>md :!mkdir -p %:p:h<CR>
+nnoremap <silent> <leader>cd :lcd %:h<CR>
+nnoremap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
+nnoremap <silent> <leader>md :!mkdir -p %:p:h<CR>
 
 " Get off my lawn
 " nnoremap <Left> :echoe "Use h"<CR>
@@ -1213,7 +1212,7 @@ vnoremap <silent> gv :call VisualSearch('gv')<CR>
 " Python
 "---------------
 " auto complete
-map <F9> :!python.exe
+noremap <F9> :!python.exe
 " Only do this part when compiled with support for autocommands.
 " if has("autocmd")
 augroup ft_python
@@ -1298,13 +1297,13 @@ augroup END
 " Verilog Automatic
 " {{{
   inoremap        iav     <ESC>:Allpn<CR>
-  map             :iav        :Allpn<CR>
+  noremap         :iav        :Allpn<CR>
   " :inoremap     av      <ESC>:Allcom<CR>
-  " map               :av     :Allcom<CR>
+  " map           :av     :Allcom<CR>
   inoremap        ihv             <ESC>:AddHeader<CR>
-  map             <leader>hv      :AddHeader<CR>
+  noremap         <leader>hv      :AddHeader<CR>
   inoremap        icv             <ESC>:Acontent<CR>
-  map             <leader>cv      :Acontent<CR>
+  noremap         <leader>cv      :Acontent<CR>
 " }}}
 
 "=====================================================================
@@ -1349,8 +1348,8 @@ augroup END
     " let Tlist_WinWidth = 20                   " set width of the vertically split taglist window
     " map to  :TlistOpen<CR>                    " 键盘映射 to 打开tag窗口
     " map tc  :TlistClose<CR>                   " tc 关闭tag窗口
-    map tt  :TlistToggle<CR>
-    nmap <silent> <leader>tl :Tlist<cr>
+    noremap tt  :TlistToggle<CR>
+    nnoremap <silent> <leader>tl :Tlist<cr>
   endif
 " }}}
 
@@ -1417,7 +1416,7 @@ endfunction
     let g:miniBufExplMaxSize = 2
     let g:miniBufExplUseSingleClick = 1    " select by single click
     " autocmd BufRead,BufNew :call UMiniBufExplorer
-    map ,be :MBEToggle<CR>
+    noremap ,be :MBEToggle<CR>
   endif
 " }}}
 
@@ -1452,9 +1451,9 @@ endfunction
       let g:netrw_http_cmd = 'wget'
     endif
 
-    map <leader>fte :Texplore<CR>            " open in new tab
-    map <leader>fve :Vexplore<CR>           " vertical split
-    nmap <silent> <leader>fe :Sexplore!<cr>
+    noremap <leader>fte :Texplore<CR>            " open in new tab
+    noremap <leader>fve :Vexplore<CR>           " vertical split
+    nnoremap <silent> <leader>fe :Sexplore!<cr>
 "  endif
 " }}}
 
@@ -1467,9 +1466,9 @@ endfunction
 " e     open a netrw for the current dir
 " {{{
   if pathogen#is_disabled('nerdtree') == 0
-    map <leader>nt :NERDTreeToggle<CR>
+    noremap <leader>nt :NERDTreeToggle<CR>
     " Opens current file heiarchy in Nerdtree
-    nmap <leader>nf :NERDTreeFind<CR>
+    nnoremap <leader>nf :NERDTreeFind<CR>
     let NERDChristmasTree=1                     " more colorful
     let NERDTreeWinPos="left"                   " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
@@ -1504,7 +1503,7 @@ endfunction
 " NERDTree-tabs
 " {{{
   if pathogen#is_disabled('nerdtree-tabs') == 0
-    map <leader>nn <plug>NERDTreeTabsToggle<CR>
+    noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
     let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
     let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
   endif
@@ -1518,7 +1517,7 @@ endfunction
 let g:calendar_wruler = '日 一 二 三 四 五 六'
 let g:calendar_mark = 'left-fit'
 let g:calendar_focus_today = 1
-map <Leader>ca :Calendar<CR>
+noremap <Leader>ca :Calendar<CR>
 
 "-----------------------------------------------------------
 " lookupfile setting
@@ -1532,9 +1531,9 @@ map <Leader>ca :Calendar<CR>
     if filereadable("./filenametags")
       let g:LookupFile_TagExpr = '"./filenametags"'
     endif
-    map lf :LookupFile<cr>
-    map lb :LUBufs<cr>
-    map lw :LUWalk<cr>
+    noremap lf :LookupFile<cr>
+    noremap lb :LUBufs<cr>
+    noremap lw :LUWalk<cr>
 
     " lookup file with ignore case
     function! LookupFile_IgnoreCaseFunc(pattern)
@@ -1596,7 +1595,7 @@ map <Leader>ca :Calendar<CR>
     let g:showmarks_textupper = "\t"
     let g:showmarks_textother = "\t"
     let g:showmarks_no_mappings = 1
-    nmap mt <Plug>ShowMarksToggle
+    nnoremap mt <Plug>ShowMarksToggle
   endif
 " }}}
 
@@ -1604,12 +1603,12 @@ map <Leader>ca :Calendar<CR>
 " mark setting
 "-----------------------------------------------------------
 " {{{
-  nmap <silent> <leader>hl <Plug>MarkSet
-  vmap <silent> <leader>hl <Plug>MarkSet
-  nmap <silent> <leader>hh <Plug>MarkClear
-  vmap <silent> <leader>hh <Plug>MarkClear
-  nmap <silent> <leader>hr <Plug>MarkRegex
-  vmap <silent> <leader>hr <Plug>MarkRegex
+  nnoremap <silent> <leader>hl <Plug>MarkSet
+  vnoremap <silent> <leader>hl <Plug>MarkSet
+  nnoremap <silent> <leader>hh <Plug>MarkClear
+  vnoremap <silent> <leader>hh <Plug>MarkClear
+  nnoremap <silent> <leader>hr <Plug>MarkRegex
+  vnoremap <silent> <leader>hr <Plug>MarkRegex
 " }}}
 
 
@@ -1649,7 +1648,7 @@ map <Leader>ca :Calendar<CR>
   if pathogen#is_disabled('yankring') == 0
     let g:yankring_enabled=0
     let g:yankring_history_file = '.vim-cache/yankring_history'
-    map <leader>yr :YRShow<cr>
+    noremap <leader>yr :YRShow<cr>
   endif
 " }}}
 
@@ -1775,7 +1774,7 @@ cnoremap <C-N>      <Down>
     " let g:tagbar_autoclose = 1    " auto close after open tag
     nnoremap <silent><leader>tb :TagbarToggle<CR>
     "Open Tagbar or jump to it if already open (useful for split windows)
-    nmap <leader>to :TagbarOpen j<CR>
+    nnoremap <leader>to :TagbarOpen j<CR>
 
     " Same as nerdtree, only open if no file was specified
     function! StartUpTagbar()
@@ -1834,8 +1833,8 @@ cnoremap <C-N>      <Down>
       let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
       " Plugin key-mappings.
-      imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-      smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      inoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      snoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
       inoremap <expr><C-g>     neocomplcache#undo_completion()
       inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
@@ -2000,8 +1999,8 @@ cnoremap <C-N>      <Down>
           \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
           \   [['（:）', '「:」', '『:』'], 'sub_pairs'],
           \ ]
-    nmap <silent> <Leader>n <Plug>CycleNext
-    vmap <silent> <Leader>n <Plug>CycleNext
+    nnoremap <silent> <Leader>n <Plug>CycleNext
+    vnoremap <silent> <Leader>n <Plug>CycleNext
   endif
 " }}}
 
@@ -2010,17 +2009,17 @@ cnoremap <C-N>      <Down>
 " {{{
   if pathogen#is_disabled('neosnippet') == 0
     " Plugin key-mappings.
-    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-k>     <Plug>(neosnippet_expand_target)
+    inoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    snoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xnoremap <C-k>     <Plug>(neosnippet_expand_target)
 
     "" " SuperTab like snippets behavior
     "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
     "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)"
       \: pumvisible() ? "\<C-n>" : "\<TAB>"
-    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)"
       \: "\<TAB>"
 
@@ -2169,19 +2168,19 @@ cnoremap <C-N>      <Down>
     let g:unite_split_rule = "botright"   " Open in bottom right
 
     function! s:unite_settings()
-      nmap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
-      nmap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
-      nmap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
-      nmap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
-      nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-      nmap <buffer> <LocalLeader>q <Plug>(unite_exit)
+      nnoremap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
+      nnoremap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
+      nnoremap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
+      nnoremap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
+      nnoremap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
+      nnoremap <buffer> <LocalLeader>q <Plug>(unite_exit)
 
-      vmap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
+      vnoremap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
 
-      imap <buffer> <C-J> <Plug>(unite_select_next_line)
-      imap <buffer> <C-K> <Plug>(unite_select_previous_line)
-      imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-      imap <buffer> <LocalLeader>q <Plug>(unite_exit)
+      inoremap <buffer> <C-J> <Plug>(unite_select_next_line)
+      inoremap <buffer> <C-K> <Plug>(unite_select_previous_line)
+      inoremap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
+      inoremap <buffer> <LocalLeader>q <Plug>(unite_exit)
     endfunction
   endif
 " }}}
@@ -2190,24 +2189,24 @@ cnoremap <C-N>      <Down>
 " fugitive - Git integration!
 " Probably the best or second best plugin of them all.
 " {{{
-  nmap <leader>gs :Gstatus<enter>
-  nmap <leader>gd :Gdiff<enter>
-  nmap <leader>gc :Gcommit<enter>
-  nmap <leader>gl :gitv<enter>
-  nmap <leader>ga :Git commit --amend<enter>
-  nmap <leader>gD :Git diff --cached --color<enter>
+  nnoremap <leader>gs :Gstatus<enter>
+  nnoremap <leader>gd :Gdiff<enter>
+  nnoremap <leader>gc :Gcommit<enter>
+  nnoremap <leader>gl :gitv<enter>
+  nnoremap <leader>ga :Git commit --amend<enter>
+  nnoremap <leader>gD :Git diff --cached --color<enter>
   " this inserts the last commit message
   " % needs to be escaped, otherwise vim inserts its register %
   " Note that no <enter> so user has the option of changing number of commits
-  nmap <leader>gh :r !git log --format=format:\%s -1
+  nnoremap <leader>gh :r !git log --format=format:\%s -1
   " Remove trailing whitespace
   " Mnemonic: delete whitespace
-  nmap <leader>dws :silent! %s/\s\+$//ge<enter>
-  vmap <leader>dws :s/\s\+$//ge<enter>
+  nnoremap <leader>dws :silent! %s/\s\+$//ge<enter>
+  vnoremap <leader>dws :s/\s\+$//ge<enter>
   " Ignore whitespace in diffs.
   " Also shows current diffopt status.
-  nmap <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
-  nmap <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
+  nnoremap <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
+  nnoremap <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
 " }}}
 
 
@@ -2333,7 +2332,7 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " Functions
 "{{{
-map <Leader>ch :call SetColorColum()<CR>
+noremap <Leader>ch :call SetColorColum()<CR>
 function! SetColorColum()
     let col_num = virtcol(".")
     let cc_list = split(&cc, ',')
@@ -2349,7 +2348,7 @@ augroup my_fileheader
   autocmd BufNewFile *.spec call FHHeader()
 augroup END
 
-map <Leader>fh :call FHHeader()<CR>
+noremap <Leader>fh :call FHHeader()<CR>
 function! FHHeader()
   let s:comment = "//"
   let s:commentline = s:comment .   "----------------------------------------------------------------------"
@@ -2442,18 +2441,18 @@ endif
 " CamelCaseMotion
 "{{{
 " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
-  map <silent> w <Plug>CamelCaseMotion_w
-  map <silent> b <Plug>CamelCaseMotion_b
-  map <silent> e <Plug>CamelCaseMotion_e
+  noremap <silent> w <Plug>CamelCaseMotion_w
+  noremap <silent> b <Plug>CamelCaseMotion_b
+  noremap <silent> e <Plug>CamelCaseMotion_e
   sunmap w
   sunmap b
   sunmap e
-  omap <silent> iw <Plug>CamelCaseMotion_iw
-  xmap <silent> iw <Plug>CamelCaseMotion_iw
-  omap <silent> ib <Plug>CamelCaseMotion_ib
-  xmap <silent> ib <Plug>CamelCaseMotion_ib
-  omap <silent> ie <Plug>CamelCaseMotion_ie
-  xmap <silent> ie <Plug>CamelCaseMotion_ie
+  onoremap <silent> iw <Plug>CamelCaseMotion_iw
+  xnoremap <silent> iw <Plug>CamelCaseMotion_iw
+  onoremap <silent> ib <Plug>CamelCaseMotion_ib
+  xnoremap <silent> ib <Plug>CamelCaseMotion_ib
+  onoremap <silent> ie <Plug>CamelCaseMotion_ie
+  xnoremap <silent> ie <Plug>CamelCaseMotion_ie
 "}}}
 
 "-----------------------------------------------------------
@@ -2461,8 +2460,8 @@ endif
 " display the current match index number and total match number of search pattern
 "{{{
 " mapping
-  nmap n <Plug>(anzu-n-with-echo)
-  nmap N <Plug>(anzu-N-with-echo)
+  nnoremap n <Plug>(anzu-n-with-echo)
+  nnoremap N <Plug>(anzu-N-with-echo)
   " nmap * <Plug>(anzu-star-with-echo)
   " nmap # <Plug>(anzu-sharp-with-echo)
 
