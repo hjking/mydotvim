@@ -111,6 +111,9 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
   "   :UseVimball $VIM\vimfiles\bundle\name
 " }}}
 
+" call plug#begin('./plugged')
+" Plug 'tpope/vim-sensible'
+" call plug#end()
 
 if MySys() == "windows"
   language message en                   " message language
@@ -1073,8 +1076,8 @@ noremap G Gzz
 noremap gg ggzz
 noremap <C-d> <C-d>zz
 noremap <C-u> <C-u>zz
-noremap n nzz
-noremap N Nzz
+" noremap n nzz
+" noremap N Nzz
 " noremap * *zz
 " noremap # #zz
 nnoremap g* g*zz
@@ -2079,12 +2082,14 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " Alignment
 
-" alignta
+" vim-easy-align
 " {{{
-  if pathogen#is_disabled('vim-alignta') == 0
-    let g:alignta_default_arguments = '! \S\+'
-    xnoremap <silent> <LocalLeader>= :Alignta! \S\+<CR>
-    xnoremap <silent> <LocalLeader>A :Alignta! \S\+<CR>
+  if pathogen#is_disabled('vim-easy-align') == 0
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
+
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
   endif
 " }}}
 
@@ -2460,8 +2465,8 @@ endif
 " display the current match index number and total match number of search pattern
 "{{{
 " mapping
-  nnoremap n <Plug>(anzu-n-with-echo)
-  nnoremap N <Plug>(anzu-N-with-echo)
+  nmap n <Plug>(anzu-n-with-echo)
+  nmap N <Plug>(anzu-N-with-echo)
   " nmap * <Plug>(anzu-star-with-echo)
   " nmap # <Plug>(anzu-sharp-with-echo)
 
