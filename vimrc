@@ -2324,7 +2324,7 @@ cnoremap <C-N>      <Down>
 "{{{
   let g:uvm_author    = "Hong Jin"
   let g:uvm_email     = "hongjin@fiberhome.com"
-  let g:uvm_company   = "Copyright (c) 2015, Fiberhome Telecommunication Technology Co., Ltd."
+  let g:uvm_company   = "Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
   let g:uvm_department = "Microelectronics Dept. Logic Development Group."
 "}}}
 
