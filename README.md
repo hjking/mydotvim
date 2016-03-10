@@ -1,10 +1,12 @@
 mydotvim
-[![I Love Vim](https://img.shields.io/badge/I%20Love-Vim-red.svg)](http://vim.org)
 ========
+
+[![I Love Vim](https://img.shields.io/badge/I%20Love-Vim-red.svg)](http://vim.org)
 
 ## my dot vim folder
 
 1. Get my dotvim
+
 ```shell
     git clone https://kinghom@github.com/kinghom/mydotvim.git ~/.vim
     cd ~/.vim
@@ -13,6 +15,7 @@ mydotvim
 ```
 
 2. Add a submodule
+
 ```shell
     git submodule add URL bundle/NAME
     git add .
@@ -21,11 +24,13 @@ mydotvim
 ```
 
 3. Update submodule
+
 ```shell
     git submodule foreach git pull origin master
 ```
 
 4. Remove a submodule
+
 ```shell
     git submodule deinit --force [path to submodule]
     git rm --cached [path to submodule]
