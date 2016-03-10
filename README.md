@@ -1,4 +1,5 @@
 mydotvim
+[![I Love Vim](https://img.shields.io/badge/I%20Love-Vim-red.svg)](http://vim.org)
 ========
 
 ## my dot vim folder
