@@ -57,48 +57,49 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
   "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
   " endif
   runtime! bundle/pathogen/autoload/pathogen.vim
-  let g:pathogen_disabled = []
+  " disable bundle
+  let g:pathogen_blacklist = []
 
   if v:version < 700 || (v:version == 700 && !has('patch167'))
-    call add(g:pathogen_disabled, 'tagbar')
+    call add(g:pathogen_blacklist, 'tagbar')
   endif
 
   if v:version < 701
-    call add(g:pathogen_disabled, 'lookupfile')
+    call add(g:pathogen_blacklist, 'lookupfile')
   endif
 
   if v:version < 702
-    call add(g:pathogen_disabled, 'airline')
-    call add(g:pathogen_disabled, 'unite')
-    call add(g:pathogen_disabled, 'neocomplcache')
-    call add(g:pathogen_disabled, 'neosnippet')
-    call add(g:pathogen_disabled, 'vimfiler')
-    call add(g:pathogen_disabled, 'indent-guides')
+    call add(g:pathogen_blacklist, 'airline')
+    call add(g:pathogen_blacklist, 'unite')
+    call add(g:pathogen_blacklist, 'neocomplcache')
+    call add(g:pathogen_blacklist, 'neosnippet')
+    call add(g:pathogen_blacklist, 'vimfiler')
+    call add(g:pathogen_blacklist, 'indent-guides')
   endif
 
   if v:version >= 702
-    call add(g:pathogen_disabled, 'lightline')
-    call add(g:pathogen_disabled, 'lightline-powerful')
+    call add(g:pathogen_blacklist, 'lightline')
+    call add(g:pathogen_blacklist, 'lightline-powerful')
   endif
 
   if v:version < 702 || !has('float')
-    call add(g:pathogen_disabled, 'L9')
-    call add(g:pathogen_disabled, 'FuzzyFinder')
+    call add(g:pathogen_blacklist, 'L9')
+    call add(g:pathogen_blacklist, 'FuzzyFinder')
   endif
 
   if v:version < 703
-  "    call add(g:pathogen_disabled, 'niceblock')
-    call add(g:pathogen_disabled, 'easymotion')
+  "    call add(g:pathogen_blacklist, 'niceblock')
+    call add(g:pathogen_blacklist, 'easymotion')
   endif
 
   if v:version < 703 || (v:version == 703 && !has('python'))
-    call add(g:pathogen_disabled, 'gundo')
+    call add(g:pathogen_blacklist, 'gundo')
   endif
 
   " Disable on purpose
   " if exists('g:pathogen_not_loaded_plugin')
   if v:version < 703 || !has('patch584')
-    call add(g:pathogen_disabled, 'YouCompleteMe')
+    call add(g:pathogen_blacklist, 'YouCompleteMe')
   endif
 
   call pathogen#infect()
@@ -565,19 +566,21 @@ set sessionoptions+=sesdir
 "-----------------------------------------------------------
 set t_Co=256
 if pathogen#is_disabled('solarized') == 0
-  let hour = strftime("%H")
-  if 6 <= hour && hour < 18
-    set background=light
-  else
-    set background=dark
-  endif
+  " let hour = strftime("%H")
+  " if 6 <= hour && hour < 18
+  "   set background=light
+  " else
+  "   set background=dark
+  " endif
   let g:solarized_termtrans=1
   let g:solarized_termcolors=256
   let g:solarized_contrast="high"
   let g:solarized_visibility="high"
 endif
 try
+  let base16colorspace=256
   colorscheme solarized
+  " set background=light
 catch
   colorscheme molokai
 " colorscheme vividchalk
@@ -623,7 +626,7 @@ try
 endtry
 
 " Scroll options
-set scrolloff=8
+set scrolloff=2
 set sidescrolloff=10
 set sidescroll=1
 
@@ -884,14 +887,6 @@ nnoremap <silent> <leader>h :split^M^W^W<cr>
 " ,v - Reselect text that was just pasted
 nnoremap <leader>v V`]
 
-" ,w - write file
-func! DeleteTrailingWS()
-  exe "normal mz"
-  %s/\s\+$//ge
-  exe "normal `z"
-endfunc
-noremap <leader>w :call DeleteTrailingWS()<CR>
-
 " ,W - clear trailing whitespace
 " nnoremap <silent> <leader>W :%s=\s\+$==<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>
@@ -1136,6 +1131,7 @@ if has("autocmd")
     "  autocmd BufNewFile,BufRead *.sv      setfiletype systemverilog
     autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree     setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
+    autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
     autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
     " Return to last edit position when opening files
     autocmd BufReadPost *
@@ -1907,8 +1903,8 @@ cnoremap <C-N>      <Down>
 " FuzzyFinder/L9 require Vim 7.2 and floating-point support
   if pathogen#is_disabled('FuzzyFinder') == 0
     let g:fuf_dataDir = '~/.vim-cache/fuzzyfinder-data'
-    ""call add(g:pathogen_disabled, 'l9')
-    ""call add(g:pathogen_disabled, 'fuzzyfinder')
+    ""call add(g:pathogen_blacklist, 'l9')
+    ""call add(g:pathogen_blacklist, 'fuzzyfinder')
     nnoremap <Leader>ffb :FufBuffer<CR>
     nnoremap <Leader>fff :FufFileWithCurrentBufferDir<CR>
     nnoremap <Leader>ffj :FufJumpList<CR>
