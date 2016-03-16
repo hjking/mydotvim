@@ -147,3 +147,7 @@ mydotvim
     * vividchalk
     * zenburn
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kinghom/mydotvim/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
