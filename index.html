@@ -1,67 +1,197 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>MyDotVim by kinghom</title>
-
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-    <div class="wrapper">
-      <header>
-        <h1 class="header">MyDotVim</h1>
-        <p class="header">my dot vim</p>
+    <section class="page-header">
+      <h1 class="project-name">MyDotVim</h1>
+      <h2 class="project-tagline">my dot vim</h2>
+      <a href="https://github.com/kinghom/mydotvim" class="btn">View on GitHub</a>
+      <a href="https://github.com/kinghom/mydotvim/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/kinghom/mydotvim/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-        <ul>
-          <li class="download"><a class="buttons" href="https://github.com/kinghom/mydotvim/zipball/master">Download ZIP</a></li>
-          <li class="download"><a class="buttons" href="https://github.com/kinghom/mydotvim/tarball/master">Download TAR</a></li>
-          <li><a class="buttons github" href="https://github.com/kinghom/mydotvim">View On GitHub</a></li>
-        </ul>
+    <section class="main-content">
+      <h1>
+<a id="mydotvim" class="anchor" href="#mydotvim" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>mydotvim</h1>
 
-        <p class="header">This project is maintained by <a class="header name" href="https://github.com/kinghom">kinghom</a></p>
+<p><a href="http://vim.org"><img src="https://img.shields.io/badge/I%20Love-Vim-red.svg" alt="I Love Vim"></a></p>
 
+<h2>
+<a id="my-dot-vim-folder" class="anchor" href="#my-dot-vim-folder" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>my dot vim folder</h2>
 
-      </header>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
+<ol>
+<li>Get my dotvim</li>
+</ol>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<div class="highlight highlight-source-shell"><pre>    git clone https://kinghom@github.com/kinghom/mydotvim.git <span class="pl-k">~</span>/.vim
+    <span class="pl-c1">cd</span> <span class="pl-k">~</span>/.vim
+    git submodule init
+    git submodule update</pre></div>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
+<ol>
+<li>Add a submodule</li>
+</ol>
+
+<div class="highlight highlight-source-shell"><pre>    git submodule add URL bundle/NAME
+    git add <span class="pl-c1">.</span>
+    git ci -m <span class="pl-s"><span class="pl-pds">"</span>some comment<span class="pl-pds">"</span></span>
+    git push</pre></div>
+
+<ol>
+<li>Update submodule</li>
+</ol>
+
+<div class="highlight highlight-source-shell"><pre>    git submodule foreach git pull origin master</pre></div>
+
+<ol>
+<li>Remove a submodule</li>
+</ol>
+
+<div class="highlight highlight-source-shell"><pre>    git submodule deinit --force [path to submodule]
+    git rm --cached [path to submodule]</pre></div>
+
+<pre><code>Delete the relevant line from the '.gitmodules' file.
+Commit the superproject.
+
+OR
+
+Delete the relevant line from the '.gitmodules' and .git/config file.
+git rm --cached [path to submodule]
+Commit the superproject.
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>
+<a id="plugins-im-using" class="anchor" href="#plugins-im-using" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Plugins I'm using</h2>
 
-<h3>Designer Templates</h3>
+<ul>
+<li>AnsiEsc</li>
+<li>anzu: display matching pattern in command line</li>
+<li>bufferline: display buffer name in command line</li>
+<li>c: support for c/c++</li>
+<li>CamelCaseMotion</li>
+<li>Conque-Shell</li>
+<li>calendar.vim: nice calendar</li>
+<li>cscope_macros</li>
+<li>
+<p>ctrlp</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>provides a uniform fuzzy matching interface for files, buffers, tags, quickfix entries, recent files, changes</p>
+</li>
+<li><p>delimitMate: auto insert brackets</p></li>
+<li>DrawIt</li>
+<li>easy-align</li>
+<li>easymotion
+bit weird at first, but my flow has now gone to /[Class] || [Method] --&gt; ,w --&gt; char. Super fast. Hint: stare down where you want to go, then ,w</li>
+<li>eunuch</li>
+<li>expand-region</li>
+<li>FencView</li>
+<li>file-line</li>
+<li>FuzzyFinder
+I use it mostly for switching buffer, it can do a lot more</li>
+<li>genutils</li>
+<li>gitv</li>
+<li>gundo
+undo history and more</li>
+<li>indent-guides: use colorful block to display indent</li>
+<li>L9</li>
+<li>lion</li>
+<li>lookupfile</li>
+<li>mark</li>
+<li>markdown
+for markdown</li>
+<li>minibufexpl</li>
+<li>multiple-cursors
+can come in really handy... some learning curve here</li>
+<li>neocomplcache</li>
+<li>neosnippet : snippet plugin with auto completion.</li>
+<li>nerdcommenter
+(un)coment easily</li>
+<li>nerdtree</li>
+<li>nerdtree-tabs</li>
+<li>niceblock
+better editing in visual mode</li>
+<li>over</li>
+<li>Pathogen: allows me to install plugins in a cleaner manner.</li>
+<li>rainbow_parentheses</li>
+<li>repeat</li>
+<li>seek</li>
+<li>ShowMarks</li>
+<li>sneak</li>
+<li>speeddating</li>
+<li>SrcExpl</li>
+<li>surround
+adds/changes/deletes pairs like ""''(){}[] and html tags</li>
+<li>syntastic
+gives me syntax checking for many languages.</li>
+<li>systemc</li>
+<li>table-mode</li>
+<li>Tabular: allows me to align blocks of code.</li>
+<li>tagbar: better than taglist</li>
+<li>taglist</li>
+<li>tlib_vim</li>
+<li>unimpaired</li>
+<li>unite.vim : creates new interface with your customization.</li>
+<li>utl</li>
+<li>uvm_gen</li>
+<li>vcscommand</li>
+<li>verilog_systemverilog</li>
+<li>vim-addon-mw-utils</li>
+<li>vim-cycle</li>
+<li>vim-fugitive</li>
+<li>vim-perl</li>
+<li>vim-snippets</li>
+<li>vim-vertical-move</li>
+<li>vimwiki</li>
+<li>vis</li>
+<li>VisIncr</li>
+<li>yankring</li>
+<li>Statusline
 
-<h3>Rather Drive Stick?</h3>
+<ul>
+<li>airline</li>
+<li>lightline: sometimes I'm using Vim 7.2, use this to subsitute airline</li>
+<li>lightline-powerful: powerful setting for lightline</li>
+</ul>
+</li>
+<li>ColorScheme
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<ul>
+<li>badwolf</li>
+<li>cs-gruvbox</li>
+<li>cs-kolor</li>
+<li>cs-peaksea</li>
+<li>desertink</li>
+<li>inkpot</li>
+<li>irblack</li>
+<li>molokai</li>
+<li>solarized</li>
+<li>skittles_berry</li>
+<li>vim-hybrid</li>
+<li>vim-vombato</li>
+<li>vividchalk</li>
+<li>zenburn</li>
+</ul>
+</li>
+</ul>
 
-<h3>Authors and Contributors</h3>
+<p><a href="https://bitdeli.com/free" title="Bitdeli Badge"><img src="https://d2weczhvl823v0.cloudfront.net/kinghom/mydotvim/trend.png" alt="Bitdeli Badge"></a></p>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/kinghom/mydotvim">MyDotVim</a> is maintained by <a href="https://github.com/kinghom">kinghom</a>.</span>
 
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-		
+
+    </section>
+
+  
   </body>
 </html>
