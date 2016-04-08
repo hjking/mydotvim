@@ -1,6 +1,3 @@
-[submodule "bundle/lightline-powerful"]
-	path = bundle/lightline-powerful
-	url = https://github.com/kinghom/lightline-powerful.git
 [submodule "bundle/uvm_gen"]
 	path = bundle/uvm_gen
 	url = https://github.com/kinghom/uvm_gen.git
