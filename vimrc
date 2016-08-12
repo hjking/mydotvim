@@ -79,7 +79,6 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
 
   if v:version >= 702
     call add(g:pathogen_blacklist, 'lightline')
-    call add(g:pathogen_blacklist, 'lightline-powerful')
   endif
 
   if v:version < 702 || !has('float')
@@ -261,7 +260,7 @@ set helpheight=12
 "-------------------------------------------------------------------------------
 "  7 multiple tab pages
 "-------------------------------------------------------------------------------
-set showtabline=2
+set showtabline=1
 
 "-------------------------------------------------------------------------------
 "  8 terminal
@@ -621,7 +620,6 @@ endif
 " Specify the behavior when switching buffers
 try
   set switchbuf=useopen,usetab,newtab
-  set showtabline=2
   catch
 endtry
 
@@ -1134,10 +1132,16 @@ if has("autocmd")
     autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
     autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
     " Return to last edit position when opening files
+    " autocmd BufReadPost *
+    "   \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    "   \   exe "normal g`\"" |
+    "   \ endif
+    " Make sure Vim returns to the same line when you reopen a file.
     autocmd BufReadPost *
-      \ if line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
-      \ endif
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \     execute 'normal! g`"zvzz' |
+        \ endif
+
     autocmd BufEnter * :syntax sync fromstart
     autocmd BufEnter * :lchdir %:p:h
     " auto load vimrc when editing it
@@ -1470,8 +1474,8 @@ endfunction
     let NERDChristmasTree=1                     " more colorful
     let NERDTreeWinPos="left"                   " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
-    let NERDTreeShowLineNumbers=0               " show line number
-    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS','\.git']
+    let NERDTreeShowLineNumbers=1               " show line number
+    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
     " setting root dir in NT also sets VIM's cd"
     let NERDTreeChDirMode=2
     let NERDTreeShowHidden=1
@@ -2505,14 +2509,9 @@ fu! Retab()
   :%s/\s\+$//
 endfunction
 
-" Make sure Vim returns to the same line when you reopen a file.
-augroup line_return
-    au!
-    au BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \     execute 'normal! g`"zvzz' |
-        \ endif
-augroup END
+" Remap VIM 0 to first non-blank character
+map 0 ^
+nnoremap <Home> ^
 
 set secure
 
