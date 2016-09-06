@@ -33,12 +33,13 @@ function! MySys()
   endif
 endfunction
 
+let os = MySys()
 let s:MSWIN = has("win16") || has("win32")   || has("win64")    || has("win95")
 let s:UNIX = has("unix")  || has("macunix") || has("win32unix")
 
-if MySys() == "windows"
+if os == "windows"
   let g:vimfiles = split(&runtimepath, ',')[1]
-elseif MySys() == "linux"
+elseif os == "linux"
   let g:vimfiles = split(&runtimepath, ',')[0]
 endif
 
@@ -51,9 +52,9 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
   let g:pathogen_not_loaded_plugin = 1
   let g:path_of_vimrc_tmp = expand('<sfile>:h')
   let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-  " if MySys() == "windows"
+  " if os == "windows"
   "   source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
-  " elseif MySys() == "linux"
+  " elseif os == "linux"
   "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
   " endif
   runtime! bundle/pathogen/autoload/pathogen.vim
@@ -115,22 +116,21 @@ set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.
 " Plug 'tpope/vim-sensible'
 " call plug#end()
 
-if MySys() == "windows"
+if os == "windows"
   language message en                   " message language
   " language message en_US                   " message language
   " language message zh_CN.UTF-8
   " lang messages zh_CN.UTF-8 " 解决consle输出乱码
-elseif MySys() == "linux"
+elseif os == "linux"
   language message C
 endif
 
 source $VIMRUNTIME/vimrc_example.vim
-if MySys() == "windows"
+if os == "windows"
   " source $VIMRUNTIME/mswin.vim      " Win behaviour
 endif
 
 runtime! ftplugin/man.vim
-runtime! macros/matchit.vim
 
 " set mapleader
 let g:mapleader=","
@@ -157,14 +157,13 @@ endif
 filetype on
 filetype plugin on
 
-
 "-------------------------------------------------------------------------------
 "  2 moving around, searching and patterns
 "-------------------------------------------------------------------------------
 " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
-if MySys() == "windows"
+if os == "windows"
   set path+=D:\cygwin\bin
-elseif MySys() == "linux"
+elseif os == "linux"
   set path+=/usr/bin
 endif
 if has("gui_running")
@@ -200,25 +199,25 @@ set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
 
 " Cscope
 "-----------------------------------------------------------
-if has("cscope")
-  if MySys() == "linux"
-    set csprg=/usr/bin/cscope
-  else
-    set csprg=cscope
-  endif
-  set csto=1
-  set cst
-  set nocsverb
-  " add any database in current directory
-  if filereadable("cscope.out")
-    silent cscope add cscope.out
-  elseif $CSCOPE_DB != ""
-    silent cscope add $CSCOPE_DB
-  endif
-  set csverb
-  set cscopetag
-  set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
-endif
+" if has("cscope")
+"   if os == "linux"
+"     set csprg=/usr/bin/cscope
+"   else
+"     set csprg=cscope
+"   endif
+"   set csto=1
+"   set cst
+"   set nocsverb
+"   " add any database in current directory
+"   if filereadable("cscope.out")
+"     silent cscope add cscope.out
+"   elseif $CSCOPE_DB != ""
+"     silent cscope add $CSCOPE_DB
+"   endif
+"   set csverb
+"   set cscopetag
+"   set cscopequickfix=s-,g-,c-,d-,t-,e-,f-,i-
+" endif
 
 
 "-------------------------------------------------------------------------------
@@ -232,9 +231,8 @@ set display+=lastline
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
 set list                        " list mode
-" set listchars=tab:>-,trail:.,extends:>,precedes:<,eol:$   "display TAB，EOL,etc
-" set listchars=tab:\|\ ,trail:.,extends:>,precedes:<
-set listchars=tab:\>\ ,trail:-,extends:>,precedes:<,nbsp:+
+set listchars=tab:\>\ ,trail:.,extends:>,precedes:<
+" set listchars=tab:▸\,trail:-,extends:>,precedes:<,nbsp:+
 set number                      " display line number
 set numberwidth=1
 set lazyredraw                  " Don't redraw while executing macros
@@ -273,9 +271,9 @@ set showtabline=1
 "-----------------------------------------------------------
 " Mouse
 "-----------------------------------------------------------
-if MySys() == "windows"
+if os == "windows"
   set mouse=a
-elseif MySys() == "linux"
+elseif os == "linux"
   set mouse=va
 endif
 " set mousemodel=extend
@@ -307,7 +305,7 @@ set t_vb=                       " Disable screen flash on error
 " set helplang& helplang=en
 " use Chinese help, support in vimcdoc.vim plugin
 if version >= 603
-  if MySys() == "windows"
+  if os == "windows"
     set helplang=cn
   else
     set helplang=en
@@ -375,7 +373,7 @@ set cindent                 " Enables automatic C program indenting
 " 16 folding
 "-------------------------------------------------------------------------------
 " set foldenable              " turn on folding
-set nofoldenable            " disable folding
+set foldenable            " disable folding
 if exists("&foldlevel")
   set foldlevel=999           " make it really high, so they're not displayed by default
 endif
@@ -383,10 +381,8 @@ set foldmarker={,}
 set foldmethod=indent       " Make folding indent sensitive  // syntax
 set foldnestmax=5
 set foldcolumn=2            " width for fold
-set foldlevel=5             " Don't autofold anything (but I can still fold manually)
 set foldlevelstart=1000     " fdls:  fold level start
-set foldopen-=search        " don't open folds when you search into them
-"set foldopen-=undo         " don't open folds when you undo stuff
+set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 
 "-------------------------------------------------------------------------------
 " 17 diff mode
@@ -395,7 +391,7 @@ set diffopt=context:3       " display 3 lines above and below the different plac
 " set scrollbind      " 左右两侧的屏幕滚动是同步的
 set diffopt+=iwhite
 set diffopt+=filler
-" if MySys() == "windows"
+" if os == "windows"
   set diffexpr=MyDiff()
   function! MyDiff()
     let opt = '-a --binary '
@@ -476,7 +472,7 @@ set history=200                 " save cmd number in history
 " set wildmode=longest:full,full
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
 set wildignore+=.svn,CVS,.git,.hg,*.bak,*.e,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.mdb,*~,~*,*.so " wildmenu: ignore these extensions
-if MySys() == "windows"
+if os == "windows"
   set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
 else
   set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
@@ -499,7 +495,7 @@ set grepprg=grep\ -nH
 "-------------------------------------------------------------------------------
 " 24 system specific
 "-------------------------------------------------------------------------------
-if MySys() == "windows"
+if os == "windows"
   if exists('+shellslash')
     set shellslash      " Exchange path separator
   endif
@@ -620,6 +616,7 @@ endif
 " Specify the behavior when switching buffers
 try
   set switchbuf=useopen,usetab,newtab
+  set showtabline=2
   catch
 endtry
 
@@ -1082,6 +1079,7 @@ nnoremap Q gqap
 
 " nnoremap <C-h> :<C-u>help<Space>
 
+" Use sane regexes
 " Thanks to Steve Losh for this liberating tip
 " See http://stevelosh.com/blog/2010/09/coming-home-to-vim
 nnoremap / /\v
@@ -1145,9 +1143,9 @@ if has("autocmd")
     autocmd BufEnter * :syntax sync fromstart
     autocmd BufEnter * :lchdir %:p:h
     " auto load vimrc when editing it
-    " if MySys() == "windows"
+    " if os == "windows"
     "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
-    " elseif MySys() == "linux"
+    " elseif os == "linux"
     "     autocmd! BufWritePost .vimrc source %
     " endif
     " remove all trailing whitespace in a file
@@ -1169,10 +1167,6 @@ endif " has("autocmd")
 "-----------------------------------------------------------
 " Abbreviations
 "-----------------------------------------------------------
-iab #c= ====================
-iab #c# ####################
-iab #c1 /****************************************************************
-iab #c2 <Space>***************************************************************/
 
 "-----------------------------------------------------------
 " Visual mode
@@ -1327,9 +1321,9 @@ augroup END
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " {{{
   if pathogen#is_disabled('taglist') == 0
-    if MySys() == "windows"
+    if os == "windows"
       let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'           "设置ctags的路径
-    elseif MySys() == "linux"
+    elseif os == "linux"
       let Tlist_Ctags_Cmd = '/usr/bin/ctags'
     endif
     if !executable('ctags')
@@ -1424,7 +1418,31 @@ endfunction
 
 "-----------------------------------------------------------
 "Matchit
-"let b:match_ignorecase=1
+runtime! macros/matchit.vim
+if exists('loaded_matchit')
+  let b:match_ignorecase=0
+  let b:match_words=
+    \ '\<begin\>:\<end\>,' .
+    \ '\<if\>:\<else\>,' .
+    \ '\<module\>:\<endmodule\>,' .
+    \ '\<class\>:\<endclass\>,' .
+    \ '\<program\>:\<endprogram\>,' .
+    \ '\<clocking\>:\<endclocking\>,' .
+    \ '\<property\>:\<endproperty\>,' .
+    \ '\<sequence\>:\<endsequence\>,' .
+    \ '\<package\>:\<endpackage\>,' .
+    \ '\<covergroup\>:\<endgroup\>,' .
+    \ '\<primitive\>:\<endprimitive\>,' .
+    \ '\<specify\>:\<endspecify\>,' .
+    \ '\<generate\>:\<endgenerate\>,' .
+    \ '\<interface\>:\<endinterface\>,' .
+    \ '\<function\>:\<endfunction\>,' .
+    \ '\<task\>:\<endtask\>,' .
+    \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
+    \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
+    \ '`ifdef\>:`else\>:`endif\>,'
+endif
+
 
 "-----------------------------------------------------------
 " Netrw  File Explorer :e <PATH>
@@ -1474,7 +1492,7 @@ endfunction
     let NERDChristmasTree=1                     " more colorful
     let NERDTreeWinPos="left"                   " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
-    let NERDTreeShowLineNumbers=1               " show line number
+    let NERDTreeShowLineNumbers=0               " show line number
     let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
     " setting root dir in NT also sets VIM's cd"
     let NERDTreeChDirMode=2
@@ -1562,15 +1580,11 @@ noremap <Leader>ca :Calendar<CR>
 "-----------------------------------------------------------
 " SVN Command
 " {{{
-  if pathogen#is_disabled('vcscommand') == 0
-    " let SVNCommandSplit='vertical'
-    " let SVNCommandDiffSplit='vertical'
-    let SVNCommandEnableBufferSetup=1
-    let SVNCommandEdit='split'
-    let SVNCommandNameResultBuffers=1
-    " let SVNAutoCommitDiff='1'
-    let SVNCommandCommitOnWrite=1
-    let SVNCommandAutoSVK='svk'
+  if pathogen#is_disabled('svnj') == 0
+    let g:svnj_custom_statusbar_ops_hide = 1
+    if os == "windows"
+      let g:svnj_cache_dir="d:/Documents and Settings/hongjin/Application Data"
+    endif
   endif
 " }}}
 
@@ -1708,7 +1722,7 @@ cnoremap <C-N>      <Down>
 " {{{
 " Powerline and neocomplcache require Vim 7.2
   if pathogen#is_disabled('vim-powerline') == 0
-    if MySys() == "windows"
+    if os == "windows"
       ""let g:Powerline_symbols = 'compatible'
       let g:Powerline_symbols = 'unicode'
     elseif has('gui_macvim')
@@ -1741,9 +1755,9 @@ cnoremap <C-N>      <Down>
     " Check C/C++
     let g:syntastic_cpp_check_header = 1 " check header file
     let g:syntastic_cpp_auto_refresh_includes = 1 " enable header files being re-checked in every filw write
-    if MySys() == "windows"
+    if os == "windows"
       let g:syntastic_cpp_include_dirs = [ 'd:\DEV\systemc_inc\' ]
-    elseif MySys() == "linux"
+    elseif os == "linux"
       let g:syntastic_cpp_include_dirs = [ '/storage/home/hongjin/app/systemc-2.3.0/include' ]
     endif
   endif
@@ -1759,9 +1773,9 @@ cnoremap <C-N>      <Down>
 " tagbar
 " {{{
   if pathogen#is_disabled('tagbar') == 0
-    if MySys() == "windows"
+    if os == "windows"
       let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
-    elseif MySys() == "linux"
+    elseif os == "linux"
       let g:tagbar_ctags_bin = 'ctags'
     endif
     let g:tagbar_width = 20
@@ -1945,9 +1959,9 @@ cnoremap <C-N>      <Down>
         \ 'dir':  '\v[\/]\.(git|hg|svn)$',
         \ 'file': '\v\.(exe|so|dll|pyc)$'
         \ }
-    if MySys() == "windows"
+    if os == "windows"
       let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
-    elseif MySys() == "linux"
+    elseif os == "linux"
       let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
     endif
     " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
@@ -2218,6 +2232,8 @@ cnoremap <C-N>      <Down>
 " NerdCommenter
 "{{{
   let g:NERDSpaceDelims = 1   " add extra space
+  " Enable trimming of trailing whitespace when uncommenting
+  let g:NERDTrimTrailingWhitespace = 1
 "}}}
 
 " if pathogen#is_disabled('molokai') == 0
@@ -2238,7 +2254,7 @@ cnoremap <C-N>      <Down>
 "-----------------------------------------------------------
 " Grep
 "{{{
-  if MySys() == "windows"
+  if os == "windows"
     let g:Grep_Path = './vimfiles/gnu/grep.exe'
     let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
     let g:Egrep_Path  = './vimfiles/gnu/egrep.exe'
