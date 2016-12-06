@@ -1458,7 +1458,7 @@ endif
     let g:netrw_keepdir        = 0
     " let g:netrw_preview        = 0
     let g:netrw_liststyle      = 3
-    let g:netrw_browse_split   = 0
+    let g:netrw_browse_split   = 1
     let g:netrw_cursor         = 3
     let g:netrw_banner         = 0
     let g:netrw_mousemaps      = 0
