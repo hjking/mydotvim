@@ -12,9 +12,9 @@ let g:load_vimrc_filetype = 1
 let g:load_vimrc_plugin_config = 1
 let g:load_vimrc_extended = 1
 
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 """""""""""""""""""""" Basic """""""""""""""""""""""""""""""""""
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 "{{{
 "-------------------------------------------------------------------------------
 "  1 important
@@ -29,18 +29,18 @@ set history=200
 
 filetype off
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " FileType Detecting
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 filetype on
 filetype plugin on
 filetype indent on
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Platform
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 function! MySys()
   if has("win16") || has("win32") || has("win64") || has("win95")
     return "windows"
@@ -91,9 +91,9 @@ set langmenu=en
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Switch syntax highlighting on.
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 if has('syntax')
   syntax enable
 endif
@@ -124,9 +124,9 @@ set autochdir          " Change the current working dir whenever open a file,
 
 set nowrapscan      " Don't Searches wrap around the end of the file
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 "Replace/Search
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 set hlsearch        " Highlight matched result when searching
 set incsearch       " Show the pattern when typing a search command
 set ignorecase      " Ignore cases
@@ -244,9 +244,9 @@ set selection=inclusive         " defines the behavior of the selection
 set selectmode=mouse            " when use mouse, launch SELECT mode
 set keymodel=startsel           " Shift + arrow key
 " set selectmode=key
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 """ ClipBoard
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Use clipboard register.
 " set clipboard+=unnamed
 if has('unnamedplus')
@@ -264,9 +264,9 @@ set formatoptions+=mM       " describes how automatic formatting is to be done
 set showmatch       " Highlight matched pairs
 set matchtime=5     " Tenths of a second to show the matching paren
 set matchpairs+=<:>
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Auto Complete Word
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " options
 set complete-=u
 set complete-=i
@@ -286,9 +286,9 @@ set expandtab               " use SPACE instead of TAB
 set smarttab                " use SPACE instead of TAB at start of line
 set shiftround              " Round indent by shiftwidth
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Indent
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 set autoindent              " Copy indent from current line when starting a new line
 set smartindent             " Do smart autoindenting when starting a new line
 set cindent                 " Enables automatic C program indenting
@@ -476,7 +476,7 @@ set viminfo='50,<1000,:50     " save session
 set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
 
 " Session options
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 set sessionoptions-=curdir
 set sessionoptions+=sesdir
 
@@ -512,9 +512,9 @@ set scrolloff=2
 set sidescrolloff=10
 set sidescroll=1
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " AutoCommands
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 if has("autocmd")
   " Set augroup
   augroup MyAutoCmd
@@ -557,9 +557,9 @@ if has("autocmd")
   augroup END
 endif " has("autocmd")
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Highlight current Line
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 "highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
 "au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
 
@@ -567,9 +567,9 @@ endif " has("autocmd")
 " Abbreviations
 "-----------------------------------------------------------
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 """ Status Line
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Color of Status Line
 if has('statusline')
   set laststatus=2           " always show the status line
@@ -614,16 +614,14 @@ if has('statusline')
   set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
 endif
 
-
-
 "}}} Basic -------------------------------------------------------------
+"-------------------------------------------------------------------------------
 
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 """""""""""""""""""""" Filetypes """""""""""""""""""""""""""""""
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 "{{{
 if g:load_vimrc_filetype
-
 
   "-----------------------------------------------------------
   " Verilog Automatic
@@ -719,11 +717,12 @@ if g:load_vimrc_filetype
 " endif :"" has("autocmd")
 endif
 "}}} Filetypes -------------------------------------------------------------
+"-------------------------------------------------------------------------------
 
 
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 """""""""""""""""""""" Plugin_config """""""""""""""""""""""""""
-"---------------------------------------------------------------
+"-------------------------------------------------------------------------------
 "{{{
 if g:load_vimrc_plugin_config
 
@@ -1917,11 +1916,12 @@ if g:load_vimrc_plugin_config
 endif
 
 "}}} Plugin_config -----------------------------------------
+"-------------------------------------------------------------------------------
 
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 """""""""""""""""""""" Extended """"""""""""""""""""""""""""
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 "{{{
 if g:load_vimrc_extended
 
@@ -2007,6 +2007,8 @@ noremap <M-y>  <C-o>yiW   " yank word
 
 " Buffer commands
 nnoremap <silent> <Leader>bd :bd<CR>
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
 
 " ,e* - Edit the vimrc file
 nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
@@ -2024,10 +2026,16 @@ nnoremap <silent> <leader>d <C-w>f
 nnoremap <silent> <leader>n :bnext<CR>
 
 " ,p - previous buffer
-nnoremap <silent> <leader>p :bprevious<CR>
+" nnoremap <silent> <leader>p :bprevious<CR>
+"
+" paste system clipboard to vim
+nmap <Leader>p "+p
 
 " ,P - Go back to previous file
 noremap <Leader>P <C-^>
+
+" ,q - close buffer
+nmap <Leader>q :q<CR>
 
 " ,s - split horizontally
 " nnoremap <silent> <leader>s :split<CR>
@@ -2039,6 +2047,9 @@ nnoremap <leader>v V`]
 " ,W - clear trailing whitespace
 " nnoremap <silent> <leader>W :%s=\s\+$==<CR>
 nnoremap <leader>W :%s/\s\+$//<cr>
+
+" ,y - copy selected area to system clipboard
+vnoremap <Leader>y "+y
 
 " clearing highlighted search
 nnoremap <silent> <leader>\ :nohlsearch<CR>
@@ -2426,9 +2437,9 @@ cnoremap <C-K>      <C-U>
 cnoremap <C-P>      <Up>
 cnoremap <C-N>      <Down>
 
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 " Functions
-"-----------------------------------------------------------
+"-------------------------------------------------------------------------------
 
 "-----------------------------------------------------------
 " Switch to buffer according to file name
@@ -2564,7 +2575,7 @@ map 0 ^
 nnoremap <Home> ^
 endif
 "}}} Extended ----------------------------------------------
-
+"-------------------------------------------------------------------------------
 
 set secure
 
