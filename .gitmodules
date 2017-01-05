@@ -321,3 +321,7 @@
 	path = bundle/vim-snipmate
 	url = https://github.com/garbas/vim-snipmate.git
     ignore = dirty
+[submodule "bundle/hl_matchit"]
+	path = bundle/hl_matchit
+	url = https://github.com/vimtaku/hl_matchit.vim.git
+    ignore = dirty
