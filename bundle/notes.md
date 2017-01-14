@@ -1,7 +1,6 @@
 # Plugins Notes
 
 
-
 ## List of plugins
 
 #### [By topic](#by-topic-1)
@@ -69,7 +68,7 @@
 - [deoplete](https://github.com/Shougo/deoplete.nvim)
 - [neocomplete](https://github.com/Shougo/neocomplete.vim) : need lua
 - [neocomplcache](https://github.com/Shougo/neocomplcache.git)
-- [supertab](https://github.com/ervandew/supertab)
+- [supertab](https://github.com/ervandew/supertab) Do all your insert-mode completion with Tab.
 - [VimCompletesMe](https://github.com/ajh17/VimCompletesMe)
 - [youcompleteme](https://github.com/Valloric/YouCompleteMe)
 - [mucomplete](https://github.com/lifepillar/vim-mucomplete)
@@ -89,7 +88,7 @@
 #### Commenters
 
 - [commentary](https://github.com/tpope/vim-commentary)
-- [nerdcommenter](https://github.com/scrooloose/nerdcommenter)
+- [NerdCommenter](https://github.com/scrooloose/nerdcommenter) easy commenting of code for many filetypes.
 - [tcomment](https://github.com/tomtom/tcomment_vim)
 - [EnhCommentify]()
 
@@ -104,13 +103,11 @@
 #### Fuzzy finders
 
 - [command-t](https://github.com/wincent/Command-T) (_requires +ruby_)
-- [ctrlp](https://github.com/ctrlpvim/ctrlp.vim.git)
+- [ctrlp](https://github.com/ctrlpvim/ctrlp.vim.git) pure vimL
 - [denite](https://github.com/Shougo/denite.nvim) (_requires +python3_)
 - [fzf](https://github.com/junegunn/fzf) General purpose command-line fuzzy file finder that integrates with Vim.
 - [unite](https://github.com/Shougo/unite.vim) : search and display information from arbitrary sources, like files, buffers, recently used files or registers
 - [FuzzyFinder](https://github.com/vim-scripts/FuzzyFinder.git)
-
-* FuzzyFinder
 
 
 #### Grep tools
@@ -154,7 +151,7 @@ Also see [fuzzy finders](#fuzzy-finders).
 #### Snippets
 
 - [neosnippet](https://github.com/Shougo/neosnippet.vim) (_depends on other plugins_)
-- [snipmate](https://github.com/garbas/vim-snipmate) (_depends on other plugins_)
+- [snipmate](https://github.com/garbas/vim-snipmate) (_depends on other plugins_) TextMate-style snippets for Vim.
 - [ultisnips](https://github.com/SirVer/ultisnips) Code snippets for boilerplate code.
 - [xptemplate](https://github.com/drmingdrmer/xptemplate)
 - [vim-snippets](https://github.com/honza/vim-snippets) : snippets collection
@@ -166,14 +163,13 @@ Also see [fuzzy finders](#fuzzy-finders).
 - [flagship](https://github.com/tpope/vim-flagship)
 - [lightline](https://github.com/itchyny/lightline.vim)
 - [powerline](https://github.com/powerline/powerline)
-- [bufferline](https://github.com/bling/vim-bufferline) : simple plugin which prints all your open buffers in the command bar
 
 
 #### Surround
 
 - [operator-surround](https://github.com/rhysd/vim-operator-surround)
 - [sandwich](https://github.com/machakann/vim-sandwich)
-- [surround](https://github.com/tpope/vim-surround) makes for quick work of surrounds
+- [surround](https://github.com/tpope/vim-surround) Delete/change/add parentheses/quotes/XML-tags/much more with ease
 
 #### Taking notes
 
@@ -230,10 +226,11 @@ Also see [fuzzy finders](#fuzzy-finders).
 
 - [multiple-cursors](https://github.com/terryma/vim-multiple-cursors) :  select all matching words and lets you concurrently change all matches at the same time
 - [over](https://github.com/osyo-manga/vim-over) : substitute preview
+- [abolish](https://github.com/tpope/vim-abolish) easily search for, substitute, and abbreviate multiple variants of a word.
 
 
 #### library:
-- L9
+
 - tlib_vim
 
 
@@ -267,8 +264,8 @@ Also see [fuzzy finders](#fuzzy-finders).
 
 #### C and C++
 
-- [a](https://github.com/vim-scripts/a.vim)
-- [c]()
+- [a](https://github.com/vim-scripts/a.vim) Alternate Files quickly (.c --> .h etc)
+- [c.vim](http://www.vim.org/scripts/script.php?script_id=213) C/C++ IDE.
 - [clang_complete](https://github.com/Rip-Rip/clang_complete)
 - [color_coded](https://github.com/jeaye/color_coded.git)
 - [lh-cpp](https://github.com/LucHermitte/lh-cpp)
@@ -331,46 +328,27 @@ Also see [fuzzy finders](#fuzzy-finders).
 
 
 AnsiEsc
-
-
 cscope_macros
-
 css-color
-
 expand-region
 FencView
-
-
 genutils
-
 hl_matchit
-
-
-lookupfile
-
 systemc
 SystemVerilog
-
-
 utl
 uvm_gen
 vim-addon-mw-utils
-
-
-
 wildfire
-
 
 ## buffer:
 * minibufexpl
 * eunuch: Delete or rename a buffer
 
-
 ## Visual-block:
 * VisIncr
 * niceblock
 * vis
-
 
 ## syntax:
 * markdown
@@ -383,10 +361,8 @@ wildfire
 * DrawIt
 * table-mode
 
-
 repeat: repeat plugin commands
-
-matchit: makes your % more awesome
+matchit: makes your % more awesome, extended % matching for HTML, LaTeX, and many other languages
 signify: adds + and - to the signs column when changes are detected to source control files (supports git/hg/svn)
 startify: gives you a better start screen
 ColorV: is a color view/pick/edit/design/scheme tool
@@ -394,5 +370,3 @@ ScrollColor, csExplorer: explorer colorschemes
 Conque-Shell: is a Vim plugin which allows you to run interactive programs, such as bash on linux or powershell.exe on Windows, inside a Vim buffer
 file-line: open the file under cursor, and goto the line specified after the filename
 headlights: add a menu to vim, revealing all plugins used
-
-

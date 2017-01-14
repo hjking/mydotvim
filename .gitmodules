@@ -57,10 +57,6 @@
 	path = bundle/file-line
 	url = https://github.com/vim-scripts/file-line.git
     ignore = dirty
-[submodule "bundle/FuzzyFinder"]
-	path = bundle/FuzzyFinder
-	url = https://github.com/vim-scripts/FuzzyFinder.git
-    ignore = dirty
 [submodule "bundle/zenburn"]
 	path = bundle/zenburn
 	url = https://github.com/jnurmine/Zenburn.git
@@ -100,10 +96,6 @@
 [submodule "bundle/indent-guides"]
 	path = bundle/indent-guides
 	url = https://github.com/nathanaelkane/vim-indent-guides.git
-    ignore = dirty
-[submodule "bundle/L9"]
-	path = bundle/L9
-	url = https://github.com/vim-scripts/L9.git
     ignore = dirty
 [submodule "bundle/markdown"]
 	path = bundle/markdown
@@ -285,10 +277,6 @@
 	path = bundle/systemc
 	url = https://github.com/Kocha/vim-systemc.git
 	ignore = dirty
-[submodule "bundle/bufferline"]
-	path = bundle/bufferline
-	url = https://github.com/bling/vim-bufferline.git
-	ignore = dirty
 [submodule "bundle/expand-region"]
 	path = bundle/expand-region
 	url = https://github.com/terryma/vim-expand-region.git
@@ -325,10 +313,6 @@
 	path = bundle/neocomplete
 	url = https://github.com/Shougo/neocomplete.vim.git
     ignore = dirty
-[submodule "bundle/fzf"]
-	path = bundle/fzf
-	url = https://github.com/junegunn/fzf.vim.git
-    ignore = dirty
 [submodule "bundle/gutentags"]
 	path = bundle/gutentags
 	url = https://github.com/ludovicchabant/vim-gutentags.git
@@ -340,4 +324,16 @@
 [submodule "bundle/scriptease"]
 	path = bundle/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
+    ignore = dirty
+[submodule "bundle/ctrlp-extensions.vim"]
+	path = bundle/ctrlp-extensions.vim
+	url = https://github.com/sgur/ctrlp-extensions.vim.git
+    ignore = dirty
+[submodule "bundle/bufexplorer"]
+	path = bundle/bufexplorer
+	url = https://github.com/jlanzarotta/bufexplorer.git
+    ignore = dirty
+[submodule "bundle/abolish"]
+	path = bundle/abolish
+	url = https://github.com/tpope/vim-abolish.git
     ignore = dirty
