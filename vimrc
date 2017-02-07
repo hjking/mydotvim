@@ -226,6 +226,7 @@ set background=dark
 "-------------------------------------------------------------------------------
 
 set equalalways " Multiple windows, when created, are equal in size
+" Open new split panes to right and bottom, which feels more natural
 set splitbelow
 set splitright
 " Adjust window size of preview and help.
@@ -258,6 +259,10 @@ elseif os == "linux"
 endif
 " set mousemodel=extend
 set nomousehide                 " Hide the mouse when typing text
+
+" cursor
+let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 "-------------------------------------------------------------------------------
 " 10 GUI
@@ -457,7 +462,6 @@ set ttimeoutlen=100
 "-------------------------------------------------------------------------------
 " 21 command line editing
 "-------------------------------------------------------------------------------
-" set wildmode=longest:full,full
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
 set wildignore+=.svn,CVS,.git,.hg,*.bak,*.e,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.mdb,*~,~*,*.so " wildmenu: ignore these extensions
 if os == "windows"
@@ -1941,26 +1945,35 @@ if g:load_vimrc_plugin_config
     if pathogen#is_disabled('airline') == 0
       " let g:loaded_airline = 1
       " enable fugitive integration >
-      let g:airline_powerline_fonts = 1
-      " let g:airline_extensions = ['branch', 'quickfix']
+      let g:airline_powerline_fonts = 0
       let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
-      let g:airline#extensions#branch#enabled = 0
       let g:airline_inactive_collapse=1
+
+      " Enable Extensions
+      " let g:airline_extensions = ['branch', 'quickfix']
+
+      " enable/disable fugitive/lawrencium integration
+      let g:airline#extensions#branch#enabled = 0
+
       " enable syntastic integration >
       let g:airline#extensions#syntastic#enabled = 0
+
       " enable/disable tagbar integration >
       let g:airline#extensions#tagbar#enabled = 0
-      " change how tags are displayed (:help tagbar-statusline) >
       let g:airline#extensions#tagbar#flags = ''  "default
       let g:airline#extensions#tagbar#flags = 'f'
       let g:airline#extensions#tagbar#flags = 's'
       let g:airline#extensions#tagbar#flags = 'p'
+
       " bufferline
       let g:airline#extensions#bufferline#enabled = 0
+
+      " whitespace
       " enable/disable detection of whitespace errors. >
       let g:airline#extensions#whitespace#enabled = 0
       " configure which whitespace checks to enable. >
       let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
+
       " anzu-mode
       let g:airline#extensions#anzu#enabled = 0
     endif
@@ -2631,6 +2644,8 @@ if g:load_vimrc_extended
   nnoremap p p=`]<C-o>
   nnoremap P P=`]<C-o>
 
+  " ,gt: ctags go to definition in new tab
+  nnoremap <leader>gt  <C-w><C-]><C-w>T
 
   "-----------------------------------------------------------
   " Functions
