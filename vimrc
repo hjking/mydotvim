@@ -11,44 +11,82 @@ let g:load_vimrc_filetype = 1
 let g:load_vimrc_plugin_config = 1
 let g:load_vimrc_extended = 1
 
-let g:dotvim_settings = {}
-" change the default directory where all miscellaneous persistent files go
-let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
+"-----------------------------------------------------------
+" Platform
+"-----------------------------------------------------------
+" Identify platform {
+  function! MySys()
+    if has("win16") || has("win32") || has("win64") || has("win95")
+      return "windows"
+    elseif has('win32unix')
+      return "cygwin"
+    elseif has('gui_macvim')
+      return "mac"
+    else
+      return "linux"
+    endif
+  endfunction
 
-let s:settings = {}
-" auto complete
-if (v:version > 703 || v:version == 703 && has('patch885')) && has('lua')
-  let s:settings.autocomplete_method = 'neocomplete' " ycm/neocomplcache
-else
-  let s:settings.autocomplete_method = 'neocomplcache' " ycm/neocomplete
-endif
-" fuzzy finder
-if v:version < 703
-  let s:settings.finder_method = 'ctrlp'
-else
-  let s:settings.finder_method = 'unite'
-endif
+  silent function! OSX()
+      return has('macunix')
+  endfunction
+  silent function! LINUX()
+      return has('unix') && !has('macunix') && !has('win32unix')
+  endfunction
+  silent function! WINDOWS()
+      return  (has('win32') || has('win64'))
+  endfunction
 
-" snippets
-let s:settings.snippet_method = 'snipmate' " neosnippet/ultisnips
+  let os = MySys()
+  let s:is_windows = has('win32') || has('win64')
+  let s:is_cygwin = has('win32unix')
+  let s:is_macvim = has('gui_macvim')
+" }
 
-" statusline
-if v:version < 702
-  let s:settings.statusline_method = 'lightline'
-else
-  let s:settings.statusline_method = 'airline'
-endif
+" Local variables {
+  let g:dotvim_settings = {}
+  " change the default directory where all miscellaneous persistent files go
+  let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
 
+  let s:settings = {}
+  " auto complete
+  " if ( v:version > 704 || (v:version == 704 && has('patch143'))) && (has('python') || has('python3'))
+  "   let s:settings.autocomplete_method = 'youcompleteme'
+  " elseif (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
+  if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
+    let s:settings.autocomplete_method = 'neocomplete'
+  else
+    let s:settings.autocomplete_method = 'neocomplcache'
+  endif
+
+  " fuzzy finder
+  if v:version < 703
+    let s:settings.finder_method = 'ctrlp'
+  else
+    let s:settings.finder_method = 'unite'
+  endif
+
+  " snippets
+  let s:settings.snippet_method = 'snipmate' " neosnippet/ultisnips
+
+  " statusline
+  if v:version < 702
+    let s:settings.statusline_method = 'lightline'
+  else
+    let s:settings.statusline_method = 'airline'
+  endif
 " let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim-cache')
 " let g:cache_dir=$HOME.'/.vim-cache'
+
+" }
 
 "---------------------------------------------------------------
 """""""""""""""""""""" Basic """""""""""""""""""""""""""""""""""
 "---------------------------------------------------------------
 "{{{
-"-------------------------------------------------------------------------------
+"---------------------------------------------------------------
 "  1 important
-"-------------------------------------------------------------------------------
+"----------------------------------------------------------------
 set all& "reset everything to their defaults
 
 " Get out of VI's compatible mode
@@ -56,7 +94,116 @@ set all& "reset everything to their defaults
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
 
+if WINDOWS()
+  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
+
 filetype off
+
+"-----------------------------------------------------------
+""" pathogen.vim
+" auto load all plugins
+"{{{
+  let g:pathogen_not_loaded_plugin = 1
+  let g:path_of_vimrc_tmp = expand('<sfile>:h')
+  let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
+  " if os == "windows"
+  "   source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
+  " elseif os == "linux"
+  "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
+  " endif
+  runtime! bundle/pathogen/autoload/pathogen.vim
+
+  " disable bundle
+  let g:pathogen_blacklist = []
+
+  if v:version < 700 || (v:version == 700 && !has('patch167'))
+    call add(g:pathogen_blacklist, 'tagbar')
+  endif
+
+  if v:version < 701
+    call add(g:pathogen_blacklist, 'lookupfile')
+  endif
+
+  if v:version < 702
+    call add(g:pathogen_blacklist, 'indent-guides')
+  endif
+
+  if v:version < 702 || !has('float')
+    call add(g:pathogen_blacklist, 'L9')
+  endif
+  call add(g:pathogen_blacklist, 'FuzzyFinder')
+
+  if v:version < 703
+    "    call add(g:pathogen_blacklist, 'niceblock')
+    call add(g:pathogen_blacklist, 'easymotion')
+  endif
+
+  if v:version < 703 || !has('python')
+    call add(g:pathogen_blacklist, 'gundo')
+  endif
+
+  if v:version < 703
+    call add(g:pathogen_blacklist, 'VimCompleteMe')
+  endif
+
+  if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
+    call add(g:pathogen_blacklist, 'YouCompleteMe')
+  endif
+
+  if s:settings.statusline_method == 'lightline'
+    call add(g:pathogen_blacklist, 'airline')
+  else
+    call add(g:pathogen_blacklist, 'lightline')
+  endif
+
+  if s:settings.autocomplete_method == 'youcompleteme'
+    call add(g:pathogen_blacklist, 'neocomplete')
+    call add(g:pathogen_blacklist, 'neocomplcache')
+  elseif s:settings.autocomplete_method == 'neocomplcache'
+    call add(g:pathogen_blacklist, 'neocomplete')
+    call add(g:pathogen_blacklist, 'YouCompleteMe')
+  else
+    call add(g:pathogen_blacklist, 'neocomplcache')
+    call add(g:pathogen_blacklist, 'YouCompleteMe')
+  endif
+
+  if s:settings.finder_method == 'ctrlp'
+    call add(g:pathogen_blacklist, 'unite')
+  else
+    call add(g:pathogen_blacklist, 'ctrlp.vim')
+    call add(g:pathogen_blacklist, 'ctrlp-extensions.vim')
+  endif
+
+  if s:settings.snippet_method == 'snipmate' " neosnippet/ultisnips
+    call add(g:pathogen_blacklist, 'neosnippet')
+    call add(g:pathogen_blacklist, 'ultisnips')
+  elseif s:settings.snippet_method == 'neosnippet'
+    call add(g:pathogen_blacklist, 'snipmate')
+    call add(g:pathogen_blacklist, 'ultisnips')
+  else " ultisnips
+    call add(g:pathogen_blacklist, 'neosnippet')
+    call add(g:pathogen_blacklist, 'snipmate')
+  endif
+
+  " disable plugins
+  call add(g:pathogen_blacklist, 'bufexplorer')
+  call add(g:pathogen_blacklist, 'minibufexpl')
+  call add(g:pathogen_blacklist, 'syntastic')
+
+  call pathogen#infect()
+  " execute pathogen#infect()
+  call pathogen#helptags()
+  " pathogen manage vba plugin
+  "   :e name.vba
+  "   :!mkdir $VIM\vimfiles\bundle\name
+  "   :UseVimball $VIM\vimfiles\bundle\name
+
+  ""if filereadable(expand("~/.vimrc.bundles.local"))
+  ""    source ~/.vimrc.bundles.local
+  ""endif
+
+" }}}
 
 "-----------------------------------------------------------
 " FileType Detecting
@@ -70,39 +217,17 @@ if has('autocmd')
   filetype plugin indent on
 endif
 
-"-----------------------------------------------------------
-" Platform
-"-----------------------------------------------------------
-function! MySys()
-  if has("win16") || has("win32") || has("win64") || has("win95")
-    return "windows"
-  elseif has('win32unix')
-    return "cygwin"
-  elseif has('gui_macvim')
-    return "mac"
-  else
-    return "linux"
-  endif
-endfunction
-
-let os = MySys()
-let s:is_windows = has('win32') || has('win64')
-let s:is_cygwin = has('win32unix')
-let s:is_macvim = has('gui_macvim')
-
 if os == "windows"
   let g:vimfiles = split(&runtimepath, ',')[1]
 elseif os == "linux"
   let g:vimfiles = split(&runtimepath, ',')[0]
 endif
 
-set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-
 if os == "windows"
   language message en                   " message language
   " language message en_US                   " message language
   " language message zh_CN.UTF-8
-  " lang messages zh_CN.UTF-8 " 解决consle输出乱码
+  " lang messages zh_CN.UTF-8 "
 elseif os == "linux"
   language message C
 endif
@@ -116,7 +241,6 @@ runtime! ftplugin/man.vim
 
 " set mapleader
 let mapleader = ","
-let g:mapleader=","
 
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
@@ -185,6 +309,13 @@ set grepformat=%f:%l:%c:%m
 "-------------------------------------------------------------------------------
 "  3 tags
 "-------------------------------------------------------------------------------
+" ctags path
+if os == "windows"
+  let g:dotvim_settings.ctags_path=g:vimfiles . '/ctags58/ctags.exe'
+elseif os == "linux"
+  let g:dotvim_settings.ctags_path='ctags'
+endif
+
 if has('path_extra')
   set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
   " setglobal tags-=./tags tags-=./tags; tags^=./tags;
@@ -214,12 +345,23 @@ set lazyredraw                  " Don't redraw while executing macros
 "-------------------------------------------------------------------------------
 "  5 syntax, highlighting and spelling
 "-------------------------------------------------------------------------------
+set background=dark
+" Allow to trigger background
+function! ToggleBG()
+    let s:tbg = &background
+    " Inversion
+    if s:tbg == "dark"
+        set background=light
+    else
+        set background=dark
+    endif
+endfunction
+noremap <leader>bg :call ToggleBG()<CR>
+
 try
   colorscheme murphy
 catch
 endtry
-
-set background=dark
 
 "-------------------------------------------------------------------------------
 "  6 multiple windows
@@ -309,10 +451,12 @@ set keymodel=startsel           " Shift + arrow key
 "-----------------------------------------------------------
 " Use clipboard register.
 " set clipboard+=unnamed
-if has('unnamedplus')
-  set clipboard& clipboard+=unnamedplus
-else
-  set clipboard& clipboard+=unnamed
+if has('clipboard')
+  if has('unnamedplus')  " When possible use + register for copy-paste
+    set clipboard=unnamedplus
+  else         " On mac and Windows, use * register for copy-paste
+    set clipboard=unnamed
+  endif
 endif
 
 "-------------------------------------------------------------------------------
@@ -502,34 +646,46 @@ set isfname-==  " remove = from filename characters
 " 26 multi-byte characters
 "-------------------------------------------------------------------------------
 if has("multi_byte")
-  if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
-    set ambiwidth=double
-  endif
-  " Set fileencoding priority
-  if getfsize(expand("%")) > 0
-    set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
-  else
-    set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
-  endif
-  " CJK environment detection and corresponding setting
-  if v:lang =~ "^zh_CN"
-  " Use cp936 to support GBK, euc-cn == gb2312
-    " set encoding=chinese
-    set fileencoding=chinese
-  elseif v:lang =~ "^zh_TW"
-    set fileencoding=taiwan
-  elseif v:lang =~ "^ko"
-    set fileencoding=euc-kr
-  elseif v:lang =~ "^ja_JP"
-    set fileencoding=cp932              " euc-jp
-  elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
-    " Detect UTF-8 locale, and replace CJK setting if needed
-    set fileencoding=utf-8
-  endif
-  if &encoding ==# 'latin1' && has('gui_running')
-    set encoding=utf-8
-  endif
-  let &termencoding = &encoding
+  " if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
+  "   set ambiwidth=double
+  " endif
+  " " Set fileencoding priority
+  " if getfsize(expand("%")) > 0
+  "   set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
+  " else
+  "   set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
+  " endif
+  " " CJK environment detection and corresponding setting
+  " if v:lang =~ "^zh_CN"
+  " " Use cp936 to support GBK, euc-cn == gb2312
+  "   " set encoding=chinese
+  "   set fileencoding=chinese
+  " elseif v:lang =~ "^zh_TW"
+  "   set fileencoding=taiwan
+  " elseif v:lang =~ "^ko"
+  "   set fileencoding=euc-kr
+  " elseif v:lang =~ "^ja_JP"
+  "   set fileencoding=cp932              " euc-jp
+  " elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
+  "   " Detect UTF-8 locale, and replace CJK setting if needed
+  "   set fileencoding=utf-8
+  " endif
+  " if &encoding ==# 'latin1' && has('gui_running')
+  "   set encoding=utf-8
+  " endif
+  " let &termencoding = &encoding
+
+  " Windows cmd.exe still uses cp850. If Windows ever moved to
+  " Powershell as the primary terminal, this would be utf-8
+  set termencoding=cp850
+  " Let Vim use utf-8 internally, because many scripts require this
+  set encoding=utf-8
+  setglobal fileencoding=utf-8
+  " Windows has traditionally used cp1252, so it's probably wise to
+  " fallback into cp1252 instead of eg. iso-8859-15.
+  " Newer Windows files might contain utf-8 or utf-16 LE so we might
+  " want to try them first.
+  set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
 else
   echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
 endif
@@ -808,104 +964,33 @@ endif
 if g:load_vimrc_plugin_config
 
   "-----------------------------------------------------------
-  """ pathogen.vim
-  " auto load all plugins
-  "{{{
-    let g:pathogen_not_loaded_plugin = 1
-    let g:path_of_vimrc_tmp = expand('<sfile>:h')
-    let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-    " if os == "windows"
-    "   source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
-    " elseif os == "linux"
-    "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
-    " endif
-    runtime! bundle/pathogen/autoload/pathogen.vim
-    " disable bundle
-    let g:pathogen_blacklist = []
-
-    if v:version < 700 || (v:version == 700 && !has('patch167'))
-      call add(g:pathogen_blacklist, 'tagbar')
-    endif
-
-    if v:version < 701
-      call add(g:pathogen_blacklist, 'lookupfile')
-    endif
-
-    if v:version < 702
-      call add(g:pathogen_blacklist, 'airline')
-      call add(g:pathogen_blacklist, 'neocomplcache')
-      call add(g:pathogen_blacklist, 'neosnippet')
-      call add(g:pathogen_blacklist, 'indent-guides')
-    endif
-
-    if v:version >= 702
-      call add(g:pathogen_blacklist, 'lightline')
-    endif
-
-    if v:version < 702 || !has('float')
-      call add(g:pathogen_blacklist, 'L9')
-    endif
-      call add(g:pathogen_blacklist, 'FuzzyFinder')
-
-    if v:version < 703
-    "    call add(g:pathogen_blacklist, 'niceblock')
-      call add(g:pathogen_blacklist, 'easymotion')
-      call add(g:pathogen_blacklist, 'unite')
-    endif
-
-    if v:version < 703 || !has('python')
-      call add(g:pathogen_blacklist, 'gundo')
-    endif
-
-    " Disable on purpose
-    " if exists('g:pathogen_not_loaded_plugin')
-    if v:version < 703 || !has('patch584')
-      call add(g:pathogen_blacklist, 'YouCompleteMe')
-    endif
-
-    " disable plugins
-    call add(g:pathogen_blacklist, 'syntastic')
-
-    call pathogen#infect()
-    " execute pathogen#infect()
-    call pathogen#helptags()
-    " pathogen 管理vba格式的插件
-    "   :e name.vba
-    "   :!mkdir $VIM\vimfiles\bundle\name
-    "   :UseVimball $VIM\vimfiles\bundle\name
-
-    ""if filereadable(expand("~/.vimrc.bundles.local"))
-    ""    source ~/.vimrc.bundles.local
-    ""endif
-
-  " }}}
-
-  "-----------------------------------------------------------
   " Solarized
   " Allow color schemes to do bright colors without forcing bold.
-  if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
-    set t_Co=16
-  endif
-  " set t_Co=256
-  if pathogen#is_disabled('solarized') == 0
-    " let hour = strftime("%H")
-    " if 6 <= hour && hour < 18
-    "   set background=light
-    " else
-    "   set background=dark
-    " endif
-    let g:solarized_termtrans=1
-    let g:solarized_termcolors=256
-    let g:solarized_contrast="high"
-    let g:solarized_visibility="high"
-  endif
-  try
-    let base16colorspace=256
-    colorscheme solarized
-    " set background=light
-  catch
-    colorscheme murphy
-  endtry
+  " {{{
+    if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
+      set t_Co=16
+    endif
+    " set t_Co=256
+    if pathogen#is_disabled('solarized') == 0
+      " let hour = strftime("%H")
+      " if 6 <= hour && hour < 18
+      "   set background=light
+      " else
+      "   set background=dark
+      " endif
+      let g:solarized_termtrans=1
+      let g:solarized_termcolors=256
+      let g:solarized_contrast="high"
+      let g:solarized_visibility="high"
+    endif
+    try
+      let base16colorspace=256
+      colorscheme solarized
+      " set background=light
+    catch
+      colorscheme murphy
+    endtry
+  " }}}
 
   "-----------------------------------------------------------
   """ python-mode
@@ -942,11 +1027,12 @@ if g:load_vimrc_plugin_config
   " TagList
   " {{{
     if pathogen#is_disabled('taglist') == 0
-      if os == "windows"
-        let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'           "设置ctags的路径
-      elseif os == "linux"
-        let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-      endif
+      " if os == "windows"
+      "   let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'
+      " elseif os == "linux"
+      "   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+      " endif
+      let Tlist_Ctags_Cmd = g:dotvim_settings.ctags_path
       if !executable('ctags')
         let loaded_taglist = 1
       endif
@@ -966,11 +1052,12 @@ if g:load_vimrc_plugin_config
   " tagbar
   " {{{
     if pathogen#is_disabled('tagbar') == 0
-      if os == "windows"
-        let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
-      elseif os == "linux"
-        let g:tagbar_ctags_bin = 'ctags'
-      endif
+      " if os == "windows"
+      "   let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
+      " elseif os == "linux"
+      "   let g:tagbar_ctags_bin = 'ctags'
+      " endif
+      let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
       let g:tagbar_width = 20
       let g:tagbar_autofocus = 1
       let g:tagbar_sort = 1
@@ -1002,30 +1089,33 @@ if g:load_vimrc_plugin_config
   "-----------------------------------------------------------
   " File Explorer
   "-----------------------------------------------------------
-  "let g:explVertical=1                   " split verticially
-  "window size
-  "let g:explWinSize=35                   " width of 35 pixels
-  "let g:explSplitLeft=1
-  "let g:explSplitBelow=1
+  " {{{
+    "let g:explVertical=1                   " split verticially
+    "window size
+    "let g:explWinSize=35                   " width of 35 pixels
+    "let g:explSplitLeft=1
+    "let g:explSplitBelow=1
+  " }}}
 
   "-----------------------------------------------------------
   "Tree explorer
   "-----------------------------------------------------------
-  "let g:Tlist_Enable_Fold_Column=0
-  "let g:treeExplVertical=1
-  "let g:treeExplWinSize=30
-  " let g:explSplitLeft=1
-  " let g:explSplitBelow=1
-  " "Hide some files
-  " let g:explHideFiles='^\.,.*\.class$,.*\.swp$,.*\.pyc$,.*\.swo$,\.DS_Store$'
-  " "Hide the help thing..
-  " let g:explDetailedHelp=0
+  " {{{
+    "let g:Tlist_Enable_Fold_Column=0
+    "let g:treeExplVertical=1
+    "let g:treeExplWinSize=30
+    " let g:explSplitLeft=1
+    " let g:explSplitBelow=1
+    " "Hide some files
+    " let g:explHideFiles='^\.,.*\.class$,.*\.swp$,.*\.pyc$,.*\.swo$,\.DS_Store$'
+    " "Hide the help thing..
+    " let g:explDetailedHelp=0
+  " }}}
 
   "-----------------------------------------------------------
   " MiniBufExplorer
   " {{{
     if pathogen#is_disabled('minibufexpl') == 0
-      let loaded_minibufexplorer = 0         " *** Disable minibuffer plugin
       let g:miniBufExplMapCTabSwitchBufs = 1
       let g:miniBufExplMapWindowNavVim = 1
       let g:miniBufExplMapWindowNavArrows = 1
@@ -1041,6 +1131,7 @@ if g:load_vimrc_plugin_config
   "-----------------------------------------------------------
   "Matchit
   " Load matchit.vim, but only if the user hasn't installed a newer version.
+  " {{{
   if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
     runtime! macros/matchit.vim
     let b:match_ignorecase=0
@@ -1065,6 +1156,7 @@ if g:load_vimrc_plugin_config
       \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
       \ '`ifdef\>:`else\>:`endif\>,'
   endif
+  " }}}
 
   "-----------------------------------------------------------
   " hl-matchit
@@ -1163,13 +1255,16 @@ if g:load_vimrc_plugin_config
 
   "-----------------------------------------------------------
   "Calendar
-  " :Calendar         "Open calendar   " :CalendarH        "打开水平的日历窗口
+  " :Calendar         " Open calendar
+  " :CalendarH        " Open Calendar horizonally
   "-----------------------------------------------------------
-  "let g:calendar_diary=<PATH>
-  " let g:calendar_wruler = '日 一 二 三 四 五 六'
-  let g:calendar_mark = 'left-fit'
-  let g:calendar_focus_today = 1
-  noremap <Leader>ca :Calendar<CR>
+  " {{{
+    "let g:calendar_diary=<PATH>
+    " let g:calendar_wruler = '日 一 二 三 四 五 六'
+    let g:calendar_mark = 'left-fit'
+    let g:calendar_focus_today = 1
+    noremap <Leader>ca :Calendar<CR>
+  " }}}
 
   "-----------------------------------------------------------
   " SVN Command
@@ -1345,9 +1440,10 @@ if g:load_vimrc_plugin_config
 
   "-----------------------------------------------------------
   " neocomplcache
-  if s:settings.autocomplete_method == 'neocomplcache' "{{{
+  " {{{
+  if s:settings.autocomplete_method == 'neocomplcache'
     if pathogen#is_disabled('neocomplcache') == 0
-      if v:version > 702
+      if v:version >= 702
         let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
         let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
         let g:neocomplcache_enable_auto_select = 1
@@ -1361,9 +1457,11 @@ if g:load_vimrc_plugin_config
         let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
         let g:neocomplcache_max_list = 5
-        let g:neocomplcache_enable_fuzzy_completion = 1
-        let g:neocomplcache_fuzzy_completion_start_length = 3
+        " let g:neocomplcache_enable_fuzzy_completion = 1
+        " let g:neocomplcache_fuzzy_completion_start_length = 3
         let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+        let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
 
         let g:neocomplcache_source_disable = {
           \ 'syntax_complete': 1,
@@ -1376,10 +1474,10 @@ if g:load_vimrc_plugin_config
         endif
         let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
+        " Enable heavy omni completion.
         if !exists('g:neocomplcache_omni_patterns')
           let g:neocomplcache_omni_patterns = {}
         endif
-
         let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
         let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
         let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
@@ -1388,28 +1486,27 @@ if g:load_vimrc_plugin_config
         " " Plugin key-mappings.
         " inoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
         " snoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
-        " inoremap <expr><C-g>     neocomplcache#undo_completion()
-        " inoremap <expr><C-l>     neocomplcache#complete_common_string()
+        inoremap <expr><C-g>     neocomplcache#undo_completion()
+        inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
         " Recommended key-mappings.
         " <CR>: close popup and save indent.
-        " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-        " function! s:my_cr_function()
-        "   return neocomplcache#smart_close_popup() . "\<CR>"
-        "   " For no inserting <CR> key.
-        "   "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-        " endfunction
+        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        function! s:my_cr_function()
+          return neocomplcache#smart_close_popup() . "\<CR>"
+          " For no inserting <CR> key.
+          "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+        endfunction
         " <TAB>: completion.
-        " inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
         " <C-h>, <BS>: close popup and delete backword char.
         inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
         inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
         inoremap <expr><C-y>  neocomplcache#close_popup()
         inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-        "
         " Close popup by <Space>.
-        " inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
 
         " Enable omni completion.
         augroup my_complete
@@ -1421,13 +1518,10 @@ if g:load_vimrc_plugin_config
         autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
         augroup END
 
-        " Enable heavy omni completion.
-        if !exists('g:neocomplcache_omni_patterns')
-          let g:neocomplcache_omni_patterns = {}
-        endif
       endif
     endif
-  endif " }}}
+  endif
+  " }}}
 
   "-----------------------------------------------------------
   " neocomplete
@@ -1518,7 +1612,8 @@ if g:load_vimrc_plugin_config
       " https://github.com/c9s/perlomni.vim
       let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     endif
-  endif "}}}
+  endif
+  "}}}
 
   "-----------------------------------------------------------
   " conque
@@ -1720,6 +1815,7 @@ if g:load_vimrc_plugin_config
   " snipMate
   if s:settings.snippet_method == 'snipmate' "{{{
     if pathogen#is_disabled('vim-snipmate') == 0
+      let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
       let g:snipMate.scope_aliases = {}
       let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog'
@@ -1765,6 +1861,10 @@ if g:load_vimrc_plugin_config
       vnoremap <Leader>a& :Tabularize /&<CR>
       nnoremap <Leader>a= :Tabularize /=<CR>
       vnoremap <Leader>a= :Tabularize /=<CR>
+      nnoremap <Leader>a=> :Tabularize /=><CR>
+      vnoremap <Leader>a=> :Tabularize /=><CR>
+      nnoremap <Leader>a<= :Tabularize /<=<CR>
+      vnoremap <Leader>a<= :Tabularize /<=<CR>
       nnoremap <Leader>a: :Tabularize /:<CR>
       vnoremap <Leader>a: :Tabularize /:<CR>
       nnoremap <Leader>a:: :Tabularize /:\zs<CR>
