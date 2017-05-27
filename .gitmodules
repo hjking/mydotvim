@@ -65,10 +65,6 @@
 	path = bundle/vividchalk
 	url = https://github.com/tpope/vim-vividchalk.git
     ignore = dirty
-[submodule "bundle/inkpot"]
-	path = bundle/inkpot
-	url = https://github.com/ciaranm/inkpot.git
-    ignore = dirty
 [submodule "bundle/vim-fugitive"]
 	path = bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
@@ -84,10 +80,6 @@
 [submodule "bundle/gundo"]
 	path = bundle/gundo
 	url = https://github.com/sjl/gundo.vim.git
-    ignore = dirty
-[submodule "bundle/desertink"]
-	path = bundle/desertink
-	url = https://github.com/toupeira/vim-desertink.git
     ignore = dirty
 [submodule "bundle/neocomplcache"]
 	path = bundle/neocomplcache
@@ -169,10 +161,6 @@
 	path = bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
     ignore = dirty
-[submodule "bundle/irblack"]
-	path = bundle/irblack
-	url = https://github.com/wgibbs/vim-irblack.git
-    ignore = dirty
 [submodule "bundle/vim-perl"]
 	path = bundle/vim-perl
 	url = https://github.com/vim-perl/vim-perl.git
@@ -188,10 +176,6 @@
 [submodule "bundle/pathogen"]
 	path = bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git
-    ignore = dirty
-[submodule "bundle/skittles_berry"]
-	path = bundle/skittles_berry
-	url = https://github.com/shawncplus/skittles_berry.git
     ignore = dirty
 [submodule "bundle/tabular"]
 	path = bundle/tabular
@@ -213,10 +197,6 @@
 	path = bundle/vim-hybrid
 	url = https://github.com/w0ng/vim-hybrid.git
     ignore = dirty
-[submodule "bundle/vim-vombato"]
-	path = bundle/vim-vombato
-	url = https://github.com/molok/vim-vombato-colorscheme.git
-	ignore = dirty
 [submodule "bundle/niceblock"]
 	path = bundle/niceblock
 	url = https://github.com/kana/vim-niceblock.git
@@ -228,10 +208,6 @@
 [submodule "bundle/airline"]
 	path = bundle/airline
 	url = https://github.com/bling/vim-airline.git
-	ignore = dirty
-[submodule "bundle/cs-kolor"]
-	path = bundle/cs-kolor
-	url = https://github.com/zeis/vim-kolor.git
 	ignore = dirty
 [submodule "bundle/CamelCaseMotion"]
 	path = bundle/CamelCaseMotion
@@ -248,10 +224,6 @@
 [submodule "bundle/over"]
 	path = bundle/over
 	url = https://github.com/osyo-manga/vim-over.git
-	ignore = dirty
-[submodule "bundle/cs-peaksea"]
-	path = bundle/cs-peaksea
-	url = https://github.com/vim-scripts/peaksea.git
 	ignore = dirty
 [submodule "bundle/sneak"]
 	path = bundle/sneak
@@ -337,3 +309,6 @@
 	path = bundle/abolish
 	url = https://github.com/tpope/vim-abolish.git
     ignore = dirty
+[submodule "bundle/incsearch"]
+	path = bundle/incsearch
+	url = https://github.com/haya14busa/incsearch.vim.git

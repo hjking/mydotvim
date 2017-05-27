@@ -14,7 +14,7 @@ let g:load_vimrc_extended = 1
 "-----------------------------------------------------------
 " Platform
 "-----------------------------------------------------------
-" Identify platform {
+" Identify platform {{{
   function! MySys()
     if has("win16") || has("win32") || has("win64") || has("win95")
       return "windows"
@@ -41,9 +41,9 @@ let g:load_vimrc_extended = 1
   let s:is_windows = has('win32') || has('win64')
   let s:is_cygwin = has('win32unix')
   let s:is_macvim = has('gui_macvim')
-" }
+" }}}
 
-" Local variables {
+" Local variables {{{
   let g:dotvim_settings = {}
   " change the default directory where all miscellaneous persistent files go
   let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
@@ -78,7 +78,7 @@ let g:load_vimrc_extended = 1
 " let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim-cache')
 " let g:cache_dir=$HOME.'/.vim-cache'
 
-" }
+" }}}
 
 "---------------------------------------------------------------
 """""""""""""""""""""" Basic """""""""""""""""""""""""""""""""""
@@ -101,9 +101,8 @@ endif
 filetype off
 
 "-----------------------------------------------------------
-""" pathogen.vim
-" auto load all plugins
-"{{{
+""" pathogen.vim {{{
+  " auto load all plugins
   let g:pathogen_not_loaded_plugin = 1
   let g:path_of_vimrc_tmp = expand('<sfile>:h')
   let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
@@ -127,6 +126,7 @@ filetype off
 
   if v:version < 702
     call add(g:pathogen_blacklist, 'indent-guides')
+    call add(g:pathogen_blacklist, 'neocomplcache')
   endif
 
   if v:version < 702 || !has('float')
@@ -149,6 +149,7 @@ filetype off
 
   if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
     call add(g:pathogen_blacklist, 'YouCompleteMe')
+    call add(g:pathogen_blacklist, 'gutentags')
   endif
 
   if s:settings.statusline_method == 'lightline'
@@ -213,9 +214,7 @@ filetype off
 " filetype on
 " filetype plugin on
 " filetype indent on
-if has('autocmd')
-  filetype plugin indent on
-endif
+filetype plugin indent on
 
 if os == "windows"
   let g:vimfiles = split(&runtimepath, ',')[1]
@@ -239,8 +238,12 @@ endif
 
 runtime! ftplugin/man.vim
 
-" set mapleader
+" our <leader> will be the space key
 let mapleader = ","
+" let mapleader=" "
+
+" our <localleader> will be the '-' key
+let maplocalleader="-"
 
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
@@ -255,7 +258,10 @@ if has('syntax') && !exists('g:syntax_on')
   syntax enable
 endif
 
-syntax on
+" Switch syntax highlighting on, when the terminal has colors
+if &t_Co > 2 || has("gui_running")
+  syntax on
+endif
 
 "-------------------------------------------------------------------------------
 "  2 moving around, searching and patterns
@@ -294,6 +300,7 @@ set incsearch       " Show the pattern when typing a search command
 set ignorecase      " Ignore cases
 set smartcase       "
 set magic           " Changes the special characters that can be used in search patterns
+set gdefault            " this makes search/replace global by default
 
 " Use grep.
 if executable('ack')
@@ -305,6 +312,14 @@ else
 endif
 let g:grep_cmd_opts = '--line-number'
 set grepformat=%f:%l:%c:%m
+
+if v:version >= 704
+  " The new Vim regex engine is currently slooooow as hell which makes syntax
+  " highlighting slow, which introduces typing latency.
+  " Consider removing this in the future when the new regex engine becomes
+  " faster.
+  set regexpengine=1
+endif
 
 "-------------------------------------------------------------------------------
 "  3 tags
@@ -332,15 +347,18 @@ set display+=lastline
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
 set list                        " list mode
-if &listchars ==# 'eol:$'
-  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
-  " set listchars=tab:\>\ ,trail:.,extends:>,precedes:<
-  " set listchars=tab:▸\,trail:-,extends:>,precedes:<,nbsp:+
+
+if has('multi_byte') && &encoding ==# 'utf-8'
+  let &listchars = 'tab:▸ ,trail:-,extends:❯,precedes:❮,nbsp:±'
+else
+  let &listchars = 'tab:> ,trail:-,extends:>,precedes:<,nbsp:.'
 endif
+
 set number                      " display line number
 set numberwidth=1
 set lazyredraw                  " Don't redraw while executing macros
 
+set columns=90
 
 "-------------------------------------------------------------------------------
 "  5 syntax, highlighting and spelling
@@ -358,10 +376,17 @@ function! ToggleBG()
 endfunction
 noremap <leader>bg :call ToggleBG()<CR>
 
-try
-  colorscheme murphy
-catch
-endtry
+if has('gui_running')
+  let colorscheme_list = ['solarized', 'badwolf',   'koehler',
+        \ 'molokai', 'gruvbox', 'vividchalk', 'elflord',
+        \ 'hybrid',    'zenburn']
+  exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
+else
+  try
+    colorscheme murphy
+  catch
+  endtry
+endif
 
 "-------------------------------------------------------------------------------
 "  6 multiple windows
@@ -452,10 +477,19 @@ set keymodel=startsel           " Shift + arrow key
 " Use clipboard register.
 " set clipboard+=unnamed
 if has('clipboard')
-  if has('unnamedplus')  " When possible use + register for copy-paste
-    set clipboard=unnamedplus
-  else         " On mac and Windows, use * register for copy-paste
-    set clipboard=unnamed
+  if has('unnamedplus')
+    " By default, Vim will not use the system clipboard when yanking/pasting to
+    " the default register. This option makes Vim use the system default
+    " clipboard.
+    " Note that on X11, there are _two_ system clipboards: the "standard" one, and
+    " the selection/mouse-middle-click one. Vim sees the standard one as register
+    " '+' (and this option makes Vim use it by default) and the selection one as
+    " '*'.
+    " See :h 'clipboard' for details.
+    set clipboard=unnamedplus,unnamed
+  else
+    " Vim now also uses the selection system clipboard for default yank/paste.
+    set clipboard+=unnamed
   endif
 endif
 
@@ -498,6 +532,7 @@ set shiftround              " Round indent by shiftwidth
 set autoindent              " Copy indent from current line when starting a new line
 set smartindent             " Do smart autoindenting when starting a new line
 set cindent                 " Enables automatic C program indenting
+set copyindent              " copy the previous indentation on autoindenting
 
 "-------------------------------------------------------------------------------
 " 16 folding
@@ -639,7 +674,8 @@ endif
 "-------------------------------------------------------------------------------
 " 25 language specific
 "-------------------------------------------------------------------------------
-set iskeyword+=_,$,@,%,#,-  " Keywords for search and some commands, no wrap
+" none of these should be word dividers, so make them not be
+set iskeyword+=_,$,@,%,#,-
 set isfname-==  " remove = from filename characters
 
 "-------------------------------------------------------------------------------
@@ -677,7 +713,10 @@ if has("multi_byte")
 
   " Windows cmd.exe still uses cp850. If Windows ever moved to
   " Powershell as the primary terminal, this would be utf-8
-  set termencoding=cp850
+  " set termencoding=cp850
+  if &termencoding == ""
+    let &termencoding = &encoding
+  endif
   " Let Vim use utf-8 internally, because many scripts require this
   set encoding=utf-8
   setglobal fileencoding=utf-8
@@ -729,7 +768,8 @@ endif
 
 " Specify the behavior when switching buffers
 try
-  set switchbuf=useopen,usetab,newtab
+  " set switchbuf=useopen,usetab,newtab
+  set switchbuf=usetab,usetab     " Open new buffers always in new tabs
   set showtabline=2
   catch
 endtry
@@ -746,7 +786,7 @@ set sidescroll=1
 "-----------------------------------------------------------
 " AutoCommands
 "-----------------------------------------------------------
-if has("autocmd")
+if has("autocmd") " {{{
   " Set augroup
   augroup MyAutoCmd
     autocmd!
@@ -780,7 +820,11 @@ if has("autocmd")
     " endif
 
     " remove all trailing whitespace in a file
-    autocmd BufWritePre * :%s/\s\+$//e
+    " autocmd BufWritePre * :%s/\s\+$//e
+
+    " Automatically delete trailing DOS-returns and whitespace on file open and
+    " write.
+    autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
 
     " Automatically resize vertical splits
     " autocmd WinEnter * :set winfixheight
@@ -798,7 +842,7 @@ if has("autocmd")
     autocmd FileType help set nonu
     autocmd FileType lisp set ts=2 softtabstop=2
   augroup END
-endif " has("autocmd")
+endif " }}}
 
 "-----------------------------------------------------------
 " Highlight current Line
@@ -814,7 +858,7 @@ endif " has("autocmd")
 """ Status Line
 "-----------------------------------------------------------
 " Color of Status Line
-if has('statusline')
+if has('statusline') " {{{
   set laststatus=2           " always show the status line
   "highlight StatusLine guifg=SlateBlue guibg=Yellow
   "highlight StatusLine guifg=SlateBlue guibg=#008800
@@ -855,15 +899,84 @@ if has('statusline')
   set statusline+=%6*%b(0X%B)
   " set statusline+=[Pos=%l,%c%V]
   set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
-endif
+endif " }}}
+
+" GUI Options {{{
+  " set guioptions+=grTt
+  set guioptions-=T
+  " don't use autoselect on OS X
+  if has('mac')
+    set guioptions-=a
+  endif
+  " For CTRL-v to work autoselect must be off.
+  " On Unix we have two selections, autoselect can be used.
+  if !has('unix')
+    set guioptions-=a
+  endif
+
+  if has("gui_win32")     " Win
+    set guioptions+=bh  " Horizontal scrolbar
+  endif
+" }}}
+
+" Font {{{
+  " set default guifont
+  if has("gui_running")
+    " check and determine the gui font after GUIEnter.
+    " NOTE: getfontname function only works after GUIEnter.
+    au GUIEnter * call s:SetGuiFont()
+  endif
+
+  " set guifont
+  function s:SetGuiFont()
+    if has('mac')
+      if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+        set guifont=Bitstream\ Vera\ Sans\ Mono:h12
+      elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
+        set guifont=DejaVu\ Sans\ Mono:h12
+      elseif getfontname( "Menlo\ Regular" ) != ""
+        set guifont=Menlo\ Regular:h12
+      endif
+    elseif has('unix')
+      " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
+      set guifont=Monospace\ 10
+      set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
+    elseif has("gui_win32")     " Windows platform
+      let font_name = ""
+      if getfontname( "Consolas" ) != ""
+        set guifont=Consolas:h11:cANSI " this is the default visual studio font
+        let font_name = "Consolas"
+      elseif getfontname( "Source_Code_Pro" ) != ""
+        set guifont=Source_Code_Pro:h10:cANSI
+        let font_name = "Source_Code_Pro"
+      elseif getfontname( "Droid_Sans_Mono" ) != ""
+        set guifont=Droid_Sans_Mono:h10:cANSI
+        let font_name = "Droid_Sans_Mono"
+      elseif getfontname( "DejaVu_Sans_Mono" ) != ""
+        set guifont=DejaVu_Sans_Mono:h11:cANSI
+        let font_name = "DejaVu_Sans_Mono"
+      elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+        set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
+        let font_name = "Bitstream_Vera_Sans_Mono"
+      elseif getfontname( "Raize" ) != ""
+        set guifont=Raize:h12:b:cANSI
+        let font_name = "Raize"
+      else
+        set guifont=Lucida_Console:h12:cANSI
+        let font_name = "Lucida_Console"
+      endif
+      set guifontwide=Courier_New:h12:cANSI
+      silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
+    endif
+  endfunction
+" }}}
 
 "}}} Basic -------------------------------------------------------------
 
 "---------------------------------------------------------------
 """""""""""""""""""""" Filetypes """""""""""""""""""""""""""""""
 "---------------------------------------------------------------
-"{{{
-if g:load_vimrc_filetype
+if g:load_vimrc_filetype "{{{
 
   "-----------------------------------------------------------
   " Verilog Automatic
@@ -960,13 +1073,11 @@ endif
 "---------------------------------------------------------------
 """""""""""""""""""""" Plugin_config """""""""""""""""""""""""""
 "---------------------------------------------------------------
-"{{{
-if g:load_vimrc_plugin_config
+if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
-  " Solarized
-  " Allow color schemes to do bright colors without forcing bold.
-  " {{{
+  " Solarized {{{
+    " Allow color schemes to do bright colors without forcing bold.
     if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
       set t_Co=16
     endif
@@ -993,9 +1104,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  """ python-mode
-  " Disable pylint checking every save
-  " {{{
+  " python-mode {{{
+    " Disable pylint checking every save
     if pathogen#is_disabled('python-mode') == 0
       let g:pymode_lint_write = 0
       let g:pymode_lint = 1
@@ -1024,8 +1134,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " TagList
-  " {{{
+  " TagList {{{
     if pathogen#is_disabled('taglist') == 0
       " if os == "windows"
       "   let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'
@@ -1049,8 +1158,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " tagbar
-  " {{{
+  " tagbar {{{
     if pathogen#is_disabled('tagbar') == 0
       " if os == "windows"
       "   let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
@@ -1069,6 +1177,7 @@ if g:load_vimrc_plugin_config
       let g:tagbar_show_visibility = 1
       " let g:tagbar_autoclose = 1    " auto close after open tag
       nnoremap <silent><leader>tb :TagbarToggle<CR>
+      map <F6> :TagbarToggle<CR>
       "Open Tagbar or jump to it if already open (useful for split windows)
       nnoremap <leader>to :TagbarOpen j<CR>
 
@@ -1087,9 +1196,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " File Explorer
-  "-----------------------------------------------------------
-  " {{{
+  " File Explorer {{{
     "let g:explVertical=1                   " split verticially
     "window size
     "let g:explWinSize=35                   " width of 35 pixels
@@ -1098,9 +1205,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  "Tree explorer
-  "-----------------------------------------------------------
-  " {{{
+  "Tree explorer {{{
     "let g:Tlist_Enable_Fold_Column=0
     "let g:treeExplVertical=1
     "let g:treeExplWinSize=30
@@ -1113,8 +1218,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " MiniBufExplorer
-  " {{{
+  " MiniBufExplorer {{{
     if pathogen#is_disabled('minibufexpl') == 0
       let g:miniBufExplMapCTabSwitchBufs = 1
       let g:miniBufExplMapWindowNavVim = 1
@@ -1129,38 +1233,36 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  "Matchit
-  " Load matchit.vim, but only if the user hasn't installed a newer version.
-  " {{{
-  if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-    runtime! macros/matchit.vim
-    let b:match_ignorecase=0
-    let b:match_words=
-      \ '\<begin\>:\<end\>,' .
-      \ '\<if\>:\<else\>,' .
-      \ '\<module\>:\<endmodule\>,' .
-      \ '\<class\>:\<endclass\>,' .
-      \ '\<program\>:\<endprogram\>,' .
-      \ '\<clocking\>:\<endclocking\>,' .
-      \ '\<property\>:\<endproperty\>,' .
-      \ '\<sequence\>:\<endsequence\>,' .
-      \ '\<package\>:\<endpackage\>,' .
-      \ '\<covergroup\>:\<endgroup\>,' .
-      \ '\<primitive\>:\<endprimitive\>,' .
-      \ '\<specify\>:\<endspecify\>,' .
-      \ '\<generate\>:\<endgenerate\>,' .
-      \ '\<interface\>:\<endinterface\>,' .
-      \ '\<function\>:\<endfunction\>,' .
-      \ '\<task\>:\<endtask\>,' .
-      \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
-      \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
-      \ '`ifdef\>:`else\>:`endif\>,'
-  endif
+  " Matchit {{{
+    " Load matchit.vim, but only if the user hasn't installed a newer version.
+    if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+      runtime! macros/matchit.vim
+      let b:match_ignorecase=0
+      let b:match_words=
+        \ '\<begin\>:\<end\>,' .
+        \ '\<if\>:\<else\>,' .
+        \ '\<module\>:\<endmodule\>,' .
+        \ '\<class\>:\<endclass\>,' .
+        \ '\<program\>:\<endprogram\>,' .
+        \ '\<clocking\>:\<endclocking\>,' .
+        \ '\<property\>:\<endproperty\>,' .
+        \ '\<sequence\>:\<endsequence\>,' .
+        \ '\<package\>:\<endpackage\>,' .
+        \ '\<covergroup\>:\<endgroup\>,' .
+        \ '\<primitive\>:\<endprimitive\>,' .
+        \ '\<specify\>:\<endspecify\>,' .
+        \ '\<generate\>:\<endgenerate\>,' .
+        \ '\<interface\>:\<endinterface\>,' .
+        \ '\<function\>:\<endfunction\>,' .
+        \ '\<task\>:\<endtask\>,' .
+        \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
+        \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
+        \ '`ifdef\>:`else\>:`endif\>,'
+    endif
   " }}}
 
   "-----------------------------------------------------------
-  " hl-matchit
-  " {{{
+  " hl-matchit {{{
     "" If this variable is set, augroup is defined, and start highlighting.
     let g:hl_matchit_enable_on_vim_startup = 1
 
@@ -1175,9 +1277,9 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Netrw  File Explorer :e <PATH>
-  " {{{
-  "  if pathogen#is_disabled('netrw') == 0
+  " Netrw {{{
+    " File Explorer :e <PATH>
+    "  if pathogen#is_disabled('netrw') == 0
       let g:netrw_winsize        = 25
       let g:netrw_keepdir        = 0
       " let g:netrw_preview        = 0
@@ -1202,15 +1304,15 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " NERD Tree  File Manager
-  " o     open file                           " t     open file in new tab
-  " go    open file,but cursor in NERDtree    " T     same as t, but focus on the current tab
-  " tab   open file in a split window         " !     execute current file
-  " x     close the current nodes parent      " X     Recursively close all children of the current node
-  " e     open a netrw for the current dir
-  " {{{
+  " NERD Tree  File Manager {{{
+    " o     open file                           " t     open file in new tab
+    " go    open file,but cursor in NERDtree    " T     same as t, but focus on the current tab
+    " tab   open file in a split window         " !     execute current file
+    " x     close the current nodes parent      " X     Recursively close all children of the current node
+    " e     open a netrw for the current dir
     if pathogen#is_disabled('nerdtree') == 0
       noremap <leader>nt :NERDTreeToggle<CR>
+      map <F5> :NERDTreeToggle<CR>
       " Opens current file heiarchy in Nerdtree
       nnoremap <leader>nf :NERDTreeFind<CR>
       let NERDChristmasTree=1                     " more colorful
@@ -1244,8 +1346,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " NERDTree-tabs
-  " {{{
+  " NERDTree-tabs {{{
     if pathogen#is_disabled('nerdtree-tabs') == 0
       noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
       let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
@@ -1254,11 +1355,9 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  "Calendar
-  " :Calendar         " Open calendar
-  " :CalendarH        " Open Calendar horizonally
-  "-----------------------------------------------------------
-  " {{{
+  "Calendar {{{
+    " :Calendar         " Open calendar
+    " :CalendarH        " Open Calendar horizonally
     "let g:calendar_diary=<PATH>
     " let g:calendar_wruler = '日 一 二 三 四 五 六'
     let g:calendar_mark = 'left-fit'
@@ -1267,8 +1366,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " SVN Command
-  " {{{
+  " SVN Command {{{
     if pathogen#is_disabled('svnj') == 0
       let g:svnj_custom_statusbar_ops_hide = 1
       if os == "windows"
@@ -1279,13 +1377,12 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " showmarks setting
-  " <Leader>mt  - Toggle whether marks are displayed or not.
-  " <Leader>mo  - Turn ShowMarks on, and displays marks.
-  " <Leader>mh  - Clear mark on current line.
-  " <Leader>ma  - Clear all marks.
-  " <Leader>mm  - Places next available mark.
-  " {{{
+  " showmarks setting {{{
+    " <Leader>mt  - Toggle whether marks are displayed or not.
+    " <Leader>mo  - Turn ShowMarks on, and displays marks.
+    " <Leader>mh  - Clear mark on current line.
+    " <Leader>ma  - Clear all marks.
+    " <Leader>mm  - Places next available mark.
     if pathogen#is_disabled('ShowMarks') == 0
       " Enable ShowMarks
       let g:showmarks_enable = 1
@@ -1306,8 +1403,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " mark setting
-  " {{{
+  " mark setting {{{
     nnoremap <silent> <leader>hl <Plug>MarkSet
     vnoremap <silent> <leader>hl <Plug>MarkSet
     nnoremap <silent> <leader>hh <Plug>MarkClear
@@ -1317,8 +1413,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Vimwiki
-  " {{{
+  " Vimwiki {{{
     if pathogen#is_disabled('vimwiki') == 0
       let g:vimwiki_menu = 'Plugin.Vimwiki'
       let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
@@ -1336,19 +1431,14 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " timestamp
-  " {{{
-    " let loaded_timestamp = 1
-    " let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified)\s*:\s+)@<=.*$|2010-08-13 09:49:39'
-    " let g:timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
+  " timestamp {{{
     let g:timestamp_regexp = '\v\C%(<%([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
     let g:timestamp_rep = '%Y-%m-%d %H:%M:%S'
     let g:timestamp_modelines = 20
   " }}}
 
   "-----------------------------------------------------------
-  " yankring.vim
-  " {{{
+  " yankring.vim  {{{
     if pathogen#is_disabled('yankring') == 0
       let g:yankring_enabled=0
       let g:yankring_history_file = '.vim-cache/yankring_history'
@@ -1357,9 +1447,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Colorful Parentheses
+  " Colorful Parentheses {{{
   " rainbow_parentheses
-  " {{{
     let g:rbpt_colorpairs = [
         \ ['White',       'Gray'],
         \ ['Darkblue',    'RoyalBlue3'],
@@ -1391,9 +1480,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Powerline
-  " {{{
-  " Powerline and neocomplcache require Vim 7.2
+  " Powerline {{{
+    " Powerline and neocomplcache require Vim 7.2
     if pathogen#is_disabled('vim-powerline') == 0
       if os == "windows"
         ""let g:Powerline_symbols = 'compatible'
@@ -1418,8 +1506,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Syntastic
-  " {{{
+  " Syntastic {{{
     let g:loaded_syntastic_plugin = 1
     if pathogen#is_disabled('syntastic') == 0
       let g:syntastic_auto_loc_list = 0 " auto open error window
@@ -1433,14 +1520,12 @@ if g:load_vimrc_plugin_config
   " }}}
 
   " ------------------------------------------------------------
-  " Draw It
-  " {{{
+  " Draw It {{{
     let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
   " }}}
 
   "-----------------------------------------------------------
-  " neocomplcache
-  " {{{
+  " neocomplcache {{{
   if s:settings.autocomplete_method == 'neocomplcache'
     if pathogen#is_disabled('neocomplcache') == 0
       if v:version >= 702
@@ -1524,8 +1609,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " neocomplete
-  if s:settings.autocomplete_method == 'neocomplete' "{{{
+  " neocomplete {{{
+  if s:settings.autocomplete_method == 'neocomplete'
     if pathogen#is_disabled('neocomplete') == 0
       "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
       " Disable AutoComplPop.
@@ -1616,8 +1701,7 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " conque
-  " {{{
+  " conque {{{
     if pathogen#is_disabled('Conque-Shell') == 0
       autocmd FileType conque_term match none
       let g:ConqueTerm_StartMessages = 0
@@ -1629,9 +1713,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " indent-guides
-  " {{{
-  " highlight indent with different color
+  " indent-guides {{{
+    " highlight indent with different color
     if pathogen#is_disabled('indent-guides') == 0
       let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
       let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
@@ -1651,9 +1734,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " fuzzy finder
-  " {{{
-  " FuzzyFinder/L9 require Vim 7.2 and floating-point support
+  " fuzzy finder {{{
+    " FuzzyFinder/L9 require Vim 7.2 and floating-point support
     if pathogen#is_disabled('FuzzyFinder') == 0
       let g:fuf_dataDir=g:dotvim_settings.cache_dir.'/fuzzyfinder-data'
       ""call add(g:pathogen_blacklist, 'l9')
@@ -1666,17 +1748,17 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " gundo
-  " Gundo requires Vim 7.3 and Python
-  " {{{
+  " gundo {{{
+    " Gundo requires Vim 7.3 and Python
     if pathogen#is_disabled('gundo') == 0
       nnoremap <silent> <Leader>u :GundoToggle<CR>
+      let g:gundo_width=80
     endif
   " }}}
 
   "-----------------------------------------------------------
-  " ctrlp
-  if s:settings.finder_method == 'ctrlp' "{{{
+  " ctrlp {{{
+  if s:settings.finder_method == 'ctrlp'
     if pathogen#is_disabled('ctrlp') == 0
       let g:ctrlp_map = '<Leader>p'
       let g:ctrlp_cmd = 'CtrlP'
@@ -1726,10 +1808,8 @@ if g:load_vimrc_plugin_config
   endif
   " }}}
 
-
   "-----------------------------------------------------------
-  " vim-cycle
-  " {{{
+  " vim-cycle {{{
     if pathogen#is_disabled('vim-cycle') == 0
       " let g:cycle_default_groups = [
       "       \   [['true', 'false']],
@@ -1769,8 +1849,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Neosnippet
-  " {{{
+  " Neosnippet {{{
   if s:settings.snippet_method == 'neosnippet'
     if pathogen#is_disabled('neosnippet') == 0
       " Plugin key-mappings.
@@ -1812,8 +1891,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " snipMate
-  if s:settings.snippet_method == 'snipmate' "{{{
+  " snipMate {{{
+  if s:settings.snippet_method == 'snipmate'
     if pathogen#is_disabled('vim-snipmate') == 0
       let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
@@ -1823,12 +1902,15 @@ if g:load_vimrc_plugin_config
   endif "}}}
 
   "-----------------------------------------------------------
-  " delimitMate
-  " {{{
-  " let loaded_delimitMate = 1
-  " au FileType mail let b:loaded_delimitMate = 1
+  " delimitMate {{{
+    " let loaded_delimitMate = 1
+    " au FileType mail let b:loaded_delimitMate = 1
     let delimitMate_matchpairs = "(:),[:],{:},<:>"
     let delimitMate_quotes = "\" ' `"
+    let g:delimitMate_expand_cr = 1
+    let delimitMate_balance_matchpairs = 1
+    let g:delimitMate_expand_space = 2
+
     augroup my_delimiMate
       autocmd!
       autocmd FileType vim,html let b:delimitMate_matchpairs = "(:),[:],{:},<:>"
@@ -1840,10 +1922,7 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Alignment
-
-  " vim-easy-align
-  " {{{
+  " vim-easy-align {{{
     if pathogen#is_disabled('vim-easy-align') == 0
       " Start interactive EasyAlign in visual mode (e.g. vipga)
       xmap ga <Plug>(EasyAlign)
@@ -1854,33 +1933,34 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " Tabular
-  " {{{
+  " Tabular {{{
     if exists(":Tabularize")
-      nnoremap <Leader>a& :Tabularize /&<CR>
-      vnoremap <Leader>a& :Tabularize /&<CR>
-      nnoremap <Leader>a= :Tabularize /=<CR>
-      vnoremap <Leader>a= :Tabularize /=<CR>
-      nnoremap <Leader>a=> :Tabularize /=><CR>
-      vnoremap <Leader>a=> :Tabularize /=><CR>
-      nnoremap <Leader>a<= :Tabularize /<=<CR>
-      vnoremap <Leader>a<= :Tabularize /<=<CR>
-      nnoremap <Leader>a: :Tabularize /:<CR>
-      vnoremap <Leader>a: :Tabularize /:<CR>
-      nnoremap <Leader>a:: :Tabularize /:\zs<CR>
-      vnoremap <Leader>a:: :Tabularize /:\zs<CR>
-      nnoremap <Leader>a,  :Tabularize /,<CR>
-      vnoremap <Leader>a,  :Tabularize /,<CR>
-      nnoremap <Leader>a,, :Tabularize /,\zs<CR>
-      vnoremap <Leader>a,, :Tabularize /,\zs<CR>
-      nnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
-      vnoremap <Leader>a<Bar> :Tabularize /<Bar><CR>
+      nnoremap <Leader>a&      : Tabularize /&<CR>
+      vnoremap <Leader>a&      : Tabularize /&<CR>
+      nnoremap <Leader>a=      : Tabularize /=<CR>
+      vnoremap <Leader>a=      : Tabularize /=<CR>
+      nnoremap <Leader>a=>     : Tabularize /=><CR>
+      vnoremap <Leader>a=>     : Tabularize /=><CR>
+      nnoremap <Leader>a<=     : Tabularize /<=<CR>
+      vnoremap <Leader>a<=     : Tabularize /<=<CR>
+      nnoremap <Leader>a:      : Tabularize /:<CR>
+      vnoremap <Leader>a:      : Tabularize /:<CR>
+      nnoremap <Leader>a::     : Tabularize /:\zs<CR>
+      vnoremap <Leader>a::     : Tabularize /:\zs<CR>
+      nnoremap <Leader>a,      : Tabularize /,<CR>
+      vnoremap <Leader>a,      : Tabularize /,<CR>
+      nnoremap <Leader>a,,     : Tabularize /,\zs<CR>
+      vnoremap <Leader>a,,     : Tabularize /,\zs<CR>
+      nnoremap <Leader>a<Bar>  : Tabularize /<Bar><CR>
+      vnoremap <Leader>a<Bar>  : Tabularize /<Bar><CR>
+      nnoremap <Leader>a/      : Tabularize /\/\//l2c1l0<CR>
+      vnoremap <Leader>a/      : Tabularize /\/\//l2c1l0<CR>
     endif
   " }}}
 
   "-----------------------------------------------------------
-  " unite
-  if s:settings.finder_method == 'unite' "{{{
+  " unite {{{
+  if s:settings.finder_method == 'unite'
     if pathogen#is_disabled('unite') == 0
       " Use the fuzzy matcher for everything
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -1979,9 +2059,8 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " fugitive - Git integration!
-  " Probably the best or second best plugin of them all.
-  " {{{
+  " fugitive {{{
+    " Git integration!
     nnoremap <leader>gs :Gstatus<enter>
     nnoremap <leader>gd :Gdiff<enter>
     nnoremap <leader>gc :Gcommit<enter>
@@ -1992,56 +2071,37 @@ if g:load_vimrc_plugin_config
     " % needs to be escaped, otherwise vim inserts its register %
     " Note that no <enter> so user has the option of changing number of commits
     nnoremap <leader>gh :r !git log --format=format:\%s -1
-    " Remove trailing whitespace
-    " Mnemonic: delete whitespace
-    nnoremap <leader>dws :silent! %s/\s\+$//ge<enter>
-    vnoremap <leader>dws :s/\s\+$//ge<enter>
-    " Ignore whitespace in diffs.
-    " Also shows current diffopt status.
-    nnoremap <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
-    nnoremap <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
   " }}}
 
-
   "-----------------------------------------------------------
-  " NerdCommenter
-  "{{{
+  " NerdCommenter {{{
     let g:NERDSpaceDelims = 1   " add extra space
     " Enable trimming of trailing whitespace when uncommenting
     let g:NERDTrimTrailingWhitespace = 1
   "}}}
 
   "-----------------------------------------------------------
-  " Molokai
-  " if pathogen#is_disabled('molokai') == 0
-  "   colorscheme molokai
-  " endif
-
-  "-----------------------------------------------------------
-  " AuthorInfo
-  "{{{
+  " AuthorInfo {{{
     let g:vimrc_author='Hong Jin'
     let g:vimrc_email='hongjin@fiberhome.com'
   "}}}
 
   "-----------------------------------------------------------
-  " Grep
-  "{{{
+  " Grep {{{
     if os == "windows"
-      let g:Grep_Path = './vimfiles/gnu/grep.exe'
-      let g:Fgrep_Path  = './vimfiles/gnu/fgrep.exe'
-      let g:Egrep_Path  = './vimfiles/gnu/egrep.exe'
-      let g:Grep_Find_Path = './vimfiles/gnu/find.exe'
+      let g:Grep_Path       = './vimfiles/gnu/grep.exe'
+      let g:Fgrep_Path      = './vimfiles/gnu/fgrep.exe'
+      let g:Egrep_Path      = './vimfiles/gnu/egrep.exe'
+      let g:Grep_Find_Path  = './vimfiles/gnu/find.exe'
       let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
     endif
     let Grep_Default_Options = '-i'
     let Grep_Skip_Dirs = 'RCS CVS .svn .git'
   "}}}
 
-
   "-----------------------------------------------------------
-  " airline
-  if s:settings.statusline_method == 'airline' "{{{
+  " airline {{{
+  if s:settings.statusline_method == 'airline'
     if pathogen#is_disabled('airline') == 0
       " let g:loaded_airline = 1
       " enable fugitive integration >
@@ -2081,8 +2141,8 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " lightline
-  if s:settings.statusline_method == 'lightline' "{{{
+  " lightlin {{{e
+  if s:settings.statusline_method == 'lightline'
     if pathogen#is_disabled('lightline') == 0
       let g:lightline = {
           \ 'colorscheme': 'solarized_dark',
@@ -2092,15 +2152,14 @@ if g:load_vimrc_plugin_config
   " }}}
 
   "-----------------------------------------------------------
-  " easymotion
-  " triggered with `<Leader><Leader>`
-  " `<Leader><Leader>w` to find the beginning of a word
-  " `<Leader><Leader>f` to find the character
-  " `<Leader><Leader>b  to Beginning of word backward
-  " `<Leader><Leader>e  to End of word forward
-  " `<Leader><Leader>j  to Line downward
-  " `<Leader><Leader>k  to Line upward
-  "{{{
+  " easymotion {{{
+    " triggered with `<Leader><Leader>`
+    " `<Leader><Leader>w` to find the beginning of a word
+    " `<Leader><Leader>f` to find the character
+    " `<Leader><Leader>b  to Beginning of word backward
+    " `<Leader><Leader>e  to End of word forward
+    " `<Leader><Leader>j  to Line downward
+    " `<Leader><Leader>k  to Line upward
     if pathogen#is_disabled('easymotion') == 0
       " change the target keys
       " let g:EasyMotion_keys = '1234567890'
@@ -2112,22 +2171,19 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " Verilog
-  " verilog root menu
-  "{{{
+  " Verilog {{{
+    " verilog root menu
     let g:PluginTopLvlMenu = 'Plugin'
   "}}}
 
   "-----------------------------------------------------------
-  "  Color Scheme Explorer
-  "{{{
+  " Color Scheme Explorer {{{
     let g:scroll_colors = 1
     let loaded_csExplorer = 1
   "}}}
 
   "-----------------------------------------------------------
-  " uvm_gen
-  "{{{
+  " uvm_gen {{{
     let g:uvm_author    = "Hong Jin"
     let g:uvm_email     = "hongjin@fiberhome.com"
     let g:uvm_company   = "Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
@@ -2135,15 +2191,13 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " multi_cursor
-  "{{{
+  " multi_cursor {{{
     let g:multi_cursor_use_default_mapping=1
   "}}}
 
   "-----------------------------------------------------------
-  " CamelCaseMotion
-  "{{{
-  " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
+  " CamelCaseMotion {{{
+    " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
     map <silent> W <Plug>CamelCaseMotion_w
     map <silent> B <Plug>CamelCaseMotion_b
     map <silent> E <Plug>CamelCaseMotion_e
@@ -2159,23 +2213,24 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " anzu
-  " display the current match index number and total match number of search pattern
-  "{{{
-  " mapping
-    nmap n <Plug>(anzu-n-with-echo)
-    nmap N <Plug>(anzu-N-with-echo)
+  " anzu {{{
+    " display the current match index number and total match number of search pattern
+    " mapping
+    " nmap n <Plug>(anzu-n-with-echo)
+    " nmap N <Plug>(anzu-N-with-echo)
     " nmap * <Plug>(anzu-star-with-echo)
     " nmap # <Plug>(anzu-sharp-with-echo)
 
     " clear status
     " nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+
+    " statusline
+    " set statusline+=%{anzu#search_status()}
   "}}}
 
   "-----------------------------------------------------------
-  " c-support
-  " C/C++ IDE
-  "{{{
+  " c-support {{{
+    " C/C++ IDE
     let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
     let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
     let g:C_Root = '&Plugin.&C\/C\+\+.'
@@ -2184,8 +2239,7 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " expand-region
-  "{{{
+  " expand-region {{{
     let g:expand_region_text_objects = {
         \ 'iw'  :1,
         \ 'iW'  :1,
@@ -2201,8 +2255,7 @@ if g:load_vimrc_plugin_config
   "}}}
 
   "-----------------------------------------------------------
-  " wildfire
-  "{{{
+  " wildfire {{{
     " This selects the next closest text object.
     let g:wildfire_fuel_map = "<ENTER>"
 
@@ -2210,13 +2263,17 @@ if g:load_vimrc_plugin_config
     let g:wildfire_water_map = "<BS>"
 
     let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "ip", "it"]
+  "}}}
 
-    " use '*' to mean 'all other filetypes'
-    " in this example, html and xml share the same text objects
-    let g:wildfire_objects = {
-        \ "*" : ["i'", 'i"', "i)", "i]", "i}", "ip"],
-        \ "html,xml" : ["at"],
-    \ }
+  "-----------------------------------------------------------
+  " incsearch {{{
+    map /  <Plug>(incsearch-forward)
+    map ?  <Plug>(incsearch-backward)
+    map g/ <Plug>(incsearch-stay)
+    let g:incsearch#magic = '\v' " very magic
+    let g:incsearch#magic = '\V' " very nomagic
+    let g:incsearch#magic = '\m' " magic
+    let g:incsearch#magic = '\M' " nomagic
   "}}}
 endif
 
@@ -2249,25 +2306,24 @@ if g:load_vimrc_extended
   " "nnoremap <silent> <F5> <C-w>-
   " "imap <silent> <F5> <C-o><F5>
 
-  " map <F6> :tabprevious<CR>
-  map <silent> <F6> <C-o><F6>
-  " map <F7> :tabnext<CR>
+  " map <F7> :tabprevious<CR>
   map <silent> <F7> <C-o><F7>
+  " map <F7> :tabnext<CR>
+  map <silent> <F8> <C-o><F8>
 
-  map  <F6>           :tabprevious<CR>
-  map  <F7>           :tabnext<CR>
+  map  <F7>           :tabprevious<CR>
+  map  <F8>           :tabnext<CR>
   map  <leader>tn     :tabnew<CR>
   map  <leader>tc     :tabclose<CR>
   map  <leader>to     :tabonly<cr>
-  imap  <F6>          <ESC>:tabprevious<CR>i
-  imap  <F7>          <ESC>:tabnext<CR>i
+  imap  <F7>          <ESC>:tabprevious<CR>i
+  imap  <F8>          <ESC>:tabnext<CR>i
   imap  ^T            <ESC>:tabnew<CR>i
 
-  " Buffer - reverse everything ... :)
-  map <F8> ggVGg?     " rot-13
   " map <F9> :!python.exe %
   map <F10> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
-  " map <F11>
+  " Buffer - reverse everything ... :)
+  map <F11> ggVGg?     " rot-13
   map     <F12>   a<C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
   imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
   " insert time    strftime("%c")
@@ -2318,6 +2374,16 @@ if g:load_vimrc_extended
   " ,bp - previous buffer
   nnoremap <silent> <leader>bp :bprevious<CR>
 
+  " Remove trailing whitespace
+  nnoremap <leader>dws :silent! %s/\s\+$//ge<enter>
+  vnoremap <leader>dws :s/\s\+$//ge<enter>
+  " Remove trailing ^M
+  nmap <leader>dms :%s/\r$//g<CR>:noh<CR>
+
+  " Ignore whitespace in diffs.
+  " Also shows current diffopt status.
+  nnoremap <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
+  nnoremap <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
 
   " ,e* - Edit the vimrc file
   nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
@@ -2450,6 +2516,7 @@ if g:load_vimrc_extended
   " Fold close & Fold open
   noremap <unique> <kPlus> zo
   noremap <unique> <kMinus> zc
+  map <leader>zz :call ToggleFold()<CR>
 
   if version >= 600
     " Reduce folding
@@ -2671,14 +2738,31 @@ if g:load_vimrc_extended
   noremap gg ggzz
   noremap <C-d> <C-d>zz
   noremap <C-u> <C-u>zz
+
+  " Keep search matches in the middle of the window.
+  " zz centers the screen on the cursor, zv unfolds any fold if the cursor
+  " suddenly appears inside a fold.
+  " nnoremap * *zzzv
+  " nnoremap # #zzzv
+  nnoremap n nzzzv
+  nnoremap N Nzzzv
   " noremap n nzz
   " noremap N Nzz
   " noremap * *zz
   " noremap # #zz
+
   nnoremap g* g*zz
   nnoremap g# g#zz
+  " Format Jump, center the screen when jumping through the changelist
+  nnoremap <silent> g; g;zz
+  nnoremap <silent> g, g,zz
 
+  " In normal mode, we use : much more often than ; so lets swap them.
   " nnoremap ; :
+  " nnoremap : ;
+  " vnoremap ; :
+  " vnoremap : ;
+
   " Use Q for formatting the current paragraph (or selection)
   vnoremap Q gq
   nnoremap Q gqap
@@ -2688,8 +2772,8 @@ if g:load_vimrc_extended
   " using Perl/Python-compatible regex syntax
   " Thanks to Steve Losh for this liberating tip
   " See http://stevelosh.com/blog/2010/09/coming-home-to-vim
-  nnoremap / /\v
-  vnoremap / /\v
+  " nnoremap / /\v
+  " vnoremap / /\v
 
   " Jump to matching pairs easily, with Tab
   nnoremap <Tab> %
