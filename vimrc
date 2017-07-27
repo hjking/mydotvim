@@ -278,6 +278,9 @@ if has("gui_running")
 "   elseif has("x11")
 "   elseif has("gui_gtk2")
   endif
+
+  set columns=135
+
 else
   set wrap
 endif
@@ -357,8 +360,6 @@ endif
 set number                      " display line number
 set numberwidth=1
 set lazyredraw                  " Don't redraw while executing macros
-
-set columns=90
 
 "-------------------------------------------------------------------------------
 "  5 syntax, highlighting and spelling
@@ -770,7 +771,7 @@ endif
 try
   " set switchbuf=useopen,usetab,newtab
   set switchbuf=usetab,usetab     " Open new buffers always in new tabs
-  set showtabline=2
+  " set showtabline=2
   catch
 endtry
 
@@ -1192,6 +1193,23 @@ if g:load_vimrc_plugin_config " {{{
         autocmd!
         " autocmd VimEnter * call StartUpTagbar()
       augroup END
+
+      " Add Verilog/Systemverilog support
+      let g:tagbar_type_systemverilog = {
+          \ 'ctagstype' : 'systemverilog',
+          \ 'sro' : '::',
+          \ 'kinds' : [
+              \ 'c:classes',
+              \ 't:tasks',
+              \ 'f:functions',
+              \ 'm:modules',
+              \ 'p:programs',
+              \ 'i:interfaces',
+              \ 'e:typedefs',
+              \ 'd:defines'
+          \]
+      \}
+
     endif
   " }}}
 
@@ -2141,12 +2159,12 @@ if g:load_vimrc_plugin_config " {{{
   "}}}
 
   "-----------------------------------------------------------
-  " lightlin {{{e
+  " lightline {{{
   if s:settings.statusline_method == 'lightline'
     if pathogen#is_disabled('lightline') == 0
-      let g:lightline = {
-          \ 'colorscheme': 'solarized_dark',
-          \ }
+      " let g:lightline = {
+      "     \ 'colorscheme': 'solarized_dark',
+      "     \ }
     endif
   endif
   " }}}
@@ -2520,11 +2538,11 @@ if g:load_vimrc_extended
 
   if version >= 600
     " Reduce folding
-      map <F2> zr
-      map <S-F2> zR
+    map <F2> zr
+    map <S-F2> zR
     " Increase folding
-      map <F3> zm
-      map <S-F3> zM
+    map <F3> zm
+    map <S-F3> zM
   endif
 
   " Yank from the cursor to the end of the line, to be consistent with C and D
@@ -2899,13 +2917,13 @@ if g:load_vimrc_extended
 
   noremap <Leader>ch :call SetColorColum()<CR>
   function! SetColorColum()
-      let col_num = virtcol(".")
-      let cc_list = split(&cc, ',')
-      if count(cc_list, string(col_num)) <= 0
-        execute "set cc+=".col_num
-      else
-        execute "set cc-=".col_num
-      endif
+    let col_num = virtcol(".")
+    let cc_list = split(&cc, ',')
+    if count(cc_list, string(col_num)) <= 0
+      execute "set cc+=".col_num
+    else
+      execute "set cc-=".col_num
+    endif
   endfunction
 
   augroup my_fileheader
@@ -2934,24 +2952,24 @@ if g:load_vimrc_extended
     let s:history_rev= s:comment .    "     Revision :"
 
     call append (0, [s:commentline,
-                    \ s:company,
-                    \ s:department,
-                    \ s:copyright,
-                    \ s:comment,
-                    \ s:file,
-                    \ s:author,
-                    \ s:email,
-                    \ s:version,
-                    \ s:created,
-                    \ s:modified,
-                    \ s:description,
-                    \ s:hierarchy,
-                    \ s:commentline,
-                    \ s:history,
-                    \ s:history_author,
-                    \ s:history_date,
-                    \ s:history_rev,
-                    \ s:commentline])
+          \ s:company,
+          \ s:department,
+          \ s:copyright,
+          \ s:comment,
+          \ s:file,
+          \ s:author,
+          \ s:email,
+          \ s:version,
+          \ s:created,
+          \ s:modified,
+          \ s:description,
+          \ s:hierarchy,
+          \ s:commentline,
+          \ s:history,
+          \ s:history_author,
+          \ s:history_date,
+          \ s:history_rev,
+          \ s:commentline])
   endfunction
 
   cnoremap $q <C-\>eDeleteTillSlash()<cr>
@@ -2970,6 +2988,96 @@ if g:load_vimrc_extended
 endif
 "}}} Extended ----------------------------------------------
 
+" {{{ Fisilink ---------------------------------------------
+" when create a new file, insert header
+autocmd BufNewFile *.v,*.sv,*.svh exec ":call SetFSLTitle()"
+" set header function
+func! SetFSLTitle()
+  call setline(1          , "\//                              ;;;;`';;;.                                                                            ")
+  call append(line(".")   , "\//                            ,`;;;;`';;;;,                                                                           ")
+  call append(line(".")+1 , "\//                          ::` :;;: `;;;';                                                                           ")
+  call append(line(".")+2 , "\//                        `    `` `    ;;;;                                                                           ")
+  call append(line(".")+3 , "\//              `:'++++++++++++++      .';;                                                                           ")
+  call append(line(".")+4 , "\//             ;+'+''++'+'+++'++:      ,;;;                                                                           ")
+  call append(line(".")+5 , "\//            '+++++++++'+'+++++       ;''`                                                                           ")
+  call append(line(".")+6 , "\//           ;+''''+''''+++++'',      `;''                                                                            ")
+  call append(line(".")+7 , "\//           ++''+++++++''++++:       ;;'`                                                                            ")
+  call append(line(".")+8 , "\//          `++++++'''''';;:.        :;;:                                                                             ")
+  call append(line(".")+9 , "\//          ,+++++'                 .;;;                                                                              ")
+  call append(line(".")+10, "\//          ;++++++                `;;'                                                                               ")
+  call append(line(".")+11, "\//          '+++++'               `;;'                                                                                ")
+  call append(line(".")+12, "\//        ,.'+++++'              `';;                                                                                 ")
+  call append(line(".")+13, "\//       ;;`++++++;`.,:;''''''  `';;                                                                                  ")
+  call append(line(".")+14, "\//      ;;. '++++++++++''++'+. `';;                                                                                   ")
+  call append(line(".")+15, "\//     '': `+++++++''++++'+'+ ,;',                                                                                    ")
+  call append(line(".")+16, "\//    ;;;  .++++'''++''+++++`;;;`   +'''''''    ;+''+';   +++'''+' ++''+''+     :+'''+++,+''+'+'   ++'+,+'''''':.+'''+")
+  call append(line(".")+17, "\//   :';   ;'++++'++''''++',;;:      +++++`   .+'    +'    '++++`   ''+'+.       `+'+'+   ,'+'+'    ''   +''++`  ,''` ")
+  call append(line(".")+18, "\//  .;;`   '++++'''';;:,,.`;;`       +++++    '':    :+    '++++    ;'+++         +'++:    ''+++,   :.   '''+'   ':   ")
+  call append(line(".")+19, "\//  ';:    ++++'''       ,;.         +'+''   '++;     '    ++++'    ++'+'        `'+++.   `:+'+'+   ;    +++++  ;,    ")
+  call append(line(".")+20, "\// ,;;     ''++'';  .   ;,           +'+':   +'++,    ;    '+++:    +''+'        ,++++`   .`++''+`  '    ++++; ;'`    ")
+  call append(line(".")+21, "\// ';;     ++'''+. ;  `,            `+'+'.   ++++++:       ++++.    +''+:        ;'+++    ; .++++'  '    ++++,'+'+    ")
+  call append(line(".")+22, "\//`;;.     '+++; ,;  `              .+'++`   '+++'+++'    .++++`    ''++,        ''+++    '  '++++  '   `''+++'+++'   ")
+  call append(line(".")+23, "\//,''.    .'+. .;:                  :''++     '+''+++''   :'+'+    .++++`        ++++'    '  :++++; ;   ,'++'`++'++`  ")
+  call append(line(".")+24, "\//:;';       ,;;'                   '+'++      ;+'+'+++`  ;+'++    :'+++         +++';    '   +'+++`,   '+'+' :+'++;  ")
+  call append(line(".")+25, "\//,;;;;.`.:;;''++                   '+'+'   '    ;'++'+`  ++'++    ;++'+         +'+',    ;   ''++''`   '+'++  ''+'+  ")
+  call append(line(".")+26, "\//`;;;;;;';;;''+'                   ++'+'   +`    `++++`  ++++'    '++'+     `: `'++'`   `.   `+'+++    ++++'  '+''+` ")
+  call append(line(".")+27, "\// .';;;;;;'+'++;                   +'++:   +'     ;+''   ++++:    +++''     +  ,++'+    ,`    +'''+    '+'':  .++++: ")
+  call append(line(".")+28, "\//   ,::. ''++'+,                  `++++.   ++     '''`  `'+++.    +'++'   .':  '++'+    '`    .++++   `++++,  .+++++ ")
+  call append(line(".")+29, "\//       `++++'+`                  '++++;  `+++   .''`   ''+'';   ;'++++::'++  `+'''+`  ,+;     +'''   '++++;  '++'+'`")
+  call append(line(".")+30, "\//       .''''''                  ,,,,,,,,  `:'+'+'.    ,,,,,,,, ,,,,,,,,,,,. .,,,,,,,`,,,,.    .,,.  ,,,,,,,`,,,,,,,,")
+  call append(line(".")+31, "\//--------------------------------------------------------------------------------------------------------------------")
+  call append(line(".")+32, "\// Copyright (c), Fisilink Microelectronics Technology Co., Ltd")
+  call append(line(".")+33, "\// Author      : ".$USER)
+  call append(line(".")+34, "\// Created Time: ".strftime("%c"))
+  call append(line(".")+35, "\//--------------------------------------------------------------------------------------------------------------------")
+  call append(line(".")+36, "")
+  " go to end of file
+  autocmd BufNewFile * normal G
+endfunc
+"for c++
+iab for_ for () begin<enter><enter>end
+iab if_ if () begin<enter><enter>end
+iab ife_ if () begin<enter><enter>end<enter>else begin<enter><enter>end
+iab ifee_ if () begin<enter><enter>end<enter>else if () begin<enter><enter>end<enter>else begin<enter><enter>end
+"for sv/v
+iab al_ always @(posedge clk or negedge rst_n) begin<enter>if (!rst_n) begin<enter><enter>end else begin<enter><enter>end<enter>end
+
+iab info_ `uvm_info (get_name(), $psprintf (""), UVM_NONE);
+iab warning_ `uvm_warning (get_name(), $psprintf (""));
+iab error_ `uvm_error (get_name(), $psprintf (""));
+iab fatal_ `uvm_fatal (get_name(), $psprintf (""));
+
+iab sq_ sequence s_xx;<enter><enter>endsequence<enter><enter>property p_xx;<enter>@(posedge clk) s_xx;<enter>endproperty<enter><enter>assert_xx : assert property (p_xx);
+
+map     <F9>   a<C-R>='// '.$USER.strftime(" @ %Y-%m-%d %H:%M")<CR>
+
+function! AddCommentBlock()
+  let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
+  let a:name_line="// struct      : "
+  let a:dscp_line="// description : "
+
+  call append(line(".")   , a:comment_line)
+  call append(line(".")+1 , a:name_line)
+  call append(line(".")+2 , a:dscp_line)
+  call append(line(".")+3 , a:comment_line)
+endfunction
+
+function! MakeFSLStruct(name)
+  let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
+  let a:struct_name_line="// struct      : " . a:name
+  let a:struct_dscp_line="// description : "
+
+  call append(line(".")   , a:comment_line)
+  call append(line(".")+1 , a:struct_name_line)
+  call append(line(".")+2 , a:struct_dscp_line)
+  call append(line(".")+3 , a:comment_line)
+  call append(line(".")+4 , "")
+  call append(line(".")+5 , "typedef struct {")
+  call append(line(".")+6 , "")
+  call append(line(".")+7 , "} " . a:name . ";")
+endfunction
+
+"}}} Fisilink ----------------------------------------------
 
 set secure
 
