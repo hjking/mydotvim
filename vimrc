@@ -132,7 +132,6 @@ filetype off
   if v:version < 702 || !has('float')
     call add(g:pathogen_blacklist, 'L9')
   endif
-  call add(g:pathogen_blacklist, 'FuzzyFinder')
 
   if v:version < 703
     "    call add(g:pathogen_blacklist, 'niceblock')
@@ -148,8 +147,6 @@ filetype off
   endif
 
   if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
-    call add(g:pathogen_blacklist, 'YouCompleteMe')
-    call add(g:pathogen_blacklist, 'gutentags')
   endif
 
   if s:settings.statusline_method == 'lightline'
@@ -158,15 +155,15 @@ filetype off
     call add(g:pathogen_blacklist, 'lightline')
   endif
 
-  if s:settings.autocomplete_method == 'youcompleteme'
+  if s:settings.autocomplete_method == 'vimcompleteme'
     call add(g:pathogen_blacklist, 'neocomplete')
     call add(g:pathogen_blacklist, 'neocomplcache')
   elseif s:settings.autocomplete_method == 'neocomplcache'
     call add(g:pathogen_blacklist, 'neocomplete')
-    call add(g:pathogen_blacklist, 'YouCompleteMe')
+    call add(g:pathogen_blacklist, 'VimCompleteMe')
   else
     call add(g:pathogen_blacklist, 'neocomplcache')
-    call add(g:pathogen_blacklist, 'YouCompleteMe')
+    call add(g:pathogen_blacklist, 'VimCompleteMe')
   endif
 
   if s:settings.finder_method == 'ctrlp'
@@ -191,6 +188,7 @@ filetype off
   call add(g:pathogen_blacklist, 'bufexplorer')
   call add(g:pathogen_blacklist, 'minibufexpl')
   call add(g:pathogen_blacklist, 'syntastic')
+  call add(g:pathogen_blacklist, 'mark')
 
   call pathogen#infect()
   " execute pathogen#infect()
@@ -378,9 +376,9 @@ endfunction
 noremap <leader>bg :call ToggleBG()<CR>
 
 if has('gui_running')
-  let colorscheme_list = ['solarized', 'badwolf',   'koehler',
+  let colorscheme_list = ['solarized', 'badwolf', 'koehler',
         \ 'molokai', 'gruvbox', 'vividchalk', 'elflord',
-        \ 'hybrid',    'zenburn']
+        \ 'hybrid', 'zenburn', 'corporation', 'herald']
   exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 else
   try
@@ -820,12 +818,8 @@ if has("autocmd") " {{{
     "     autocmd! BufWritePost .vimrc source %
     " endif
 
-    " remove all trailing whitespace in a file
-    " autocmd BufWritePre * :%s/\s\+$//e
-
-    " Automatically delete trailing DOS-returns and whitespace on file open and
-    " write.
-    autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
+    " Automatically delete trailing DOS-returns and whitespace on file open and write.
+    " autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
 
     " Automatically resize vertical splits
     " autocmd WinEnter * :set winfixheight
@@ -972,7 +966,7 @@ endif " }}}
   endfunction
 " }}}
 
-"}}} Basic -------------------------------------------------------------
+"}}} Basic
 
 "---------------------------------------------------------------
 """""""""""""""""""""" Filetypes """""""""""""""""""""""""""""""
@@ -1030,45 +1024,8 @@ if g:load_vimrc_filetype "{{{
   if exists('$TMUX')
       set term=screen-256color
   endif
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  " auto detect filetype and load setting
-  "filetype plugin indent on
-
-  " For all text files set 'textwidth' to 71 characters.
-  "autocmd FileType text setlocal textwidth=71
-
-  " zope dtml
-  "autocmd BufNewFile,BufRead *.dtml setf dtml
-
-  " skeleton file
-  " use template
-  "autocmd BufNewFile test*.py 0r ~/.vim/skeleton/test.py
-  "autocmd BufNewFile alltests.py 0r ~/.vim/skeleton/alltests.py
-  "autocmd BufNewFile *.py 0r ~/.vim/skeleton/skeleton.py
-
-  " shell script
-  "autocmd fileType sh setlocal sw=4 | setlocal sta
-
-  " RedHat spec file
-  "autocmd BufNewFile,BufReadPost *.spec setf spec
-
-  " Brainfuck file
-  "autocmd BufNewFile,BufReadPost *.b setf brainfuck
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  "autocmd BufReadPost *
-   " \ if line("'\"") > 0 && line("'\"") <= line("$") |
-   " \   exe :"normal g`\"" |
-   " \ endif
-" endif :"" has("autocmd")
 endif
-"}}} Filetypes -------------------------------------------------------------
+"}}} Filetypes
 
 
 "---------------------------------------------------------------
@@ -1102,36 +1059,6 @@ if g:load_vimrc_plugin_config " {{{
     catch
       colorscheme murphy
     endtry
-  " }}}
-
-  "-----------------------------------------------------------
-  " python-mode {{{
-    " Disable pylint checking every save
-    if pathogen#is_disabled('python-mode') == 0
-      let g:pymode_lint_write = 0
-      let g:pymode_lint = 1
-      let g:pymode_lint_checker = "pyflakes,pep8"
-
-      " Set key 'R' for run python code
-      " let g:pymode_run_key = 'R'
-      let g:pymode_run_key = '<leader>r'
-
-      " Support virtualenv
-      let g:pymode_virtualenv = 1
-
-      " Enable breakpoints plugin
-      let g:pymode_breakpoint = 1
-      let g:pymode_breakpoint_key = '<leader>b'
-
-      " syntax highlighting
-      let g:pymode_syntax = 1
-      let g:pymode_syntax_all = 1
-      let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-      let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-      " Don't autofold code
-      let g:pymode_folding = 0
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1209,30 +1136,7 @@ if g:load_vimrc_plugin_config " {{{
               \ 'd:defines'
           \]
       \}
-
     endif
-  " }}}
-
-  "-----------------------------------------------------------
-  " File Explorer {{{
-    "let g:explVertical=1                   " split verticially
-    "window size
-    "let g:explWinSize=35                   " width of 35 pixels
-    "let g:explSplitLeft=1
-    "let g:explSplitBelow=1
-  " }}}
-
-  "-----------------------------------------------------------
-  "Tree explorer {{{
-    "let g:Tlist_Enable_Fold_Column=0
-    "let g:treeExplVertical=1
-    "let g:treeExplWinSize=30
-    " let g:explSplitLeft=1
-    " let g:explSplitBelow=1
-    " "Hide some files
-    " let g:explHideFiles='^\.,.*\.class$,.*\.swp$,.*\.pyc$,.*\.swo$,\.DS_Store$'
-    " "Hide the help thing..
-    " let g:explDetailedHelp=0
   " }}}
 
   "-----------------------------------------------------------
@@ -1395,7 +1299,7 @@ if g:load_vimrc_plugin_config " {{{
   " }}}
 
   "-----------------------------------------------------------
-  " showmarks setting {{{
+  " showmarks {{{
     " <Leader>mt  - Toggle whether marks are displayed or not.
     " <Leader>mo  - Turn ShowMarks on, and displays marks.
     " <Leader>mh  - Clear mark on current line.
@@ -1415,8 +1319,8 @@ if g:load_vimrc_plugin_config " {{{
       let g:showmarks_textlower = "\t"
       let g:showmarks_textupper = "\t"
       let g:showmarks_textother = "\t"
-      let g:showmarks_no_mappings = 1
-      nnoremap mt <Plug>ShowMarksToggle
+      let g:showmarks_no_mappings = 0
+      " nnoremap mt <Plug>ShowMarksToggle
     endif
   " }}}
 
@@ -1495,32 +1399,6 @@ if g:load_vimrc_plugin_config " {{{
       autocmd Syntax * RainbowParenthesesLoadSquare
       autocmd Syntax * RainbowParenthesesLoadBraces
     augroup END
-  " }}}
-
-  "-----------------------------------------------------------
-  " Powerline {{{
-    " Powerline and neocomplcache require Vim 7.2
-    if pathogen#is_disabled('vim-powerline') == 0
-      if os == "windows"
-        ""let g:Powerline_symbols = 'compatible'
-        let g:Powerline_symbols = 'unicode'
-      elseif has('gui_macvim')
-        let g:Powerline_symbols = 'fancy'
-      else
-        let g:Powerline_symbols = 'unicode'
-      endif
-
-      let g:Powerline_cache_enabled = 1
-      " override the dividers
-      let g:Powerline_dividers_override = ['>>', '>', '<<', '<']
-      let g:Powerline_stl_path_style = 'short'
-      " let Powerline_theme = 'skwp'
-      " let Powerline_colorscheme = 'skwp'
-      " Insert the charcode segment after the filetype segment
-      " call Pl#Theme#InsertSegment('ws_marker', 'after', 'lineinfo')
-      " Replace the scrollpercent segment with the charcode segment
-      " call Pl#Theme#ReplaceSegment('scrollpercent', 'fileinfo')
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1752,20 +1630,6 @@ if g:load_vimrc_plugin_config " {{{
   " }}}
 
   "-----------------------------------------------------------
-  " fuzzy finder {{{
-    " FuzzyFinder/L9 require Vim 7.2 and floating-point support
-    if pathogen#is_disabled('FuzzyFinder') == 0
-      let g:fuf_dataDir=g:dotvim_settings.cache_dir.'/fuzzyfinder-data'
-      ""call add(g:pathogen_blacklist, 'l9')
-      ""call add(g:pathogen_blacklist, 'fuzzyfinder')
-      nnoremap <Leader>ffb :FufBuffer<CR>
-      nnoremap <Leader>fff :FufFileWithCurrentBufferDir<CR>
-      nnoremap <Leader>ffj :FufJumpList<CR>
-      nnoremap <Leader>ffl :FufLine<CR>
-    endif
-  " }}}
-
-  "-----------------------------------------------------------
   " gundo {{{
     " Gundo requires Vim 7.3 and Python
     if pathogen#is_disabled('gundo') == 0
@@ -1912,10 +1776,25 @@ if g:load_vimrc_plugin_config " {{{
   " snipMate {{{
   if s:settings.snippet_method == 'snipmate'
     if pathogen#is_disabled('vim-snipmate') == 0
-      let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
+      let g:snips_author = 'Hong Jin'
+      let g:snips_email = 'hon9jin@gmail.com'
+      let g:snips_github = 'hjking'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
       let g:snipMate.scope_aliases = {}
       let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog'
+    endif
+  endif "}}}
+
+  "-----------------------------------------------------------
+  " UltiSnips {{{
+  if s:settings.snippet_method == 'ultisnips'
+    if pathogen#is_disabled('ultisnips') == 0
+      " better key bindings for UltiSnipsExpandTrigger
+      let g:UltiSnipsExpandTrigger = "<c-j>"
+      let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+      let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+      let g:UltiSnipsEditSplit="vertical"
+      let g:UltiSnipsSnippetsDir=g:dotvim_settings.cache_dir . '/ultisnips'
     endif
   endif "}}}
 
@@ -2121,39 +2000,17 @@ if g:load_vimrc_plugin_config " {{{
   " airline {{{
   if s:settings.statusline_method == 'airline'
     if pathogen#is_disabled('airline') == 0
-      " let g:loaded_airline = 1
-      " enable fugitive integration >
-      let g:airline_powerline_fonts = 0
-      let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
+
+      " let g:airline_section_b = '%{getcwd()}'
+      " " let g:airline_section_c = '%t'
+      " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
+      " let g:airline_section_c = airline#section#create_left(['file'])
+
       let g:airline_inactive_collapse=1
 
       " Enable Extensions
-      " let g:airline_extensions = ['branch', 'quickfix']
+      " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
 
-      " enable/disable fugitive/lawrencium integration
-      let g:airline#extensions#branch#enabled = 0
-
-      " enable syntastic integration >
-      let g:airline#extensions#syntastic#enabled = 0
-
-      " enable/disable tagbar integration >
-      let g:airline#extensions#tagbar#enabled = 0
-      let g:airline#extensions#tagbar#flags = ''  "default
-      let g:airline#extensions#tagbar#flags = 'f'
-      let g:airline#extensions#tagbar#flags = 's'
-      let g:airline#extensions#tagbar#flags = 'p'
-
-      " bufferline
-      let g:airline#extensions#bufferline#enabled = 0
-
-      " whitespace
-      " enable/disable detection of whitespace errors. >
-      let g:airline#extensions#whitespace#enabled = 0
-      " configure which whitespace checks to enable. >
-      let g:airline#extensions#whitespace#checks = [ 'indent', 'trailing' ]
-
-      " anzu-mode
-      let g:airline#extensions#anzu#enabled = 0
     endif
   endif
   "}}}
@@ -2179,6 +2036,7 @@ if g:load_vimrc_plugin_config " {{{
     " `<Leader><Leader>j  to Line downward
     " `<Leader><Leader>k  to Line upward
     if pathogen#is_disabled('easymotion') == 0
+      " let g:EasyMotion_leader_key = '<space>'
       " change the target keys
       " let g:EasyMotion_keys = '1234567890'
       " disable shading : 0
@@ -2192,12 +2050,6 @@ if g:load_vimrc_plugin_config " {{{
   " Verilog {{{
     " verilog root menu
     let g:PluginTopLvlMenu = 'Plugin'
-  "}}}
-
-  "-----------------------------------------------------------
-  " Color Scheme Explorer {{{
-    let g:scroll_colors = 1
-    let loaded_csExplorer = 1
   "}}}
 
   "-----------------------------------------------------------
@@ -2281,7 +2133,7 @@ if g:load_vimrc_plugin_config " {{{
     let g:wildfire_water_map = "<BS>"
 
     let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "ip", "it"]
-  "}}}
+  " }}}
 
   "-----------------------------------------------------------
   " incsearch {{{
@@ -2293,6 +2145,19 @@ if g:load_vimrc_plugin_config " {{{
     let g:incsearch#magic = '\m' " magic
     let g:incsearch#magic = '\M' " nomagic
   "}}}
+
+  "-----------------------------------------------------------
+  " vim-asterisk {{{
+  " provides immap *   <Plug>(asterisk-*)
+    map #   <Plug>(asterisk-#)
+    map g*  <Plug>(asterisk-g*)
+    map g#  <Plug>(asterisk-g#)
+    map z*  <Plug>(asterisk-z*)
+    map gz* <Plug>(asterisk-gz*)
+    map z#  <Plug>(asterisk-z#)
+    map gz# <Plug>(asterisk-gz#)proved * motions.
+  " }}}
+
 endif
 
 "}}} Plugin_config -----------------------------------------
@@ -2555,26 +2420,26 @@ if g:load_vimrc_extended
   noremap <leader>sa zg
   noremap <leader>s? z=
 
-  " don't use exact searches for */#
-  " "noremap * g*
-  " "noremap # g#
-  noremap <kMultiply> g*          " map * to g*
-  " Smart word search."{{{
-  " Search cursor word by word unit.
-  " nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
-  " Search cursor word.
-  nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
-  " Search from cursor to word end.
-  " nnoremap <silent> #  :<C-u>call <SID>SetSearch('""ye')<CR>
+  " " don't use exact searches for */#
+  " " "noremap * g*
+  " " "noremap # g#
+  " noremap <kMultiply> g*          " map * to g*
+  " " Smart word search."{{{
+  " " Search cursor word by word unit.
+  " " nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
+  " " Search cursor word.
+  " nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
+  " " Search from cursor to word end.
+  " " nnoremap <silent> #  :<C-u>call <SID>SetSearch('""ye')<CR>
 
-  " Search selected text.
-  xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
-  xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
+  " " Search selected text.
+  " xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
+  " xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
 
-  " Visual mode pressing * or # searches for the current selection
-  " Super useful! From an idea by Michael Naumann
-  vnoremap <silent> * :call VisualSelection('f', '')<CR>
-  vnoremap <silent> # :call VisualSelection('b', '')<CR>
+  " " Visual mode pressing * or # searches for the current selection
+  " " Super useful! From an idea by Michael Naumann
+  " vnoremap <silent> * :call VisualSelection('f', '')<CR>
+  " vnoremap <silent> # :call VisualSelection('b', '')<CR>
 
   function! VisualSelection(direction, extra_filter) range
     let l:saved_reg = @"
@@ -2911,9 +2776,9 @@ if g:load_vimrc_extended
   endfunction
 
   "Basically you press * or # to search for the current selection !! Really useful
-  vnoremap <silent> * :call VisualSearch('f')<CR>
-  vnoremap <silent> # :call VisualSearch('b')<CR>
-  vnoremap <silent> gv :call VisualSearch('gv')<CR>
+  " vnoremap <silent> * :call VisualSearch('f')<CR>
+  " vnoremap <silent> # :call VisualSearch('b')<CR>
+  " vnoremap <silent> gv :call VisualSearch('gv')<CR>
 
   noremap <Leader>ch :call SetColorColum()<CR>
   function! SetColorColum()
@@ -3078,6 +2943,32 @@ function! MakeFSLStruct(name)
 endfunction
 
 "}}} Fisilink ----------------------------------------------
+
+
+" Strip trailing whitespace
+function! <SID>StripTrailingWhitespaces()
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  %s/\s\+$//e
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
+endfunction
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+" autocmd FileType c,cpp,scss,css,html,erb,java,php,ruby,python,javascript autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+" nnoremap <leader>cs :call <SID>StripTrailingWhitespaces()<cr>
+
+
+" Search for the current selection
+function! s:VSetSearch()
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction
 
 set secure
 

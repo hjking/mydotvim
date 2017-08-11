@@ -77,10 +77,6 @@
 	path = bundle/tagbar
 	url = https://github.com/majutsushi/tagbar.git
     ignore = dirty
-[submodule "bundle/gundo"]
-	path = bundle/gundo
-	url = https://github.com/sjl/gundo.vim.git
-    ignore = dirty
 [submodule "bundle/neocomplcache"]
 	path = bundle/neocomplcache
 	url = https://github.com/Shougo/neocomplcache.git
@@ -285,10 +281,6 @@
 	path = bundle/neocomplete
 	url = https://github.com/Shougo/neocomplete.vim.git
     ignore = dirty
-[submodule "bundle/gutentags"]
-	path = bundle/gutentags
-	url = https://github.com/ludovicchabant/vim-gutentags.git
-    ignore = dirty
 [submodule "bundle/VimCompletesMe"]
 	path = bundle/VimCompletesMe
 	url = https://github.com/ajh17/VimCompletesMe.git
@@ -312,3 +304,15 @@
 [submodule "bundle/incsearch"]
 	path = bundle/incsearch
 	url = https://github.com/haya14busa/incsearch.vim.git
+    ignore = dirty
+[submodule "bundle/cs-deus"]
+	path = bundle/cs-deus
+	url = https://github.com/ajmwagar/vim-deus.git
+    ignore = dirty
+[submodule "bundle/vim-asterisk"]
+	path = bundle/vim-asterisk
+	url = https://github.com/haya14busa/vim-asterisk.git
+    ignore = dirty
+[submodule "bundle/undotree"]
+	path = bundle/undotree
+	url = https://github.com/mbbill/undotree.git

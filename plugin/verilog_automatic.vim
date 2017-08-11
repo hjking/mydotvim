@@ -13,7 +13,7 @@ if exists("b:vlog_plugin")
 endif
 let b:vlog_plugin = 1
 
-iabbrev <= <= #`FFD
+" iabbrev <= <= #`FFD
 
 if exists("b:vlog_company") == 0
    let b:vlog_company = $USER
