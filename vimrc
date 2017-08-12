@@ -134,16 +134,11 @@ filetype off
   endif
 
   if v:version < 703
-    "    call add(g:pathogen_blacklist, 'niceblock')
     call add(g:pathogen_blacklist, 'easymotion')
+    call add(g:pathogen_blacklist, 'VimCompleteMe')
   endif
 
   if v:version < 703 || !has('python')
-    call add(g:pathogen_blacklist, 'gundo')
-  endif
-
-  if v:version < 703
-    call add(g:pathogen_blacklist, 'VimCompleteMe')
   endif
 
   if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
@@ -1103,6 +1098,8 @@ if g:load_vimrc_plugin_config " {{{
       let g:tagbar_usearrows = 1
       let g:tagbar_autoshowtag = 1
       let g:tagbar_show_visibility = 1
+      let g:tagbar_map_closefold = ['h', '-', 'zc']
+      let g:tagbar_map_openfold = ['l', '+', 'zo']
       " let g:tagbar_autoclose = 1    " auto close after open tag
       nnoremap <silent><leader>tb :TagbarToggle<CR>
       map <F6> :TagbarToggle<CR>
@@ -1618,23 +1615,13 @@ if g:load_vimrc_plugin_config " {{{
       let g:indent_guides_start_level=1
       let g:indent_guides_guide_size=1
       let g:indent_guides_color_change_percent=3
-      " if !has('gui_running')
-      "   let g:indent_guides_auto_colors=0
-      "   function! s:indent_set_console_colors()
-      "     hi IndentGuidesOdd ctermbg=235
-      "     hi IndentGuidesEven ctermbg=236
-      "   endfunction
-      "   autocmd VimEnter,Colorscheme * call s:indent_set_console_colors()
-      " endif
     endif
   " }}}
 
   "-----------------------------------------------------------
-  " gundo {{{
-    " Gundo requires Vim 7.3 and Python
-    if pathogen#is_disabled('gundo') == 0
-      nnoremap <silent> <Leader>u :GundoToggle<CR>
-      let g:gundo_width=80
+  " undotree {{{
+    if pathogen#is_disabled('undotree') == 0
+      nnoremap <Leader>gu :UndotreeToggle<CR>
     endif
   " }}}
 
@@ -1972,9 +1959,12 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " NerdCommenter {{{
+    " Add spaces after comment delimiters by default
     let g:NERDSpaceDelims = 1   " add extra space
     " Enable trimming of trailing whitespace when uncommenting
     let g:NERDTrimTrailingWhitespace = 1
+    " Allow commenting and inverting empty lines (useful when commenting a region)
+    let g:NERDCommentEmptyLines = 1
   "}}}
 
   "-----------------------------------------------------------
@@ -2086,13 +2076,13 @@ if g:load_vimrc_plugin_config " {{{
   " anzu {{{
     " display the current match index number and total match number of search pattern
     " mapping
-    " nmap n <Plug>(anzu-n-with-echo)
-    " nmap N <Plug>(anzu-N-with-echo)
+    nmap n <Plug>(anzu-n-with-echo)
+    nmap N <Plug>(anzu-N-with-echo)
     " nmap * <Plug>(anzu-star-with-echo)
     " nmap # <Plug>(anzu-sharp-with-echo)
 
     " clear status
-    " nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+    nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 
     " statusline
     " set statusline+=%{anzu#search_status()}
@@ -2122,6 +2112,8 @@ if g:load_vimrc_plugin_config " {{{
         \ 'ip'  :1,
         \ 'ie'  :1,
         \ }
+    xmap v <Plug>(expand_region_expand)
+    xmap V <Plug>(expand_region_shrink)
   "}}}
 
   "-----------------------------------------------------------
@@ -2144,18 +2136,22 @@ if g:load_vimrc_plugin_config " {{{
     let g:incsearch#magic = '\V' " very nomagic
     let g:incsearch#magic = '\m' " magic
     let g:incsearch#magic = '\M' " nomagic
+    map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+    map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
   "}}}
 
   "-----------------------------------------------------------
   " vim-asterisk {{{
   " provides immap *   <Plug>(asterisk-*)
-    map #   <Plug>(asterisk-#)
-    map g*  <Plug>(asterisk-g*)
-    map g#  <Plug>(asterisk-g#)
+    map *   <Plug>(asterisk-g*)
+    map g*  <Plug>(asterisk-*)
+    map #   <Plug>(asterisk-g#)
+    map g#  <Plug>(asterisk-#)
+
     map z*  <Plug>(asterisk-z*)
     map gz* <Plug>(asterisk-gz*)
     map z#  <Plug>(asterisk-z#)
-    map gz# <Plug>(asterisk-gz#)proved * motions.
+    map gz# <Plug>(asterisk-gz#)
   " }}}
 
 endif
@@ -2296,7 +2292,7 @@ if g:load_vimrc_extended
 
   " clearing highlighted search
   nnoremap <silent> <leader>\ :nohlsearch<CR>
-  nnoremap <ESC><ESC> :nohlsearch<CR>
+  " nnoremap <ESC><ESC> :nohlsearch<CR>
 
   inoremap <buffer> /*          /**/<Left><Left>
   inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
@@ -2627,15 +2623,15 @@ if g:load_vimrc_extended
   " suddenly appears inside a fold.
   " nnoremap * *zzzv
   " nnoremap # #zzzv
-  nnoremap n nzzzv
-  nnoremap N Nzzzv
+  " nnoremap n nzzzv
+  " nnoremap N Nzzzv
   " noremap n nzz
   " noremap N Nzz
   " noremap * *zz
   " noremap # #zz
 
-  nnoremap g* g*zz
-  nnoremap g# g#zz
+  " nnoremap g* g*zz
+  " nnoremap g# g#zz
   " Format Jump, center the screen when jumping through the changelist
   nnoremap <silent> g; g;zz
   nnoremap <silent> g, g,zz

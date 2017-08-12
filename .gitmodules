@@ -301,10 +301,6 @@
 	path = bundle/abolish
 	url = https://github.com/tpope/vim-abolish.git
     ignore = dirty
-[submodule "bundle/incsearch"]
-	path = bundle/incsearch
-	url = https://github.com/haya14busa/incsearch.vim.git
-    ignore = dirty
 [submodule "bundle/cs-deus"]
 	path = bundle/cs-deus
 	url = https://github.com/ajmwagar/vim-deus.git
@@ -316,3 +312,8 @@
 [submodule "bundle/undotree"]
 	path = bundle/undotree
 	url = https://github.com/mbbill/undotree.git
+    ignore = dirty
+[submodule "bundle/incsearch"]
+	path = bundle/incsearch
+	url = https://github.com/haya14busa/incsearch.vim.git
+    ignore = dirty
