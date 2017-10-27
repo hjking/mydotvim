@@ -27,20 +27,7 @@ let g:load_vimrc_extended = 1
     endif
   endfunction
 
-  silent function! OSX()
-      return has('macunix')
-  endfunction
-  silent function! LINUX()
-      return has('unix') && !has('macunix') && !has('win32unix')
-  endfunction
-  silent function! WINDOWS()
-      return  (has('win32') || has('win64'))
-  endfunction
-
   let os = MySys()
-  let s:is_windows = has('win32') || has('win64')
-  let s:is_cygwin = has('win32unix')
-  let s:is_macvim = has('gui_macvim')
 " }}}
 
 " Local variables {{{
@@ -94,7 +81,7 @@ set all& "reset everything to their defaults
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
 
-if WINDOWS()
+if os == "windows"
   set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
@@ -188,15 +175,6 @@ filetype off
   call pathogen#infect()
   " execute pathogen#infect()
   call pathogen#helptags()
-  " pathogen manage vba plugin
-  "   :e name.vba
-  "   :!mkdir $VIM\vimfiles\bundle\name
-  "   :UseVimball $VIM\vimfiles\bundle\name
-
-  ""if filereadable(expand("~/.vimrc.bundles.local"))
-  ""    source ~/.vimrc.bundles.local
-  ""endif
-
 " }}}
 
 "-----------------------------------------------------------
@@ -204,10 +182,9 @@ filetype off
 " Enable file type detection. Use the default filetype settings.
 " Also load indent files, to automatically do language-dependent indenting.
 "-----------------------------------------------------------
-" filetype on
-" filetype plugin on
-" filetype indent on
-filetype plugin indent on
+if has('autocmd')
+  filetype plugin indent on
+endif
 
 if os == "windows"
   let g:vimfiles = split(&runtimepath, ',')[1]
@@ -236,7 +213,7 @@ let mapleader = ","
 " let mapleader=" "
 
 " our <localleader> will be the '-' key
-let maplocalleader="-"
+let maplocalleader=","
 
 " Avoid garbled characters in Chinese language windows OS
 let $LANG='en'
@@ -371,9 +348,8 @@ endfunction
 noremap <leader>bg :call ToggleBG()<CR>
 
 if has('gui_running')
-  let colorscheme_list = ['solarized', 'badwolf', 'koehler',
-        \ 'molokai', 'gruvbox', 'vividchalk', 'elflord',
-        \ 'hybrid', 'zenburn', 'corporation', 'herald']
+  let colorscheme_list = ['solarized', 'badwolf',   'koehler',
+        \ 'molokai', 'gruvbox', 'vividchalk', 'hybrid',    'zenburn']
   exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
 else
   try
@@ -547,7 +523,6 @@ set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 " 17 diff mode
 "-------------------------------------------------------------------------------
 set diffopt=context:3       " display 3 lines above and below the different place
-" set scrollbind      " 左右两侧的屏幕滚动是同步的
 set diffopt+=iwhite
 set diffopt+=filler
 " if os == "windows"
@@ -676,34 +651,6 @@ set isfname-==  " remove = from filename characters
 " 26 multi-byte characters
 "-------------------------------------------------------------------------------
 if has("multi_byte")
-  " if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
-  "   set ambiwidth=double
-  " endif
-  " " Set fileencoding priority
-  " if getfsize(expand("%")) > 0
-  "   set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,sjis,cp932,cp949,euc-kr,latin1
-  " else
-  "   set fileencodings=cp936,cp932,cp949,big5,euc-jp,euc-kr,latin1
-  " endif
-  " " CJK environment detection and corresponding setting
-  " if v:lang =~ "^zh_CN"
-  " " Use cp936 to support GBK, euc-cn == gb2312
-  "   " set encoding=chinese
-  "   set fileencoding=chinese
-  " elseif v:lang =~ "^zh_TW"
-  "   set fileencoding=taiwan
-  " elseif v:lang =~ "^ko"
-  "   set fileencoding=euc-kr
-  " elseif v:lang =~ "^ja_JP"
-  "   set fileencoding=cp932              " euc-jp
-  " elseif v:lang =~ "utf8$"  || v:lang =~ "UTF-8$" || v:lang =~ "^en_US"
-  "   " Detect UTF-8 locale, and replace CJK setting if needed
-  "   set fileencoding=utf-8
-  " endif
-  " if &encoding ==# 'latin1' && has('gui_running')
-  "   set encoding=utf-8
-  " endif
-  " let &termencoding = &encoding
 
   " Windows cmd.exe still uses cp850. If Windows ever moved to
   " Powershell as the primary terminal, this would be utf-8
@@ -791,7 +738,6 @@ if has("autocmd") " {{{
     " Check timestamp more for 'autoread'.
     autocmd WinEnter * checktime
 
-    autocmd BufReadPre,BufNewFile,BufRead *.vp,*.sva setfiletype systemverilog
     autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree setfiletype tcl
     autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
     autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
@@ -825,9 +771,8 @@ if has("autocmd") " {{{
     autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
     autocmd FileType markdown setlocal nolist
     autocmd FileType vim setlocal fdm=indent keywordprg=:help
-    autocmd FileType xml,html vmap <C-o> <ESC>'<i<!--<ESC>o<ESC>'>o-->
-    autocmd FileType java,c,cpp,cs vmap <C-o> <ESC>'<o/*<ESC>'>o*/
-    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,systemverilog,vimwiki set textwidth=80
+    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal nosmartindent autoindent
+    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,systemverilog,verilog_systemverilog,vimwiki set textwidth=80
     autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
     autocmd FileType lisp set ts=2 softtabstop=2
@@ -1011,7 +956,7 @@ if g:load_vimrc_filetype "{{{
   """"""""""""""""""""""""""""""
   " => Shell section
   """"""""""""""""""""""""""""""
-  if s:is_windows && !s:is_cygwin
+  if os == "windows"
     " ensure correct shell in gvim
     set shell=c:\windows\system32\cmd.exe
   endif
@@ -1680,38 +1625,6 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " vim-cycle {{{
     if pathogen#is_disabled('vim-cycle') == 0
-      " let g:cycle_default_groups = [
-      "       \   [['true', 'false']],
-      "       \   [['yes', 'no']],
-      "       \   [['on', 'off']],
-      "       \   [['+', '-']],
-      "       \   [['>', '<']],
-      "       \   [['"', "'"]],
-      "       \   [['==', '!=']],
-      "       \   [['0', '1']],
-      "       \   [['and', 'or']],
-      "       \   [['in', 'out']],
-      "       \   [['up', 'down']],
-      "       \   [['min', 'max']],
-      "       \   [['get', 'set']],
-      "       \   [['add', 'remove']],
-      "       \   [['to', 'from']],
-      "       \   [['read', 'write']],
-      "       \   [['save', 'load', 'restore']],
-      "       \   [['next', 'previous', 'prev']],
-      "       \   [['only', 'except']],
-      "       \   [['without', 'with']],
-      "       \   [['exclude', 'include']],
-      "       \   [['width', 'height']],
-      "       \   [['asc', 'desc']],
-      "       \   [['是', '否']],
-      "       \   [['上', '下']],
-      "       \   [['男', '女']],
-      "       \   [['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
-      "       \     'Friday', 'Saturday'], ['hard_case', {'name': 'Days'}]],
-      "       \   [['{:}', '[:]', '(:)'], 'sub_pairs'],
-      "       \   [['（:）', '「:」', '『:』'], 'sub_pairs']
-      "       \ ]
       nnoremap <silent> <Leader>n <Plug>CycleNext
       vnoremap <silent> <Leader>n <Plug>CycleNext
     endif
@@ -1763,12 +1676,13 @@ if g:load_vimrc_plugin_config " {{{
   " snipMate {{{
   if s:settings.snippet_method == 'snipmate'
     if pathogen#is_disabled('vim-snipmate') == 0
-      let g:snips_author = 'Hong Jin'
-      let g:snips_email = 'hon9jin@gmail.com'
-      let g:snips_github = 'hjking'
+      let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
       let g:snipMate.scope_aliases = {}
       let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog'
+      let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog'
+      imap <C-J> <Plug>snipMateNextOrTrigger
+      smap <C-J> <Plug>snipMateNextOrTrigger
     endif
   endif "}}}
 
