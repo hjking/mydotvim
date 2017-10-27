@@ -147,6 +147,13 @@ mydotvim
     * vividchalk
     * zenburn
 
+## Note
+
+### Windows
+
+We need the following tools:
+
+- [Universal Ctags](https://github.com/universal-ctags/ctags-win32)
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kinghom/mydotvim/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
