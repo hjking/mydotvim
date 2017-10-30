@@ -155,6 +155,11 @@ We need the following tools:
 
 - [Universal Ctags](https://github.com/universal-ctags/ctags-win32)
 
+- [Gow](https://github.com/bmatzelle/gow)
+
+  Gow (Gnu On Windows) is the lightweight alternative to Cygwin. It uses a convenient Windows installer that installs about 130 extremely useful open source UNIX applications compiled as native win32 binaries.
+
+
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/kinghom/mydotvim/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 

@@ -299,7 +299,7 @@ endif
 "-------------------------------------------------------------------------------
 " ctags path
 if os == "windows"
-  let g:dotvim_settings.ctags_path=g:vimfiles . '/ctags58/ctags.exe'
+  let g:dotvim_settings.ctags_path=g:vimfiles . '/ctags/ctags.exe'
 elseif os == "linux"
   let g:dotvim_settings.ctags_path='ctags'
 endif
