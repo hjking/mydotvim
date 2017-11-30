@@ -317,3 +317,6 @@
 	path = bundle/incsearch
 	url = https://github.com/haya14busa/incsearch.vim.git
     ignore = dirty
+[submodule "bundle/neosnippet-snippets"]
+	path = bundle/neosnippet-snippets
+	url = https://github.com/Shougo/neosnippet-snippets.git

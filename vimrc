@@ -35,35 +35,32 @@ let g:load_vimrc_extended = 1
   " change the default directory where all miscellaneous persistent files go
   let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
 
-  let s:settings = {}
   " auto complete
   " if ( v:version > 704 || (v:version == 704 && has('patch143'))) && (has('python') || has('python3'))
-  "   let s:settings.autocomplete_method = 'youcompleteme'
+  "   let g:dotvim_settings.autocomplete_method = 'youcompleteme'
   " elseif (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
   if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
-    let s:settings.autocomplete_method = 'neocomplete'
+    let g:dotvim_settings.autocomplete_method = 'neocomplete'
   else
-    let s:settings.autocomplete_method = 'neocomplcache'
+    let g:dotvim_settings.autocomplete_method = 'neocomplcache'
   endif
 
   " fuzzy finder
   if v:version < 703
-    let s:settings.finder_method = 'ctrlp'
+    let g:dotvim_settings.finder_method = 'ctrlp'
   else
-    let s:settings.finder_method = 'unite'
+    let g:dotvim_settings.finder_method = 'unite'
   endif
 
   " snippets
-  let s:settings.snippet_method = 'snipmate' " neosnippet/ultisnips
+  let g:dotvim_settings.snippet_method = 'snipmate' " neosnippet/ultisnips
 
   " statusline
   if v:version < 702
-    let s:settings.statusline_method = 'lightline'
+    let g:dotvim_settings.statusline_method = 'lightline'
   else
-    let s:settings.statusline_method = 'airline'
+    let g:dotvim_settings.statusline_method = 'airline'
   endif
-" let s:cache_dir = get(g:dotvim_settings, 'cache_dir', '~/.vim-cache')
-" let g:cache_dir=$HOME.'/.vim-cache'
 
 " }}}
 
@@ -81,9 +78,9 @@ set all& "reset everything to their defaults
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
 
-if os == "windows"
-  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
-endif
+" if os == "windows"
+"   set runtimepath+=$HOME/.vim,$HOME/.vim/after
+" endif
 
 filetype off
 
@@ -93,11 +90,7 @@ filetype off
   let g:pathogen_not_loaded_plugin = 1
   let g:path_of_vimrc_tmp = expand('<sfile>:h')
   let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-  " if os == "windows"
-  "   source $VIM/vimfiles/bundle/pathogen/autoload/pathogen.vim
-  " elseif os == "linux"
-  "   source ~/.vim/bundle/pathogen/autoload/pathogen.vim
-  " endif
+
   runtime! bundle/pathogen/autoload/pathogen.vim
 
   " disable bundle
@@ -131,34 +124,34 @@ filetype off
   if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
   endif
 
-  if s:settings.statusline_method == 'lightline'
+  if g:dotvim_settings.statusline_method == 'lightline'
     call add(g:pathogen_blacklist, 'airline')
   else
     call add(g:pathogen_blacklist, 'lightline')
   endif
 
-  if s:settings.autocomplete_method == 'vimcompleteme'
+  if g:dotvim_settings.autocomplete_method == 'vimcompleteme'
     call add(g:pathogen_blacklist, 'neocomplete')
     call add(g:pathogen_blacklist, 'neocomplcache')
-  elseif s:settings.autocomplete_method == 'neocomplcache'
+  elseif g:dotvim_settings.autocomplete_method == 'neocomplcache'
     call add(g:pathogen_blacklist, 'neocomplete')
     call add(g:pathogen_blacklist, 'VimCompleteMe')
-  else
+  else " neocomplete
     call add(g:pathogen_blacklist, 'neocomplcache')
     call add(g:pathogen_blacklist, 'VimCompleteMe')
   endif
 
-  if s:settings.finder_method == 'ctrlp'
+  if g:dotvim_settings.finder_method == 'ctrlp'
     call add(g:pathogen_blacklist, 'unite')
   else
     call add(g:pathogen_blacklist, 'ctrlp.vim')
     call add(g:pathogen_blacklist, 'ctrlp-extensions.vim')
   endif
 
-  if s:settings.snippet_method == 'snipmate' " neosnippet/ultisnips
+  if g:dotvim_settings.snippet_method == 'snipmate' " neosnippet/ultisnips
     call add(g:pathogen_blacklist, 'neosnippet')
     call add(g:pathogen_blacklist, 'ultisnips')
-  elseif s:settings.snippet_method == 'neosnippet'
+  elseif g:dotvim_settings.snippet_method == 'neosnippet'
     call add(g:pathogen_blacklist, 'snipmate')
     call add(g:pathogen_blacklist, 'ultisnips')
   else " ultisnips
@@ -347,16 +340,16 @@ function! ToggleBG()
 endfunction
 noremap <leader>bg :call ToggleBG()<CR>
 
-if has('gui_running')
-  let colorscheme_list = ['solarized', 'badwolf',   'koehler',
-        \ 'molokai', 'gruvbox', 'vividchalk', 'hybrid',    'zenburn']
-  exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
-else
-  try
-    colorscheme murphy
-  catch
-  endtry
-endif
+" if has('gui_running')
+"   let colorscheme_list = ['solarized', 'badwolf',   'koehler',
+"         \ 'molokai', 'gruvbox', 'vividchalk', 'hybrid',    'zenburn']
+"   exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
+" else
+"   try
+"     colorscheme murphy
+"   catch
+"   endtry
+" endif
 
 "-------------------------------------------------------------------------------
 "  6 multiple windows
@@ -1364,31 +1357,25 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " neocomplcache {{{
-  if s:settings.autocomplete_method == 'neocomplcache'
+  if g:dotvim_settings.autocomplete_method == 'neocomplcache'
     if pathogen#is_disabled('neocomplcache') == 0
       if v:version >= 702
         let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
         let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-        let g:neocomplcache_enable_auto_select = 1
         let g:neocomplcache_enable_smart_case = 1  " Use smartcase
         let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
-        let g:neocomplcache_enable_quick_match = 1
         let g:neocomplcache_temporary_dir = g:dotvim_settings.cache_dir . '/neocomplcache'
         " Enable heavy features.
         " Use camel case completion.
         let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
         let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
-        let g:neocomplcache_max_list = 5
+        let g:neocomplcache_max_list = 10
         " let g:neocomplcache_enable_fuzzy_completion = 1
         " let g:neocomplcache_fuzzy_completion_start_length = 3
         let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
         let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
-
-        let g:neocomplcache_source_disable = {
-          \ 'syntax_complete': 1,
-          \ }
 
         let g:neocomplcache_auto_completion_start_length = 2
         " Define keyword.
@@ -1401,8 +1388,6 @@ if g:load_vimrc_plugin_config " {{{
         if !exists('g:neocomplcache_omni_patterns')
           let g:neocomplcache_omni_patterns = {}
         endif
-        let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-        let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
         let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
         let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
@@ -1448,7 +1433,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " neocomplete {{{
-  if s:settings.autocomplete_method == 'neocomplete'
+  if g:dotvim_settings.autocomplete_method == 'neocomplete'
     if pathogen#is_disabled('neocomplete') == 0
       "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
       " Disable AutoComplPop.
@@ -1572,7 +1557,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " ctrlp {{{
-  if s:settings.finder_method == 'ctrlp'
+  if g:dotvim_settings.finder_method == 'ctrlp'
     if pathogen#is_disabled('ctrlp') == 0
       let g:ctrlp_map = '<Leader>p'
       let g:ctrlp_cmd = 'CtrlP'
@@ -1630,72 +1615,77 @@ if g:load_vimrc_plugin_config " {{{
     endif
   " }}}
 
+
+  " Add my snippets folder
+  set runtimepath+=g:vimfiles.'/snippets'
+
   "-----------------------------------------------------------
   " Neosnippet {{{
-  if s:settings.snippet_method == 'neosnippet'
+  if g:dotvim_settings.snippet_method == 'neosnippet'
     if pathogen#is_disabled('neosnippet') == 0
       " Plugin key-mappings.
+      " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
+      " C-k can also be used to jump to the next field in the snippet.
       inoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
       snoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
       xnoremap <C-k>     <Plug>(neosnippet_expand_target)
 
+      " Tab to select the next field to fill in the snippet.
       "" " SuperTab like snippets behavior
-      "" imap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-      "" smap <expr><TAB> neosnippet#expandable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-      inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)"
-        \: pumvisible() ? "\<C-n>" : "\<TAB>"
-      snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        \ "\<Plug>(neosnippet_expand_or_jump)"
-        \: "\<TAB>"
+      " inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      "   \ "\<Plug>(neosnippet_expand_or_jump)"
+      "   \: pumvisible() ? "\<C-n>" : "\<TAB>"
+      " snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      "   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
       " For snippet_complete marker.
       if has('conceal')
         set conceallevel=2 concealcursor=i
       endif"
 
-      " Enable snipMate compatibility feature.
-      let g:neosnippet#enable_snipmate_compatibility = 0  " no
-      " Installing default snippets is optional
-      let g:neosnippet#disable_runtime_snippets = {
-                                                    \   '_' : 1,
-                                                    \ }
-      " Tell Neosnippet about the other snippets
       " use a different collection of snippets other than the built-in ones
+      " Enable snipMate compatibility feature, load snipMate snippets from runtime path automatically.
+      let g:neosnippet#enable_snipmate_compatibility = 1
+
+      " Tell Neosnippet about the other snippets
       let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets',
-                                          \ g:vimfiles . '/snippets',
+                                          \ g:vimfiles . '/snippets/snippets',
                                           \ g:vimfiles . '/bundle/systemc/snippets']
+
       " associating certain filetypes with other snippet files.
       let g:neosnippet#scope_aliases = {}
       let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
+      let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
     endif
   endif
   " }}}
 
   "-----------------------------------------------------------
   " snipMate {{{
-  if s:settings.snippet_method == 'snipmate'
+  if g:dotvim_settings.snippet_method == 'snipmate'
     if pathogen#is_disabled('vim-snipmate') == 0
       let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
       let g:snipMate.scope_aliases = {}
-      let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog'
-      let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog'
+      let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog,uvm'
+      let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog,uvm'
       imap <C-J> <Plug>snipMateNextOrTrigger
       smap <C-J> <Plug>snipMateNextOrTrigger
+      imap <C-K> <Plug>snipMateNextOrTrigger
+      smap <C-K> <Plug>snipMateNextOrTrigger
     endif
   endif "}}}
 
   "-----------------------------------------------------------
   " UltiSnips {{{
-  if s:settings.snippet_method == 'ultisnips'
+  if g:dotvim_settings.snippet_method == 'ultisnips'
     if pathogen#is_disabled('ultisnips') == 0
       " better key bindings for UltiSnipsExpandTrigger
-      let g:UltiSnipsExpandTrigger = "<c-j>"
-      let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-      let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+      let g:UltiSnipsExpandTrigger = "<C-J>"
+      let g:UltiSnipsJumpForwardTrigger = "<C-J>"
+      let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
       let g:UltiSnipsEditSplit="vertical"
-      let g:UltiSnipsSnippetsDir=g:dotvim_settings.cache_dir . '/ultisnips'
+      let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
     endif
   endif "}}}
 
@@ -1758,7 +1748,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " unite {{{
-  if s:settings.finder_method == 'unite'
+  if g:dotvim_settings.finder_method == 'unite'
     if pathogen#is_disabled('unite') == 0
       " Use the fuzzy matcher for everything
       call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -1902,7 +1892,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " airline {{{
-  if s:settings.statusline_method == 'airline'
+  if g:dotvim_settings.statusline_method == 'airline'
     if pathogen#is_disabled('airline') == 0
 
       " let g:airline_section_b = '%{getcwd()}'
@@ -1921,7 +1911,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " lightline {{{
-  if s:settings.statusline_method == 'lightline'
+  if g:dotvim_settings.statusline_method == 'lightline'
     if pathogen#is_disabled('lightline') == 0
       " let g:lightline = {
       "     \ 'colorscheme': 'solarized_dark',
@@ -2154,7 +2144,6 @@ if g:load_vimrc_extended
   inoremap <C-f> <Right>
   inoremap <C-b> <Left>
 
-  inoremap <C-k>  <C-o>d$
   noremap <M-d>  <C-o>diW   " delete word
   noremap <M-y>  <C-o>yiW   " yank word
 
@@ -2206,7 +2195,7 @@ if g:load_vimrc_extended
 
   " clearing highlighted search
   nnoremap <silent> <leader>\ :nohlsearch<CR>
-  " nnoremap <ESC><ESC> :nohlsearch<CR>
+  nnoremap <ESC><ESC> :nohlsearch<CR>
 
   inoremap <buffer> /*          /**/<Left><Left>
   inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
