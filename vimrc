@@ -71,18 +71,21 @@ let g:load_vimrc_extended = 1
 "---------------------------------------------------------------
 "  1 important
 "----------------------------------------------------------------
-set all& "reset everything to their defaults
+" set all& "reset everything to their defaults
 
 " Get out of VI's compatible mode
 " Use Vim settings, rather then Vi settings.
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
 
-" if os == "windows"
-"   set runtimepath+=$HOME/.vim,$HOME/.vim/after
-" endif
+if os == "windows"
+  set runtimepath+=$HOME/.vim,$HOME/.vim/after
+endif
 
 filetype off
+
+" Add my snippets folder
+set runtimepath+=g:vimfiles.'/snippets'
 
 "-----------------------------------------------------------
 """ pathogen.vim {{{
@@ -177,6 +180,7 @@ filetype off
 "-----------------------------------------------------------
 if has('autocmd')
   filetype plugin indent on
+  filetype indent on        " load filetype-specific indent files
 endif
 
 if os == "windows"
@@ -321,6 +325,7 @@ else
 endif
 
 set number                      " display line number
+" set relativenumber              " show relative numbers
 set numberwidth=1
 set lazyredraw                  " Don't redraw while executing macros
 
@@ -493,7 +498,6 @@ set shiftround              " Round indent by shiftwidth
 " Indent
 "-----------------------------------------------------------
 set autoindent              " Copy indent from current line when starting a new line
-set smartindent             " Do smart autoindenting when starting a new line
 set cindent                 " Enables automatic C program indenting
 set copyindent              " copy the previous indentation on autoindenting
 
@@ -610,7 +614,7 @@ if os == "windows"
 else
   set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
 endif
-set wildmenu                    " command-line completion operates in an enhanced mode
+set wildmenu                    " command-line autocompletion operates in an enhanced mode
 
 "-------------------------------------------------------------------------------
 " 22 executing external commands
@@ -681,18 +685,40 @@ set sessionoptions-=curdir
 set sessionoptions+=sesdir
 set sessionoptions-=options
 
-" HighLight Character
-highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-" highlight pop menu
-highlight Pmenu ctermbg=8 guibg=#606060
-highlight PmenuSel ctermbg=1 guifg=#dddd00 guibg=#1f82cd
-highlight PmenuSbar ctermbg=0 guibg=#d6d6d6
-highlight LineNr ctermbg=0
-highlight FoldColumn ctermbg=0
-highlight ShowMarksHLl ctermbg=0
-highlight ShowMarksHLu ctermbg=0
-highlight ShowMarksHLo ctermbg=0
-highlight ShowMarksHLm ctermbg=0
+function! MyHighlights() abort
+  " highlight Visual     cterm=NONE ctermbg=76  ctermfg=16  gui=NONE guibg=#5fd700 guifg=#000000
+  " highlight StatusLine cterm=NONE ctermbg=231 ctermfg=160 gui=NONE guibg=#ffffff guifg=#d70000
+  " highlight Normal     cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+  " highlight NonText    cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+
+  highlight OverLength  ctermbg=red ctermfg=white   guibg=red     guifg=white
+  highlight Pmenu       ctermbg=8                   guibg=#606060
+  highlight PmenuSel    ctermbg=1                   guifg=#dddd00 guibg=#1f82cd
+  highlight PmenuSbar   ctermbg=0                   guibg=#d6d6d6
+  "
+  "highlight StatusLine guifg=SlateBlue guibg=Yellow
+  "highlight StatusLine guifg=SlateBlue guibg=#008800
+  highlight StatusLine NONE
+  highlight StatusLineNC NONE
+  " current window
+  highlight StatusLine ctermfg=yellow     guifg=orange guibg=#008800 gui=underline
+  " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
+  " not current window
+  highlight StatusLineNC ctermfg=lightgrey guifg=Gray guibg=white
+  " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
+  highlight User1 guifg=yellow
+  highlight User2 guifg=lightblue
+  highlight User3 guifg=red
+  highlight User4 guifg=cyan
+  highlight User5 guifg=lightgreen
+  highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue
+  highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+endfunction
+
+augroup MyColors
+    autocmd!
+    autocmd ColorScheme * call MyHighlights()
+augroup END
 
 ":match OverLength '\%200v.*'
 
@@ -788,23 +814,6 @@ endif " }}}
 " Color of Status Line
 if has('statusline') " {{{
   set laststatus=2           " always show the status line
-  "highlight StatusLine guifg=SlateBlue guibg=Yellow
-  "highlight StatusLine guifg=SlateBlue guibg=#008800
-  highlight StatusLine NONE
-  highlight StatusLineNC NONE
-  " current window
-  highlight StatusLine guifg=orange guibg=#008800 gui=underline ctermfg=yellow
-  " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
-  " not current window
-  highlight StatusLineNC guifg=Gray guibg=white ctermfg=lightgrey
-  " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
-  highlight User1 guifg=yellow
-  highlight User2 guifg=lightblue
-  highlight User3 guifg=red
-  highlight User4 guifg=cyan
-  highlight User5 guifg=lightgreen
-  highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue " ctermbg=brown
-  highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
   " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
   " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
   " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
@@ -990,7 +999,8 @@ if g:load_vimrc_plugin_config " {{{
       colorscheme solarized
       " set background=light
     catch
-      colorscheme murphy
+      " colorscheme murphy
+      colorscheme badwolf
     endtry
   " }}}
 
@@ -1255,18 +1265,18 @@ if g:load_vimrc_plugin_config " {{{
       let g:showmarks_textupper = "\t"
       let g:showmarks_textother = "\t"
       let g:showmarks_no_mappings = 0
-      " nnoremap mt <Plug>ShowMarksToggle
+      " nmap mt <Plug>ShowMarksToggle
     endif
   " }}}
 
   "-----------------------------------------------------------
   " mark setting {{{
-    nnoremap <silent> <leader>hl <Plug>MarkSet
-    vnoremap <silent> <leader>hl <Plug>MarkSet
-    nnoremap <silent> <leader>hh <Plug>MarkClear
-    vnoremap <silent> <leader>hh <Plug>MarkClear
-    nnoremap <silent> <leader>hr <Plug>MarkRegex
-    vnoremap <silent> <leader>hr <Plug>MarkRegex
+    nmap <silent> <leader>hl <Plug>MarkSet
+    vmap <silent> <leader>hl <Plug>MarkSet
+    nmap <silent> <leader>hh <Plug>MarkClear
+    vmap <silent> <leader>hh <Plug>MarkClear
+    nmap <silent> <leader>hr <Plug>MarkRegex
+    vmap <silent> <leader>hr <Plug>MarkRegex
   " }}}
 
   "-----------------------------------------------------------
@@ -1392,8 +1402,8 @@ if g:load_vimrc_plugin_config " {{{
         let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
         " " Plugin key-mappings.
-        " inoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
-        " snoremap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        " imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        " smap <C-k>     <Plug>(neocomplcache_snippets_expand)
         inoremap <expr><C-g>     neocomplcache#undo_completion()
         inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
@@ -1415,17 +1425,6 @@ if g:load_vimrc_plugin_config " {{{
 
         " Close popup by <Space>.
         inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
-
-        " Enable omni completion.
-        augroup my_complete
-          autocmd!
-        autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-        autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-        autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-        autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-        autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-        augroup END
-
       endif
     endif
   endif
@@ -1500,13 +1499,6 @@ if g:load_vimrc_plugin_config " {{{
       "let g:neocomplete#enable_auto_select = 1
       "let g:neocomplete#disable_auto_complete = 1
       "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
-
-      " Enable omni completion.
-      autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-      autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-      autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-      autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-      autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
       " Enable heavy omni completion.
       if !exists('g:neocomplete#sources#omni#input_patterns')
@@ -1610,14 +1602,11 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " vim-cycle {{{
     if pathogen#is_disabled('vim-cycle') == 0
-      nnoremap <silent> <Leader>n <Plug>CycleNext
-      vnoremap <silent> <Leader>n <Plug>CycleNext
+      nmap <silent> <Leader>n <Plug>CycleNext
+      vmap <silent> <Leader>n <Plug>CycleNext
     endif
   " }}}
 
-
-  " Add my snippets folder
-  set runtimepath+=g:vimfiles.'/snippets'
 
   "-----------------------------------------------------------
   " Neosnippet {{{
@@ -1626,9 +1615,9 @@ if g:load_vimrc_plugin_config " {{{
       " Plugin key-mappings.
       " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
       " C-k can also be used to jump to the next field in the snippet.
-      inoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      snoremap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      xnoremap <C-k>     <Plug>(neosnippet_expand_target)
+      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      xmap <C-k>     <Plug>(neosnippet_expand_target)
 
       " Tab to select the next field to fill in the snippet.
       "" " SuperTab like snippets behavior
@@ -1828,19 +1817,17 @@ if g:load_vimrc_plugin_config " {{{
       let g:unite_source_rec_max_cache_files = 99999
 
       function! s:unite_settings()
-        nnoremap <buffer> <C-J> <Plug>(unite_loop_cursor_down)
-        nnoremap <buffer> <C-K> <Plug>(unite_loop_cursor_up)
-        nnoremap <buffer> m <Plug>(unite_toggle_mark_current_candidate)
-        nnoremap <buffer> M <Plug>(unite_toggle_mark_all_candidate)
-        nnoremap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-        nnoremap <buffer> <LocalLeader>q <Plug>(unite_exit)
-
-        vnoremap <buffer> m <Plug>(unite_toggle_mark_selected_candidates)
-
-        inoremap <buffer> <C-J> <Plug>(unite_select_next_line)
-        inoremap <buffer> <C-K> <Plug>(unite_select_previous_line)
-        inoremap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-        inoremap <buffer> <LocalLeader>q <Plug>(unite_exit)
+        nmap <buffer> <C-J>             <Plug>(unite_loop_cursor_down)
+        nmap <buffer> <C-K>             <Plug>(unite_loop_cursor_up)
+        nmap <buffer> m                 <Plug>(unite_toggle_mark_current_candidate)
+        nmap <buffer> M                 <Plug>(unite_toggle_mark_all_candidate)
+        nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
+        vmap <buffer> m                 <Plug>(unite_toggle_mark_selected_candidates)
+        imap <buffer> <C-J>             <Plug>(unite_select_next_line)
+        imap <buffer> <C-K>             <Plug>(unite_select_previous_line)
+        imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
+        nmap <buffer> <LocalLeader>q    <Plug>(unite_exit)
+        imap <buffer> <LocalLeader>q    <Plug>(unite_exit)
       endfunction
     endif
   endif
@@ -2509,6 +2496,7 @@ if g:load_vimrc_extended
   nnoremap <space> 5jzz
   nnoremap <backspace> 5kzz
 
+  " move vertically by visual line
   noremap j gjzz
   noremap k gkzz
   " noremap gj j
@@ -2613,6 +2601,9 @@ if g:load_vimrc_extended
   " ,gt: ctags go to definition in new tab
   nnoremap <leader>gt  <C-w><C-]><C-w>T
 
+  " highlight last inserted text
+  nnoremap gV `[v`]
+
   "-----------------------------------------------------------
   " Functions
   "-----------------------------------------------------------
@@ -2690,52 +2681,6 @@ if g:load_vimrc_extended
     endif
   endfunction
 
-  augroup my_fileheader
-    autocmd!
-    autocmd BufNewFile *.spec call FHHeader()
-  augroup END
-
-  noremap <Leader>fh :call FHHeader()<CR>
-  function! FHHeader()
-    let s:comment = "//"
-    let s:commentline = s:comment .   "----------------------------------------------------------------------"
-    let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
-    let s:department = s:comment .    " Microelectronics Dept."
-    let s:copyright = s:comment .     " All rights reserved."
-    let s:file = s:comment .          " FileName    : " . expand("%:t")
-    let s:author = s:comment .        " Author      : " . g:vimrc_author
-    let s:email= s:comment .          " EMail       : " . g:vimrc_email
-    let s:version = s:comment .       " Version     : 1.0"
-    let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
-    let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
-    let s:description= s:comment .    " Description : "
-    let s:hierarchy= s:comment .      " Hierarchy   : "
-    let s:history= s:comment .        " History"
-    let s:history_author= s:comment . "     Author   :"
-    let s:history_date= s:comment .   "     Date     :"
-    let s:history_rev= s:comment .    "     Revision :"
-
-    call append (0, [s:commentline,
-          \ s:company,
-          \ s:department,
-          \ s:copyright,
-          \ s:comment,
-          \ s:file,
-          \ s:author,
-          \ s:email,
-          \ s:version,
-          \ s:created,
-          \ s:modified,
-          \ s:description,
-          \ s:hierarchy,
-          \ s:commentline,
-          \ s:history,
-          \ s:history_author,
-          \ s:history_date,
-          \ s:history_rev,
-          \ s:commentline])
-  endfunction
-
   cnoremap $q <C-\>eDeleteTillSlash()<cr>
 
   " autocmd GUIEnter * call libcallnr("vimtweak.dll", "SetAlpha", 230)
@@ -2753,8 +2698,55 @@ endif
 "}}} Extended ----------------------------------------------
 
 " {{{ Fisilink ---------------------------------------------
-" when create a new file, insert header
-autocmd BufNewFile *.v,*.sv,*.svh exec ":call SetFSLTitle()"
+
+augroup my_fileheader
+  autocmd!
+  autocmd BufNewFile *.spec call FHHeader()
+  " when create a new file, insert header
+  autocmd BufNewFile *.v,*.sv,*.svh exec ":call SetFSLTitle()"
+augroup END
+
+noremap <Leader>fh :call FHHeader()<CR>
+function! FHHeader()
+  let s:comment = "//"
+  let s:commentline = s:comment .   "----------------------------------------------------------------------"
+  let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
+  let s:department = s:comment .    " Microelectronics Dept."
+  let s:copyright = s:comment .     " All rights reserved."
+  let s:file = s:comment .          " FileName    : " . expand("%:t")
+  let s:author = s:comment .        " Author      : " . g:vimrc_author
+  let s:email= s:comment .          " EMail       : " . g:vimrc_email
+  let s:version = s:comment .       " Version     : 1.0"
+  let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
+  let s:description= s:comment .    " Description : "
+  let s:hierarchy= s:comment .      " Hierarchy   : "
+  let s:history= s:comment .        " History"
+  let s:history_author= s:comment . "     Author   :"
+  let s:history_date= s:comment .   "     Date     :"
+  let s:history_rev= s:comment .    "     Revision :"
+
+  call append (0, [s:commentline,
+        \ s:company,
+        \ s:department,
+        \ s:copyright,
+        \ s:comment,
+        \ s:file,
+        \ s:author,
+        \ s:email,
+        \ s:version,
+        \ s:created,
+        \ s:modified,
+        \ s:description,
+        \ s:hierarchy,
+        \ s:commentline,
+        \ s:history,
+        \ s:history_author,
+        \ s:history_date,
+        \ s:history_rev,
+        \ s:commentline])
+endfunction
+
 " set header function
 func! SetFSLTitle()
   call setline(1          , "\//                              ;;;;`';;;.                                                                            ")
@@ -2793,8 +2785,12 @@ func! SetFSLTitle()
   call append(line(".")+32, "\// Copyright (c), Fisilink Microelectronics Technology Co., Ltd")
   call append(line(".")+33, "\// Author      : ".$USER)
   call append(line(".")+34, "\// Created Time: ".strftime("%c"))
-  call append(line(".")+35, "\//--------------------------------------------------------------------------------------------------------------------")
-  call append(line(".")+36, "")
+  call append(line(".")+35, "")
+  call append(line(".")+36, "\// Date        : ".strftime("%Y-%m-%d %H:%M:%S"))
+  call append(line(".")+37, "\// Revision    : 1.0")
+  call append(line(".")+38, "\// Description : ")
+  call append(line(".")+39, "\//--------------------------------------------------------------------------------------------------------------------")
+  call append(line(".")+40, "")
   " go to end of file
   autocmd BufNewFile * normal G
 endfunc
