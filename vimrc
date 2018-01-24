@@ -56,11 +56,11 @@ let g:load_vimrc_extended = 1
   let g:dotvim_settings.snippet_method = 'snipmate' " neosnippet/ultisnips
 
   " statusline
-  if v:version < 702
+  " if v:version < 702
     let g:dotvim_settings.statusline_method = 'lightline'
-  else
-    let g:dotvim_settings.statusline_method = 'airline'
-  endif
+  " else
+  "   let g:dotvim_settings.statusline_method = 'airline'
+  " endif
 
 " }}}
 
@@ -270,7 +270,6 @@ set incsearch       " Show the pattern when typing a search command
 set ignorecase      " Ignore cases
 set smartcase       "
 set magic           " Changes the special characters that can be used in search patterns
-set gdefault            " this makes search/replace global by default
 
 " Use grep.
 if executable('ack')
@@ -2016,7 +2015,7 @@ if g:load_vimrc_plugin_config " {{{
     let g:wildfire_water_map = "<BS>"
 
     let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "ip", "it"]
-  " }}}
+  "}}}
 
   "-----------------------------------------------------------
   " incsearch {{{
@@ -2043,6 +2042,19 @@ if g:load_vimrc_plugin_config " {{{
     map gz* <Plug>(asterisk-gz*)
     map z#  <Plug>(asterisk-z#)
     map gz# <Plug>(asterisk-gz#)
+  " }}}
+
+  "-----------------------------------------------------------
+  " FastFold {{{
+    nmap zuz <Plug>(FastFoldUpdate)
+    let g:fastfold_savehook = 1
+    let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+    let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+    let g:tex_fold_enabled   = 1
+    let g:vimsyn_folding     = 'af'
+    let g:xml_syntax_folding = 1
+    let g:php_folding        = 1
+    let g:perl_fold          = 1
   " }}}
 
 endif
@@ -2135,6 +2147,7 @@ if g:load_vimrc_extended
   noremap <M-y>  <C-o>yiW   " yank word
 
   " Buffer commands
+  nnoremap <silent> <leader>bb :buffers<CR>
   nnoremap <silent> <Leader>bd :bdelete<CR>
 
   " ,bn - next buffer
@@ -2286,6 +2299,10 @@ if g:load_vimrc_extended
   noremap <unique> <kPlus> zo
   noremap <unique> <kMinus> zc
   map <leader>zz :call ToggleFold()<CR>
+
+  " Set as toggle foldcomment
+  nnoremap zc @=((foldclosed(line('.')) < 0) ? 'zc' :'zo')<CR>
+  nnoremap zr zR
 
   if version >= 600
     " Reduce folding
@@ -2864,6 +2881,16 @@ function! s:VSetSearch()
   let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
   let @s = temp
 endfunction
+
+function! MyFormatXml()
+  set filetype=xml
+  :%s/></>\r</g
+  " :%s/<\([^>]\)*>/\r&/g<CR>
+  :normal gg=G<CR>
+endfunction
+
+nmap <leader>ml :call MyFormatXml()<CR>
+nmap <F8> :call MyFormatXml()<CR>
 
 set secure
 
