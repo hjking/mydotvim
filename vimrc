@@ -27,7 +27,7 @@ let g:load_vimrc_extended = 1
     endif
   endfunction
 
-  let os = MySys()
+  let s:os = MySys()
 " }}}
 
 " Local variables {{{
@@ -35,39 +35,31 @@ let g:load_vimrc_extended = 1
   " change the default directory where all miscellaneous persistent files go
   let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
 
-  " auto complete
-  " if ( v:version > 704 || (v:version == 704 && has('patch143'))) && (has('python') || has('python3'))
-  "   let g:dotvim_settings.autocomplete_method = 'youcompleteme'
-  " elseif (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
-  if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
-    let g:dotvim_settings.autocomplete_method = 'neocomplete'
-  else
-    let g:dotvim_settings.autocomplete_method = 'neocomplcache'
-  endif
+  " auto complete:
+  "      neocomplete: if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
+  "      neocomplcache
+  "      vimcompletesme
+  "      mucomplete
+  let g:dotvim_settings.autocomplete_method = 'vimcompletesme'
 
   " fuzzy finder
-  if v:version < 703
-    let g:dotvim_settings.finder_method = 'ctrlp'
-  else
-    let g:dotvim_settings.finder_method = 'unite'
-  endif
+  let g:dotvim_settings.finder_method = 'ctrlp' " if v:version < 703
 
-  " snippets
-  let g:dotvim_settings.snippet_method = 'snipmate' " neosnippet/ultisnips
+  " snippets:
+  "   neosnippet
+  "   ultisnips
+  "   snipmate
+  let g:dotvim_settings.snippet_method = 'snipmate'
 
-  " statusline
-  " if v:version < 702
-    let g:dotvim_settings.statusline_method = 'lightline'
-  " else
-  "   let g:dotvim_settings.statusline_method = 'airline'
-  " endif
+  " statusline:
+  "   lightline : if v:version < 702
+  "   airline
+  let g:dotvim_settings.statusline_method = 'lightline'
 
 " }}}
 
 "---------------------------------------------------------------
-"""""""""""""""""""""" Basic """""""""""""""""""""""""""""""""""
-"---------------------------------------------------------------
-"{{{
+"""""""""""""""""""""" Basic {{{
 "---------------------------------------------------------------
 "  1 important
 "----------------------------------------------------------------
@@ -78,99 +70,155 @@ let g:load_vimrc_extended = 1
 " This must be first, because it changes other options as a side effect.
 set nocompatible                " not use vi keyboard mode
 
-if os == "windows"
+if s:os == "windows"
   set runtimepath+=$HOME/.vim,$HOME/.vim/after
 endif
 
 filetype off
 
-" Add my snippets folder
-set runtimepath+=g:vimfiles.'/snippets'
+let g:path_of_vimrc_tmp = fnamemodify(resolve(expand('<sfile>')), ':p:h')
+let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
+if s:os == "windows"
+  let g:vimfiles = g:path_of_vimrc.'/vimfiles'
+else
+  let g:vimfiles = g:path_of_vimrc.'/.vim'
+endif
 
 "-----------------------------------------------------------
-""" pathogen.vim {{{
-  " auto load all plugins
-  let g:pathogen_not_loaded_plugin = 1
-  let g:path_of_vimrc_tmp = expand('<sfile>:h')
-  let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-
-  runtime! bundle/pathogen/autoload/pathogen.vim
-
-  " disable bundle
-  let g:pathogen_blacklist = []
-
-  if v:version < 700 || (v:version == 700 && !has('patch167'))
-    call add(g:pathogen_blacklist, 'tagbar')
-  endif
-
-  if v:version < 701
-    call add(g:pathogen_blacklist, 'lookupfile')
-  endif
-
-  if v:version < 702
-    call add(g:pathogen_blacklist, 'indent-guides')
-    call add(g:pathogen_blacklist, 'neocomplcache')
-  endif
-
-  if v:version < 702 || !has('float')
-    call add(g:pathogen_blacklist, 'L9')
-  endif
-
-  if v:version < 703
-    call add(g:pathogen_blacklist, 'easymotion')
-    call add(g:pathogen_blacklist, 'VimCompleteMe')
-  endif
-
-  if v:version < 703 || !has('python')
-  endif
-
-  if (v:version < 704 || (v:version == 704 && !has('patch143'))) || (!has( 'python' ) && !has( 'python3' ))
-  endif
-
-  if g:dotvim_settings.statusline_method == 'lightline'
-    call add(g:pathogen_blacklist, 'airline')
+  """ vim-plug {{{
+  " Specify a directory for plugins
+  " - For Neovim: ~/.local/share/nvim/plugged
+  " - Avoid using standard Vim directory names like 'plugin'
+  " silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
+  if s:os == "windows"
+    call plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
   else
-    call add(g:pathogen_blacklist, 'lightline')
+    call plug#begin('~/.vim/plugged')
   endif
+  " Make sure you use single quotes
 
-  if g:dotvim_settings.autocomplete_method == 'vimcompleteme'
-    call add(g:pathogen_blacklist, 'neocomplete')
-    call add(g:pathogen_blacklist, 'neocomplcache')
+  """ Alignment
+  " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+  Plug 'junegunn/vim-easy-align'
+  Plug 'godlygeek/tabular'
+  Plug 'tommcdo/vim-lion'
+
+  """ Code completion
+  if g:dotvim_settings.autocomplete_method == 'vimcompletesme'
+    Plug 'ajh17/VimCompletesMe'
   elseif g:dotvim_settings.autocomplete_method == 'neocomplcache'
-    call add(g:pathogen_blacklist, 'neocomplete')
-    call add(g:pathogen_blacklist, 'VimCompleteMe')
-  else " neocomplete
-    call add(g:pathogen_blacklist, 'neocomplcache')
-    call add(g:pathogen_blacklist, 'VimCompleteMe')
-  endif
-
-  if g:dotvim_settings.finder_method == 'ctrlp'
-    call add(g:pathogen_blacklist, 'unite')
+    Plug 'Shougo/neocomplcache'
+  elseif g:dotvim_settings.autocomplete_method == 'neocomplete'
+    Plug 'Shougo/neocomplete.vim'
   else
-    call add(g:pathogen_blacklist, 'ctrlp.vim')
-    call add(g:pathogen_blacklist, 'ctrlp-extensions.vim')
+    Plug 'lifepillar/vim-mucomplete', {'on': 'MUcompleteAutoToggle'}
   endif
 
+  " Colorscheme
+  Plug 'sjl/badwolf'
+  Plug 'jnurmine/Zenburn'
+  Plug 'altercation/vim-colors-solarized'
+  Plug 'ajmwagar/vim-deus'
+  Plug 'morhetz/gruvbox'
+  Plug 'tpope/vim-vividchalk'
+  Plug 'tomasr/molokai'
+  Plug 'chriskempson/vim-tomorrow-theme'
+  Plug 'morhetz/gruvbox'
+  Plug 'yuttie/hydrangea-vim'
+  Plug 'tyrannicaltoucan/vim-deep-space'
+  Plug 'AlessandroYorba/Despacio'
+  Plug 'w0ng/vim-hybrid'
+
+  """ Cycle
+  Plug 'tpope/vim-speeddating'
+
+  """ Commenters
+  Plug 'scrooloose/nerdcommenter'
+
+  """ Delimiter
+  Plug 'Raimondi/delimitMate'
+  Plug 'luochen1990/rainbow'
+
+  """ Fuzzy finders
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'sgur/ctrlp-extensions.vim'
+  " Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+
+  """ Indent
+  Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesToggle', 'IndentGuidesEnable']}
+  Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
+
+  """ Navigation
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+  Plug 'jistr/vim-nerdtree-tabs'
+  if v:version >= 703
+    Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
+  endif
+  Plug 'Lokaltog/vim-easymotion'
+  Plug 'justinmk/vim-sneak'
+  Plug 'bkad/CamelCaseMotion'
+
+  """ Snippets
   if g:dotvim_settings.snippet_method == 'snipmate' " neosnippet/ultisnips
-    call add(g:pathogen_blacklist, 'neosnippet')
-    call add(g:pathogen_blacklist, 'ultisnips')
+    Plug 'MarcWeber/vim-addon-mw-utils'
+    Plug 'tomtom/tlib_vim'
+    Plug 'garbas/vim-snipmate'
   elseif g:dotvim_settings.snippet_method == 'neosnippet'
-    call add(g:pathogen_blacklist, 'snipmate')
-    call add(g:pathogen_blacklist, 'ultisnips')
-  else " ultisnips
-    call add(g:pathogen_blacklist, 'neosnippet')
-    call add(g:pathogen_blacklist, 'snipmate')
+    Plug 'Shougo/neosnippet'
+    Plug 'Shougo/neosnippet-snippets'
+  endif
+  Plug 'honza/vim-snippets'
+
+  """ Statusline
+  " Plug 'bling/vim-airline'
+  Plug 'itchyny/lightline.vim'
+  " Plug 'tpope/vim-flagship'
+
+  """ Surround
+  Plug 'tpope/vim-surround'
+
+  """ Undo history
+  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+
+  """ Version control
+  if v:version >= 703
+    Plug 'mhinz/vim-signify', {'on': ['SignifyToggle', 'SignifyEnable'] }
   endif
 
-  " disable plugins
-  call add(g:pathogen_blacklist, 'bufexplorer')
-  call add(g:pathogen_blacklist, 'minibufexpl')
-  call add(g:pathogen_blacklist, 'syntastic')
-  call add(g:pathogen_blacklist, 'mark')
+  """ VimL
+  Plug 'tpope/vim-scriptease'
 
-  call pathogen#infect()
-  " execute pathogen#infect()
-  call pathogen#helptags()
+  """ Misc
+  " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
+  Plug 'jlanzarotta/bufexplorer', { 'on': ['BufExplorer', 'ToggleBufExplorer'] }
+  Plug 'Konfekt/FastFold'
+  Plug 'bootleq/ShowMarks'
+  Plug 'bruno-/vim-vertical-move'
+  Plug 'gcmt/wildfire.vim'
+  Plug 'hallison/vim-markdown'
+  Plug 'haya14busa/incsearch.vim'
+  Plug 'haya14busa/vim-asterisk'
+  Plug 'itchyny/calendar.vim'
+  Plug 'kana/vim-niceblock'
+  Plug 'osyo-manga/vim-anzu'
+  Plug 'osyo-manga/vim-over'
+  Plug 'terryma/vim-expand-region'
+  Plug 'terryma/vim-multiple-cursors'
+  Plug 'tpope/vim-abolish'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'vim-scripts/VisIncr'
+  Plug 'vim-scripts/YankRing.vim'
+  Plug 'vimtaku/hl_matchit.vim'
+
+  """ Verilog/SystemVerilog
+  Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
+  Plug 'kinghom/uvm_gen', { 'for': ['systemverilog', 'verilog'] }
+
+  " Unmanaged plugin (manually installed and updated)
+
+  " Initialize plugin system
+  call plug#end()
 " }}}
 
 "-----------------------------------------------------------
@@ -183,23 +231,17 @@ if has('autocmd')
   filetype indent on        " load filetype-specific indent files
 endif
 
-if os == "windows"
-  let g:vimfiles = split(&runtimepath, ',')[1]
-elseif os == "linux"
-  let g:vimfiles = split(&runtimepath, ',')[0]
-endif
-
-if os == "windows"
+if s:os == "windows"
   language message en                   " message language
   " language message en_US                   " message language
   " language message zh_CN.UTF-8
   " lang messages zh_CN.UTF-8 "
-elseif os == "linux"
+elseif s:os == "linux"
   language message C
 endif
 
 " source $VIMRUNTIME/vimrc_example.vim
-if os == "windows"
+if s:os == "windows"
   " source $VIMRUNTIME/mswin.vim      " Win behaviour
 endif
 
@@ -234,9 +276,9 @@ endif
 "  2 moving around, searching and patterns
 "-------------------------------------------------------------------------------
 " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
-if os == "windows"
+if s:os == "windows"
   set path+=D:\cygwin\bin
-elseif os == "linux"
+elseif s:os == "linux"
   set path+=/usr/bin
 endif
 if has("gui_running")
@@ -294,9 +336,9 @@ endif
 "  3 tags
 "-------------------------------------------------------------------------------
 " ctags path
-if os == "windows"
-  let g:dotvim_settings.ctags_path=g:vimfiles . '/ctags/ctags.exe'
-elseif os == "linux"
+if s:os == "windows"
+  let g:dotvim_settings.ctags_path = g:vimfiles . '/ctags/ctags.exe'
+elseif s:os == "linux"
   let g:dotvim_settings.ctags_path='ctags'
 endif
 
@@ -344,16 +386,6 @@ function! ToggleBG()
 endfunction
 noremap <leader>bg :call ToggleBG()<CR>
 
-" if has('gui_running')
-"   let colorscheme_list = ['solarized', 'badwolf',   'koehler',
-"         \ 'molokai', 'gruvbox', 'vividchalk', 'hybrid',    'zenburn']
-"   exec "colorscheme " . colorscheme_list[localtime()%len(colorscheme_list)]
-" else
-"   try
-"     colorscheme murphy
-"   catch
-"   endtry
-" endif
 
 "-------------------------------------------------------------------------------
 "  6 multiple windows
@@ -386,9 +418,9 @@ endif
 "-----------------------------------------------------------
 " Mouse
 "-----------------------------------------------------------
-if os == "windows"
+if s:os == "windows"
   set mouse=a
-elseif os == "linux"
+elseif s:os == "linux"
   set mouse=va
 endif
 " set mousemodel=extend
@@ -424,7 +456,7 @@ set t_vb=                       " Disable screen flash on error
 " set helplang& helplang=en
 " use Chinese help, support in vimcdoc.vim plugin
 if version >= 603
-  if os == "windows"
+  if s:os == "windows"
     set helplang=cn
   else
     set helplang=en
@@ -477,9 +509,10 @@ set matchpairs+=<:>
 " options
 set complete-=u
 set complete-=i
-set complete+=.,w,b,kspell,ss      " current buffer, other windows' buffers, dictionary, spelling
+set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
 set complete+=k                 " scan the files given with the 'dictionary' option
-set completeopt=longest,menuone    " Insert mode completetion
+set completeopt=longest         " Insert mode completetion
+set completeopt+=menuone        " Insert mode completetion
 " Set popup menu max height.
 set pumheight=20
 
@@ -608,7 +641,7 @@ set ttimeoutlen=100
 "-------------------------------------------------------------------------------
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
 set wildignore+=.svn,CVS,.git,.hg,*.bak,*.e,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.mdb,*~,~*,*.so " wildmenu: ignore these extensions
-if os == "windows"
+if s:os == "windows"
   set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
 else
   set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
@@ -630,7 +663,7 @@ set makeef=error.err " the errorfile for :make and :grep
 "-------------------------------------------------------------------------------
 " 24 system specific
 "-------------------------------------------------------------------------------
-if os == "windows"
+if s:os == "windows"
   if exists('+shellslash')
     set shellslash      " Exchange path separator
   endif
@@ -655,13 +688,13 @@ if has("multi_byte")
     let &termencoding = &encoding
   endif
   " Let Vim use utf-8 internally, because many scripts require this
-  set encoding=utf-8
-  setglobal fileencoding=utf-8
+  "set encoding=utf-8
+  " setglobal fileencoding=utf-8
   " Windows has traditionally used cp1252, so it's probably wise to
   " fallback into cp1252 instead of eg. iso-8859-15.
   " Newer Windows files might contain utf-8 or utf-16 LE so we might
   " want to try them first.
-  set fileencodings=ucs-bom,utf-8,utf-16le,cp1252,iso-8859-15
+  set fileencodings=ucs-bom,utf-8,cp936,gb18030,cp1252,big5,euc-jp,euc-kr,latin1
 else
   echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
 endif
@@ -789,7 +822,7 @@ if has("autocmd") " {{{
     autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
     autocmd FileType markdown setlocal nolist
     autocmd FileType vim setlocal fdm=indent keywordprg=:help
-    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal nosmartindent autoindent
+    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal autoindent
     autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,systemverilog,verilog_systemverilog,vimwiki set textwidth=80
     autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
@@ -853,6 +886,7 @@ endif " }}}
   if has("gui_win32")     " Win
     set guioptions+=bh  " Horizontal scrolbar
   endif
+  set guioptions-=e
 " }}}
 
 " Font {{{
@@ -938,7 +972,7 @@ if g:load_vimrc_filetype "{{{
     autocmd!
     autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
     autocmd FileType python setlocal colorcolumn=79 textwidth=80
-    autocmd FileType python setlocal formatoptions+=croq smartindent
+    autocmd FileType python setlocal formatoptions+=croq
     autocmd FileType python setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class,with
     autocmd FileType python setlocal foldmethod=indent
     autocmd FileType python setlocal cindent
@@ -957,7 +991,7 @@ if g:load_vimrc_filetype "{{{
   """"""""""""""""""""""""""""""
   " => Shell section
   """"""""""""""""""""""""""""""
-  if os == "windows"
+  if s:os == "windows"
     " ensure correct shell in gvim
     set shell=c:\windows\system32\cmd.exe
   endif
@@ -974,6 +1008,12 @@ endif
 "---------------------------------------------------------------
 if g:load_vimrc_plugin_config " {{{
 
+  " ----------------------------------------------------------------------------
+  " vim-plug extension
+  " ----------------------------------------------------------------------------
+  let g:plug_window = '-tabnew'
+  let g:plug_pwindow = 'vertical rightbelow new'
+
   "-----------------------------------------------------------
   " Solarized {{{
     " Allow color schemes to do bright colors without forcing bold.
@@ -981,60 +1021,39 @@ if g:load_vimrc_plugin_config " {{{
       set t_Co=16
     endif
     " set t_Co=256
-    if pathogen#is_disabled('solarized') == 0
-      " let hour = strftime("%H")
-      " if 6 <= hour && hour < 18
-      "   set background=light
-      " else
-      "   set background=dark
-      " endif
+    try
       let g:solarized_termtrans=1
       let g:solarized_termcolors=256
       let g:solarized_contrast="high"
       let g:solarized_visibility="high"
-    endif
-    try
       let base16colorspace=256
       colorscheme solarized
       " set background=light
     catch
-      " colorscheme murphy
-      colorscheme badwolf
+      colorscheme murphy
+      " colorscheme badwolf
     endtry
   " }}}
 
   "-----------------------------------------------------------
   " TagList {{{
-    if pathogen#is_disabled('taglist') == 0
-      " if os == "windows"
-      "   let Tlist_Ctags_Cmd = g:vimfiles . '/ctags58/ctags.exe'
-      " elseif os == "linux"
-      "   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-      " endif
-      let Tlist_Ctags_Cmd = g:dotvim_settings.ctags_path
-      if !executable('ctags')
-        let loaded_taglist = 1
-      endif
-      let Tlist_Use_Right_Window=1                " display at right side
-      let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
-      let Tlist_Sort_Type = "name"                " sort by name
-      let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
-      let Tlist_Auto_Open=0                     " not auto open
-      let Tlist_Compact_Format=1                " compress
-      let Tlist_Enable_Fold_Column=0            " Do not show folding tree
-      noremap tt  :TlistToggle<CR>
-      nnoremap <silent> <leader>tl :Tlist<cr>
+    let Tlist_Ctags_Cmd = g:dotvim_settings.ctags_path
+    if !executable('ctags')
+      let loaded_taglist = 1
     endif
+    let Tlist_Use_Right_Window=1                " display at right side
+    let Tlist_File_Fold_Auto_Close=0            " only display current file, close other files tags
+    let Tlist_Sort_Type = "name"                " sort by name
+    let Tlist_Exit_OnlyWindow = 1             " exit if it's the last window
+    let Tlist_Auto_Open=0                     " not auto open
+    let Tlist_Compact_Format=1                " compress
+    let Tlist_Enable_Fold_Column=0            " Do not show folding tree
+    noremap tt  :TlistToggle<CR>
+    nnoremap <silent> <leader>tl :Tlist<cr>
   " }}}
 
   "-----------------------------------------------------------
   " tagbar {{{
-    if pathogen#is_disabled('tagbar') == 0
-      " if os == "windows"
-      "   let g:tagbar_ctags_bin = g:vimfiles . '\ctags58\ctags.exe'
-      " elseif os == "linux"
-      "   let g:tagbar_ctags_bin = 'ctags'
-      " endif
       let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
       let g:tagbar_width = 20
       let g:tagbar_autofocus = 1
@@ -1049,7 +1068,7 @@ if g:load_vimrc_plugin_config " {{{
       let g:tagbar_map_openfold = ['l', '+', 'zo']
       " let g:tagbar_autoclose = 1    " auto close after open tag
       nnoremap <silent><leader>tb :TagbarToggle<CR>
-      map <F6> :TagbarToggle<CR>
+      nnoremap <F6> :TagbarToggle<CR>
       "Open Tagbar or jump to it if already open (useful for split windows)
       nnoremap <leader>to :TagbarOpen j<CR>
 
@@ -1080,12 +1099,10 @@ if g:load_vimrc_plugin_config " {{{
               \ 'd:defines'
           \]
       \}
-    endif
   " }}}
 
   "-----------------------------------------------------------
   " MiniBufExplorer {{{
-    if pathogen#is_disabled('minibufexpl') == 0
       let g:miniBufExplMapCTabSwitchBufs = 1
       let g:miniBufExplMapWindowNavVim = 1
       let g:miniBufExplMapWindowNavArrows = 1
@@ -1095,7 +1112,6 @@ if g:load_vimrc_plugin_config " {{{
       let g:miniBufExplUseSingleClick = 1    " select by single click
       " autocmd BufRead,BufNew :call UMiniBufExplorer
       " noremap ,be :MBEToggle<CR>
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1145,7 +1161,6 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " Netrw {{{
     " File Explorer :e <PATH>
-    "  if pathogen#is_disabled('netrw') == 0
       let g:netrw_winsize        = 25
       let g:netrw_keepdir        = 0
       " let g:netrw_preview        = 0
@@ -1166,7 +1181,6 @@ if g:load_vimrc_plugin_config " {{{
       noremap <leader>fte :Texplore<CR>            " open in new tab
       noremap <leader>fve :Vexplore<CR>           " vertical split
       nnoremap <silent> <leader>fe :Sexplore!<cr>
-  "  endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1176,7 +1190,6 @@ if g:load_vimrc_plugin_config " {{{
     " tab   open file in a split window         " !     execute current file
     " x     close the current nodes parent      " X     Recursively close all children of the current node
     " e     open a netrw for the current dir
-    if pathogen#is_disabled('nerdtree') == 0
       noremap <leader>nt :NERDTreeToggle<CR>
       map <F5> :NERDTreeToggle<CR>
       " Opens current file heiarchy in Nerdtree
@@ -1207,17 +1220,13 @@ if g:load_vimrc_plugin_config " {{{
         autocmd Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
         " autocmd VimEnter * call StartUpNerdtree()
       augroup END
-
-    endif
   " }}}
 
   "-----------------------------------------------------------
   " NERDTree-tabs {{{
-    if pathogen#is_disabled('nerdtree-tabs') == 0
       noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
       let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
       let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1233,13 +1242,11 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " SVN Command {{{
-    if pathogen#is_disabled('svnj') == 0
       let g:svnj_custom_statusbar_ops_hide = 1
-      if os == "windows"
+      if s:os == "windows"
         " let g:svnj_cache_dir=$HOME.'/.vim-cache'
         let g:svnj_cache_dir=g:dotvim_settings.cache_dir
       endif
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1249,7 +1256,6 @@ if g:load_vimrc_plugin_config " {{{
     " <Leader>mh  - Clear mark on current line.
     " <Leader>ma  - Clear all marks.
     " <Leader>mm  - Places next available mark.
-    if pathogen#is_disabled('ShowMarks') == 0
       " Enable ShowMarks
       let g:showmarks_enable = 1
       " Show which marks
@@ -1265,7 +1271,6 @@ if g:load_vimrc_plugin_config " {{{
       let g:showmarks_textother = "\t"
       let g:showmarks_no_mappings = 0
       " nmap mt <Plug>ShowMarksToggle
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1280,7 +1285,6 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " Vimwiki {{{
-    if pathogen#is_disabled('vimwiki') == 0
       let g:vimwiki_menu = 'Plugin.Vimwiki'
       let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
                           \ 'syntax': 'markdown',
@@ -1293,7 +1297,6 @@ if g:load_vimrc_plugin_config " {{{
     "                    \ '.mkd': 'markdown',
     "                    \ '.markdown': 'markdown',
     "                    \ '.wiki': 'media'}
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1305,58 +1308,19 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " yankring.vim  {{{
-    if pathogen#is_disabled('yankring') == 0
       let g:yankring_enabled=0
       let g:yankring_history_file = '.vim-cache/yankring_history'
       noremap <leader>yr :YRShow<cr>
-    endif
   " }}}
 
   "-----------------------------------------------------------
   " Colorful Parentheses {{{
-  " rainbow_parentheses
-    let g:rbpt_colorpairs = [
-        \ ['White',       'Gray'],
-        \ ['Darkblue',    'RoyalBlue3'],
-        \ ['darkgray',    'Magenta'],
-        \ ['darkmagenta', 'Cyan'],
-        \ ['darkgreen',   'Purple'],
-        \ ['darkcyan',    'Red'],
-        \ ['darkred',     'Violet'],
-        \ ['darkmagenta', 'DarkYellow'],
-        \ ['darkgreen',   'SlateBlue'],
-        \ ['darkcyan',    'Orange'],
-        \ ['darkred',     'Brown'],
-        \ ['green',       'Green'],
-        \ ['cyan',        'Yellow'],
-        \ ['yellow',      'DarkOrchid3'],
-        \ ['brown',       'SeaGreen3'],
-        \ ['red',         'firebrick3'],
-        \ ]
-    let g:rbpt_max = 16
-    let g:rbpt_loadcmd_toggle = 0
+  " rainbow
 
-    augroup my_rainbow
-      autocmd!
-      autocmd VimEnter * RainbowParenthesesToggle
-      autocmd Syntax * RainbowParenthesesLoadRound
-      autocmd Syntax * RainbowParenthesesLoadSquare
-      autocmd Syntax * RainbowParenthesesLoadBraces
-    augroup END
-  " }}}
-
-  "-----------------------------------------------------------
-  " Syntastic {{{
-    let g:loaded_syntastic_plugin = 1
-    if pathogen#is_disabled('syntastic') == 0
-      let g:syntastic_auto_loc_list = 0 " auto open error window
-      let g:syntastic_check_on_wq = 0   " skip syntax check when saving file
-      let g:syntastic_auto_jump = 0     " auto jump to the first issue detected
-      let g:syntastic_loc_list_height = 5 " height of the location lists
-      " Check C/C++
-      let g:syntastic_cpp_check_header = 1 " check header file
-      let g:syntastic_cpp_auto_refresh_includes = 1 " enable header files being re-checked in every filw write
-    endif
+    let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
+    " Colors I got off the internet somewhere
+    let g:rainbow_conf = { 'ctermfgs': ['cyan', 'magenta', 'yellow', 'grey', 'red', 'green', 'blue'],
+          \                'guifgs': ['#FF0000', '#FF00FF', '#FFFF00', '#000000', '#FF0000', '#00FF00', '#0000FF'] }
   " }}}
 
   " ------------------------------------------------------------
@@ -1367,64 +1331,62 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " neocomplcache {{{
   if g:dotvim_settings.autocomplete_method == 'neocomplcache'
-    if pathogen#is_disabled('neocomplcache') == 0
-      if v:version >= 702
-        let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
-        let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-        let g:neocomplcache_enable_smart_case = 1  " Use smartcase
-        let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
-        let g:neocomplcache_temporary_dir = g:dotvim_settings.cache_dir . '/neocomplcache'
-        " Enable heavy features.
-        " Use camel case completion.
-        let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
-        let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
+    if v:version >= 702
+      let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
+      let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
+      let g:neocomplcache_enable_smart_case = 1  " Use smartcase
+      let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
+      let g:neocomplcache_temporary_dir = g:dotvim_settings.cache_dir . '/neocomplcache'
+      " Enable heavy features.
+      " Use camel case completion.
+      let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
+      let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
-        let g:neocomplcache_max_list = 10
-        " let g:neocomplcache_enable_fuzzy_completion = 1
-        " let g:neocomplcache_fuzzy_completion_start_length = 3
-        let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+      let g:neocomplcache_max_list = 10
+      " let g:neocomplcache_enable_fuzzy_completion = 1
+      " let g:neocomplcache_fuzzy_completion_start_length = 3
+      let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-        let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
+      let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
 
-        let g:neocomplcache_auto_completion_start_length = 2
-        " Define keyword.
-        if !exists('g:neocomplcache_keyword_patterns')
-          let g:neocomplcache_keyword_patterns = {}
-        endif
-        let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-        " Enable heavy omni completion.
-        if !exists('g:neocomplcache_omni_patterns')
-          let g:neocomplcache_omni_patterns = {}
-        endif
-        let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-        let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-
-        " " Plugin key-mappings.
-        " imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-        " smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-        inoremap <expr><C-g>     neocomplcache#undo_completion()
-        inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-        " Recommended key-mappings.
-        " <CR>: close popup and save indent.
-        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-        function! s:my_cr_function()
-          return neocomplcache#smart_close_popup() . "\<CR>"
-          " For no inserting <CR> key.
-          "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-        endfunction
-        " <TAB>: completion.
-        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-        " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-        inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-        inoremap <expr><C-y>  neocomplcache#close_popup()
-        inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-        " Close popup by <Space>.
-        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
+      let g:neocomplcache_auto_completion_start_length = 2
+      " Define keyword.
+      if !exists('g:neocomplcache_keyword_patterns')
+        let g:neocomplcache_keyword_patterns = {}
       endif
+      let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+      " Enable heavy omni completion.
+      if !exists('g:neocomplcache_omni_patterns')
+        let g:neocomplcache_omni_patterns = {}
+      endif
+      let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+      let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+      " " Plugin key-mappings.
+      " imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      " smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+      inoremap <expr><C-g>     neocomplcache#undo_completion()
+      inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+      " Recommended key-mappings.
+      " <CR>: close popup and save indent.
+      " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+      function! s:my_cr_function()
+        return neocomplcache#smart_close_popup() . "\<CR>"
+        " For no inserting <CR> key.
+        "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+      endfunction
+      " <TAB>: completion.
+      inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+      " <C-h>, <BS>: close popup and delete backword char.
+      inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+      inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+      inoremap <expr><C-y>  neocomplcache#close_popup()
+      inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+      " Close popup by <Space>.
+      inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
     endif
   endif
   " }}}
@@ -1432,7 +1394,6 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " neocomplete {{{
   if g:dotvim_settings.autocomplete_method == 'neocomplete'
-    if pathogen#is_disabled('neocomplete') == 0
       "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
       " Disable AutoComplPop.
       let g:acp_enableAtStartup = 0
@@ -1510,48 +1471,47 @@ if g:load_vimrc_plugin_config " {{{
       " For perlomni.vim setting.
       " https://github.com/c9s/perlomni.vim
       let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-    endif
   endif
   "}}}
 
   "-----------------------------------------------------------
   " conque {{{
-    if pathogen#is_disabled('Conque-Shell') == 0
       autocmd FileType conque_term match none
       let g:ConqueTerm_StartMessages = 0
 
       command! Sh ConqueTermSplit bash --login
       command! Irb ConqueTermSplit irb
       command! Py ConqueTermSplit ipython
-    endif
   " }}}
 
   "-----------------------------------------------------------
   " indent-guides {{{
     " highlight indent with different color
-    if pathogen#is_disabled('indent-guides') == 0
-      let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
+    " The default mapping : <Leader>ig
+      " let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
       let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
       let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
       let g:indent_guides_start_level=1
       let g:indent_guides_guide_size=1
       let g:indent_guides_color_change_percent=3
-    endif
+  " }}}
+
+  "-----------------------------------------------------------
+  " indentLines {{{
+    autocmd! User indentLine doautocmd indentLine Syntax
   " }}}
 
   "-----------------------------------------------------------
   " undotree {{{
-    if pathogen#is_disabled('undotree') == 0
       nnoremap <Leader>gu :UndotreeToggle<CR>
-    endif
   " }}}
 
   "-----------------------------------------------------------
   " ctrlp {{{
   if g:dotvim_settings.finder_method == 'ctrlp'
-    if pathogen#is_disabled('ctrlp') == 0
       let g:ctrlp_map = '<Leader>p'
       let g:ctrlp_cmd = 'CtrlP'
+      map <leader>j :CtrlP<cr>
       " Set Ctrl-P to show match at top of list instead of at bottom, which is so
       " stupid that it's not default
       let g:ctrlp_match_window_reversed = 0
@@ -1573,44 +1533,29 @@ if g:load_vimrc_plugin_config " {{{
           \ 'file': '\v\.(exe|so|dll|pyc)$',
           \ 'link': 'some_bad_symbolic_links',
           \ }
-      if os == "windows"  " Windows
+      if s:os == "windows"  " Windows
         let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-      elseif os == "linux"        " MacOSX/Linux
+      elseif s:os == "linux"        " MacOSX/Linux
         if executable('ag')
           let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
         else
           let g:ctrlp_user_command = 'find %s -type f'
         endif
       endif
-      " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files']
-      " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-      " let g:ctrlp_user_command = ['.hg', 'hg --cwd %s locate -I .']
-      ""let g:ctrlp_user_command = {
-      ""        \ 'types': {
-      ""            \ 1: ['.git', 'cd %s && git ls-files'],
-      ""            \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-      ""            \ },
-      ""        \ 'fallback': 'find %s -type f'
-      ""        \ }
-      " Open multiplely selected files in a tab by default
       let g:ctrlp_open_multi = '10t'
-    endif
   endif
   " }}}
 
   "-----------------------------------------------------------
   " vim-cycle {{{
-    if pathogen#is_disabled('vim-cycle') == 0
       nmap <silent> <Leader>n <Plug>CycleNext
       vmap <silent> <Leader>n <Plug>CycleNext
-    endif
   " }}}
 
 
   "-----------------------------------------------------------
   " Neosnippet {{{
   if g:dotvim_settings.snippet_method == 'neosnippet'
-    if pathogen#is_disabled('neosnippet') == 0
       " Plugin key-mappings.
       " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
       " C-k can also be used to jump to the next field in the snippet.
@@ -1636,22 +1581,21 @@ if g:load_vimrc_plugin_config " {{{
       let g:neosnippet#enable_snipmate_compatibility = 1
 
       " Tell Neosnippet about the other snippets
-      let g:neosnippet#snippets_directory=[ g:vimfiles . '/bundle/vim-snippets/snippets',
-                                          \ g:vimfiles . '/snippets/snippets',
+      let g:neosnippet#snippets_directory=[ g:vimfiles . '/snippets/snippets',
                                           \ g:vimfiles . '/bundle/systemc/snippets']
 
       " associating certain filetypes with other snippet files.
       let g:neosnippet#scope_aliases = {}
       let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
       let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
-    endif
   endif
   " }}}
 
   "-----------------------------------------------------------
   " snipMate {{{
   if g:dotvim_settings.snippet_method == 'snipmate'
-    if pathogen#is_disabled('vim-snipmate') == 0
+      " Add my snippets folder
+      let g:local_snippets = g:vimfiles.'/snippets/snippets'
       let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
       let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
       let g:snipMate.scope_aliases = {}
@@ -1661,20 +1605,17 @@ if g:load_vimrc_plugin_config " {{{
       smap <C-J> <Plug>snipMateNextOrTrigger
       imap <C-K> <Plug>snipMateNextOrTrigger
       smap <C-K> <Plug>snipMateNextOrTrigger
-    endif
   endif "}}}
 
   "-----------------------------------------------------------
   " UltiSnips {{{
   if g:dotvim_settings.snippet_method == 'ultisnips'
-    if pathogen#is_disabled('ultisnips') == 0
       " better key bindings for UltiSnipsExpandTrigger
       let g:UltiSnipsExpandTrigger = "<C-J>"
       let g:UltiSnipsJumpForwardTrigger = "<C-J>"
       let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
       let g:UltiSnipsEditSplit="vertical"
       let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
-    endif
   endif "}}}
 
   "-----------------------------------------------------------
@@ -1699,13 +1640,11 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " vim-easy-align {{{
-    if pathogen#is_disabled('vim-easy-align') == 0
       " Start interactive EasyAlign in visual mode (e.g. vipga)
       xmap ga <Plug>(EasyAlign)
 
       " Start interactive EasyAlign for a motion/text object (e.g. gaip)
       nmap ga <Plug>(EasyAlign)
-    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1734,103 +1673,6 @@ if g:load_vimrc_plugin_config " {{{
     endif
   " }}}
 
-  "-----------------------------------------------------------
-  " unite {{{
-  if g:dotvim_settings.finder_method == 'unite'
-    if pathogen#is_disabled('unite') == 0
-      " Use the fuzzy matcher for everything
-      call unite#filters#matcher_default#use(['matcher_fuzzy'])
-      " Use the rank sorter for everything
-      call unite#filters#sorter_default#use(['sorter_rank'])
-      " Set up some custom ignores
-      call unite#custom_source('file_rec,file_rec/async,file_mru,file,buffer,grep',
-                  \ 'ignore_pattern', join([
-                  \ '\.git/',
-                  \ 'git5/.*/review/',
-                  \ 'google/obj/',
-                  \], '\|'))
-      " nnoremap [unite] <Nop>
-      " xnoremap [unite] <Nop>
-      " nmap <leader>f [unite]
-      " xmap <leader>f [unite]
-
-      nnoremap [unite]S :<C-U>Unite source<CR>
-      nnoremap <silent> [unite]f :<C-U>UniteWithBufferDir -buffer-name=files -start-insert file<CR>
-      nnoremap <silent> [unite]r :<C-U>Unite -buffer-name=mru -start-insert file_mru<CR>
-      nnoremap <silent> [unite]/ :<C-U>Unite -buffer-name=search line<CR>
-      nnoremap <silent> [unite]d :<C-U>Unite -buffer-name=mru_dir -start-insert directory_mru<CR>
-      nnoremap <silent> [unite]t :<C-U>Unite -buffer-name=tabs -start-insert tab<CR>
-      nnoremap <silent> [unite]p :<C-U>Unite -buffer-name=registers -start-insert register<CR>
-      xnoremap <silent> [unite]p :<C-U>Unite -buffer-name=register register<CR>
-      nnoremap <silent> [unite]b :<C-U>Unite -buffer-name=bookmarks bookmark<CR>
-      nnoremap <silent> [unite]m :<C-U>Unite mark<CR>
-      nnoremap <silent> [unite]h :<C-U>Unite -buffer-name=helps help<CR>
-      nnoremap <silent> [unite]o :<C-U>Unite outline<CR>
-      nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
-      nnoremap <silent> [unite]s :<C-u>Unite -start-insert session<CR>
-      nnoremap <silent> [unite]g :<C-u>Unite tab<CR>
-      " nnoremap <silent> [unite]G :<C-u>Unite grep -no-quit<CR>
-      nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
-      nnoremap <silent> [unite]c :<C-u>Unite change<CR>
-      nnoremap <silent> [unite]q :<C-u>Unite poslist<CR>
-      nnoremap <space>y :Unite history/yank<cr>
-      nnoremap <space>s :Unite -quick-match buffer<cr>
-
-      if executable('ack-grep')
-        let g:unite_source_grep_command = 'ack-grep'
-        let g:unite_source_grep_default_opts = '-i --no-heading --no-color -a -H'
-      elseif executable('ack')
-        let g:unite_source_grep_command = 'ack'
-        let g:unite_source_grep_default_opts = '-i --no-heading --no-color -a -H'
-      elseif executable('ag')
-        let g:unite_source_grep_command = 'ag'
-        let g:unite_source_grep_default_opts =
-              \ '-i --vimgrep --hidden --ignore ' .
-              \ '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
-      elseif executable('pt')
-        let g:unite_source_grep_command = 'pt'
-        let g:unite_source_grep_default_opts = '--nogroup --nocolor'
-      elseif executable('ack')
-        let g:unite_source_grep_command = 'ack'
-        let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
-      endif
-      let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_grep_encoding = 'utf-8'
-
-      let g:unite_update_time = 70
-      let g:unite_enable_split_vertically = 0   " split horizontally
-      let g:unite_enable_ignore_case = 1
-      let g:unite_enable_smart_case = 1
-      let g:unite_enable_start_insert = 1   " start in INSERT mode
-      let g:unite_enable_use_short_source_names = 1
-      let g:unite_source_history_yank_enable = 1  " search through yank history
-      let g:unite_winheight = 10
-      let g:unite_data_directory = expand(g:dotvim_settings.cache_dir.'/unite')
-      let g:unite_cursor_line_highlight = 'TabLineSel'
-      " let g:unite_source_file_mru_time_format = "(%m/%d %T) "
-      let g:unite_source_file_mru_filename_format = ':~:.'
-      let g:unite_source_file_mru_limit = 300
-      " let g:unite_source_directory_mru_time_format = ''
-      let g:unite_source_directory_mru_limit = 300
-      let g:unite_split_rule = "botright"   " Open in bottom right
-      let g:unite_source_rec_max_cache_files = 99999
-
-      function! s:unite_settings()
-        nmap <buffer> <C-J>             <Plug>(unite_loop_cursor_down)
-        nmap <buffer> <C-K>             <Plug>(unite_loop_cursor_up)
-        nmap <buffer> m                 <Plug>(unite_toggle_mark_current_candidate)
-        nmap <buffer> M                 <Plug>(unite_toggle_mark_all_candidate)
-        nmap <buffer> <LocalLeader><F5> <Plug>(unite_redraw)
-        vmap <buffer> m                 <Plug>(unite_toggle_mark_selected_candidates)
-        imap <buffer> <C-J>             <Plug>(unite_select_next_line)
-        imap <buffer> <C-K>             <Plug>(unite_select_previous_line)
-        imap <buffer> <LocalLeader><BS> <Plug>(unite_delete_backward_path)
-        nmap <buffer> <LocalLeader>q    <Plug>(unite_exit)
-        imap <buffer> <LocalLeader>q    <Plug>(unite_exit)
-      endfunction
-    endif
-  endif
-  " }}}
 
   "-----------------------------------------------------------
   " fugitive {{{
@@ -1865,12 +1707,12 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " Grep {{{
-    if os == "windows"
-      let g:Grep_Path       = './vimfiles/gnu/grep.exe'
-      let g:Fgrep_Path      = './vimfiles/gnu/fgrep.exe'
-      let g:Egrep_Path      = './vimfiles/gnu/egrep.exe'
-      let g:Grep_Find_Path  = './vimfiles/gnu/find.exe'
-      let g:Grep_Xargs_Path = './vimfiles/gnu/xargs.exe'
+    if s:os == "windows"
+      let g:Grep_Path       = g:vimfiles.'/gnu/grep.exe'
+      let g:Fgrep_Path      = g:vimfiles.'/gnu/fgrep.exe'
+      let g:Egrep_Path      = g:vimfiles.'/gnu/egrep.exe'
+      let g:Grep_Find_Path  = g:vimfiles.'/gnu/find.exe'
+      let g:Grep_Xargs_Path = g:vimfiles.'/gnu/xargs.exe'
     endif
     let Grep_Default_Options = '-i'
     let Grep_Skip_Dirs = 'RCS CVS .svn .git'
@@ -1879,8 +1721,6 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " airline {{{
   if g:dotvim_settings.statusline_method == 'airline'
-    if pathogen#is_disabled('airline') == 0
-
       " let g:airline_section_b = '%{getcwd()}'
       " " let g:airline_section_c = '%t'
       " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
@@ -1890,19 +1730,18 @@ if g:load_vimrc_plugin_config " {{{
 
       " Enable Extensions
       " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
-
-    endif
   endif
   "}}}
 
   "-----------------------------------------------------------
   " lightline {{{
   if g:dotvim_settings.statusline_method == 'lightline'
-    if pathogen#is_disabled('lightline') == 0
-      " let g:lightline = {
-      "     \ 'colorscheme': 'solarized_dark',
-      "     \ }
-    endif
+      "let g:lightline = {
+      "    \     'active': {
+      "    \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
+      "    \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
+      "    \     }
+      "    \ }
   endif
   " }}}
 
@@ -1915,7 +1754,6 @@ if g:load_vimrc_plugin_config " {{{
     " `<Leader><Leader>e  to End of word forward
     " `<Leader><Leader>j  to Line downward
     " `<Leader><Leader>k  to Line upward
-    if pathogen#is_disabled('easymotion') == 0
       " let g:EasyMotion_leader_key = '<space>'
       " change the target keys
       " let g:EasyMotion_keys = '1234567890'
@@ -1923,7 +1761,6 @@ if g:load_vimrc_plugin_config " {{{
       let g:EasyMotion_do_shade = 1
       hi link EasyMotionTarget ErrorMsg
       hi link EasyMotionShade Comment
-    endif
   "}}}
 
   "-----------------------------------------------------------
@@ -2057,6 +1894,10 @@ if g:load_vimrc_plugin_config " {{{
     let g:perl_fold          = 1
   " }}}
 
+  "-----------------------------------------------------------
+  " signify {{{
+  let g:signify_vcs_list = [ 'git', 'svn' ]
+  " }}}
 endif
 
 "}}} Plugin_config -----------------------------------------
@@ -2069,8 +1910,7 @@ endif
 if g:load_vimrc_extended
 
   "-----------------------------------------------------------
-  " Custom mappings
-  " Key Mapping Setting
+  " Key Mapping Setting {{{
   "-----------------------------------------------------------
 
   " map <F1> :call ToggleSketch()<CR>
@@ -2621,6 +2461,27 @@ if g:load_vimrc_extended
   " highlight last inserted text
   nnoremap gV `[v`]
 
+  " ----------------------------------------------------------------------------
+  " Quickfix
+  " ----------------------------------------------------------------------------
+  nnoremap ]q :cnext<cr>zz
+  nnoremap [q :cprev<cr>zz
+  nnoremap ]l :lnext<cr>zz
+  nnoremap [l :lprev<cr>zz
+
+  " ----------------------------------------------------------------------------
+  " Buffers
+  " ----------------------------------------------------------------------------
+  nnoremap ]b :bnext<cr>
+  nnoremap [b :bprev<cr>
+
+  " ----------------------------------------------------------------------------
+  " Tabs
+  " ----------------------------------------------------------------------------
+  nnoremap ]t :tabn<cr>
+  nnoremap [t :tabp<cr>
+  " }}}
+
   "-----------------------------------------------------------
   " Functions
   "-----------------------------------------------------------
@@ -2891,6 +2752,18 @@ endfunction
 
 nmap <leader>ml :call MyFormatXml()<CR>
 nmap <F8> :call MyFormatXml()<CR>
+
+
+
+" ============================================================================
+" LOCAL VIMRC {{{
+" ============================================================================
+let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
+if filereadable(g:local_vimrc)
+  execute 'source' g:local_vimrc
+endif
+
+" }}}
 
 set secure
 

@@ -1,0 +1,71 @@
+extends verilog
+
+snippet ifnd
+    `ifndef _${1:NAME}_SV_
+    `define _$1_SV_
+
+    `endif
+
+snippet cfg
+
+	class ${1:`vim_snippets#Filename('$1', 'name')`} extends uvm_object
+
+		${0:/* Variables */};
+
+		`uvm_object_utils_begin ($1)
+		`uvm_object_utils_end
+
+		function new (string name = "$1");
+			super.new(name);
+		endfunction
+
+	endclass
+
+snippet drv
+
+	class ${1:`vim_snippets#Filename('$1', 'name')`} extends uvm_driver
+
+		${0:/* Variables */};
+
+		`uvm_component_utils_begin ($1)
+		`uvm_component_utils_end
+
+		function new (string name = "$1", uvm_component parent = null);
+			super.new(name, parent);
+		endfunction
+
+		extern function void build_phase (uvm_phase phase);
+		extern task run_phase (uvm_phase phase);
+
+	endclass
+
+snippet mon
+
+	class ${1:`vim_snippets#Filename('$1', 'name')`} extends uvm_monitor
+
+		${0:/* Variables */};
+
+		`uvm_component_utils_begin ($1)
+		`uvm_component_utils_end
+
+		function new (string name = "$1", uvm_component parent = null);
+			super.new(name, parent);
+		endfunction
+
+		extern function void build_phase (uvm_phase phase);
+		extern task run_phase (uvm_phase phase);
+
+	endclass
+
+
+# SystemC main
+snippet scmain
+    int sc_main(int argc, char* argv[]){
+
+        ${0:/* data */};
+
+        sc_start();
+
+        return 0;
+    }
+
