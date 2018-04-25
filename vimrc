@@ -214,7 +214,7 @@ endif
   """ Verilog/SystemVerilog
   Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
   Plug 'kinghom/uvm_gen', { 'for': ['systemverilog', 'verilog'] }
-
+  Plug 'Kocha/vim-systemc', { 'for': 'systemc' }
   " Unmanaged plugin (manually installed and updated)
 
   " Initialize plugin system
