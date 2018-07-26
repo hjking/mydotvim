@@ -91,7 +91,7 @@ endif
   " - Avoid using standard Vim directory names like 'plugin'
   " silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
   if s:os == "windows"
-    call plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
+    call plug#begin(g:vimfiles.'/plugged')
   else
     call plug#begin('~/.vim/plugged')
   endif
@@ -128,6 +128,7 @@ endif
   Plug 'tyrannicaltoucan/vim-deep-space'
   Plug 'AlessandroYorba/Despacio'
   Plug 'w0ng/vim-hybrid'
+  Plug 'rakr/vim-one'
 
   """ Cycle
   Plug 'tpope/vim-speeddating'
@@ -145,7 +146,7 @@ endif
   " Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
   """ Indent
-  Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesToggle', 'IndentGuidesEnable']}
+  " Plug 'nathanaelkane/vim-indent-guides', {'on': ['IndentGuidesToggle', 'IndentGuidesEnable']}
   Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
 
   """ Navigation
@@ -154,7 +155,7 @@ endif
   if v:version >= 703
     Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   endif
-  Plug 'Lokaltog/vim-easymotion'
+  Plug 'easymotion/vim-easymotion'
   Plug 'justinmk/vim-sneak'
   Plug 'bkad/CamelCaseMotion'
 
@@ -188,28 +189,32 @@ endif
   """ VimL
   Plug 'tpope/vim-scriptease'
 
+  """ Selection
+  Plug 'gcmt/wildfire.vim'
+  Plug 'terryma/vim-expand-region'
+  Plug 'kana/vim-niceblock'
+
   """ Misc
   " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
   Plug 'jlanzarotta/bufexplorer', { 'on': ['BufExplorer', 'ToggleBufExplorer'] }
   Plug 'Konfekt/FastFold'
   Plug 'bootleq/ShowMarks'
   Plug 'bruno-/vim-vertical-move'
-  Plug 'gcmt/wildfire.vim'
-  Plug 'hallison/vim-markdown'
+  Plug 'hallison/vim-markdown', { 'for': 'markdown' }
   Plug 'haya14busa/incsearch.vim'
+  " Plug 'haya14busa/is.vim'
   Plug 'haya14busa/vim-asterisk'
-  Plug 'itchyny/calendar.vim'
-  Plug 'kana/vim-niceblock'
+  Plug 'itchyny/calendar.vim', { 'on': 'Calendar' }
   Plug 'osyo-manga/vim-anzu'
-  Plug 'osyo-manga/vim-over'
-  Plug 'terryma/vim-expand-region'
+  Plug 'osyo-manga/vim-over', { 'on': ['OverCommandLine', 'OverCommandLineNoremap'] }
   Plug 'terryma/vim-multiple-cursors'
-  Plug 'tpope/vim-abolish'
+  " Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
   Plug 'vim-scripts/VisIncr'
   Plug 'vim-scripts/YankRing.vim'
   Plug 'vimtaku/hl_matchit.vim'
+  Plug 'vim-scripts/timestamp.vim'
 
   """ Verilog/SystemVerilog
   Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
@@ -358,12 +363,7 @@ set display+=lastline
 set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
 set cmdheight=1                 " heighth of CMD line
 set list                        " list mode
-
-if has('multi_byte') && &encoding ==# 'utf-8'
-  let &listchars = 'tab:▸ ,trail:-,extends:❯,precedes:❮,nbsp:±'
-else
-  let &listchars = 'tab:> ,trail:-,extends:>,precedes:<,nbsp:.'
-endif
+set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:.
 
 set number                      " display line number
 " set relativenumber              " show relative numbers
@@ -673,7 +673,7 @@ endif
 " 25 language specific
 "-------------------------------------------------------------------------------
 " none of these should be word dividers, so make them not be
-set iskeyword+=_,$,@,%,#,-
+set iskeyword+=_,$,@,%,#
 set isfname-==  " remove = from filename characters
 
 "-------------------------------------------------------------------------------
@@ -826,7 +826,7 @@ if has("autocmd") " {{{
     autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,systemverilog,verilog_systemverilog,vimwiki set textwidth=80
     autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
-    autocmd FileType lisp set ts=2 softtabstop=2
+    autocmd FileType lisp set ts=2 softtabstop=2 lisp
   augroup END
 endif " }}}
 
@@ -1286,17 +1286,20 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " Vimwiki {{{
       let g:vimwiki_menu = 'Plugin.Vimwiki'
-      let g:vimwiki_list = [{'path': 'E:/Workspace/Ref/vim/vim_wiki',
-                          \ 'syntax': 'markdown',
-                          \ 'path_html': 'E:/Workspace/Ref/vim/vim_wiki/pub_html',
-                          \ 'nested_syntaxes' : {'python': 'python', 'verilog': 'verilog'},
-                          \ 'diary_rel_path': 'diary/'}]
-      let g:vimwiki_badsyms = ' '
+
+      let wiki_1 = {}
+      let wiki_1.path = '~/vimwiki_work/'
+      let wiki_1.syntax = 'markdown'
+      let wiki_1.ext = '.md'
+      let wiki_2 = {}
+      let wiki_2.path = '~/vimwiki_personal/'
+      let wiki_2.syntax = 'markdown'
+      let wiki_2.ext = '.md'
+
+      let g:vimwiki_list = [wiki_1, wiki_2]
+
       let g:vimwiki_camel_case = 0
-    "    let g:vimwiki_ext2syntax = {'.md': 'markdown',
-    "                    \ '.mkd': 'markdown',
-    "                    \ '.markdown': 'markdown',
-    "                    \ '.wiki': 'media'}
+      let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.markdown': 'markdown'}
   " }}}
 
   "-----------------------------------------------------------
@@ -1785,18 +1788,21 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " CamelCaseMotion {{{
     " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
-    map <silent> W <Plug>CamelCaseMotion_w
-    map <silent> B <Plug>CamelCaseMotion_b
-    map <silent> E <Plug>CamelCaseMotion_e
-    sunmap W
-    sunmap B
-    sunmap E
-    omap <silent> iw <Plug>CamelCaseMotion_iw
-    xmap <silent> iw <Plug>CamelCaseMotion_iw
-    omap <silent> ib <Plug>CamelCaseMotion_ib
-    xmap <silent> ib <Plug>CamelCaseMotion_ib
-    omap <silent> ie <Plug>CamelCaseMotion_ie
-    xmap <silent> ie <Plug>CamelCaseMotion_ie
+    if exists('g:loaded_camelcasemotion')
+      " call camelcasemotion#CreateMotionMappings('<leader>')
+      map <silent> W <Plug>CamelCaseMotion_w
+      map <silent> B <Plug>CamelCaseMotion_b
+      map <silent> E <Plug>CamelCaseMotion_e
+      sunmap W
+      sunmap B
+      sunmap E
+      omap <silent> iw <Plug>CamelCaseMotion_iw
+      xmap <silent> iw <Plug>CamelCaseMotion_iw
+      omap <silent> ib <Plug>CamelCaseMotion_ib
+      xmap <silent> ib <Plug>CamelCaseMotion_ib
+      omap <silent> ie <Plug>CamelCaseMotion_ie
+      xmap <silent> ie <Plug>CamelCaseMotion_ie
+    endif
   "}}}
 
   "-----------------------------------------------------------
@@ -1856,6 +1862,7 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " incsearch {{{
+  if exists('g:loaded_incsearch')
     map /  <Plug>(incsearch-forward)
     map ?  <Plug>(incsearch-backward)
     map g/ <Plug>(incsearch-stay)
@@ -1863,22 +1870,25 @@ if g:load_vimrc_plugin_config " {{{
     let g:incsearch#magic = '\V' " very nomagic
     let g:incsearch#magic = '\m' " magic
     let g:incsearch#magic = '\M' " nomagic
+    " work with anzu
     map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
     map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
+  endif
   "}}}
 
   "-----------------------------------------------------------
   " vim-asterisk {{{
   " provides immap *   <Plug>(asterisk-*)
-    map *   <Plug>(asterisk-g*)
-    map g*  <Plug>(asterisk-*)
-    map #   <Plug>(asterisk-g#)
-    map g#  <Plug>(asterisk-#)
-
+  if exists('g:loaded_asterisk')
+    map *   <Plug>(asterisk-*)
+    map #   <Plug>(asterisk-#)
+    map g*  <Plug>(asterisk-g*)
+    map g#  <Plug>(asterisk-g#)
     map z*  <Plug>(asterisk-z*)
     map gz* <Plug>(asterisk-gz*)
     map z#  <Plug>(asterisk-z#)
     map gz# <Plug>(asterisk-gz#)
+  endif
   " }}}
 
   "-----------------------------------------------------------
@@ -2074,9 +2084,9 @@ if g:load_vimrc_extended
   xnoremap <expr> gm    (virtcol('$')/2).'\|'
 
   " Fast saving
-  nnoremap <silent> <leader>wr :w<cr>
-  nnoremap <silent> <leader>wf :w!<cr>
-  nnoremap <silent> <leader>w :w!<cr>
+  " nnoremap <silent> <leader>wr :w<cr>
+  " nnoremap <silent> <leader>wf :w!<cr>
+  " nnoremap <silent> <leader>w :w!<cr>
   " Force Saving Files that Require Root Permission
   cnoremap w!! %!sudo tee > /dev/null %
   " Fast quiting
