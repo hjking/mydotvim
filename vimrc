@@ -129,6 +129,7 @@ endif
   Plug 'AlessandroYorba/Despacio'
   Plug 'w0ng/vim-hybrid'
   Plug 'rakr/vim-one'
+  Plug 'dracula/vim', { 'as': 'dracula' }
 
   """ Cycle
   Plug 'tpope/vim-speeddating'
@@ -192,7 +193,8 @@ endif
   """ Selection
   Plug 'gcmt/wildfire.vim'
   Plug 'terryma/vim-expand-region'
-  Plug 'kana/vim-niceblock'
+  " Plug 'kana/vim-niceblock'
+  Plug 'terryma/vim-multiple-cursors'
 
   """ Misc
   " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
@@ -207,7 +209,6 @@ endif
   Plug 'itchyny/calendar.vim', { 'on': 'Calendar' }
   Plug 'osyo-manga/vim-anzu'
   Plug 'osyo-manga/vim-over', { 'on': ['OverCommandLine', 'OverCommandLineNoremap'] }
-  Plug 'terryma/vim-multiple-cursors'
   " Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
@@ -220,7 +221,8 @@ endif
   Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
   Plug 'kinghom/uvm_gen', { 'for': ['systemverilog', 'verilog'] }
   Plug 'Kocha/vim-systemc', { 'for': 'systemc' }
-  " Unmanaged plugin (manually installed and updated)
+
+  """ Unmanaged plugin (manually installed and updated)
 
   " Initialize plugin system
   call plug#end()
