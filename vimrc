@@ -49,7 +49,7 @@ let g:load_vimrc_extended = 1
   "   neosnippet
   "   ultisnips
   "   snipmate
-  let g:dotvim_settings.snippet_method = 'snipmate'
+  let g:dotvim_settings.snippet_method = 'ultisnips'
 
   " statusline:
   "   lightline : if v:version < 702
@@ -85,21 +85,21 @@ else
 endif
 
 "-----------------------------------------------------------
-  """ vim-plug {{{
-  " Specify a directory for plugins
-  " - For Neovim: ~/.local/share/nvim/plugged
-  " - Avoid using standard Vim directory names like 'plugin'
-  " silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
-  if s:os == "windows"
-    call plug#begin(g:vimfiles.'/plugged')
-  else
-    call plug#begin('~/.vim/plugged')
-  endif
-  " Make sure you use single quotes
+""" vim-plug {{{
+" Specify a directory for plugins
+" - For Neovim: ~/.local/share/nvim/plugged
+" - Avoid using standard Vim directory names like 'plugin'
+" silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
+if s:os == "windows"
+  call plug#begin(g:vimfiles.'/plugged')
+else
+  call plug#begin('~/.vim/plugged')
+endif
+" Make sure you use single quotes
 
   """ Alignment
   " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-  Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'godlygeek/tabular'
   Plug 'tommcdo/vim-lion'
 
@@ -130,6 +130,7 @@ endif
   Plug 'w0ng/vim-hybrid'
   Plug 'rakr/vim-one'
   Plug 'dracula/vim', { 'as': 'dracula' }
+  Plug 'joshdick/onedark.vim'
 
   """ Cycle
   Plug 'tpope/vim-speeddating'
@@ -156,15 +157,17 @@ endif
   if v:version >= 703
     Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   endif
-  Plug 'easymotion/vim-easymotion'
+  Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
   Plug 'justinmk/vim-sneak'
   Plug 'bkad/CamelCaseMotion'
 
   """ Snippets
-  if g:dotvim_settings.snippet_method == 'snipmate' " neosnippet/ultisnips
+  if g:dotvim_settings.snippet_method == 'snipmate'
     Plug 'MarcWeber/vim-addon-mw-utils'
     Plug 'tomtom/tlib_vim'
     Plug 'garbas/vim-snipmate'
+  elseif g:dotvim_settings.snippet_method == 'ultisnips'
+    Plug 'SirVer/ultisnips'
   elseif g:dotvim_settings.snippet_method == 'neosnippet'
     Plug 'Shougo/neosnippet'
     Plug 'Shougo/neosnippet-snippets'
@@ -194,7 +197,8 @@ endif
   Plug 'gcmt/wildfire.vim'
   Plug 'terryma/vim-expand-region'
   " Plug 'kana/vim-niceblock'
-  Plug 'terryma/vim-multiple-cursors'
+  " Plug 'terryma/vim-multiple-cursors'
+  Plug 'mg979/vim-visual-multi'
 
   """ Misc
   " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
@@ -218,8 +222,9 @@ endif
   Plug 'vim-scripts/timestamp.vim'
 
   """ Verilog/SystemVerilog
-  Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
-  Plug 'kinghom/uvm_gen', { 'for': ['systemverilog', 'verilog'] }
+  " Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
+  Plug 'vhda/verilog_systemverilog.vim', {'as': 'vhda-verilog_systemverilog.vim'}
+  Plug 'kinghom/uvm_gen', { 'for': ['systemverilog', 'verilog', 'verilog_systemverilog'] }
   Plug 'Kocha/vim-systemc', { 'for': 'systemc' }
 
   """ Unmanaged plugin (manually installed and updated)
@@ -510,7 +515,8 @@ set matchpairs+=<:>
 "-----------------------------------------------------------
 " options
 set complete-=u
-set complete-=i
+set complete-=i                 " disable scanning included files
+set complete-=t                 " disable searching tags
 set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
 set complete+=k                 " scan the files given with the 'dictionary' option
 set completeopt=longest         " Insert mode completetion
@@ -941,6 +947,10 @@ endif " }}}
       silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
     endif
   endfunction
+
+  " commands for change font size
+  command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+  command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
 " }}}
 
 "}}} Basic
@@ -1621,6 +1631,7 @@ if g:load_vimrc_plugin_config " {{{
       let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
       let g:UltiSnipsEditSplit="vertical"
       let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
+      let g:UltiSnipsSnippetDirectories=["UltiSnips"]
   endif "}}}
 
   "-----------------------------------------------------------
@@ -1702,6 +1713,8 @@ if g:load_vimrc_plugin_config " {{{
     let g:NERDTrimTrailingWhitespace = 1
     " Allow commenting and inverting empty lines (useful when commenting a region)
     let g:NERDCommentEmptyLines = 1
+    " custom delimiters
+    let g:NERDCustomDelimiters = { 'verilog_systemverilog': { 'left': '//', }, }
   "}}}
 
   "-----------------------------------------------------------
@@ -2780,4 +2793,3 @@ endif
 set secure
 
 " vim: fdm=marker ts=2 sts=2 sw=2
-
