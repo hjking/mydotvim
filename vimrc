@@ -5,11 +5,8 @@
 "
 "******************************************************************************/
 
-let g:vimrc_loaded = 1
-" Set which part to load
-let g:load_vimrc_filetype = 1
-let g:load_vimrc_plugin_config = 1
-let g:load_vimrc_extended = 1
+let g:path_of_vimrc_tmp = fnamemodify(resolve(expand('<sfile>')), ':p:h')
+let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 
 "-----------------------------------------------------------
 " Platform
@@ -30,7 +27,21 @@ let g:load_vimrc_extended = 1
   let s:os = MySys()
 " }}}
 
+  if s:os == "windows"
+    let g:vimfiles = g:path_of_vimrc.'/vimfiles'
+  else
+
+    let g:vimfiles = g:path_of_vimrc.'/.vim'
+  endif
+  exec 'set rtp+='."g:vimfiles"
+
 " Local variables {{{
+  let g:vimrc_loaded = 1
+  " Set which part to load
+  let g:load_vimrc_filetype = 1
+  let g:load_vimrc_plugin_config = 1
+  let g:load_vimrc_extended = 1
+
   let g:dotvim_settings = {}
   " change the default directory where all miscellaneous persistent files go
   let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
@@ -75,14 +86,6 @@ if s:os == "windows"
 endif
 
 filetype off
-
-let g:path_of_vimrc_tmp = fnamemodify(resolve(expand('<sfile>')), ':p:h')
-let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
-if s:os == "windows"
-  let g:vimfiles = g:path_of_vimrc.'/vimfiles'
-else
-  let g:vimfiles = g:path_of_vimrc.'/.vim'
-endif
 
 "-----------------------------------------------------------
 """ vim-plug {{{
@@ -173,6 +176,7 @@ endif
     Plug 'Shougo/neosnippet-snippets'
   endif
   Plug 'honza/vim-snippets'
+  Plug 'hjking/hjking-vim-snippets'
 
   """ Statusline
   " Plug 'bling/vim-airline'
@@ -220,6 +224,7 @@ endif
   Plug 'vim-scripts/YankRing.vim'
   Plug 'vimtaku/hl_matchit.vim'
   Plug 'vim-scripts/timestamp.vim'
+  Plug 'ervandew/supertab'
 
   """ Verilog/SystemVerilog
   " Plug 'sychen/vim-systemverilog', {'as': 'sychen-systemverilog'}
@@ -647,13 +652,32 @@ set ttimeoutlen=100
 "-------------------------------------------------------------------------------
 " 21 command line editing
 "-------------------------------------------------------------------------------
+set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
+
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
-set wildignore+=.svn,CVS,.git,.hg,*.bak,*.e,*.obj,*.swp,*.pyc,*.o,*.lo,*.la,*.exe,*.db,*.old,*.mdb,*~,~*,*.so " wildmenu: ignore these extensions
+set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
+set wildignore+=*.so,*.dll,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
+set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux
+set wildignore+=*DS_Store*,*.ipch
+set wildignore+=*.gem
+set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
+set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**
+set wildignore+=*/.nx/**,*.app,*.git,.git
+set wildignore+=*.wav,*.mp3,*.ogg,*.pcm
+set wildignore+=*.mht,*.suo,*.sdf,*.jnlp
+set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf
+set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
+set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
+set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
+set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
+set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
+set wildignore+=.svn,CVS,.hg,*.bak,*.e,*.lo,*.la,*.db,*.old,*.mdb,*~,~* " wildmenu: ignore these extensions
 if s:os == "windows"
   set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
 else
   set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
 endif
+
 set wildmenu                    " command-line autocompletion operates in an enhanced mode
 
 "-------------------------------------------------------------------------------
@@ -835,6 +859,7 @@ if has("autocmd") " {{{
     autocmd FileType bash,shell set ts=2
     autocmd FileType help set nonu
     autocmd FileType lisp set ts=2 softtabstop=2 lisp
+    autocmd FileType snippets set expandtab
   augroup END
 endif " }}}
 
@@ -1239,6 +1264,7 @@ if g:load_vimrc_plugin_config " {{{
       noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
       let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
       let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
+      let g:NERDTreeNodeDelimiter=","
   " }}}
 
   "-----------------------------------------------------------
@@ -1569,6 +1595,7 @@ if g:load_vimrc_plugin_config " {{{
 
 
   "-----------------------------------------------------------
+  set rtp+="g:vimfiles . '\snippets'"
   " Neosnippet {{{
   if g:dotvim_settings.snippet_method == 'neosnippet'
       " Plugin key-mappings.
@@ -1626,12 +1653,18 @@ if g:load_vimrc_plugin_config " {{{
   " UltiSnips {{{
   if g:dotvim_settings.snippet_method == 'ultisnips'
       " better key bindings for UltiSnipsExpandTrigger
-      let g:UltiSnipsExpandTrigger = "<C-J>"
-      let g:UltiSnipsJumpForwardTrigger = "<C-J>"
-      let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
+      " let g:UltiSnipsExpandTrigger = "<C-J>"
+      " let g:UltiSnipsJumpForwardTrigger = "<C-J>"
+      " let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
+      let g:UltiSnipsListSnippets = '<C-S-tab>'
+      let g:UltiSnipsExpandTrigger = '<tab>'
+      let g:UltiSnipsJumpForwardTrigger = '<tab>'
+      let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
       let g:UltiSnipsEditSplit="vertical"
-      let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
-      let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+      let g:UltiSnipsEnableSnipMate=0
+      " let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
+      " let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+      let g:UltiSnipsSnippetDirectories=[g:vimfiles . '/snippets/UltiSnips', "UltiSnips"]
   endif "}}}
 
   "-----------------------------------------------------------
