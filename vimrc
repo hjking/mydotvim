@@ -9,9 +9,9 @@ let g:path_of_vimrc_tmp = fnamemodify(resolve(expand('<sfile>')), ':p:h')
 let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 
 "-----------------------------------------------------------
-" Platform
+" Platform {{{
 "-----------------------------------------------------------
-" Identify platform {{{
+  " Identify platform {{{
   function! MySys()
     if has("win16") || has("win32") || has("win64") || has("win95")
       return "windows"
@@ -25,7 +25,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   endfunction
 
   let s:os = MySys()
-" }}}
+  " }}}
 
   if s:os == "windows"
     let g:vimfiles = g:path_of_vimrc.'/vimfiles'
@@ -35,7 +35,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   endif
   exec 'set rtp+='."g:vimfiles"
 
-" Local variables {{{
+  " Local variables {{{
   let g:vimrc_loaded = 1
   " Set which part to load
   let g:load_vimrc_filetype = 1
@@ -67,38 +67,40 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   "   airline
   let g:dotvim_settings.statusline_method = 'lightline'
 
-" }}}
-
-"---------------------------------------------------------------
-"""""""""""""""""""""" Basic {{{
-"---------------------------------------------------------------
-"  1 important
-"----------------------------------------------------------------
-" set all& "reset everything to their defaults
-
-" Get out of VI's compatible mode
-" Use Vim settings, rather then Vi settings.
-" This must be first, because it changes other options as a side effect.
-set nocompatible                " not use vi keyboard mode
-
-if s:os == "windows"
-  set runtimepath+=$HOME/.vim,$HOME/.vim/after
-endif
-
-filetype off
+  " }}}
+" }}} Platform
 
 "-----------------------------------------------------------
-""" vim-plug {{{
-" Specify a directory for plugins
-" - For Neovim: ~/.local/share/nvim/plugged
-" - Avoid using standard Vim directory names like 'plugin'
-" silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
-if s:os == "windows"
-  call plug#begin(g:vimfiles.'/plugged')
-else
-  call plug#begin('~/.vim/plugged')
-endif
-" Make sure you use single quotes
+" Basic {{{
+"-----------------------------------------------------------
+  "---------------------------------------------------------------
+  "  1 important
+  "----------------------------------------------------------------
+  " set all& "reset everything to their defaults
+
+  " Get out of VI's compatible mode
+  " Use Vim settings, rather then Vi settings.
+  " This must be first, because it changes other options as a side effect.
+  set nocompatible                " not use vi keyboard mode
+
+  if s:os == "windows"
+    set runtimepath+=$HOME/.vim,$HOME/.vim/after
+  endif
+
+  filetype off
+
+  "-----------------------------------------------------------
+  """ vim-plug {{{
+  " Specify a directory for plugins
+  " - For Neovim: ~/.local/share/nvim/plugged
+  " - Avoid using standard Vim directory names like 'plugin'
+  " silent! if plug#begin(g:path_of_vimrc.'/vimfiles/plugged')
+  if s:os == "windows"
+    call plug#begin(g:vimfiles.'/plugged')
+  else
+    call plug#begin('~/.vim/plugged')
+  endif
+  " Make sure you use single quotes
 
   """ Alignment
   " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
@@ -220,6 +222,7 @@ endif
   " Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-abolish'
   Plug 'vim-scripts/VisIncr'
   Plug 'vim-scripts/YankRing.vim'
   Plug 'vimtaku/hl_matchit.vim'
@@ -236,749 +239,750 @@ endif
 
   " Initialize plugin system
   call plug#end()
-" }}}
+  " }}} vim-plug
 
-"-----------------------------------------------------------
-" FileType Detecting
-" Enable file type detection. Use the default filetype settings.
-" Also load indent files, to automatically do language-dependent indenting.
-"-----------------------------------------------------------
-if has('autocmd')
-  filetype plugin indent on
-  filetype indent on        " load filetype-specific indent files
-endif
+    "-----------------------------------------------------------
+    " FileType Detecting
+    " Enable file type detection. Use the default filetype settings.
+    " Also load indent files, to automatically do language-dependent indenting.
+    "-----------------------------------------------------------
+    if has('autocmd')
+      filetype plugin indent on
+      filetype indent on        " load filetype-specific indent files
+    endif
 
-if s:os == "windows"
-  language message en                   " message language
-  " language message en_US                   " message language
-  " language message zh_CN.UTF-8
-  " lang messages zh_CN.UTF-8 "
-elseif s:os == "linux"
-  language message C
-endif
+    if s:os == "windows"
+      language message en                   " message language
+      " language message en_US                   " message language
+      " language message zh_CN.UTF-8
+      " lang messages zh_CN.UTF-8 "
+    elseif s:os == "linux"
+      language message C
+    endif
 
-" source $VIMRUNTIME/vimrc_example.vim
-if s:os == "windows"
-  " source $VIMRUNTIME/mswin.vim      " Win behaviour
-endif
+    " source $VIMRUNTIME/vimrc_example.vim
+    if s:os == "windows"
+      " source $VIMRUNTIME/mswin.vim      " Win behaviour
+    endif
 
-runtime! ftplugin/man.vim
+    runtime! ftplugin/man.vim
 
-" our <leader> will be the space key
-let mapleader = ","
-" let mapleader=" "
+    " our <leader> will be the space key
+    let mapleader = ","
+    " let mapleader=" "
 
-" our <localleader> will be the '-' key
-let maplocalleader=","
+    " our <localleader> will be the '-' key
+    let maplocalleader=","
 
-" Avoid garbled characters in Chinese language windows OS
-let $LANG='en'
-set langmenu=en
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
+    " Avoid garbled characters in Chinese language windows OS
+    let $LANG='en'
+    set langmenu=en
+    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME/menu.vim
 
-"-----------------------------------------------------------
-" Switch syntax highlighting on.
-"-----------------------------------------------------------
-if has('syntax') && !exists('g:syntax_on')
-  syntax enable
-endif
+    "-----------------------------------------------------------
+    " Switch syntax highlighting on.
+    "-----------------------------------------------------------
+    if has('syntax') && !exists('g:syntax_on')
+      syntax enable
+    endif
 
-" Switch syntax highlighting on, when the terminal has colors
-if &t_Co > 2 || has("gui_running")
-  syntax on
-endif
+    " Switch syntax highlighting on, when the terminal has colors
+    if &t_Co > 2 || has("gui_running")
+      syntax on
+    endif
 
-"-------------------------------------------------------------------------------
-"  2 moving around, searching and patterns
-"-------------------------------------------------------------------------------
-" set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
-if s:os == "windows"
-  set path+=D:\cygwin\bin
-elseif s:os == "linux"
-  set path+=/usr/bin
-endif
-if has("gui_running")
-  if has("gui_win32")     " Win OS
-    set wrap            " Wrap line
-"   elseif has("x11")
-"   elseif has("gui_gtk2")
-  endif
+    "-------------------------------------------------------------------------------
+    "  2 moving around, searching and patterns
+    "-------------------------------------------------------------------------------
+    " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
+    if s:os == "windows"
+      set path+=D:\cygwin\bin
+    elseif s:os == "linux"
+      set path+=/usr/bin
+    endif
+    if has("gui_running")
+      if has("gui_win32")     " Win OS
+        set wrap            " Wrap line
+    "   elseif has("x11")
+    "   elseif has("gui_gtk2")
+      endif
 
-  set columns=135
+      set columns=135
 
-else
-  set wrap
-endif
-
-set autochdir          " Change the current working dir whenever open a file,
-                       " switch buffers, delete a buffer, open/close a window
-
-set nowrapscan      " Don't Searches wrap around the end of the file
-
-" Sets how many lines of history VIM has to remember
-if &history < 1000
-  set history=1000
-endif
-
-"-----------------------------------------------------------
-"Replace/Search
-"-----------------------------------------------------------
-set hlsearch        " Highlight matched result when searching
-set incsearch       " Show the pattern when typing a search command
-set ignorecase      " Ignore cases
-set smartcase       "
-set magic           " Changes the special characters that can be used in search patterns
-
-" Use grep.
-if executable('ack')
-  set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-elseif executable('ag')
-  set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-else
-  set grepprg=grep\ -nH
-endif
-let g:grep_cmd_opts = '--line-number'
-set grepformat=%f:%l:%c:%m
-
-if v:version >= 704
-  " The new Vim regex engine is currently slooooow as hell which makes syntax
-  " highlighting slow, which introduces typing latency.
-  " Consider removing this in the future when the new regex engine becomes
-  " faster.
-  set regexpengine=1
-endif
-
-"-------------------------------------------------------------------------------
-"  3 tags
-"-------------------------------------------------------------------------------
-" ctags path
-if s:os == "windows"
-  let g:dotvim_settings.ctags_path = g:vimfiles . '/ctags/ctags.exe'
-elseif s:os == "linux"
-  let g:dotvim_settings.ctags_path='ctags'
-endif
-
-if has('path_extra')
-  set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
-  " setglobal tags-=./tags tags-=./tags; tags^=./tags;
-endif
-"-------------------------------------------------------------------------------
-
-"  4 displaying text
-"-------------------------------------------------------------------------------
-set linebreak               " wrap at the right place
-set breakat=\ \ ;:,!?
-set showbreak=>
-set display+=lastline
-" set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
-set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
-set cmdheight=1                 " heighth of CMD line
-set list                        " list mode
-set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:.
-
-set number                      " display line number
-" set relativenumber              " show relative numbers
-set numberwidth=1
-set lazyredraw                  " Don't redraw while executing macros
-
-"-------------------------------------------------------------------------------
-"  5 syntax, highlighting and spelling
-"-------------------------------------------------------------------------------
-set background=dark
-" Allow to trigger background
-function! ToggleBG()
-    let s:tbg = &background
-    " Inversion
-    if s:tbg == "dark"
-        set background=light
     else
-        set background=dark
+      set wrap
     endif
-endfunction
-noremap <leader>bg :call ToggleBG()<CR>
 
+    set autochdir          " Change the current working dir whenever open a file,
+                          " switch buffers, delete a buffer, open/close a window
 
-"-------------------------------------------------------------------------------
-"  6 multiple windows
-"-------------------------------------------------------------------------------
+    set nowrapscan      " Don't Searches wrap around the end of the file
 
-set equalalways " Multiple windows, when created, are equal in size
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
-" Adjust window size of preview and help.
-set previewheight=10
-set helpheight=12
-
-"-------------------------------------------------------------------------------
-"  7 multiple tab pages
-"-------------------------------------------------------------------------------
-set showtabline=1
-if &tabpagemax < 50
-  set tabpagemax=50
-endif
-
-"-------------------------------------------------------------------------------
-"  8 terminal
-"-------------------------------------------------------------------------------
-" set title                       " display title
-
-"-------------------------------------------------------------------------------
-"  9 using the mouse
-"-------------------------------------------------------------------------------
-"-----------------------------------------------------------
-" Mouse
-"-----------------------------------------------------------
-if s:os == "windows"
-  set mouse=a
-elseif s:os == "linux"
-  set mouse=va
-endif
-" set mousemodel=extend
-set nomousehide                 " Hide the mouse when typing text
-
-" cursor
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-
-"-------------------------------------------------------------------------------
-" 10 GUI
-"-------------------------------------------------------------------------------
-set browsedir=current           " which directory to use for the file browser
-
-"-------------------------------------------------------------------------------
-" 11 printing
-"-------------------------------------------------------------------------------
-
-"-------------------------------------------------------------------------------
-" 12 messages and info
-"-------------------------------------------------------------------------------
-set shortmess+=atoOIT           " To avoid some hint messages
-if has('cmdline_info')
-  set ruler                     " Show the line and column number of the cursor position
-  " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
-  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
-  set showcmd                     " display incomplete commands
-endif
-set report=0                    " Threshold for reporting number of lines changed
-set noerrorbells                " No bell for error messages
-set novisualbell                " Use visual bell instead of beeping
-set t_vb=                       " Disable screen flash on error
-" set helplang& helplang=en
-" use Chinese help, support in vimcdoc.vim plugin
-if version >= 603
-  if s:os == "windows"
-    set helplang=cn
-  else
-    set helplang=en
-  endif
-endif
-
-"-------------------------------------------------------------------------------
-" 13 selecting text
-"-------------------------------------------------------------------------------
-set selection=inclusive         " defines the behavior of the selection
-set selectmode=mouse            " when use mouse, launch SELECT mode
-set keymodel=startsel           " Shift + arrow key
-" set selectmode=key
-"-----------------------------------------------------------
-""" ClipBoard
-"-----------------------------------------------------------
-" Use clipboard register.
-" set clipboard+=unnamed
-if has('clipboard')
-  if has('unnamedplus')
-    " By default, Vim will not use the system clipboard when yanking/pasting to
-    " the default register. This option makes Vim use the system default
-    " clipboard.
-    " Note that on X11, there are _two_ system clipboards: the "standard" one, and
-    " the selection/mouse-middle-click one. Vim sees the standard one as register
-    " '+' (and this option makes Vim use it by default) and the selection one as
-    " '*'.
-    " See :h 'clipboard' for details.
-    set clipboard=unnamedplus,unnamed
-  else
-    " Vim now also uses the selection system clipboard for default yank/paste.
-    set clipboard+=unnamed
-  endif
-endif
-
-"-------------------------------------------------------------------------------
-" 14 editing text
-"-------------------------------------------------------------------------------
-set backspace=indent,start,eol  " BACKSPACE behavior
-set formatoptions+=mM       " describes how automatic formatting is to be done
-if v:version > 703 || v:version == 703 && has("patch541")
-  set formatoptions+=j " Delete comment character when joining commented lines
-endif
-set showmatch       " Highlight matched pairs
-set matchtime=5     " Tenths of a second to show the matching paren
-set matchpairs+=<:>
-"-----------------------------------------------------------
-" Auto Complete Word
-"-----------------------------------------------------------
-" options
-set complete-=u
-set complete-=i                 " disable scanning included files
-set complete-=t                 " disable searching tags
-set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
-set complete+=k                 " scan the files given with the 'dictionary' option
-set completeopt=longest         " Insert mode completetion
-set completeopt+=menuone        " Insert mode completetion
-" Set popup menu max height.
-set pumheight=20
-
-"-------------------------------------------------------------------------------
-" 15 tabs and indenting
-"-------------------------------------------------------------------------------
-set tabstop=4               " TAB width
-set softtabstop=4           " Soft TAB width
-set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
-set expandtab               " use SPACE instead of TAB
-set smarttab                " use SPACE instead of TAB at start of line
-set shiftround              " Round indent by shiftwidth
-
-"-----------------------------------------------------------
-" Indent
-"-----------------------------------------------------------
-set autoindent              " Copy indent from current line when starting a new line
-set cindent                 " Enables automatic C program indenting
-set copyindent              " copy the previous indentation on autoindenting
-
-"-------------------------------------------------------------------------------
-" 16 folding
-"-------------------------------------------------------------------------------
-" set foldenable              " turn on folding
-set foldenable            " disable folding
-if exists("&foldlevel")
-  set foldlevel=999           " make it really high, so they're not displayed by default
-endif
-set foldmarker={,}
-set foldmethod=indent       " Make folding indent sensitive  // syntax
-set foldnestmax=5
-set foldcolumn=2            " width for fold
-set foldlevelstart=1000     " fdls:  fold level start
-set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
-
-"-------------------------------------------------------------------------------
-" 17 diff mode
-"-------------------------------------------------------------------------------
-set diffopt=context:3       " display 3 lines above and below the different place
-set diffopt+=iwhite
-set diffopt+=filler
-" if os == "windows"
-  set diffexpr=MyDiff()
-  function! MyDiff()
-    let opt = '-a --binary '
-    if &diffopt =~ 'icase'
-      let opt = opt . '-i '
+    " Sets how many lines of history VIM has to remember
+    if &history < 1000
+      set history=1000
     endif
-    if &diffopt =~ 'iwhite'
-      let opt = opt . '-b '
+
+    "-----------------------------------------------------------
+    "Replace/Search
+    "-----------------------------------------------------------
+    set hlsearch        " Highlight matched result when searching
+    set incsearch       " Show the pattern when typing a search command
+    set ignorecase      " Ignore cases
+    set smartcase       "
+    set magic           " Changes the special characters that can be used in search patterns
+
+    " Use grep.
+    if executable('ack')
+      set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+    elseif executable('ag')
+      set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+    else
+      set grepprg=grep\ -nH
     endif
-    let arg1 = v:fname_in
-    if arg1 =~ ' '
-      let arg1 = '"' . arg1 . '"'
+    let g:grep_cmd_opts = '--line-number'
+    set grepformat=%f:%l:%c:%m
+
+    if v:version >= 704
+      " The new Vim regex engine is currently slooooow as hell which makes syntax
+      " highlighting slow, which introduces typing latency.
+      " Consider removing this in the future when the new regex engine becomes
+      " faster.
+      set regexpengine=1
     endif
-    let arg2 = v:fname_new
-    if arg2 =~ ' '
-      let arg2 = '"' . arg2 . '"'
+
+    "-------------------------------------------------------------------------------
+    "  3 tags
+    "-------------------------------------------------------------------------------
+    " ctags path
+    if s:os == "windows"
+      let g:dotvim_settings.ctags_path = g:vimfiles . '/ctags/ctags.exe'
+    elseif s:os == "linux"
+      let g:dotvim_settings.ctags_path='ctags'
     endif
-    let arg3 = v:fname_out
-    if arg3 =~ ' '
-      let arg3 = '"' . arg3 . '"'
+
+    if has('path_extra')
+      set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
+      " setglobal tags-=./tags tags-=./tags; tags^=./tags;
     endif
-    let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-    silent execute cmd
-    " let eq = ''
-    " if $VIMRUNTIME =~ ' '
-    "     if &sh =~ '\<cmd'
-    "     let cmd = '""' . $VIMRUNTIME . '\diff"'
-    "     let eq = '"'
-    " else
-    "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    " endif
-    " else
-    "     let cmd = $VIMRUNTIME . '\diff'
-    " endif
-    " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-  endfunction
-" endif
+    "-------------------------------------------------------------------------------
 
-"-------------------------------------------------------------------------------
-" 18 mapping
-"-------------------------------------------------------------------------------
+    "  4 displaying text
+    "-------------------------------------------------------------------------------
+    set linebreak               " wrap at the right place
+    set breakat=\ \ ;:,!?
+    set showbreak=>
+    set display+=lastline
+    " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
+    set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
+    set cmdheight=1                 " heighth of CMD line
+    set list                        " list mode
+    set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:.
 
-"-------------------------------------------------------------------------------
-" 19 reading and writing files
-"-------------------------------------------------------------------------------
-set nobackup                    " no backup file
-set nowritebackup               " no backup before rewrite file
-"set backupdir=E:\bak
-if exists("&autoread")
-  set autoread                    " autoload when file changed outside vim
-endif
-set autowrite                   " write a modified buffer on each :next
-" Default fileformat
-set fileformat=unix
-" Automatic recognition of a new line cord
-set fileformats=unix,dos,mac
-nnoremap <leader>fd :se ff=dos<cr>
-nnoremap <leader>fu :se ff=unix<cr>
+    set number                      " display line number
+    " set relativenumber              " show relative numbers
+    set numberwidth=1
+    set lazyredraw                  " Don't redraw while executing macros
 
-" undo
-" persistent undo
-if exists('+undofile')
-  set undofile
-  " let &undodir = s:get_cache_dir('undo')
-  " set undodir=$HOME.'/.vim-cache/undodir'
-  set undodir=g:dotvim_settings.cache_dir.'/undodir'
-endif
+    "-------------------------------------------------------------------------------
+    "  5 syntax, highlighting and spelling
+    "-------------------------------------------------------------------------------
+    set background=dark
+    " Allow to trigger background
+    function! ToggleBG()
+        let s:tbg = &background
+        " Inversion
+        if s:tbg == "dark"
+            set background=light
+        else
+            set background=dark
+        endif
+    endfunction
+    noremap <leader>bg :call ToggleBG()<CR>
 
-"-------------------------------------------------------------------------------
-" 20 the swap file
-"-------------------------------------------------------------------------------
-"set directory=E:\bak
-set noswapfile
-" CursorHold time
-set updatetime=1000
+    "-------------------------------------------------------------------------------
+    "  6 multiple windows
+    "-------------------------------------------------------------------------------
 
-set nrformats-=octal
+    set equalalways " Multiple windows, when created, are equal in size
+    " Open new split panes to right and bottom, which feels more natural
+    set splitbelow
+    set splitright
+    " Adjust window size of preview and help.
+    set previewheight=10
+    set helpheight=12
 
-set ttimeout
-set ttimeoutlen=100
+    "-------------------------------------------------------------------------------
+    "  7 multiple tab pages
+    "-------------------------------------------------------------------------------
+    set showtabline=1
+    if &tabpagemax < 50
+      set tabpagemax=50
+    endif
 
-"-------------------------------------------------------------------------------
-" 21 command line editing
-"-------------------------------------------------------------------------------
-set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
+    "-------------------------------------------------------------------------------
+    "  8 terminal
+    "-------------------------------------------------------------------------------
+    " set title                       " display title
 
-set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
-set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
-set wildignore+=*.so,*.dll,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
-set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux
-set wildignore+=*DS_Store*,*.ipch
-set wildignore+=*.gem
-set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
-set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**
-set wildignore+=*/.nx/**,*.app,*.git,.git
-set wildignore+=*.wav,*.mp3,*.ogg,*.pcm
-set wildignore+=*.mht,*.suo,*.sdf,*.jnlp
-set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf
-set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
-set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
-set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
-set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
-set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
-set wildignore+=.svn,CVS,.hg,*.bak,*.e,*.lo,*.la,*.db,*.old,*.mdb,*~,~* " wildmenu: ignore these extensions
-if s:os == "windows"
-  set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
-else
-  set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
-endif
+    "-------------------------------------------------------------------------------
+    "  9 using the mouse
+    "-------------------------------------------------------------------------------
+    "-----------------------------------------------------------
+    " Mouse
+    "-----------------------------------------------------------
+    if s:os == "windows"
+      set mouse=a
+    elseif s:os == "linux"
+      set mouse=va
+    endif
+    " set mousemodel=extend
+    set nomousehide                 " Hide the mouse when typing text
 
-set wildmenu                    " command-line autocompletion operates in an enhanced mode
+    " cursor
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-"-------------------------------------------------------------------------------
-" 22 executing external commands
-"-------------------------------------------------------------------------------
-" Set keyword help.
-set keywordprg=:help
+    "-------------------------------------------------------------------------------
+    " 10 GUI
+    "-------------------------------------------------------------------------------
+    set browsedir=current           " which directory to use for the file browser
 
-"-------------------------------------------------------------------------------
-" 23 running make and jumping to errors
-"-------------------------------------------------------------------------------
-" programming related
-set makeef=error.err " the errorfile for :make and :grep
+    "-------------------------------------------------------------------------------
+    " 11 printing
+    "-------------------------------------------------------------------------------
 
-"-------------------------------------------------------------------------------
-" 24 system specific
-"-------------------------------------------------------------------------------
-if s:os == "windows"
-  if exists('+shellslash')
-    set shellslash      " Exchange path separator
-  endif
-endif
-
-"-------------------------------------------------------------------------------
-" 25 language specific
-"-------------------------------------------------------------------------------
-" none of these should be word dividers, so make them not be
-set iskeyword+=_,$,@,%,#
-set isfname-==  " remove = from filename characters
-
-"-------------------------------------------------------------------------------
-" 26 multi-byte characters
-"-------------------------------------------------------------------------------
-if has("multi_byte")
-
-  " Windows cmd.exe still uses cp850. If Windows ever moved to
-  " Powershell as the primary terminal, this would be utf-8
-  " set termencoding=cp850
-  if &termencoding == ""
-    let &termencoding = &encoding
-  endif
-  " Let Vim use utf-8 internally, because many scripts require this
-  "set encoding=utf-8
-  " setglobal fileencoding=utf-8
-  " Windows has traditionally used cp1252, so it's probably wise to
-  " fallback into cp1252 instead of eg. iso-8859-15.
-  " Newer Windows files might contain utf-8 or utf-16 LE so we might
-  " want to try them first.
-  set fileencodings=ucs-bom,utf-8,cp936,gb18030,cp1252,big5,euc-jp,euc-kr,latin1
-else
-  echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
-endif
-
-"-------------------------------------------------------------------------------
-" 27 various
-"-------------------------------------------------------------------------------
-" set virtualedit=onemore         " allow for cursor beyond last character
-set virtualedit+=block          " Enable virtualedit in visual block mode
-" set viminfo='50,<1000,:50,n$VIM/.viminfo     " save session
-set viminfo='50,<1000,:50     " save session
-if !empty(&viminfo)
-  set viminfo^=!
-endif
-set viewoptions=folds,options,cursor,unix,slash " better unix / windows compatibility
-
-" Session options
-"-----------------------------------------------------------
-set sessionoptions-=curdir
-set sessionoptions+=sesdir
-set sessionoptions-=options
-
-function! MyHighlights() abort
-  " highlight Visual     cterm=NONE ctermbg=76  ctermfg=16  gui=NONE guibg=#5fd700 guifg=#000000
-  " highlight StatusLine cterm=NONE ctermbg=231 ctermfg=160 gui=NONE guibg=#ffffff guifg=#d70000
-  " highlight Normal     cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
-  " highlight NonText    cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
-
-  highlight OverLength  ctermbg=red ctermfg=white   guibg=red     guifg=white
-  highlight Pmenu       ctermbg=8                   guibg=#606060
-  highlight PmenuSel    ctermbg=1                   guifg=#dddd00 guibg=#1f82cd
-  highlight PmenuSbar   ctermbg=0                   guibg=#d6d6d6
-  "
-  "highlight StatusLine guifg=SlateBlue guibg=Yellow
-  "highlight StatusLine guifg=SlateBlue guibg=#008800
-  highlight StatusLine NONE
-  highlight StatusLineNC NONE
-  " current window
-  highlight StatusLine ctermfg=yellow     guifg=orange guibg=#008800 gui=underline
-  " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
-  " not current window
-  highlight StatusLineNC ctermfg=lightgrey guifg=Gray guibg=white
-  " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
-  highlight User1 guifg=yellow
-  highlight User2 guifg=lightblue
-  highlight User3 guifg=red
-  highlight User4 guifg=cyan
-  highlight User5 guifg=lightgreen
-  highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue
-  highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
-endfunction
-
-augroup MyColors
-    autocmd!
-    autocmd ColorScheme * call MyHighlights()
-augroup END
-
-":match OverLength '\%200v.*'
-
-if v:version > 703
-  set cryptmethod=blowfish
-endif
-
-" Specify the behavior when switching buffers
-try
-  " set switchbuf=useopen,usetab,newtab
-  set switchbuf=usetab,usetab     " Open new buffers always in new tabs
-  " set showtabline=2
-  catch
-endtry
-
-" Scroll options
-if !&scrolloff
-  set scrolloff=2
-endif
-if !&sidescrolloff
-  set sidescrolloff=10
-endif
-set sidescroll=1
-
-"-----------------------------------------------------------
-" AutoCommands
-"-----------------------------------------------------------
-if has("autocmd") " {{{
-  " Set augroup
-  augroup MyAutoCmd
-    autocmd!
-
-    " automatically rebalance windows on vim resize
-    autocmd VimResized * :wincmd =
-
-    " Check timestamp more for 'autoread'.
-    autocmd WinEnter * checktime
-
-    autocmd BufReadPre,BufNewFile,BufRead *.do,*.tree setfiletype tcl
-    autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
-    autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
-    autocmd BufRead,BufNewFile *.txt setfiletype txt " highlight TXT file
-
-    " Make sure Vim returns to the same line when you reopen a file.
-    autocmd BufReadPost *
-        \ if line("'\"") > 0 && line("'\"") <= line("$") |
-        \     execute 'normal! g`"zvzz' |
-        \ endif
-
-    autocmd BufEnter * :syntax sync fromstart
-    autocmd BufEnter * :lchdir %:p:h
-
-    " auto load vimrc when editing it
-    " if os == "windows"
-    "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
-    " elseif os == "linux"
-    "     autocmd! BufWritePost .vimrc source %
-    " endif
-
-    " Automatically delete trailing DOS-returns and whitespace on file open and write.
-    " autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
-
-    " Automatically resize vertical splits
-    " autocmd WinEnter * :set winfixheight
-    " autocmd WinEnter * :wincmd =
-
-    autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
-    autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-    autocmd FileType markdown setlocal nolist
-    autocmd FileType vim setlocal fdm=indent keywordprg=:help
-    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal autoindent
-    autocmd FileType html,text,php,vim,c,java,xml,bash,shell,perl,systemverilog,verilog_systemverilog,vimwiki set textwidth=80
-    autocmd FileType bash,shell set ts=2
-    autocmd FileType help set nonu
-    autocmd FileType lisp set ts=2 softtabstop=2 lisp
-    autocmd FileType snippets set expandtab
-  augroup END
-endif " }}}
-
-"-----------------------------------------------------------
-" Highlight current Line
-"-----------------------------------------------------------
-"highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
-"au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
-
-"-----------------------------------------------------------
-" Abbreviations
-"-----------------------------------------------------------
-
-"-----------------------------------------------------------
-""" Status Line
-"-----------------------------------------------------------
-" Color of Status Line
-if has('statusline') " {{{
-  set laststatus=2           " always show the status line
-  " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
-  " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-  " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-  " %([%R%M]%)   read-only, modified and modifiable flags between braces
-  " %{'$'[!&list]}  shows a '$' if in list mode
-  " %{'~'[&pm=='']} shows a '~' if in patchmode
-  " #%n    buffer number
-  set statusline=
-  set statusline+=[%f]                " file name
-  set statusline+=[%{&ff}]            " file format
-  set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
-  set statusline+=%y                  " file type
-  set statusline+=%7*%m%*             " modified flag
-  set statusline+=%r                  " readonly flag
-  set statusline+=%h                  "
-  set statusline+=%w
-  " set statusline+=\ [%{getcwd()}] " current directory
-  set statusline+=%#warningmsg#
-  set statusline+=%=                  " left/right separator
-  set statusline+=%6*%b(0X%B)
-  " set statusline+=[Pos=%l,%c%V]
-  set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
-endif " }}}
-
-" GUI Options {{{
-  " set guioptions+=grTt
-  set guioptions-=T
-  " don't use autoselect on OS X
-  if has('mac')
-    set guioptions-=a
-  endif
-  " For CTRL-v to work autoselect must be off.
-  " On Unix we have two selections, autoselect can be used.
-  if !has('unix')
-    set guioptions-=a
-  endif
-
-  if has("gui_win32")     " Win
-    set guioptions+=bh  " Horizontal scrolbar
-  endif
-  set guioptions-=e
-" }}}
-
-" Font {{{
-  " set default guifont
-  if has("gui_running")
-    " check and determine the gui font after GUIEnter.
-    " NOTE: getfontname function only works after GUIEnter.
-    au GUIEnter * call s:SetGuiFont()
-  endif
-
-  " set guifont
-  function s:SetGuiFont()
-    if has('mac')
-      if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
-        set guifont=Bitstream\ Vera\ Sans\ Mono:h12
-      elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
-        set guifont=DejaVu\ Sans\ Mono:h12
-      elseif getfontname( "Menlo\ Regular" ) != ""
-        set guifont=Menlo\ Regular:h12
-      endif
-    elseif has('unix')
-      " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
-      set guifont=Monospace\ 10
-      set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
-    elseif has("gui_win32")     " Windows platform
-      let font_name = ""
-      if getfontname( "Consolas" ) != ""
-        set guifont=Consolas:h11:cANSI " this is the default visual studio font
-        let font_name = "Consolas"
-      elseif getfontname( "Source_Code_Pro" ) != ""
-        set guifont=Source_Code_Pro:h10:cANSI
-        let font_name = "Source_Code_Pro"
-      elseif getfontname( "Droid_Sans_Mono" ) != ""
-        set guifont=Droid_Sans_Mono:h10:cANSI
-        let font_name = "Droid_Sans_Mono"
-      elseif getfontname( "DejaVu_Sans_Mono" ) != ""
-        set guifont=DejaVu_Sans_Mono:h11:cANSI
-        let font_name = "DejaVu_Sans_Mono"
-      elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
-        set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
-        let font_name = "Bitstream_Vera_Sans_Mono"
-      elseif getfontname( "Raize" ) != ""
-        set guifont=Raize:h12:b:cANSI
-        let font_name = "Raize"
+    "-------------------------------------------------------------------------------
+    " 12 messages and info
+    "-------------------------------------------------------------------------------
+    set shortmess+=atoOIT           " To avoid some hint messages
+    if has('cmdline_info')
+      set ruler                     " Show the line and column number of the cursor position
+      " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+      set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+      set showcmd                     " display incomplete commands
+    endif
+    set report=0                    " Threshold for reporting number of lines changed
+    set noerrorbells                " No bell for error messages
+    set novisualbell                " Use visual bell instead of beeping
+    set t_vb=                       " Disable screen flash on error
+    " set helplang& helplang=en
+    " use Chinese help, support in vimcdoc.vim plugin
+    if version >= 603
+      if s:os == "windows"
+        set helplang=cn
       else
-        set guifont=Lucida_Console:h12:cANSI
-        let font_name = "Lucida_Console"
+        set helplang=en
       endif
-      set guifontwide=Courier_New:h12:cANSI
-      silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
     endif
-  endfunction
 
-  " commands for change font size
-  command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
-  command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
-" }}}
+    "-------------------------------------------------------------------------------
+    " 13 selecting text
+    "-------------------------------------------------------------------------------
+    set selection=inclusive         " defines the behavior of the selection
+    set selectmode=mouse            " when use mouse, launch SELECT mode
+    set keymodel=startsel           " Shift + arrow key
+    " set selectmode=key
+    "-----------------------------------------------------------
+    """ ClipBoard
+    "-----------------------------------------------------------
+    " Use clipboard register.
+    " set clipboard+=unnamed
+    if has('clipboard')
+      if has('unnamedplus')
+        " By default, Vim will not use the system clipboard when yanking/pasting to
+        " the default register. This option makes Vim use the system default
+        " clipboard.
+        " Note that on X11, there are _two_ system clipboards: the "standard" one, and
+        " the selection/mouse-middle-click one. Vim sees the standard one as register
+        " '+' (and this option makes Vim use it by default) and the selection one as
+        " '*'.
+        " See :h 'clipboard' for details.
+        set clipboard=unnamedplus,unnamed
+      else
+        " Vim now also uses the selection system clipboard for default yank/paste.
+        set clipboard+=unnamed
+      endif
+    endif
 
-"}}} Basic
+    "-------------------------------------------------------------------------------
+    " 14 editing text
+    "-------------------------------------------------------------------------------
+    set backspace=indent,start,eol  " BACKSPACE behavior
+    set formatoptions+=mM       " describes how automatic formatting is to be done
+    if v:version > 703 || v:version == 703 && has("patch541")
+      set formatoptions+=j " Delete comment character when joining commented lines
+    endif
+    set showmatch       " Highlight matched pairs
+    set matchtime=5     " Tenths of a second to show the matching paren
+    set matchpairs+=<:>
+    "-----------------------------------------------------------
+    " Auto Complete Word
+    "-----------------------------------------------------------
+    " options
+      set complete-=u
+      set complete-=i                 " disable scanning included files
+      set complete-=t                 " disable searching tags
+      set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
+      set complete+=k                 " scan the files given with the 'dictionary' option
+      set completeopt=longest         " Insert mode completetion
+      set completeopt+=menuone        " Insert mode completetion
+      " Set popup menu max height.
+      set pumheight=20
+
+    "-------------------------------------------------------------------------------
+    " 15 tabs and indenting
+    "-------------------------------------------------------------------------------
+    set tabstop=4               " TAB width
+    set softtabstop=4           " Soft TAB width
+    set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
+    set expandtab               " use SPACE instead of TAB
+    set smarttab                " use SPACE instead of TAB at start of line
+    set shiftround              " Round indent by shiftwidth
+
+    "-----------------------------------------------------------
+    " Indent
+    "-----------------------------------------------------------
+    set autoindent              " Copy indent from current line when starting a new line
+    set cindent                 " Enables automatic C program indenting
+    set copyindent              " copy the previous indentation on autoindenting
+
+    "-------------------------------------------------------------------------------
+    " 16 folding
+    "-------------------------------------------------------------------------------
+    " set foldenable              " turn on folding
+    set foldenable            " disable folding
+    if exists("&foldlevel")
+      set foldlevel=999           " make it really high, so they're not displayed by default
+    endif
+    set foldmarker={,}
+    set foldmethod=indent       " Make folding indent sensitive  // syntax
+    set foldnestmax=5
+    set foldcolumn=2            " width for fold
+    set foldlevelstart=1000     " fdls:  fold level start
+    set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
+
+    "-------------------------------------------------------------------------------
+    " 17 diff mode
+    "-------------------------------------------------------------------------------
+    set diffopt=context:3       " display 3 lines above and below the different place
+    set diffopt+=iwhite
+    set diffopt+=filler
+    " if os == "windows"
+      set diffexpr=MyDiff()
+      function! MyDiff()
+        let opt = '-a --binary '
+        if &diffopt =~ 'icase'
+          let opt = opt . '-i '
+        endif
+        if &diffopt =~ 'iwhite'
+          let opt = opt . '-b '
+        endif
+        let arg1 = v:fname_in
+        if arg1 =~ ' '
+          let arg1 = '"' . arg1 . '"'
+        endif
+        let arg2 = v:fname_new
+        if arg2 =~ ' '
+          let arg2 = '"' . arg2 . '"'
+        endif
+        let arg3 = v:fname_out
+        if arg3 =~ ' '
+          let arg3 = '"' . arg3 . '"'
+        endif
+        let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+        silent execute cmd
+        " let eq = ''
+        " if $VIMRUNTIME =~ ' '
+        "     if &sh =~ '\<cmd'
+        "     let cmd = '""' . $VIMRUNTIME . '\diff"'
+        "     let eq = '"'
+        " else
+        "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        " endif
+        " else
+        "     let cmd = $VIMRUNTIME . '\diff'
+        " endif
+        " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+      endfunction
+    " endif
+
+    "-------------------------------------------------------------------------------
+    " 18 mapping
+    "-------------------------------------------------------------------------------
+
+    "-------------------------------------------------------------------------------
+    " 19 reading and writing files
+    "-------------------------------------------------------------------------------
+    set nobackup                    " no backup file
+    set nowritebackup               " no backup before rewrite file
+    "set backupdir=E:\bak
+    if exists("&autoread")
+      set autoread                    " autoload when file changed outside vim
+    endif
+    set autowrite                   " write a modified buffer on each :next
+    " Default fileformat
+    set fileformat=unix
+    " Automatic recognition of a new line cord
+    set fileformats=unix,dos,mac
+    nnoremap <leader>fd :se ff=dos<cr>
+    nnoremap <leader>fu :se ff=unix<cr>
+
+    " undo
+    " persistent undo
+    if exists('+undofile')
+      set undofile
+      " let &undodir = s:get_cache_dir('undo')
+      " set undodir=$HOME.'/.vim-cache/undodir'
+      set undodir=g:dotvim_settings.cache_dir.'/undodir'
+    endif
+
+    "-------------------------------------------------------------------------------
+    " 20 the swap file
+    "-------------------------------------------------------------------------------
+    "set directory=E:\bak
+    set noswapfile
+    " CursorHold time
+    set updatetime=1000
+
+    set nrformats-=octal
+
+    set ttimeout
+    set ttimeoutlen=100
+
+    "-------------------------------------------------------------------------------
+    " 21 command line editing
+    "-------------------------------------------------------------------------------
+    set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
+
+    set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
+    set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
+    set wildignore+=*.so,*.dll,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
+    set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux
+    set wildignore+=*DS_Store*,*.ipch
+    set wildignore+=*.gem
+    set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
+    set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**
+    set wildignore+=*/.nx/**,*.app,*.git,.git
+    set wildignore+=*.wav,*.mp3,*.ogg,*.pcm
+    set wildignore+=*.mht,*.suo,*.sdf,*.jnlp
+    set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf
+    set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
+    set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
+    set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
+    set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
+    set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
+    set wildignore+=.svn,CVS,.hg,*.bak,*.e,*.lo,*.la,*.db,*.old,*.mdb,*~,~* " wildmenu: ignore these extensions
+    if s:os == "windows"
+      set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
+    else
+      set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
+    endif
+
+    " command-line autocompletion operates in an enhanced mode
+    set wildmenu
+
+    "-------------------------------------------------------------------------------
+    " 22 executing external commands
+    "-------------------------------------------------------------------------------
+    " Set keyword help.
+    set keywordprg=:help
+
+    "-------------------------------------------------------------------------------
+    " 23 running make and jumping to errors
+    "-------------------------------------------------------------------------------
+    " programming related
+    set makeef=error.err " the errorfile for :make and :grep
+
+    "-------------------------------------------------------------------------------
+    " 24 system specific
+    "-------------------------------------------------------------------------------
+    if s:os == "windows"
+      if exists('+shellslash')
+        set shellslash      " Exchange path separator
+      endif
+    endif
+
+    "-------------------------------------------------------------------------------
+    " 25 language specific
+    "-------------------------------------------------------------------------------
+    " none of these should be word dividers, so make them not be
+    set iskeyword+=_,$,@,%,#
+    set isfname-==  " remove = from filename characters
+
+    "-------------------------------------------------------------------------------
+    " 26 multi-byte characters
+    "-------------------------------------------------------------------------------
+    if has("multi_byte")
+
+      " Windows cmd.exe still uses cp850. If Windows ever moved to
+      " Powershell as the primary terminal, this would be utf-8
+      " set termencoding=cp850
+      if &termencoding == ""
+        let &termencoding = &encoding
+      endif
+      " Let Vim use utf-8 internally, because many scripts require this
+      "set encoding=utf-8
+      " setglobal fileencoding=utf-8
+      " Windows has traditionally used cp1252, so it's probably wise to
+      " fallback into cp1252 instead of eg. iso-8859-15.
+      " Newer Windows files might contain utf-8 or utf-16 LE so we might
+      " want to try them first.
+      set fileencodings=ucs-bom,utf-8,cp936,gb18030,cp1252,big5,euc-jp,euc-kr,latin1
+    else
+      echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
+    endif
+
+    "-------------------------------------------------------------------------------
+    " 27 various
+    "-------------------------------------------------------------------------------
+    " set virtualedit=onemore         " allow for cursor beyond last character
+    set virtualedit+=block          " Enable virtualedit in visual block mode
+    " set viminfo='50,<1000,:50,n$VIM/.viminfo     " save session
+    set viminfo='50,<1000,:50     " save session
+    if !empty(&viminfo)
+      set viminfo^=!
+    endif
+
+    " better unix / windows compatibility
+    set viewoptions=folds,options,cursor,unix,slash
+
+    " Session options
+    "-----------------------------------------------------------
+    set sessionoptions-=curdir
+    set sessionoptions+=sesdir
+    set sessionoptions-=options
+
+    function! MyHighlights() abort
+      " highlight Visual     cterm=NONE ctermbg=76  ctermfg=16  gui=NONE guibg=#5fd700 guifg=#000000
+      " highlight StatusLine cterm=NONE ctermbg=231 ctermfg=160 gui=NONE guibg=#ffffff guifg=#d70000
+      " highlight Normal     cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+      " highlight NonText    cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+
+      highlight OverLength  ctermbg=red ctermfg=white   guibg=red     guifg=white
+      highlight Pmenu       ctermbg=8                   guibg=#606060
+      highlight PmenuSel    ctermbg=1                   guifg=#dddd00 guibg=#1f82cd
+      highlight PmenuSbar   ctermbg=0                   guibg=#d6d6d6
+      "
+      "highlight StatusLine guifg=SlateBlue guibg=Yellow
+      "highlight StatusLine guifg=SlateBlue guibg=#008800
+      highlight StatusLine NONE
+      highlight StatusLineNC NONE
+      " current window
+      highlight StatusLine ctermfg=yellow     guifg=orange guibg=#008800 gui=underline
+      " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
+      " not current window
+      highlight StatusLineNC ctermfg=lightgrey guifg=Gray guibg=white
+      " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
+      highlight User1 guifg=yellow
+      highlight User2 guifg=lightblue
+      highlight User3 guifg=red
+      highlight User4 guifg=cyan
+      highlight User5 guifg=lightgreen
+      highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue
+      highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+    endfunction
+
+    augroup MyColors
+        autocmd!
+        autocmd ColorScheme * call MyHighlights()
+    augroup END
+
+    ":match OverLength '\%200v.*'
+
+    if v:version > 703
+      set cryptmethod=blowfish
+    endif
+
+    " Specify the behavior when switching buffers
+    try
+      " set switchbuf=useopen,usetab,newtab
+      set switchbuf=usetab,usetab     " Open new buffers always in new tabs
+      " set showtabline=2
+      catch
+    endtry
+
+    " Scroll options
+    if !&scrolloff
+      set scrolloff=2
+    endif
+    if !&sidescrolloff
+      set sidescrolloff=10
+    endif
+    set sidescroll=1
+
+    "-----------------------------------------------------------
+    " AutoCommands
+    "-----------------------------------------------------------
+    if has("autocmd") " {{{
+      " Set augroup
+      augroup MyAutoCmd
+        autocmd!
+
+        " automatically rebalance windows on vim resize
+        autocmd VimResized * :wincmd =
+
+        " Check timestamp more for 'autoread'.
+        autocmd WinEnter * checktime
+
+        autocmd BufReadPre,BufNewFile,BufRead *.do  setfiletype tcl
+        autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
+        autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
+
+        " Make sure Vim returns to the same line when you reopen a file.
+        autocmd BufReadPost *
+            \ if line("'\"") > 0 && line("'\"") <= line("$") |
+            \     execute 'normal! g`"zvzz' |
+            \ endif
+
+        autocmd BufEnter * :syntax sync fromstart
+        autocmd BufEnter * :lchdir %:p:h
+
+        " auto load vimrc when editing it
+        " if os == "windows"
+        "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
+        " elseif os == "linux"
+        "     autocmd! BufWritePost .vimrc source %
+        " endif
+
+        " Automatically delete trailing DOS-returns and whitespace on file open and write.
+        " autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
+
+        " Automatically resize vertical splits
+        " autocmd WinEnter * :set winfixheight
+        " autocmd WinEnter * :wincmd =
+
+      augroup END
+    endif " }}}
+
+    "-----------------------------------------------------------
+    " Highlight current Line
+    "-----------------------------------------------------------
+    "highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
+    "au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
+
+    "-----------------------------------------------------------
+    " Abbreviations
+    "-----------------------------------------------------------
+
+    "-----------------------------------------------------------
+    """ Status Line
+    "-----------------------------------------------------------
+    " Color of Status Line
+    if has('statusline') " {{{
+      set laststatus=2           " always show the status line
+      " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
+      " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+      " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+      " %([%R%M]%)   read-only, modified and modifiable flags between braces
+      " %{'$'[!&list]}  shows a '$' if in list mode
+      " %{'~'[&pm=='']} shows a '~' if in patchmode
+      " #%n    buffer number
+      set statusline=
+      set statusline+=[%f]                " file name
+      set statusline+=[%{&ff}]            " file format
+      set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
+      set statusline+=%y                  " file type
+      set statusline+=%7*%m%*             " modified flag
+      set statusline+=%r                  " readonly flag
+      set statusline+=%h                  "
+      set statusline+=%w
+      " set statusline+=\ [%{getcwd()}] " current directory
+      set statusline+=%#warningmsg#
+      set statusline+=%=                  " left/right separator
+      set statusline+=%6*%b(0X%B)
+      " set statusline+=[Pos=%l,%c%V]
+      set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
+    endif " }}}
+
+    " GUI Options {{{
+    " set guioptions+=grTt
+    set guioptions-=T
+    " don't use autoselect on OS X
+    if has('mac')
+      set guioptions-=a
+    endif
+    " For CTRL-v to work autoselect must be off.
+    " On Unix we have two selections, autoselect can be used.
+    if !has('unix')
+      set guioptions-=a
+    endif
+
+    if has("gui_win32")     " Win
+      set guioptions+=bh  " Horizontal scrolbar
+    endif
+    set guioptions-=e
+    " }}}
+
+    " Font {{{
+    " set default guifont
+    if has("gui_running")
+      " check and determine the gui font after GUIEnter.
+      " NOTE: getfontname function only works after GUIEnter.
+      au GUIEnter * call s:SetGuiFont()
+    endif
+
+    " set guifont
+    function s:SetGuiFont()
+      if has('mac')
+        if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+          set guifont=Bitstream\ Vera\ Sans\ Mono:h12
+        elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
+          set guifont=DejaVu\ Sans\ Mono:h12
+        elseif getfontname( "Menlo\ Regular" ) != ""
+          set guifont=Menlo\ Regular:h12
+        endif
+      elseif has('unix')
+        " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
+        set guifont=Monospace\ 10
+        set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
+      elseif has("gui_win32")     " Windows platform
+        let font_name = ""
+        if getfontname( "Consolas" ) != ""
+          set guifont=Consolas:h11:cANSI " this is the default visual studio font
+          let font_name = "Consolas"
+        elseif getfontname( "Source_Code_Pro" ) != ""
+          set guifont=Source_Code_Pro:h10:cANSI
+          let font_name = "Source_Code_Pro"
+        elseif getfontname( "Droid_Sans_Mono" ) != ""
+          set guifont=Droid_Sans_Mono:h10:cANSI
+          let font_name = "Droid_Sans_Mono"
+        elseif getfontname( "DejaVu_Sans_Mono" ) != ""
+          set guifont=DejaVu_Sans_Mono:h11:cANSI
+          let font_name = "DejaVu_Sans_Mono"
+        elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+          set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
+          let font_name = "Bitstream_Vera_Sans_Mono"
+        elseif getfontname( "Raize" ) != ""
+          set guifont=Raize:h12:b:cANSI
+          let font_name = "Raize"
+        else
+          set guifont=Lucida_Console:h12:cANSI
+          let font_name = "Lucida_Console"
+        endif
+        set guifontwide=Courier_New:h12:cANSI
+        silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
+      endif
+    endfunction
+
+    " commands for change font size
+    command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+    command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+    " }}}
+
+    """"""""""""""""""""""""""""""
+    " => Shell section
+    """"""""""""""""""""""""""""""
+    if s:os == "windows"
+      " ensure correct shell in gvim
+      set shell=c:\windows\system32\cmd.exe
+    endif
+
+    if exists('$TMUX')
+      set term=screen-256color
+    endif
+" }}} Basic
 
 "---------------------------------------------------------------
 """""""""""""""""""""" Filetypes """""""""""""""""""""""""""""""
@@ -988,19 +992,26 @@ if g:load_vimrc_filetype "{{{
   "-----------------------------------------------------------
   " Verilog Automatic
   " {{{
-    inoremap        iav     <ESC>:Allpn<CR>
-    noremap         :iav        :Allpn<CR>
-    " :inoremap     av      <ESC>:Allcom<CR>
-    " map           :av     :Allcom<CR>
-    inoremap        ihv             <ESC>:AddHeader<CR>
-    noremap         <leader>hv      :AddHeader<CR>
-    inoremap        icv             <ESC>:Acontent<CR>
-    noremap         <leader>cv      :Acontent<CR>
+  inoremap        iav     <ESC>:Allpn<CR>
+  noremap         :iav        :Allpn<CR>
+  " :inoremap     av      <ESC>:Allcom<CR>
+  " map           :av     :Allcom<CR>
+  inoremap        ihv             <ESC>:AddHeader<CR>
+  noremap         <leader>hv      :AddHeader<CR>
+  inoremap        icv             <ESC>:Acontent<CR>
+  noremap         <leader>cv      :Acontent<CR>
+
+  augroup ft_verilog
+    autocmd!
+    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal autoindent
+    autocmd FileType systemverilog,verilog_systemverilog,verilog set textwidth=100
+  augroup END
   " }}}
 
   "---------------
   " Python
   "---------------
+  " {{{
   " auto complete
   noremap <F9> :!python.exe
   " Only do this part when compiled with support for autocommands.
@@ -1024,20 +1035,77 @@ if g:load_vimrc_filetype "{{{
     autocmd FileType python map <buffer> <leader>C ?class
     autocmd FileType python map <buffer> <leader>D ?def
   augroup END
+  " }}}
 
-  """"""""""""""""""""""""""""""
-  " => Shell section
-  """"""""""""""""""""""""""""""
-  if s:os == "windows"
-    " ensure correct shell in gvim
-    set shell=c:\windows\system32\cmd.exe
-  endif
+  " Vim {{{
+  augroup ft_vim
+      autocmd!
 
-  if exists('$TMUX')
-      set term=screen-256color
-  endif
+      autocmd FileType vim setlocal foldmethod=marker keywordprg=:help
+      autocmd FileType help setlocal textwidth=78
+      autocmd FileType help set nonu
+      autocmd BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+
+      autocmd FileType vim vnoremap <localleader>S y:@"<CR>
+      autocmd FileType vim nnoremap <localleader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+
+      autocmd FileType vim inoremap <c-n> <c-x><c-n>
+  augroup END
+  " }}}
+
+  " HTML {{{
+  augroup ft_html
+    autocmd!
+    autocmd FileType html,php,java,xml set textwidth=80
+  augroup END
+  " }}}
+
+  " CSS {{{
+  augroup ft_css
+    autocmd!
+    autocmd FileType css,scss,less setlocal foldmethod=marker foldmarker={,}
+    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
+    autocmd Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
+    autocmd Filetype less,css setlocal iskeyword+=-
+  augroup END
+  " }}}
+
+  " C {{{
+  augroup ft_c
+      autocmd!
+      autocmd FileType c,cpp setlocal foldmethod=marker foldmarker={,}
+      autocmd FileType c,cpp setlocal textwidth=80
+  augroup END
+  " }}}
+
+  augroup ft_misc
+    autocmd!
+    autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
+    autocmd FileType text,perl,vimwiki set textwidth=80
+    autocmd FileType bash,shell set ts=2 textwidth=80
+    autocmd FileType lisp set ts=2 softtabstop=2
+    autocmd FileType snippets set expandtab
+  augroup END
+
+  " Markdown {{{
+  augroup ft_markdown
+      autocmd!
+
+      autocmd FileType markdown setlocal nolist
+
+      " Linkify selected text inline to contents of pasteboard.
+      autocmd Filetype markdown vnoremap <buffer> <localleader>l <esc>`>a]<esc>`<i[<esc>`>lla()<esc>"+P
+
+      " Use <localleader>1/2/3 to add headings.
+      autocmd Filetype markdown nnoremap <buffer> <localleader>1 yypVr=:redraw<cr>
+      autocmd Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
+      autocmd Filetype markdown nnoremap <buffer> <localleader>3 mzI###<space><esc>`zllll
+      autocmd Filetype markdown nnoremap <buffer> <localleader>4 mzI####<space><esc>`zlllll
+  augroup END
+  " }}}
+
 endif
-"}}} Filetypes
+" }}} Filetypes
 
 
 "---------------------------------------------------------------
@@ -1091,64 +1159,64 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " tagbar {{{
-      let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
-      let g:tagbar_width = 20
-      let g:tagbar_autofocus = 1
-      let g:tagbar_sort = 1
-      let g:tagbar_compact = 1
-      let g:tagbar_expand = 1
-      let g:tagbar_singleclick = 1
-      let g:tagbar_usearrows = 1
-      let g:tagbar_autoshowtag = 1
-      let g:tagbar_show_visibility = 1
-      let g:tagbar_map_closefold = ['h', '-', 'zc']
-      let g:tagbar_map_openfold = ['l', '+', 'zo']
-      " let g:tagbar_autoclose = 1    " auto close after open tag
-      nnoremap <silent><leader>tb :TagbarToggle<CR>
-      nnoremap <F6> :TagbarToggle<CR>
-      "Open Tagbar or jump to it if already open (useful for split windows)
-      nnoremap <leader>to :TagbarOpen j<CR>
+    let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
+    let g:tagbar_width = 20
+    let g:tagbar_autofocus = 1
+    let g:tagbar_sort = 1
+    let g:tagbar_compact = 1
+    let g:tagbar_expand = 1
+    let g:tagbar_singleclick = 1
+    let g:tagbar_usearrows = 1
+    let g:tagbar_autoshowtag = 1
+    let g:tagbar_show_visibility = 1
+    let g:tagbar_map_closefold = ['h', '-', 'zc']
+    let g:tagbar_map_openfold = ['l', '+', 'zo']
+    " let g:tagbar_autoclose = 1    " auto close after open tag
+    nnoremap <silent><leader>tb :TagbarToggle<CR>
+    nnoremap <F6> :TagbarToggle<CR>
+    "Open Tagbar or jump to it if already open (useful for split windows)
+    nnoremap <leader>to :TagbarOpen j<CR>
 
-      " Same as nerdtree, only open if no file was specified
-      function! StartUpTagbar()
-        if 0 == argc()
-          TagbarOpen
-        end
-      endfunction
+    " Same as nerdtree, only open if no file was specified
+    function! StartUpTagbar()
+      if 0 == argc()
+        TagbarOpen
+      end
+    endfunction
 
-      augroup my_tagbar
-        autocmd!
-        " autocmd VimEnter * call StartUpTagbar()
-      augroup END
+    augroup my_tagbar
+      autocmd!
+      " autocmd VimEnter * call StartUpTagbar()
+    augroup END
 
-      " Add Verilog/Systemverilog support
-      let g:tagbar_type_systemverilog = {
-          \ 'ctagstype' : 'systemverilog',
-          \ 'sro' : '::',
-          \ 'kinds' : [
-              \ 'c:classes',
-              \ 't:tasks',
-              \ 'f:functions',
-              \ 'm:modules',
-              \ 'p:programs',
-              \ 'i:interfaces',
-              \ 'e:typedefs',
-              \ 'd:defines'
-          \]
-      \}
+    " Add Verilog/Systemverilog support
+    let g:tagbar_type_systemverilog = {
+        \ 'ctagstype' : 'systemverilog',
+        \ 'sro' : '::',
+        \ 'kinds' : [
+            \ 'c:classes',
+            \ 't:tasks',
+            \ 'f:functions',
+            \ 'm:modules',
+            \ 'p:programs',
+            \ 'i:interfaces',
+            \ 'e:typedefs',
+            \ 'd:defines'
+        \]
+    \}
   " }}}
 
   "-----------------------------------------------------------
   " MiniBufExplorer {{{
-      let g:miniBufExplMapCTabSwitchBufs = 1
-      let g:miniBufExplMapWindowNavVim = 1
-      let g:miniBufExplMapWindowNavArrows = 1
-      let g:miniBufExplModSelTarget = 1
-      let g:miniBufExplSplitBelow = 1
-      let g:miniBufExplMaxSize = 2
-      let g:miniBufExplUseSingleClick = 1    " select by single click
-      " autocmd BufRead,BufNew :call UMiniBufExplorer
-      " noremap ,be :MBEToggle<CR>
+    let g:miniBufExplMapCTabSwitchBufs = 1
+    let g:miniBufExplMapWindowNavVim = 1
+    let g:miniBufExplMapWindowNavArrows = 1
+    let g:miniBufExplModSelTarget = 1
+    let g:miniBufExplSplitBelow = 1
+    let g:miniBufExplMaxSize = 2
+    let g:miniBufExplUseSingleClick = 1    " select by single click
+    " autocmd BufRead,BufNew :call UMiniBufExplorer
+    " noremap ,be :MBEToggle<CR>
   " }}}
 
   "-----------------------------------------------------------
@@ -1198,26 +1266,26 @@ if g:load_vimrc_plugin_config " {{{
   "-----------------------------------------------------------
   " Netrw {{{
     " File Explorer :e <PATH>
-      let g:netrw_winsize        = 25
-      let g:netrw_keepdir        = 0
-      " let g:netrw_preview        = 0
-      let g:netrw_liststyle      = 3
-      let g:netrw_browse_split   = 0
-      let g:netrw_cursor         = 3
-      let g:netrw_banner         = 0
-      let g:netrw_mousemaps      = 0
-      let g:netrw_special_syntax = 1
-      let g:netrw_timefmt        = "%y-%m-%d  %H-%M-%S"
-      let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
-      let g:netrw_cursor         = 0
-      let g:netrw_errorlvl       = 1
-      if executable('wget')
-        let g:netrw_http_cmd = 'wget'
-      endif
+    let g:netrw_winsize        = 25
+    let g:netrw_keepdir        = 0
+    " let g:netrw_preview        = 0
+    let g:netrw_liststyle      = 3
+    let g:netrw_browse_split   = 0
+    let g:netrw_cursor         = 3
+    let g:netrw_banner         = 0
+    let g:netrw_mousemaps      = 0
+    let g:netrw_special_syntax = 1
+    let g:netrw_timefmt        = "%y-%m-%d  %H-%M-%S"
+    let g:netrw_list_hide      = '^[.]\w\|.*\.swp$'
+    let g:netrw_cursor         = 0
+    let g:netrw_errorlvl       = 1
+    if executable('wget')
+      let g:netrw_http_cmd = 'wget'
+    endif
 
-      noremap <leader>fte :Texplore<CR>            " open in new tab
-      noremap <leader>fve :Vexplore<CR>           " vertical split
-      nnoremap <silent> <leader>fe :Sexplore!<cr>
+    noremap <leader>fte :Texplore<CR>            " open in new tab
+    noremap <leader>fve :Vexplore<CR>           " vertical split
+    nnoremap <silent> <leader>fe :Sexplore!<cr>
   " }}}
 
   "-----------------------------------------------------------
@@ -1227,44 +1295,44 @@ if g:load_vimrc_plugin_config " {{{
     " tab   open file in a split window         " !     execute current file
     " x     close the current nodes parent      " X     Recursively close all children of the current node
     " e     open a netrw for the current dir
-      noremap <leader>nt :NERDTreeToggle<CR>
-      map <F5> :NERDTreeToggle<CR>
-      " Opens current file heiarchy in Nerdtree
-      nnoremap <leader>nf :NERDTreeFind<CR>
-      let NERDChristmasTree=1                     " more colorful
-      let NERDTreeWinPos="left"                   " put NERDTree at left
-      let NERDTreeWinSize=25                      " set size
-      let NERDTreeShowLineNumbers=0               " show line number
-      let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
-      " setting root dir in NT also sets VIM's cd"
-      let NERDTreeChDirMode=2
-      let NERDTreeShowHidden=1
-      " single click to open directory
-      let NERDTreeMouseMode = 2
-      let NERDTreeHijackNetrw = 1
+    noremap <leader>nt :NERDTreeToggle<CR>
+    map <F5> :NERDTreeToggle<CR>
+    " Opens current file heiarchy in Nerdtree
+    nnoremap <leader>nf :NERDTreeFind<CR>
+    let NERDChristmasTree=1                     " more colorful
+    let NERDTreeWinPos="left"                   " put NERDTree at left
+    let NERDTreeWinSize=25                      " set size
+    let NERDTreeShowLineNumbers=0               " show line number
+    let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
+    " setting root dir in NT also sets VIM's cd"
+    let NERDTreeChDirMode=2
+    let NERDTreeShowHidden=1
+    " single click to open directory
+    let NERDTreeMouseMode = 2
+    let NERDTreeHijackNetrw = 1
 
-      " Only open nerdtree if no file was specified on startup
-      function! StartUpNerdtree()
-        if 0 == argc()
-          NERDTree $HOME
-        end
-      endfunction
+    " Only open nerdtree if no file was specified on startup
+    function! StartUpNerdtree()
+      if 0 == argc()
+        NERDTree $HOME
+      end
+    endfunction
 
-      augroup my_nerdtree
-        autocmd!
-        autocmd Filetype nerdtree setlocal nolist
-        autocmd Filetype nerdtree nnoremap <buffer> H :vertical resize -10<cr>
-        autocmd Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
-        " autocmd VimEnter * call StartUpNerdtree()
-      augroup END
+    augroup my_nerdtree
+      autocmd!
+      autocmd Filetype nerdtree setlocal nolist
+      autocmd Filetype nerdtree nnoremap <buffer> H :vertical resize -10<cr>
+      autocmd Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
+      " autocmd VimEnter * call StartUpNerdtree()
+    augroup END
   " }}}
 
   "-----------------------------------------------------------
   " NERDTree-tabs {{{
-      noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
-      let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
-      let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
-      let g:NERDTreeNodeDelimiter=","
+    noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
+    let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
+    let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
+    let g:NERDTreeNodeDelimiter=","
   " }}}
 
   "-----------------------------------------------------------
@@ -1280,11 +1348,11 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " SVN Command {{{
-      let g:svnj_custom_statusbar_ops_hide = 1
-      if s:os == "windows"
-        " let g:svnj_cache_dir=$HOME.'/.vim-cache'
-        let g:svnj_cache_dir=g:dotvim_settings.cache_dir
-      endif
+    let g:svnj_custom_statusbar_ops_hide = 1
+    if s:os == "windows"
+      " let g:svnj_cache_dir=$HOME.'/.vim-cache'
+      let g:svnj_cache_dir=g:dotvim_settings.cache_dir
+    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1294,21 +1362,21 @@ if g:load_vimrc_plugin_config " {{{
     " <Leader>mh  - Clear mark on current line.
     " <Leader>ma  - Clear all marks.
     " <Leader>mm  - Places next available mark.
-      " Enable ShowMarks
-      let g:showmarks_enable = 1
-      " Show which marks
-      " let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      let g:showmarks_include = "abcdefghijklmnopqrstuvwxyz"
-      " Ignore help, quickfix, non-modifiable buffers
-      let g:showmarks_ignore_type = "hqm"
-      " Hilight lower & upper marks
-      let g:showmarks_hlline_lower = 1
-      let g:showmarks_hlline_upper = 1
-      let g:showmarks_textlower = "\t"
-      let g:showmarks_textupper = "\t"
-      let g:showmarks_textother = "\t"
-      let g:showmarks_no_mappings = 0
-      " nmap mt <Plug>ShowMarksToggle
+    " Enable ShowMarks
+    let g:showmarks_enable = 1
+    " Show which marks
+    " let g:showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    let g:showmarks_include = "abcdefghijklmnopqrstuvwxyz"
+    " Ignore help, quickfix, non-modifiable buffers
+    let g:showmarks_ignore_type = "hqm"
+    " Hilight lower & upper marks
+    let g:showmarks_hlline_lower = 1
+    let g:showmarks_hlline_upper = 1
+    let g:showmarks_textlower = "\t"
+    let g:showmarks_textupper = "\t"
+    let g:showmarks_textother = "\t"
+    let g:showmarks_no_mappings = 0
+    " nmap mt <Plug>ShowMarksToggle
   " }}}
 
   "-----------------------------------------------------------
@@ -1323,21 +1391,21 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " Vimwiki {{{
-      let g:vimwiki_menu = 'Plugin.Vimwiki'
+    let g:vimwiki_menu = 'Plugin.Vimwiki'
 
-      let wiki_1 = {}
-      let wiki_1.path = '~/vimwiki_work/'
-      let wiki_1.syntax = 'markdown'
-      let wiki_1.ext = '.md'
-      let wiki_2 = {}
-      let wiki_2.path = '~/vimwiki_personal/'
-      let wiki_2.syntax = 'markdown'
-      let wiki_2.ext = '.md'
+    let wiki_1 = {}
+    let wiki_1.path = '~/vimwiki_work/'
+    let wiki_1.syntax = 'markdown'
+    let wiki_1.ext = '.md'
+    let wiki_2 = {}
+    let wiki_2.path = '~/vimwiki_personal/'
+    let wiki_2.syntax = 'markdown'
+    let wiki_2.ext = '.md'
 
-      let g:vimwiki_list = [wiki_1, wiki_2]
+    let g:vimwiki_list = [wiki_1, wiki_2]
 
-      let g:vimwiki_camel_case = 0
-      let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.markdown': 'markdown'}
+    let g:vimwiki_camel_case = 0
+    let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.markdown': 'markdown'}
   " }}}
 
   "-----------------------------------------------------------
@@ -1349,9 +1417,9 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " yankring.vim  {{{
-      let g:yankring_enabled=0
-      let g:yankring_history_file = '.vim-cache/yankring_history'
-      noremap <leader>yr :YRShow<cr>
+    let g:yankring_enabled=0
+    let g:yankring_history_file = '.vim-cache/yankring_history'
+    noremap <leader>yr :YRShow<cr>
   " }}}
 
   "-----------------------------------------------------------
@@ -1371,170 +1439,170 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " neocomplcache {{{
-  if g:dotvim_settings.autocomplete_method == 'neocomplcache'
-    if v:version >= 702
-      let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
-      let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
-      let g:neocomplcache_enable_smart_case = 1  " Use smartcase
-      let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
-      let g:neocomplcache_temporary_dir = g:dotvim_settings.cache_dir . '/neocomplcache'
-      " Enable heavy features.
-      " Use camel case completion.
-      let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
-      let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
+    if g:dotvim_settings.autocomplete_method == 'neocomplcache'
+      if v:version >= 702
+        let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
+        let g:neocomplcache_enable_at_startup = 1  " Use neocomplcache
+        let g:neocomplcache_enable_smart_case = 1  " Use smartcase
+        let g:neocomplcache_min_syntax_length = 3 " Set minimum syntax keyword length.
+        let g:neocomplcache_temporary_dir = g:dotvim_settings.cache_dir . '/neocomplcache'
+        " Enable heavy features.
+        " Use camel case completion.
+        let g:neocomplcache_enable_camel_case_completion = 1 " Use camel case completion
+        let g:neocomplcache_enable_underbar_completion = 1   " Use underbar completion
 
-      let g:neocomplcache_max_list = 10
-      " let g:neocomplcache_enable_fuzzy_completion = 1
-      " let g:neocomplcache_fuzzy_completion_start_length = 3
-      let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+        let g:neocomplcache_max_list = 10
+        " let g:neocomplcache_enable_fuzzy_completion = 1
+        " let g:neocomplcache_fuzzy_completion_start_length = 3
+        let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-      let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
+        let g:neocomplcache_ctags_program = g:dotvim_settings.ctags_path
 
-      let g:neocomplcache_auto_completion_start_length = 2
-      " Define keyword.
-      if !exists('g:neocomplcache_keyword_patterns')
-        let g:neocomplcache_keyword_patterns = {}
+        let g:neocomplcache_auto_completion_start_length = 2
+        " Define keyword.
+        if !exists('g:neocomplcache_keyword_patterns')
+          let g:neocomplcache_keyword_patterns = {}
+        endif
+        let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+
+        " Enable heavy omni completion.
+        if !exists('g:neocomplcache_omni_patterns')
+          let g:neocomplcache_omni_patterns = {}
+        endif
+        let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+        let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+        " " Plugin key-mappings.
+        " imap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        " smap <C-k>     <Plug>(neocomplcache_snippets_expand)
+        inoremap <expr><C-g>     neocomplcache#undo_completion()
+        inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+        " Recommended key-mappings.
+        " <CR>: close popup and save indent.
+        " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        function! s:my_cr_function()
+          return neocomplcache#smart_close_popup() . "\<CR>"
+          " For no inserting <CR> key.
+          "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+        endfunction
+        " <TAB>: completion.
+        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        " <C-h>, <BS>: close popup and delete backword char.
+        inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+        inoremap <expr><C-y>  neocomplcache#close_popup()
+        inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+        " Close popup by <Space>.
+        inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
       endif
-      let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
-
-      " Enable heavy omni completion.
-      if !exists('g:neocomplcache_omni_patterns')
-        let g:neocomplcache_omni_patterns = {}
-      endif
-      let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-      let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-
-      " " Plugin key-mappings.
-      " imap <C-k>     <Plug>(neocomplcache_snippets_expand)
-      " smap <C-k>     <Plug>(neocomplcache_snippets_expand)
-      inoremap <expr><C-g>     neocomplcache#undo_completion()
-      inoremap <expr><C-l>     neocomplcache#complete_common_string()
-
-      " Recommended key-mappings.
-      " <CR>: close popup and save indent.
-      " inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-      function! s:my_cr_function()
-        return neocomplcache#smart_close_popup() . "\<CR>"
-        " For no inserting <CR> key.
-        "return pumvisible() ? neocomplcache#close_popup() : "\<CR>"
-      endfunction
-      " <TAB>: completion.
-      inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-      " <C-h>, <BS>: close popup and delete backword char.
-      inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-      inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-      inoremap <expr><C-y>  neocomplcache#close_popup()
-      inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-      " Close popup by <Space>.
-      inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
     endif
-  endif
   " }}}
 
   "-----------------------------------------------------------
   " neocomplete {{{
-  if g:dotvim_settings.autocomplete_method == 'neocomplete'
-      "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-      " Disable AutoComplPop.
-      let g:acp_enableAtStartup = 0
-      " Use neocomplete.
-      let g:neocomplete#enable_at_startup = 1
-      " Use smartcase.
-      let g:neocomplete#enable_smart_case = 1
-      " Set minimum syntax keyword length.
-      let g:neocomplete#sources#syntax#min_keyword_length = 3
-      let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-      let g:neocomplete#data_directory=g:dotvim_settings.cache_dir.'/neocomplcache'
+    if g:dotvim_settings.autocomplete_method == 'neocomplete'
+        "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+        " Disable AutoComplPop.
+        let g:acp_enableAtStartup = 0
+        " Use neocomplete.
+        let g:neocomplete#enable_at_startup = 1
+        " Use smartcase.
+        let g:neocomplete#enable_smart_case = 1
+        " Set minimum syntax keyword length.
+        let g:neocomplete#sources#syntax#min_keyword_length = 3
+        let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+        let g:neocomplete#data_directory=g:dotvim_settings.cache_dir.'/neocomplcache'
 
-      " Define dictionary.
-      let g:neocomplete#sources#dictionary#dictionaries = {
-          \ 'default' : '',
-          \ 'vimshell' : $HOME.'/.vimshell_hist',
-          \ 'scheme' : $HOME.'/.gosh_completions'
-              \ }
+        " Define dictionary.
+        let g:neocomplete#sources#dictionary#dictionaries = {
+            \ 'default' : '',
+            \ 'vimshell' : $HOME.'/.vimshell_hist',
+            \ 'scheme' : $HOME.'/.gosh_completions'
+                \ }
 
-      " Define keyword.
-      if !exists('g:neocomplete#keyword_patterns')
-          let g:neocomplete#keyword_patterns = {}
-      endif
-      let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+        " Define keyword.
+        if !exists('g:neocomplete#keyword_patterns')
+            let g:neocomplete#keyword_patterns = {}
+        endif
+        let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-      " Plugin key-mappings.
-      inoremap <expr><C-g>     neocomplete#undo_completion()
-      inoremap <expr><C-l>     neocomplete#complete_common_string()
+        " Plugin key-mappings.
+        inoremap <expr><C-g>     neocomplete#undo_completion()
+        inoremap <expr><C-l>     neocomplete#complete_common_string()
 
-      " Recommended key-mappings.
-      " <CR>: close popup and save indent.
-      inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-      function! s:my_cr_function()
-        return neocomplete#close_popup() . "\<CR>"
-        " For no inserting <CR> key.
-        "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-      endfunction
-      " <TAB>: completion.
-      inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-      " <C-h>, <BS>: close popup and delete backword char.
-      inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-      inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-      inoremap <expr><C-y>  neocomplete#close_popup()
-      inoremap <expr><C-e>  neocomplete#cancel_popup()
-      " Close popup by <Space>.
-      "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+        " Recommended key-mappings.
+        " <CR>: close popup and save indent.
+        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+        function! s:my_cr_function()
+          return neocomplete#close_popup() . "\<CR>"
+          " For no inserting <CR> key.
+          "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+        endfunction
+        " <TAB>: completion.
+        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+        " <C-h>, <BS>: close popup and delete backword char.
+        inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+        inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+        inoremap <expr><C-y>  neocomplete#close_popup()
+        inoremap <expr><C-e>  neocomplete#cancel_popup()
+        " Close popup by <Space>.
+        "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
-      " For cursor moving in insert mode(Not recommended)
-      "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-      "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-      "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-      "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-      " Or set this.
-      "let g:neocomplete#enable_cursor_hold_i = 1
-      " Or set this.
-      "let g:neocomplete#enable_insert_char_pre = 1
+        " For cursor moving in insert mode(Not recommended)
+        "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+        "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+        "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+        "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+        " Or set this.
+        "let g:neocomplete#enable_cursor_hold_i = 1
+        " Or set this.
+        "let g:neocomplete#enable_insert_char_pre = 1
 
-      " AutoComplPop like behavior.
-      "let g:neocomplete#enable_auto_select = 1
+        " AutoComplPop like behavior.
+        "let g:neocomplete#enable_auto_select = 1
 
-      " Shell like behavior(not recommended).
-      "set completeopt+=longest
-      "let g:neocomplete#enable_auto_select = 1
-      "let g:neocomplete#disable_auto_complete = 1
-      "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+        " Shell like behavior(not recommended).
+        "set completeopt+=longest
+        "let g:neocomplete#enable_auto_select = 1
+        "let g:neocomplete#disable_auto_complete = 1
+        "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
-      " Enable heavy omni completion.
-      if !exists('g:neocomplete#sources#omni#input_patterns')
-        let g:neocomplete#sources#omni#input_patterns = {}
-      endif
-      "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-      "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-      "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+        " Enable heavy omni completion.
+        if !exists('g:neocomplete#sources#omni#input_patterns')
+          let g:neocomplete#sources#omni#input_patterns = {}
+        endif
+        "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+        "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+        "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-      " For perlomni.vim setting.
-      " https://github.com/c9s/perlomni.vim
-      let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-  endif
+        " For perlomni.vim setting.
+        " https://github.com/c9s/perlomni.vim
+        let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+    endif
   "}}}
 
   "-----------------------------------------------------------
   " conque {{{
-      autocmd FileType conque_term match none
-      let g:ConqueTerm_StartMessages = 0
+    autocmd FileType conque_term match none
+    let g:ConqueTerm_StartMessages = 0
 
-      command! Sh ConqueTermSplit bash --login
-      command! Irb ConqueTermSplit irb
-      command! Py ConqueTermSplit ipython
+    command! Sh ConqueTermSplit bash --login
+    command! Irb ConqueTermSplit irb
+    command! Py ConqueTermSplit ipython
   " }}}
 
   "-----------------------------------------------------------
   " indent-guides {{{
     " highlight indent with different color
     " The default mapping : <Leader>ig
-      " let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
-      let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
-      let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
-      let g:indent_guides_start_level=1
-      let g:indent_guides_guide_size=1
-      let g:indent_guides_color_change_percent=3
+    " let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
+    let g:indent_guides_auto_colors = 1       " automatically calculates the highlight colors
+    let g:indent_guides_exclude_filetypes = ['help', 'nerdtree']
+    let g:indent_guides_start_level=1
+    let g:indent_guides_guide_size=1
+    let g:indent_guides_color_change_percent=3
   " }}}
 
   "-----------------------------------------------------------
@@ -1544,128 +1612,130 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " undotree {{{
-      nnoremap <Leader>gu :UndotreeToggle<CR>
+    nnoremap <Leader>gu :UndotreeToggle<CR>
   " }}}
 
   "-----------------------------------------------------------
   " ctrlp {{{
-  if g:dotvim_settings.finder_method == 'ctrlp'
-      let g:ctrlp_map = '<Leader>p'
-      let g:ctrlp_cmd = 'CtrlP'
-      map <leader>j :CtrlP<cr>
-      " Set Ctrl-P to show match at top of list instead of at bottom, which is so
-      " stupid that it's not default
-      let g:ctrlp_match_window_reversed = 0
-      let g:ctrlp_cache_dir = g:dotvim_settings.cache_dir . '/ctrlp'
-      " Tell Ctrl-P to keep the current VIM working directory when starting a
-      " search, another really stupid non default
-      let g:ctrlp_working_path_mode = 'ra'
-      let g:ctrlp_clear_cache_on_exit=1
-      let g:ctrlp_max_height=40
-      let g:ctrlp_show_hidden=0
-      let g:ctrlp_follow_symlinks=1
-      let g:ctrlp_max_files=20000
-      let g:ctrlp_reuse_window='startify'
-      let g:ctrlp_extensions=['funky']
+    if g:dotvim_settings.finder_method == 'ctrlp'
+        let g:ctrlp_map = '<Leader>p'
+        let g:ctrlp_cmd = 'CtrlP'
+        map <leader>j :CtrlP<cr>
+        " Set Ctrl-P to show match at top of list instead of at bottom, which is so
+        " stupid that it's not default
+        let g:ctrlp_match_window_reversed = 0
+        let g:ctrlp_cache_dir = g:dotvim_settings.cache_dir . '/ctrlp'
+        " Tell Ctrl-P to keep the current VIM working directory when starting a
+        " search, another really stupid non default
+        let g:ctrlp_working_path_mode = 'ra'
+        let g:ctrlp_clear_cache_on_exit=1
+        let g:ctrlp_max_height=40
+        let g:ctrlp_show_hidden=0
+        let g:ctrlp_follow_symlinks=1
+        let g:ctrlp_max_files=20000
+        let g:ctrlp_reuse_window='startify'
+        let g:ctrlp_extensions=['funky']
 
-      " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-      let g:ctrlp_custom_ignore = {
-          \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-          \ 'file': '\v\.(exe|so|dll|pyc)$',
-          \ 'link': 'some_bad_symbolic_links',
-          \ }
-      if s:os == "windows"  " Windows
-        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-      elseif s:os == "linux"        " MacOSX/Linux
-        if executable('ag')
-          let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-        else
-          let g:ctrlp_user_command = 'find %s -type f'
+        " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+        let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+            \ 'file': '\v\.(exe|so|dll|pyc)$',
+            \ 'link': 'some_bad_symbolic_links',
+            \ }
+        if s:os == "windows"  " Windows
+          let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+        elseif s:os == "linux"        " MacOSX/Linux
+          if executable('ag')
+            let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+          else
+            let g:ctrlp_user_command = 'find %s -type f'
+          endif
         endif
-      endif
-      let g:ctrlp_open_multi = '10t'
-  endif
+        let g:ctrlp_open_multi = '10t'
+    endif
   " }}}
 
   "-----------------------------------------------------------
   " vim-cycle {{{
-      nmap <silent> <Leader>n <Plug>CycleNext
-      vmap <silent> <Leader>n <Plug>CycleNext
+    nmap <silent> <Leader>n <Plug>CycleNext
+    vmap <silent> <Leader>n <Plug>CycleNext
   " }}}
 
-
   "-----------------------------------------------------------
-  set rtp+="g:vimfiles . '\snippets'"
   " Neosnippet {{{
-  if g:dotvim_settings.snippet_method == 'neosnippet'
-      " Plugin key-mappings.
-      " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
-      " C-k can also be used to jump to the next field in the snippet.
-      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-      xmap <C-k>     <Plug>(neosnippet_expand_target)
+    set rtp+="g:vimfiles . '\snippets'"
 
-      " Tab to select the next field to fill in the snippet.
-      "" " SuperTab like snippets behavior
-      " inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      "   \ "\<Plug>(neosnippet_expand_or_jump)"
-      "   \: pumvisible() ? "\<C-n>" : "\<TAB>"
-      " snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-      "   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    if g:dotvim_settings.snippet_method == 'neosnippet'
+        " Plugin key-mappings.
+        " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
+        " C-k can also be used to jump to the next field in the snippet.
+        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+        xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-      " For snippet_complete marker.
-      if has('conceal')
-        set conceallevel=2 concealcursor=i
-      endif"
+        " Tab to select the next field to fill in the snippet.
+        "" " SuperTab like snippets behavior
+        " inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        "   \ "\<Plug>(neosnippet_expand_or_jump)"
+        "   \: pumvisible() ? "\<C-n>" : "\<TAB>"
+        " snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+        "   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-      " use a different collection of snippets other than the built-in ones
-      " Enable snipMate compatibility feature, load snipMate snippets from runtime path automatically.
-      let g:neosnippet#enable_snipmate_compatibility = 1
+        " For snippet_complete marker.
+        if has('conceal')
+          set conceallevel=2 concealcursor=i
+        endif"
 
-      " Tell Neosnippet about the other snippets
-      let g:neosnippet#snippets_directory=[ g:vimfiles . '/snippets/snippets',
-                                          \ g:vimfiles . '/bundle/systemc/snippets']
+        " use a different collection of snippets other than the built-in ones
+        " Enable snipMate compatibility feature, load snipMate snippets from runtime path automatically.
+        let g:neosnippet#enable_snipmate_compatibility = 1
 
-      " associating certain filetypes with other snippet files.
-      let g:neosnippet#scope_aliases = {}
-      let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
-      let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
-  endif
+        " Tell Neosnippet about the other snippets
+        let g:neosnippet#snippets_directory=[ g:vimfiles . '/snippets/snippets',
+                                            \ g:vimfiles . '/bundle/systemc/snippets']
+
+        " associating certain filetypes with other snippet files.
+        let g:neosnippet#scope_aliases = {}
+        let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
+        let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
+    endif
   " }}}
 
   "-----------------------------------------------------------
   " snipMate {{{
-  if g:dotvim_settings.snippet_method == 'snipmate'
-      " Add my snippets folder
-      let g:local_snippets = g:vimfiles.'/snippets/snippets'
-      let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
-      let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
-      let g:snipMate.scope_aliases = {}
-      let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog,uvm'
-      let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog,uvm'
-      imap <C-J> <Plug>snipMateNextOrTrigger
-      smap <C-J> <Plug>snipMateNextOrTrigger
-      imap <C-K> <Plug>snipMateNextOrTrigger
-      smap <C-K> <Plug>snipMateNextOrTrigger
-  endif "}}}
+    if g:dotvim_settings.snippet_method == 'snipmate'
+        " Add my snippets folder
+        let g:local_snippets = g:vimfiles.'/snippets/snippets'
+        let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
+        let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
+        let g:snipMate.scope_aliases = {}
+        let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog,uvm'
+        let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog,uvm'
+        imap <C-J> <Plug>snipMateNextOrTrigger
+        smap <C-J> <Plug>snipMateNextOrTrigger
+        imap <C-K> <Plug>snipMateNextOrTrigger
+        smap <C-K> <Plug>snipMateNextOrTrigger
+    endif
+  "}}}
 
   "-----------------------------------------------------------
   " UltiSnips {{{
-  if g:dotvim_settings.snippet_method == 'ultisnips'
-      " better key bindings for UltiSnipsExpandTrigger
-      " let g:UltiSnipsExpandTrigger = "<C-J>"
-      " let g:UltiSnipsJumpForwardTrigger = "<C-J>"
-      " let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
-      let g:UltiSnipsListSnippets = '<C-S-tab>'
-      let g:UltiSnipsExpandTrigger = '<tab>'
-      let g:UltiSnipsJumpForwardTrigger = '<tab>'
-      let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
-      let g:UltiSnipsEditSplit="vertical"
-      let g:UltiSnipsEnableSnipMate=0
-      " let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
-      " let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-      let g:UltiSnipsSnippetDirectories=[g:vimfiles . '/snippets/UltiSnips', "UltiSnips"]
-  endif "}}}
+    if g:dotvim_settings.snippet_method == 'ultisnips'
+        " better key bindings for UltiSnipsExpandTrigger
+        " let g:UltiSnipsExpandTrigger = "<C-J>"
+        " let g:UltiSnipsJumpForwardTrigger = "<C-J>"
+        " let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
+        let g:UltiSnipsListSnippets = '<C-S-tab>'
+        let g:UltiSnipsExpandTrigger = '<tab>'
+        let g:UltiSnipsJumpForwardTrigger = '<tab>'
+        let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
+        let g:UltiSnipsEditSplit="vertical"
+        let g:UltiSnipsEnableSnipMate=0
+        " let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
+        " let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+        let g:UltiSnipsSnippetDirectories=[g:vimfiles . '/snippets/UltiSnips', "UltiSnips"]
+    endif
+  "}}}
 
   "-----------------------------------------------------------
   " delimitMate {{{
@@ -1689,11 +1759,11 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " vim-easy-align {{{
-      " Start interactive EasyAlign in visual mode (e.g. vipga)
-      xmap ga <Plug>(EasyAlign)
+    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    xmap ga <Plug>(EasyAlign)
 
-      " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-      nmap ga <Plug>(EasyAlign)
+    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
+    nmap ga <Plug>(EasyAlign)
   " }}}
 
   "-----------------------------------------------------------
@@ -1771,29 +1841,29 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " airline {{{
-  if g:dotvim_settings.statusline_method == 'airline'
-      " let g:airline_section_b = '%{getcwd()}'
-      " " let g:airline_section_c = '%t'
-      " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
-      " let g:airline_section_c = airline#section#create_left(['file'])
+    if g:dotvim_settings.statusline_method == 'airline'
+        " let g:airline_section_b = '%{getcwd()}'
+        " " let g:airline_section_c = '%t'
+        " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
+        " let g:airline_section_c = airline#section#create_left(['file'])
 
-      let g:airline_inactive_collapse=1
+        let g:airline_inactive_collapse=1
 
-      " Enable Extensions
-      " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
-  endif
+        " Enable Extensions
+        " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
+    endif
   "}}}
 
   "-----------------------------------------------------------
   " lightline {{{
-  if g:dotvim_settings.statusline_method == 'lightline'
-      "let g:lightline = {
-      "    \     'active': {
-      "    \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
-      "    \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
-      "    \     }
-      "    \ }
-  endif
+    if g:dotvim_settings.statusline_method == 'lightline'
+        "let g:lightline = {
+        "    \     'active': {
+        "    \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
+        "    \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
+        "    \     }
+        "    \ }
+    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1805,13 +1875,13 @@ if g:load_vimrc_plugin_config " {{{
     " `<Leader><Leader>e  to End of word forward
     " `<Leader><Leader>j  to Line downward
     " `<Leader><Leader>k  to Line upward
-      " let g:EasyMotion_leader_key = '<space>'
-      " change the target keys
-      " let g:EasyMotion_keys = '1234567890'
-      " disable shading : 0
-      let g:EasyMotion_do_shade = 1
-      hi link EasyMotionTarget ErrorMsg
-      hi link EasyMotionShade Comment
+    " let g:EasyMotion_leader_key = '<space>'
+    " change the target keys
+    " let g:EasyMotion_keys = '1234567890'
+    " disable shading : 0
+    let g:EasyMotion_do_shade = 1
+    hi link EasyMotionTarget ErrorMsg
+    hi link EasyMotionShade Comment
   "}}}
 
   "-----------------------------------------------------------
@@ -1910,33 +1980,33 @@ if g:load_vimrc_plugin_config " {{{
 
   "-----------------------------------------------------------
   " incsearch {{{
-  if exists('g:loaded_incsearch')
-    map /  <Plug>(incsearch-forward)
-    map ?  <Plug>(incsearch-backward)
-    map g/ <Plug>(incsearch-stay)
-    let g:incsearch#magic = '\v' " very magic
-    let g:incsearch#magic = '\V' " very nomagic
-    let g:incsearch#magic = '\m' " magic
-    let g:incsearch#magic = '\M' " nomagic
-    " work with anzu
-    map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
-    map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
-  endif
-  "}}}
+    if exists('g:loaded_incsearch')
+      map /  <Plug>(incsearch-forward)
+      map ?  <Plug>(incsearch-backward)
+      map g/ <Plug>(incsearch-stay)
+      let g:incsearch#magic = '\v' " very magic
+      let g:incsearch#magic = '\V' " very nomagic
+      let g:incsearch#magic = '\m' " magic
+      let g:incsearch#magic = '\M' " nomagic
+      " work with anzu
+      map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+      map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
+    endif
+  " }}}
 
   "-----------------------------------------------------------
   " vim-asterisk {{{
   " provides immap *   <Plug>(asterisk-*)
-  if exists('g:loaded_asterisk')
-    map *   <Plug>(asterisk-*)
-    map #   <Plug>(asterisk-#)
-    map g*  <Plug>(asterisk-g*)
-    map g#  <Plug>(asterisk-g#)
-    map z*  <Plug>(asterisk-z*)
-    map gz* <Plug>(asterisk-gz*)
-    map z#  <Plug>(asterisk-z#)
-    map gz# <Plug>(asterisk-gz#)
-  endif
+    if exists('g:loaded_asterisk')
+      map *   <Plug>(asterisk-*)
+      map #   <Plug>(asterisk-#)
+      map g*  <Plug>(asterisk-g*)
+      map g#  <Plug>(asterisk-g#)
+      map z*  <Plug>(asterisk-z*)
+      map gz* <Plug>(asterisk-gz*)
+      map z#  <Plug>(asterisk-z#)
+      map gz# <Plug>(asterisk-gz#)
+    endif
   " }}}
 
   "-----------------------------------------------------------
@@ -1957,7 +2027,6 @@ if g:load_vimrc_plugin_config " {{{
   let g:signify_vcs_list = [ 'git', 'svn' ]
   " }}}
 endif
-
 "}}} Plugin_config -----------------------------------------
 
 
@@ -2001,9 +2070,9 @@ if g:load_vimrc_extended
   imap  ^T            <ESC>:tabnew<CR>i
 
   " map <F9> :!python.exe %
-  map <F10> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+  map     <F10>   :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
   " Buffer - reverse everything ... :)
-  map <F11> ggVGg?     " rot-13
+  map     <F11>   ggVGg?     " rot-13
   map     <F12>   a<C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
   imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
   " insert time    strftime("%c")
@@ -2025,75 +2094,73 @@ if g:load_vimrc_extended
   " nnoremap <silent> ,/ :noh<CR>
 
   " ,1-9 - quick buffer switching
-  nnoremap <silent> <leader>1 :b1<CR>
-  nnoremap <silent> <leader>2 :b2<CR>
-  nnoremap <silent> <leader>3 :b3<CR>
-  nnoremap <silent> <leader>4 :b4<CR>
-  nnoremap <silent> <leader>5 :b5<CR>
-  nnoremap <silent> <leader>6 :b6<CR>
-  nnoremap <silent> <leader>7 :b7<CR>
-  nnoremap <silent> <leader>8 :b8<CR>
-  nnoremap <silent> <leader>9 :b9<CR>
+  nnoremap  <leader>1 :b1<CR>
+  nnoremap  <leader>2 :b2<CR>
+  nnoremap  <leader>3 :b3<CR>
+  nnoremap  <leader>4 :b4<CR>
+  nnoremap  <leader>5 :b5<CR>
+  nnoremap  <leader>6 :b6<CR>
+  nnoremap  <leader>7 :b7<CR>
+  nnoremap  <leader>8 :b8<CR>
+  nnoremap  <leader>9 :b9<CR>
 
   " Allow insert mode editing like emacs
-  inoremap <C-a>  <Home>
-  inoremap <C-e>  <End>
-  inoremap <C-f> <Right>
-  inoremap <C-b> <Left>
+  inoremap  <C-a>  <Home>
+  inoremap  <C-e>  <End>
+  inoremap  <C-f>  <Right>
+  inoremap  <C-b>  <Left>
 
-  noremap <M-d>  <C-o>diW   " delete word
-  noremap <M-y>  <C-o>yiW   " yank word
+  noremap   <M-d>  <C-o>diW   " delete word
+  noremap   <M-y>  <C-o>yiW   " yank word
 
   " Buffer commands
-  nnoremap <silent> <leader>bb :buffers<CR>
-  nnoremap <silent> <Leader>bd :bdelete<CR>
+  nnoremap  <leader>bb :buffers<CR>
+  nnoremap  <Leader>bd :bdelete<CR>
 
   " ,bn - next buffer
-  nnoremap <silent> <leader>bn :bnext<CR>
+  nnoremap  <leader>bn :bnext<CR>
 
   " ,bp - previous buffer
-  nnoremap <silent> <leader>bp :bprevious<CR>
+  nnoremap  <leader>bp :bprevious<CR>
 
   " Remove trailing whitespace
-  nnoremap <leader>dws :silent! %s/\s\+$//ge<enter>
-  vnoremap <leader>dws :s/\s\+$//ge<enter>
+  nnoremap  <leader>dws :silent! %s/\s\+$//ge<enter>
+  vnoremap  <leader>dws :s/\s\+$//ge<enter>
   " Remove trailing ^M
-  nmap <leader>dms :%s/\r$//g<CR>:noh<CR>
+  nmap      <leader>dms :%s/\r$//g<CR>:noh<CR>
 
   " Ignore whitespace in diffs.
   " Also shows current diffopt status.
-  nnoremap <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
-  nnoremap <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
+  nnoremap  <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
+  nnoremap  <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
 
   " ,e* - Edit the vimrc file
-  nnoremap <silent> <Leader>ev :e $MYVIMRC<CR>
-  nnoremap <silent> <Leader>sv :so $MYVIMRC<CR>
-  nnoremap <silent> <Leader>egv :e $MYGVIMRC<CR>
-  nnoremap <silent> <Leader>sgv :so $MYGVIMRC<CR>
+  nnoremap  <Leader>ev    :next $MYVIMRC<CR>
+  nnoremap  <Leader>sv    :source $MYVIMRC<CR>
 
   " ,c - close current window
   " nnoremap <silent> <leader>c :silent! close<CR>
 
   " ,d - open definition in new window
-  nnoremap <silent> <leader>d <C-w>f
+  nnoremap  <leader>d   <C-w>f
 
   " ,P - Go back to previous file
-  noremap <Leader>P <C-^>
+  noremap   <Leader>P   <C-^>
 
   " ,s - split horizontally
   " nnoremap <silent> <leader>s :split<CR>
-  nnoremap <silent> <leader>h :split^M^W^W<cr>
+  nnoremap  <silent> <leader>h :split^M^W^W<cr>
 
   " ,v - Reselect text that was just pasted
-  nnoremap <leader>v V`]
+  nnoremap  <leader>v V`]
 
   " ,W - clear trailing whitespace
   " nnoremap <silent> <leader>W :%s=\s\+$==<CR>
-  nnoremap <leader>W :%s/\s\+$//<cr>
+  nnoremap  <leader>W     :%s/\s\+$//<cr>
 
   " clearing highlighted search
-  nnoremap <silent> <leader>\ :nohlsearch<CR>
-  nnoremap <ESC><ESC> :nohlsearch<CR>
+  nnoremap <silent> <leader>\     :nohlsearch<CR>
+  nnoremap <ESC><ESC>             :nohlsearch<CR>
 
   inoremap <buffer> /*          /**/<Left><Left>
   inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
@@ -2120,16 +2187,16 @@ if g:load_vimrc_extended
   " Like gv, but select the last changed text.
   nnoremap gc  `[v`]
   " Specify the last changed text as {motion}.
-  vnoremap <silent> gc  :<C-u>normal gc<CR>
-  onoremap <silent> gc  :<C-u>normal gc<CR>
+  vnoremap <silent> gc    :<C-u>normal gc<CR>
+  onoremap <silent> gc    :<C-u>normal gc<CR>
 
   " Smart home and smart end."{{{
-  nnoremap <silent> gh  :<C-u>call SmartHome("n")<CR>
-  nnoremap <silent> ge  :<C-u>call SmartEnd("n")<CR>
-  xnoremap <silent> gh  <ESC>:<C-u>call SmartHome("v")<CR>
-  xnoremap <silent> ge  <ESC>:<C-u>call SmartEnd("v")<CR>
-  nnoremap <expr> gm    (virtcol('$')/2).'\|'
-  xnoremap <expr> gm    (virtcol('$')/2).'\|'
+  nnoremap <silent> gh    :<C-u>call SmartHome("n")<CR>
+  nnoremap <silent> ge    :<C-u>call SmartEnd("n")<CR>
+  xnoremap <silent> gh    <ESC>:<C-u>call SmartHome("v")<CR>
+  xnoremap <silent> ge    <ESC>:<C-u>call SmartEnd("v")<CR>
+  nnoremap <expr>   gm    (virtcol('$')/2).'\|'
+  xnoremap <expr>   gm    (virtcol('$')/2).'\|'
 
   " Fast saving
   " nnoremap <silent> <leader>wr :w<cr>
@@ -2519,6 +2586,25 @@ if g:load_vimrc_extended
   " highlight last inserted text
   nnoremap gV `[v`]
 
+  " CamelCase <==> under_scores
+  " Convert name_like_this to nameLikeThis in current line.
+  nnoremap  <Leader>sc    :s#_\(\l\)#\u\1#g<CR>
+
+  " Convert name_like_this to NameLikeThis in current line.
+  nnoremap  <Leader>sC    :s/\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)/\u\1\2/g<CR>
+
+  " Change UNDER_SCORES to CamelCase
+  " Convert NAME_LIKE_THIS to NameLikeThis in the current line.
+  nnoremap  <Leader>SC    :s#_*\(\u\)\(\u*\)#\1\L\2#g<CR>
+
+  " Change CamelCase to under_scores
+  " Convert each NameLikeThis to name_like_this in current line.
+  " nnoremap  <Leader>ss    :s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
+
+  " Alternative: accept numbers in name.
+  nnoremap  <Leader>ss    :s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>
+
+
   " ----------------------------------------------------------------------------
   " Quickfix
   " ----------------------------------------------------------------------------
@@ -2812,15 +2898,13 @@ nmap <leader>ml :call MyFormatXml()<CR>
 nmap <F8> :call MyFormatXml()<CR>
 
 
-
 " ============================================================================
 " LOCAL VIMRC {{{
 " ============================================================================
-let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
-if filereadable(g:local_vimrc)
-  execute 'source' g:local_vimrc
-endif
-
+  let g:local_vimrc = fnamemodify(resolve(expand('<sfile>')), ':p:h').'/vimrc.local'
+  if filereadable(g:local_vimrc)
+    execute 'source' g:local_vimrc
+  endif
 " }}}
 
 set secure
