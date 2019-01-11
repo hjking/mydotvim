@@ -209,7 +209,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   """ Misc
   " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
   Plug 'jlanzarotta/bufexplorer', { 'on': ['BufExplorer', 'ToggleBufExplorer'] }
-  Plug 'Konfekt/FastFold'
+  " Plug 'Konfekt/FastFold'
   Plug 'bootleq/ShowMarks'
   Plug 'bruno-/vim-vertical-move'
   Plug 'hallison/vim-markdown', { 'for': 'markdown' }
@@ -219,7 +219,6 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   Plug 'itchyny/calendar.vim', { 'on': 'Calendar' }
   Plug 'osyo-manga/vim-anzu'
   Plug 'osyo-manga/vim-over', { 'on': ['OverCommandLine', 'OverCommandLineNoremap'] }
-  " Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-abolish'
@@ -241,747 +240,747 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   call plug#end()
   " }}} vim-plug
 
-    "-----------------------------------------------------------
-    " FileType Detecting
-    " Enable file type detection. Use the default filetype settings.
-    " Also load indent files, to automatically do language-dependent indenting.
-    "-----------------------------------------------------------
-    if has('autocmd')
-      filetype plugin indent on
-      filetype indent on        " load filetype-specific indent files
+  "-----------------------------------------------------------
+  " FileType Detecting
+  " Enable file type detection. Use the default filetype settings.
+  " Also load indent files, to automatically do language-dependent indenting.
+  "-----------------------------------------------------------
+  if has('autocmd')
+    filetype plugin indent on
+    filetype indent on        " load filetype-specific indent files
+  endif
+
+  if s:os == "windows"
+    language message en                   " message language
+    " language message en_US                   " message language
+    " language message zh_CN.UTF-8
+    " lang messages zh_CN.UTF-8 "
+  elseif s:os == "linux"
+    language message C
+  endif
+
+  " source $VIMRUNTIME/vimrc_example.vim
+  if s:os == "windows"
+    " source $VIMRUNTIME/mswin.vim      " Win behaviour
+  endif
+
+  runtime! ftplugin/man.vim
+
+  " our <leader> will be the space key
+  let mapleader = ","
+  " let mapleader=" "
+
+  " our <localleader> will be the '-' key
+  let maplocalleader=","
+
+  " Avoid garbled characters in Chinese language windows OS
+  let $LANG='en'
+  set langmenu=en
+  source $VIMRUNTIME/delmenu.vim
+  source $VIMRUNTIME/menu.vim
+
+  "-----------------------------------------------------------
+  " Switch syntax highlighting on.
+  "-----------------------------------------------------------
+  if has('syntax') && !exists('g:syntax_on')
+    syntax enable
+  endif
+
+  " Switch syntax highlighting on, when the terminal has colors
+  if &t_Co > 2 || has("gui_running")
+    syntax on
+  endif
+
+  "-------------------------------------------------------------------------------
+  "  2 moving around, searching and patterns
+  "-------------------------------------------------------------------------------
+  " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
+  if s:os == "windows"
+    set path+=D:\cygwin\bin
+  elseif s:os == "linux"
+    set path+=/usr/bin
+  endif
+  if has("gui_running")
+    if has("gui_win32")     " Win OS
+      set wrap            " Wrap line
+  "   elseif has("x11")
+  "   elseif has("gui_gtk2")
     endif
 
-    if s:os == "windows"
-      language message en                   " message language
-      " language message en_US                   " message language
-      " language message zh_CN.UTF-8
-      " lang messages zh_CN.UTF-8 "
-    elseif s:os == "linux"
-      language message C
-    endif
+    set columns=135
 
-    " source $VIMRUNTIME/vimrc_example.vim
-    if s:os == "windows"
-      " source $VIMRUNTIME/mswin.vim      " Win behaviour
-    endif
+  else
+    set wrap
+  endif
 
-    runtime! ftplugin/man.vim
+  set autochdir          " Change the current working dir whenever open a file,
+                        " switch buffers, delete a buffer, open/close a window
 
-    " our <leader> will be the space key
-    let mapleader = ","
-    " let mapleader=" "
+  set nowrapscan      " Don't Searches wrap around the end of the file
 
-    " our <localleader> will be the '-' key
-    let maplocalleader=","
+  " Sets how many lines of history VIM has to remember
+  if &history < 1000
+    set history=1000
+  endif
 
-    " Avoid garbled characters in Chinese language windows OS
-    let $LANG='en'
-    set langmenu=en
-    source $VIMRUNTIME/delmenu.vim
-    source $VIMRUNTIME/menu.vim
+  "-----------------------------------------------------------
+  "Replace/Search
+  "-----------------------------------------------------------
+  set hlsearch        " Highlight matched result when searching
+  set incsearch       " Show the pattern when typing a search command
+  set ignorecase      " Ignore cases
+  set smartcase       "
+  set magic           " Changes the special characters that can be used in search patterns
 
-    "-----------------------------------------------------------
-    " Switch syntax highlighting on.
-    "-----------------------------------------------------------
-    if has('syntax') && !exists('g:syntax_on')
-      syntax enable
-    endif
+  " Use grep.
+  if executable('ack')
+    set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
+  elseif executable('ag')
+    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+  else
+    set grepprg=grep\ -nH
+  endif
+  let g:grep_cmd_opts = '--line-number'
+  set grepformat=%f:%l:%c:%m
 
-    " Switch syntax highlighting on, when the terminal has colors
-    if &t_Co > 2 || has("gui_running")
-      syntax on
-    endif
+  if v:version >= 704
+    " The new Vim regex engine is currently slooooow as hell which makes syntax
+    " highlighting slow, which introduces typing latency.
+    " Consider removing this in the future when the new regex engine becomes
+    " faster.
+    set regexpengine=1
+  endif
 
-    "-------------------------------------------------------------------------------
-    "  2 moving around, searching and patterns
-    "-------------------------------------------------------------------------------
-    " set whichwrap+=<,>,[,]      " Allow wrap only when cursor keys are used
-    if s:os == "windows"
-      set path+=D:\cygwin\bin
-    elseif s:os == "linux"
-      set path+=/usr/bin
-    endif
-    if has("gui_running")
-      if has("gui_win32")     " Win OS
-        set wrap            " Wrap line
-    "   elseif has("x11")
-    "   elseif has("gui_gtk2")
-      endif
+  "-------------------------------------------------------------------------------
+  "  3 tags
+  "-------------------------------------------------------------------------------
+  " ctags path
+  if s:os == "windows"
+    let g:dotvim_settings.ctags_path = g:vimfiles . '/ctags/ctags.exe'
+  elseif s:os == "linux"
+    let g:dotvim_settings.ctags_path='ctags'
+  endif
 
-      set columns=135
+  if has('path_extra')
+    set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
+    " setglobal tags-=./tags tags-=./tags; tags^=./tags;
+  endif
+  "-------------------------------------------------------------------------------
 
-    else
-      set wrap
-    endif
+  "  4 displaying text
+  "-------------------------------------------------------------------------------
+  set linebreak               " wrap at the right place
+  set breakat=\ \ ;:,!?
+  set showbreak=>
+  set display+=lastline
+  " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
+  set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
+  set cmdheight=1                 " heighth of CMD line
+  set list                        " list mode
+  set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:.
 
-    set autochdir          " Change the current working dir whenever open a file,
-                          " switch buffers, delete a buffer, open/close a window
+  set number                      " display line number
+  " set relativenumber              " show relative numbers
+  set numberwidth=1
+  set lazyredraw                  " Don't redraw while executing macros
 
-    set nowrapscan      " Don't Searches wrap around the end of the file
-
-    " Sets how many lines of history VIM has to remember
-    if &history < 1000
-      set history=1000
-    endif
-
-    "-----------------------------------------------------------
-    "Replace/Search
-    "-----------------------------------------------------------
-    set hlsearch        " Highlight matched result when searching
-    set incsearch       " Show the pattern when typing a search command
-    set ignorecase      " Ignore cases
-    set smartcase       "
-    set magic           " Changes the special characters that can be used in search patterns
-
-    " Use grep.
-    if executable('ack')
-      set grepprg=ack\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow\ $*
-    elseif executable('ag')
-      set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-    else
-      set grepprg=grep\ -nH
-    endif
-    let g:grep_cmd_opts = '--line-number'
-    set grepformat=%f:%l:%c:%m
-
-    if v:version >= 704
-      " The new Vim regex engine is currently slooooow as hell which makes syntax
-      " highlighting slow, which introduces typing latency.
-      " Consider removing this in the future when the new regex engine becomes
-      " faster.
-      set regexpengine=1
-    endif
-
-    "-------------------------------------------------------------------------------
-    "  3 tags
-    "-------------------------------------------------------------------------------
-    " ctags path
-    if s:os == "windows"
-      let g:dotvim_settings.ctags_path = g:vimfiles . '/ctags/ctags.exe'
-    elseif s:os == "linux"
-      let g:dotvim_settings.ctags_path='ctags'
-    endif
-
-    if has('path_extra')
-      set tags+=./tags,./../tags,./**/tags,tags " which tags files CTRL-] will find
-      " setglobal tags-=./tags tags-=./tags; tags^=./tags;
-    endif
-    "-------------------------------------------------------------------------------
-
-    "  4 displaying text
-    "-------------------------------------------------------------------------------
-    set linebreak               " wrap at the right place
-    set breakat=\ \ ;:,!?
-    set showbreak=>
-    set display+=lastline
-    " set fillchars=vert:\ ,stl:\ ,stlnc:\  " Characters to fill the statuslines and vertical separators
-    set fillchars=stl:-,stlnc:\ ,diff:-,vert:\|  " Characters to fill the statuslines and vertical separators
-    set cmdheight=1                 " heighth of CMD line
-    set list                        " list mode
-    set listchars=tab:>-,trail:-,extends:>,precedes:<,nbsp:.
-
-    set number                      " display line number
-    " set relativenumber              " show relative numbers
-    set numberwidth=1
-    set lazyredraw                  " Don't redraw while executing macros
-
-    "-------------------------------------------------------------------------------
-    "  5 syntax, highlighting and spelling
-    "-------------------------------------------------------------------------------
-    set background=dark
-    " Allow to trigger background
-    function! ToggleBG()
-        let s:tbg = &background
-        " Inversion
-        if s:tbg == "dark"
-            set background=light
-        else
-            set background=dark
-        endif
-    endfunction
-    noremap <leader>bg :call ToggleBG()<CR>
-
-    "-------------------------------------------------------------------------------
-    "  6 multiple windows
-    "-------------------------------------------------------------------------------
-
-    set equalalways " Multiple windows, when created, are equal in size
-    " Open new split panes to right and bottom, which feels more natural
-    set splitbelow
-    set splitright
-    " Adjust window size of preview and help.
-    set previewheight=10
-    set helpheight=12
-
-    "-------------------------------------------------------------------------------
-    "  7 multiple tab pages
-    "-------------------------------------------------------------------------------
-    set showtabline=1
-    if &tabpagemax < 50
-      set tabpagemax=50
-    endif
-
-    "-------------------------------------------------------------------------------
-    "  8 terminal
-    "-------------------------------------------------------------------------------
-    " set title                       " display title
-
-    "-------------------------------------------------------------------------------
-    "  9 using the mouse
-    "-------------------------------------------------------------------------------
-    "-----------------------------------------------------------
-    " Mouse
-    "-----------------------------------------------------------
-    if s:os == "windows"
-      set mouse=a
-    elseif s:os == "linux"
-      set mouse=va
-    endif
-    " set mousemodel=extend
-    set nomousehide                 " Hide the mouse when typing text
-
-    " cursor
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-
-    "-------------------------------------------------------------------------------
-    " 10 GUI
-    "-------------------------------------------------------------------------------
-    set browsedir=current           " which directory to use for the file browser
-
-    "-------------------------------------------------------------------------------
-    " 11 printing
-    "-------------------------------------------------------------------------------
-
-    "-------------------------------------------------------------------------------
-    " 12 messages and info
-    "-------------------------------------------------------------------------------
-    set shortmess+=atoOIT           " To avoid some hint messages
-    if has('cmdline_info')
-      set ruler                     " Show the line and column number of the cursor position
-      " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
-      set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
-      set showcmd                     " display incomplete commands
-    endif
-    set report=0                    " Threshold for reporting number of lines changed
-    set noerrorbells                " No bell for error messages
-    set novisualbell                " Use visual bell instead of beeping
-    set t_vb=                       " Disable screen flash on error
-    " set helplang& helplang=en
-    " use Chinese help, support in vimcdoc.vim plugin
-    if version >= 603
-      if s:os == "windows"
-        set helplang=cn
+  "-------------------------------------------------------------------------------
+  "  5 syntax, highlighting and spelling
+  "-------------------------------------------------------------------------------
+  set background=dark
+  " Allow to trigger background
+  function! ToggleBG()
+      let s:tbg = &background
+      " Inversion
+      if s:tbg == "dark"
+          set background=light
       else
-        set helplang=en
+          set background=dark
       endif
-    endif
+  endfunction
+  noremap <leader>bg :call ToggleBG()<CR>
 
-    "-------------------------------------------------------------------------------
-    " 13 selecting text
-    "-------------------------------------------------------------------------------
-    set selection=inclusive         " defines the behavior of the selection
-    set selectmode=mouse            " when use mouse, launch SELECT mode
-    set keymodel=startsel           " Shift + arrow key
-    " set selectmode=key
-    "-----------------------------------------------------------
-    """ ClipBoard
-    "-----------------------------------------------------------
-    " Use clipboard register.
-    " set clipboard+=unnamed
-    if has('clipboard')
-      if has('unnamedplus')
-        " By default, Vim will not use the system clipboard when yanking/pasting to
-        " the default register. This option makes Vim use the system default
-        " clipboard.
-        " Note that on X11, there are _two_ system clipboards: the "standard" one, and
-        " the selection/mouse-middle-click one. Vim sees the standard one as register
-        " '+' (and this option makes Vim use it by default) and the selection one as
-        " '*'.
-        " See :h 'clipboard' for details.
-        set clipboard=unnamedplus,unnamed
-      else
-        " Vim now also uses the selection system clipboard for default yank/paste.
-        set clipboard+=unnamed
-      endif
-    endif
+  "-------------------------------------------------------------------------------
+  "  6 multiple windows
+  "-------------------------------------------------------------------------------
 
-    "-------------------------------------------------------------------------------
-    " 14 editing text
-    "-------------------------------------------------------------------------------
-    set backspace=indent,start,eol  " BACKSPACE behavior
-    set formatoptions+=mM       " describes how automatic formatting is to be done
-    if v:version > 703 || v:version == 703 && has("patch541")
-      set formatoptions+=j " Delete comment character when joining commented lines
-    endif
-    set showmatch       " Highlight matched pairs
-    set matchtime=5     " Tenths of a second to show the matching paren
-    set matchpairs+=<:>
-    "-----------------------------------------------------------
-    " Auto Complete Word
-    "-----------------------------------------------------------
-    " options
-      set complete-=u
-      set complete-=i                 " disable scanning included files
-      set complete-=t                 " disable searching tags
-      set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
-      set complete+=k                 " scan the files given with the 'dictionary' option
-      set completeopt=longest         " Insert mode completetion
-      set completeopt+=menuone        " Insert mode completetion
-      " Set popup menu max height.
-      set pumheight=20
+  set equalalways " Multiple windows, when created, are equal in size
+  " Open new split panes to right and bottom, which feels more natural
+  set splitbelow
+  set splitright
+  " Adjust window size of preview and help.
+  set previewheight=10
+  set helpheight=12
 
-    "-------------------------------------------------------------------------------
-    " 15 tabs and indenting
-    "-------------------------------------------------------------------------------
-    set tabstop=4               " TAB width
-    set softtabstop=4           " Soft TAB width
-    set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
-    set expandtab               " use SPACE instead of TAB
-    set smarttab                " use SPACE instead of TAB at start of line
-    set shiftround              " Round indent by shiftwidth
+  "-------------------------------------------------------------------------------
+  "  7 multiple tab pages
+  "-------------------------------------------------------------------------------
+  set showtabline=1
+  if &tabpagemax < 50
+    set tabpagemax=50
+  endif
 
-    "-----------------------------------------------------------
-    " Indent
-    "-----------------------------------------------------------
-    set autoindent              " Copy indent from current line when starting a new line
-    set cindent                 " Enables automatic C program indenting
-    set copyindent              " copy the previous indentation on autoindenting
+  "-------------------------------------------------------------------------------
+  "  8 terminal
+  "-------------------------------------------------------------------------------
+  " set title                       " display title
 
-    "-------------------------------------------------------------------------------
-    " 16 folding
-    "-------------------------------------------------------------------------------
-    " set foldenable              " turn on folding
-    set foldenable            " disable folding
-    if exists("&foldlevel")
-      set foldlevel=999           " make it really high, so they're not displayed by default
-    endif
-    set foldmarker={,}
-    set foldmethod=indent       " Make folding indent sensitive  // syntax
-    set foldnestmax=5
-    set foldcolumn=2            " width for fold
-    set foldlevelstart=1000     " fdls:  fold level start
-    set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
+  "-------------------------------------------------------------------------------
+  "  9 using the mouse
+  "-------------------------------------------------------------------------------
+  "-----------------------------------------------------------
+  " Mouse
+  "-----------------------------------------------------------
+  if s:os == "windows"
+    set mouse=a
+  elseif s:os == "linux"
+    set mouse=va
+  endif
+  " set mousemodel=extend
+  set nomousehide                 " Hide the mouse when typing text
 
-    "-------------------------------------------------------------------------------
-    " 17 diff mode
-    "-------------------------------------------------------------------------------
-    set diffopt=context:3       " display 3 lines above and below the different place
-    set diffopt+=iwhite
-    set diffopt+=filler
-    " if os == "windows"
-      set diffexpr=MyDiff()
-      function! MyDiff()
-        let opt = '-a --binary '
-        if &diffopt =~ 'icase'
-          let opt = opt . '-i '
-        endif
-        if &diffopt =~ 'iwhite'
-          let opt = opt . '-b '
-        endif
-        let arg1 = v:fname_in
-        if arg1 =~ ' '
-          let arg1 = '"' . arg1 . '"'
-        endif
-        let arg2 = v:fname_new
-        if arg2 =~ ' '
-          let arg2 = '"' . arg2 . '"'
-        endif
-        let arg3 = v:fname_out
-        if arg3 =~ ' '
-          let arg3 = '"' . arg3 . '"'
-        endif
-        let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-        silent execute cmd
-        " let eq = ''
-        " if $VIMRUNTIME =~ ' '
-        "     if &sh =~ '\<cmd'
-        "     let cmd = '""' . $VIMRUNTIME . '\diff"'
-        "     let eq = '"'
-        " else
-        "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-        " endif
-        " else
-        "     let cmd = $VIMRUNTIME . '\diff'
-        " endif
-        " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-      endfunction
-    " endif
+  " cursor
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
-    "-------------------------------------------------------------------------------
-    " 18 mapping
-    "-------------------------------------------------------------------------------
+  "-------------------------------------------------------------------------------
+  " 10 GUI
+  "-------------------------------------------------------------------------------
+  set browsedir=current           " which directory to use for the file browser
 
-    "-------------------------------------------------------------------------------
-    " 19 reading and writing files
-    "-------------------------------------------------------------------------------
-    set nobackup                    " no backup file
-    set nowritebackup               " no backup before rewrite file
-    "set backupdir=E:\bak
-    if exists("&autoread")
-      set autoread                    " autoload when file changed outside vim
-    endif
-    set autowrite                   " write a modified buffer on each :next
-    " Default fileformat
-    set fileformat=unix
-    " Automatic recognition of a new line cord
-    set fileformats=unix,dos,mac
-    nnoremap <leader>fd :se ff=dos<cr>
-    nnoremap <leader>fu :se ff=unix<cr>
+  "-------------------------------------------------------------------------------
+  " 11 printing
+  "-------------------------------------------------------------------------------
 
-    " undo
-    " persistent undo
-    if exists('+undofile')
-      set undofile
-      " let &undodir = s:get_cache_dir('undo')
-      " set undodir=$HOME.'/.vim-cache/undodir'
-      set undodir=g:dotvim_settings.cache_dir.'/undodir'
-    endif
-
-    "-------------------------------------------------------------------------------
-    " 20 the swap file
-    "-------------------------------------------------------------------------------
-    "set directory=E:\bak
-    set noswapfile
-    " CursorHold time
-    set updatetime=1000
-
-    set nrformats-=octal
-
-    set ttimeout
-    set ttimeoutlen=100
-
-    "-------------------------------------------------------------------------------
-    " 21 command line editing
-    "-------------------------------------------------------------------------------
-    set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
-
-    set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
-    set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
-    set wildignore+=*.so,*.dll,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
-    set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux
-    set wildignore+=*DS_Store*,*.ipch
-    set wildignore+=*.gem
-    set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
-    set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**
-    set wildignore+=*/.nx/**,*.app,*.git,.git
-    set wildignore+=*.wav,*.mp3,*.ogg,*.pcm
-    set wildignore+=*.mht,*.suo,*.sdf,*.jnlp
-    set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf
-    set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
-    set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
-    set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
-    set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
-    set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
-    set wildignore+=.svn,CVS,.hg,*.bak,*.e,*.lo,*.la,*.db,*.old,*.mdb,*~,~* " wildmenu: ignore these extensions
+  "-------------------------------------------------------------------------------
+  " 12 messages and info
+  "-------------------------------------------------------------------------------
+  set shortmess+=atoOIT           " To avoid some hint messages
+  if has('cmdline_info')
+    set ruler                     " Show the line and column number of the cursor position
+    " set rulerformat=%30(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%) " determines the content of the ruler string
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids"
+    set showcmd                     " display incomplete commands
+  endif
+  set report=0                    " Threshold for reporting number of lines changed
+  set noerrorbells                " No bell for error messages
+  set novisualbell                " Use visual bell instead of beeping
+  set t_vb=                       " Disable screen flash on error
+  " set helplang& helplang=en
+  " use Chinese help, support in vimcdoc.vim plugin
+  if version >= 603
     if s:os == "windows"
-      set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
+      set helplang=cn
     else
-      set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
+      set helplang=en
     endif
+  endif
 
-    " command-line autocompletion operates in an enhanced mode
-    set wildmenu
-
-    "-------------------------------------------------------------------------------
-    " 22 executing external commands
-    "-------------------------------------------------------------------------------
-    " Set keyword help.
-    set keywordprg=:help
-
-    "-------------------------------------------------------------------------------
-    " 23 running make and jumping to errors
-    "-------------------------------------------------------------------------------
-    " programming related
-    set makeef=error.err " the errorfile for :make and :grep
-
-    "-------------------------------------------------------------------------------
-    " 24 system specific
-    "-------------------------------------------------------------------------------
-    if s:os == "windows"
-      if exists('+shellslash')
-        set shellslash      " Exchange path separator
-      endif
-    endif
-
-    "-------------------------------------------------------------------------------
-    " 25 language specific
-    "-------------------------------------------------------------------------------
-    " none of these should be word dividers, so make them not be
-    set iskeyword+=_,$,@,%,#
-    set isfname-==  " remove = from filename characters
-
-    "-------------------------------------------------------------------------------
-    " 26 multi-byte characters
-    "-------------------------------------------------------------------------------
-    if has("multi_byte")
-
-      " Windows cmd.exe still uses cp850. If Windows ever moved to
-      " Powershell as the primary terminal, this would be utf-8
-      " set termencoding=cp850
-      if &termencoding == ""
-        let &termencoding = &encoding
-      endif
-      " Let Vim use utf-8 internally, because many scripts require this
-      "set encoding=utf-8
-      " setglobal fileencoding=utf-8
-      " Windows has traditionally used cp1252, so it's probably wise to
-      " fallback into cp1252 instead of eg. iso-8859-15.
-      " Newer Windows files might contain utf-8 or utf-16 LE so we might
-      " want to try them first.
-      set fileencodings=ucs-bom,utf-8,cp936,gb18030,cp1252,big5,euc-jp,euc-kr,latin1
+  "-------------------------------------------------------------------------------
+  " 13 selecting text
+  "-------------------------------------------------------------------------------
+  set selection=inclusive         " defines the behavior of the selection
+  set selectmode=mouse            " when use mouse, launch SELECT mode
+  set keymodel=startsel           " Shift + arrow key
+  " set selectmode=key
+  "-----------------------------------------------------------
+  """ ClipBoard
+  "-----------------------------------------------------------
+  " Use clipboard register.
+  " set clipboard+=unnamed
+  if has('clipboard')
+    if has('unnamedplus')
+      " By default, Vim will not use the system clipboard when yanking/pasting to
+      " the default register. This option makes Vim use the system default
+      " clipboard.
+      " Note that on X11, there are _two_ system clipboards: the "standard" one, and
+      " the selection/mouse-middle-click one. Vim sees the standard one as register
+      " '+' (and this option makes Vim use it by default) and the selection one as
+      " '*'.
+      " See :h 'clipboard' for details.
+      set clipboard=unnamedplus,unnamed
     else
-      echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
+      " Vim now also uses the selection system clipboard for default yank/paste.
+      set clipboard+=unnamed
     endif
+  endif
 
-    "-------------------------------------------------------------------------------
-    " 27 various
-    "-------------------------------------------------------------------------------
-    " set virtualedit=onemore         " allow for cursor beyond last character
-    set virtualedit+=block          " Enable virtualedit in visual block mode
-    " set viminfo='50,<1000,:50,n$VIM/.viminfo     " save session
-    set viminfo='50,<1000,:50     " save session
-    if !empty(&viminfo)
-      set viminfo^=!
-    endif
+  "-------------------------------------------------------------------------------
+  " 14 editing text
+  "-------------------------------------------------------------------------------
+  set backspace=indent,start,eol  " BACKSPACE behavior
+  set formatoptions+=mM       " describes how automatic formatting is to be done
+  if v:version > 703 || v:version == 703 && has("patch541")
+    set formatoptions+=j " Delete comment character when joining commented lines
+  endif
+  set showmatch       " Highlight matched pairs
+  set matchtime=5     " Tenths of a second to show the matching paren
+  set matchpairs+=<:>
+  "-----------------------------------------------------------
+  " Auto Complete Word
+  "-----------------------------------------------------------
+  " options
+    set complete-=u
+    set complete-=i                 " disable scanning included files
+    set complete-=t                 " disable searching tags
+    set complete+=.,w,b,kspell,ss   " current buffer, other windows' buffers, dictionary, spelling
+    set complete+=k                 " scan the files given with the 'dictionary' option
+    set completeopt=longest         " Insert mode completetion
+    set completeopt+=menuone        " Insert mode completetion
+    " Set popup menu max height.
+    set pumheight=20
 
-    " better unix / windows compatibility
-    set viewoptions=folds,options,cursor,unix,slash
+  "-------------------------------------------------------------------------------
+  " 15 tabs and indenting
+  "-------------------------------------------------------------------------------
+  set tabstop=4               " TAB width
+  set softtabstop=4           " Soft TAB width
+  set shiftwidth=4            " Number of spaces to use for each step of (auto)indent, for cindent
+  set expandtab               " use SPACE instead of TAB
+  set smarttab                " use SPACE instead of TAB at start of line
+  set shiftround              " Round indent by shiftwidth
 
-    " Session options
-    "-----------------------------------------------------------
-    set sessionoptions-=curdir
-    set sessionoptions+=sesdir
-    set sessionoptions-=options
+  "-----------------------------------------------------------
+  " Indent
+  "-----------------------------------------------------------
+  set autoindent              " Copy indent from current line when starting a new line
+  set cindent                 " Enables automatic C program indenting
+  set copyindent              " copy the previous indentation on autoindenting
 
-    function! MyHighlights() abort
-      " highlight Visual     cterm=NONE ctermbg=76  ctermfg=16  gui=NONE guibg=#5fd700 guifg=#000000
-      " highlight StatusLine cterm=NONE ctermbg=231 ctermfg=160 gui=NONE guibg=#ffffff guifg=#d70000
-      " highlight Normal     cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
-      " highlight NonText    cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+  "-------------------------------------------------------------------------------
+  " 16 folding
+  "-------------------------------------------------------------------------------
+  " set foldenable              " turn on folding
+  set foldenable            " disable folding
+  if exists("&foldlevel")
+    set foldlevel=999           " make it really high, so they're not displayed by default
+  endif
+  set foldmarker={,}
+  set foldmethod=indent       " Make folding indent sensitive  // syntax
+  set foldnestmax=5
+  set foldcolumn=2            " width for fold
+  set foldlevelstart=1000     " fdls:  fold level start
+  set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 
-      highlight OverLength  ctermbg=red ctermfg=white   guibg=red     guifg=white
-      highlight Pmenu       ctermbg=8                   guibg=#606060
-      highlight PmenuSel    ctermbg=1                   guifg=#dddd00 guibg=#1f82cd
-      highlight PmenuSbar   ctermbg=0                   guibg=#d6d6d6
-      "
-      "highlight StatusLine guifg=SlateBlue guibg=Yellow
-      "highlight StatusLine guifg=SlateBlue guibg=#008800
-      highlight StatusLine NONE
-      highlight StatusLineNC NONE
-      " current window
-      highlight StatusLine ctermfg=yellow     guifg=orange guibg=#008800 gui=underline
-      " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
-      " not current window
-      highlight StatusLineNC ctermfg=lightgrey guifg=Gray guibg=white
-      " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
-      highlight User1 guifg=yellow
-      highlight User2 guifg=lightblue
-      highlight User3 guifg=red
-      highlight User4 guifg=cyan
-      highlight User5 guifg=lightgreen
-      highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue
-      highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+  "-------------------------------------------------------------------------------
+  " 17 diff mode
+  "-------------------------------------------------------------------------------
+  set diffopt=context:3       " display 3 lines above and below the different place
+  set diffopt+=iwhite
+  set diffopt+=filler
+  " if os == "windows"
+    set diffexpr=MyDiff()
+    function! MyDiff()
+      let opt = '-a --binary '
+      if &diffopt =~ 'icase'
+        let opt = opt . '-i '
+      endif
+      if &diffopt =~ 'iwhite'
+        let opt = opt . '-b '
+      endif
+      let arg1 = v:fname_in
+      if arg1 =~ ' '
+        let arg1 = '"' . arg1 . '"'
+      endif
+      let arg2 = v:fname_new
+      if arg2 =~ ' '
+        let arg2 = '"' . arg2 . '"'
+      endif
+      let arg3 = v:fname_out
+      if arg3 =~ ' '
+        let arg3 = '"' . arg3 . '"'
+      endif
+      let cmd = '!diff ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+      silent execute cmd
+      " let eq = ''
+      " if $VIMRUNTIME =~ ' '
+      "     if &sh =~ '\<cmd'
+      "     let cmd = '""' . $VIMRUNTIME . '\diff"'
+      "     let eq = '"'
+      " else
+      "     let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+      " endif
+      " else
+      "     let cmd = $VIMRUNTIME . '\diff'
+      " endif
+      " silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
     endfunction
+  " endif
 
-    augroup MyColors
-        autocmd!
-        autocmd ColorScheme * call MyHighlights()
+  "-------------------------------------------------------------------------------
+  " 18 mapping
+  "-------------------------------------------------------------------------------
+
+  "-------------------------------------------------------------------------------
+  " 19 reading and writing files
+  "-------------------------------------------------------------------------------
+  set nobackup                    " no backup file
+  set nowritebackup               " no backup before rewrite file
+  "set backupdir=E:\bak
+  if exists("&autoread")
+    set autoread                    " autoload when file changed outside vim
+  endif
+  set autowrite                   " write a modified buffer on each :next
+  " Default fileformat
+  set fileformat=unix
+  " Automatic recognition of a new line cord
+  set fileformats=unix,dos,mac
+  nnoremap <leader>fd :se ff=dos<cr>
+  nnoremap <leader>fu :se ff=unix<cr>
+
+  " undo
+  " persistent undo
+  if exists('+undofile')
+    set undofile
+    " let &undodir = s:get_cache_dir('undo')
+    " set undodir=$HOME.'/.vim-cache/undodir'
+    set undodir=g:dotvim_settings.cache_dir.'/undodir'
+  endif
+
+  "-------------------------------------------------------------------------------
+  " 20 the swap file
+  "-------------------------------------------------------------------------------
+  "set directory=E:\bak
+  set noswapfile
+  " CursorHold time
+  set updatetime=1000
+
+  set nrformats-=octal
+
+  set ttimeout
+  set ttimeoutlen=100
+
+  "-------------------------------------------------------------------------------
+  " 21 command line editing
+  "-------------------------------------------------------------------------------
+  set suffixes=.bak,~,.o,.h,.info,.swp,.obj,.pyc,.pyo,.egg-info,.class
+
+  set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all"
+  set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib "stuff to ignore when tab completing
+  set wildignore+=*.so,*.dll,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
+  set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz    " MacOSX/Linux
+  set wildignore+=*DS_Store*,*.ipch
+  set wildignore+=*.gem
+  set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
+  set wildignore+=*.so,*.swp,*.zip,*/.Trash/**,*.pdf,*.dmg,*/.rbenv/**
+  set wildignore+=*/.nx/**,*.app,*.git,.git
+  set wildignore+=*.wav,*.mp3,*.ogg,*.pcm
+  set wildignore+=*.mht,*.suo,*.sdf,*.jnlp
+  set wildignore+=*.chm,*.epub,*.pdf,*.mobi,*.ttf
+  set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
+  set wildignore+=*.ppt,*.pptx,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
+  set wildignore+=*.msi,*.crx,*.deb,*.vfd,*.apk,*.ipa,*.bin,*.msu
+  set wildignore+=*.gba,*.sfc,*.078,*.nds,*.smd,*.smc
+  set wildignore+=*.linux2,*.win32,*.darwin,*.freebsd,*.linux,*.android
+  set wildignore+=.svn,CVS,.hg,*.bak,*.e,*.lo,*.la,*.db,*.old,*.mdb,*~,~* " wildmenu: ignore these extensions
+  if s:os == "windows"
+    set wildignore+=*/.git/*,*/.hg/*,*/.svn/*,*/CVS/*,*/.DS_Store
+  else
+    set wildignore+=.git\*,.hg\*,.svn\*,CVS\*
+  endif
+
+  " command-line autocompletion operates in an enhanced mode
+  set wildmenu
+
+  "-------------------------------------------------------------------------------
+  " 22 executing external commands
+  "-------------------------------------------------------------------------------
+  " Set keyword help.
+  set keywordprg=:help
+
+  "-------------------------------------------------------------------------------
+  " 23 running make and jumping to errors
+  "-------------------------------------------------------------------------------
+  " programming related
+  set makeef=error.err " the errorfile for :make and :grep
+
+  "-------------------------------------------------------------------------------
+  " 24 system specific
+  "-------------------------------------------------------------------------------
+  if s:os == "windows"
+    if exists('+shellslash')
+      set shellslash      " Exchange path separator
+    endif
+  endif
+
+  "-------------------------------------------------------------------------------
+  " 25 language specific
+  "-------------------------------------------------------------------------------
+  " none of these should be word dividers, so make them not be
+  set iskeyword+=_,$,@,%,#
+  set isfname-==  " remove = from filename characters
+
+  "-------------------------------------------------------------------------------
+  " 26 multi-byte characters
+  "-------------------------------------------------------------------------------
+  if has("multi_byte")
+
+    " Windows cmd.exe still uses cp850. If Windows ever moved to
+    " Powershell as the primary terminal, this would be utf-8
+    " set termencoding=cp850
+    if &termencoding == ""
+      let &termencoding = &encoding
+    endif
+    " Let Vim use utf-8 internally, because many scripts require this
+    "set encoding=utf-8
+    " setglobal fileencoding=utf-8
+    " Windows has traditionally used cp1252, so it's probably wise to
+    " fallback into cp1252 instead of eg. iso-8859-15.
+    " Newer Windows files might contain utf-8 or utf-16 LE so we might
+    " want to try them first.
+    set fileencodings=ucs-bom,utf-8,cp936,gb18030,cp1252,big5,euc-jp,euc-kr,latin1
+  else
+    echoerr "Sorry, this version of (g)vim was not compiled with multi_byte"
+  endif
+
+  "-------------------------------------------------------------------------------
+  " 27 various
+  "-------------------------------------------------------------------------------
+  " set virtualedit=onemore         " allow for cursor beyond last character
+  set virtualedit+=block          " Enable virtualedit in visual block mode
+  " set viminfo='50,<1000,:50,n$VIM/.viminfo     " save session
+  set viminfo='50,<1000,:50     " save session
+  if !empty(&viminfo)
+    set viminfo^=!
+  endif
+
+  " better unix / windows compatibility
+  set viewoptions=folds,options,cursor,unix,slash
+
+  " Session options
+  "-----------------------------------------------------------
+  set sessionoptions-=curdir
+  set sessionoptions+=sesdir
+  set sessionoptions-=options
+
+  function! MyHighlights() abort
+    " highlight Visual     cterm=NONE ctermbg=76  ctermfg=16  gui=NONE guibg=#5fd700 guifg=#000000
+    " highlight StatusLine cterm=NONE ctermbg=231 ctermfg=160 gui=NONE guibg=#ffffff guifg=#d70000
+    " highlight Normal     cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+    " highlight NonText    cterm=NONE ctermbg=17              gui=NONE guibg=#00005f
+
+    highlight OverLength  ctermbg=red ctermfg=white   guibg=red     guifg=white
+    highlight Pmenu       ctermbg=8                   guibg=#606060
+    highlight PmenuSel    ctermbg=1                   guifg=#dddd00 guibg=#1f82cd
+    highlight PmenuSbar   ctermbg=0                   guibg=#d6d6d6
+    "
+    "highlight StatusLine guifg=SlateBlue guibg=Yellow
+    "highlight StatusLine guifg=SlateBlue guibg=#008800
+    highlight StatusLine NONE
+    highlight StatusLineNC NONE
+    " current window
+    highlight StatusLine ctermfg=yellow     guifg=orange guibg=#008800 gui=underline
+    " highlight StatusLine guifg=orange guibg=#008800 gui=underline term=bold cterm=bold ctermfg=yellow
+    " not current window
+    highlight StatusLineNC ctermfg=lightgrey guifg=Gray guibg=white
+    " highlight StatusLineNC guifg=Gray guibg=white ctermfg=gray ctermbg=white
+    highlight User1 guifg=yellow
+    highlight User2 guifg=lightblue
+    highlight User3 guifg=red
+    highlight User4 guifg=cyan
+    highlight User5 guifg=lightgreen
+    highlight User6 gui=bold,inverse guifg=red term=bold,inverse ctermfg=blue
+    highlight User7 gui=bold,inverse guifg=red term=bold,inverse cterm=bold ctermfg=green ctermbg=red
+  endfunction
+
+  augroup MyColors
+      autocmd!
+      autocmd ColorScheme * call MyHighlights()
+  augroup END
+
+  ":match OverLength '\%200v.*'
+
+  if v:version > 703
+    set cryptmethod=blowfish
+  endif
+
+  " Specify the behavior when switching buffers
+  try
+    " set switchbuf=useopen,usetab,newtab
+    set switchbuf=usetab,usetab     " Open new buffers always in new tabs
+    " set showtabline=2
+    catch
+  endtry
+
+  " Scroll options
+  if !&scrolloff
+    set scrolloff=2
+  endif
+  if !&sidescrolloff
+    set sidescrolloff=10
+  endif
+  set sidescroll=1
+
+  "-----------------------------------------------------------
+  " AutoCommands
+  "-----------------------------------------------------------
+  if has("autocmd") " {{{
+    " Set augroup
+    augroup MyAutoCmd
+      autocmd!
+
+      " automatically rebalance windows on vim resize
+      autocmd VimResized * :wincmd =
+
+      " Check timestamp more for 'autoread'.
+      autocmd WinEnter * checktime
+
+      autocmd BufReadPre,BufNewFile,BufRead *.do  setfiletype tcl
+      autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
+      autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
+
+      " Make sure Vim returns to the same line when you reopen a file.
+      autocmd BufReadPost *
+          \ if line("'\"") > 0 && line("'\"") <= line("$") |
+          \     execute 'normal! g`"zvzz' |
+          \ endif
+
+      autocmd BufEnter * :syntax sync fromstart
+      autocmd BufEnter * :lchdir %:p:h
+
+      " auto load vimrc when editing it
+      " if os == "windows"
+      "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
+      " elseif os == "linux"
+      "     autocmd! BufWritePost .vimrc source %
+      " endif
+
+      " Automatically delete trailing DOS-returns and whitespace on file open and write.
+      " autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
+
+      " Automatically resize vertical splits
+      " autocmd WinEnter * :set winfixheight
+      " autocmd WinEnter * :wincmd =
+
     augroup END
+  endif " }}}
 
-    ":match OverLength '\%200v.*'
+  "-----------------------------------------------------------
+  " Highlight current Line
+  "-----------------------------------------------------------
+  "highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
+  "au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
 
-    if v:version > 703
-      set cryptmethod=blowfish
-    endif
+  "-----------------------------------------------------------
+  " Abbreviations
+  "-----------------------------------------------------------
 
-    " Specify the behavior when switching buffers
-    try
-      " set switchbuf=useopen,usetab,newtab
-      set switchbuf=usetab,usetab     " Open new buffers always in new tabs
-      " set showtabline=2
-      catch
-    endtry
+  "-----------------------------------------------------------
+  """ Status Line
+  "-----------------------------------------------------------
+  " Color of Status Line
+  if has('statusline') " {{{
+    set laststatus=2           " always show the status line
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
+    " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
+    " %([%R%M]%)   read-only, modified and modifiable flags between braces
+    " %{'$'[!&list]}  shows a '$' if in list mode
+    " %{'~'[&pm=='']} shows a '~' if in patchmode
+    " #%n    buffer number
+    set statusline=
+    set statusline+=[%f]                " file name
+    set statusline+=[%{&ff}]            " file format
+    set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
+    set statusline+=%y                  " file type
+    set statusline+=%7*%m%*             " modified flag
+    set statusline+=%r                  " readonly flag
+    set statusline+=%h                  "
+    set statusline+=%w
+    " set statusline+=\ [%{getcwd()}] " current directory
+    set statusline+=%#warningmsg#
+    set statusline+=%=                  " left/right separator
+    set statusline+=%6*%b(0X%B)
+    " set statusline+=[Pos=%l,%c%V]
+    set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
+  endif " }}}
 
-    " Scroll options
-    if !&scrolloff
-      set scrolloff=2
-    endif
-    if !&sidescrolloff
-      set sidescrolloff=10
-    endif
-    set sidescroll=1
+  " GUI Options {{{
+  " set guioptions+=grTt
+  set guioptions-=T
+  " don't use autoselect on OS X
+  if has('mac')
+    set guioptions-=a
+  endif
+  " For CTRL-v to work autoselect must be off.
+  " On Unix we have two selections, autoselect can be used.
+  if !has('unix')
+    set guioptions-=a
+  endif
 
-    "-----------------------------------------------------------
-    " AutoCommands
-    "-----------------------------------------------------------
-    if has("autocmd") " {{{
-      " Set augroup
-      augroup MyAutoCmd
-        autocmd!
+  if has("gui_win32")     " Win
+    set guioptions+=bh  " Horizontal scrolbar
+  endif
+  set guioptions-=e
+  " }}}
 
-        " automatically rebalance windows on vim resize
-        autocmd VimResized * :wincmd =
+  " Font {{{
+  " set default guifont
+  if has("gui_running")
+    " check and determine the gui font after GUIEnter.
+    " NOTE: getfontname function only works after GUIEnter.
+    au GUIEnter * call s:SetGuiFont()
+  endif
 
-        " Check timestamp more for 'autoread'.
-        autocmd WinEnter * checktime
-
-        autocmd BufReadPre,BufNewFile,BufRead *.do  setfiletype tcl
-        autocmd BufReadPre,BufNewFile,BufRead *.log setfiletype txt nowrap
-        autocmd BufReadPre,BufNewFile,BufRead *.rpt setfiletype txt nowrap
-
-        " Make sure Vim returns to the same line when you reopen a file.
-        autocmd BufReadPost *
-            \ if line("'\"") > 0 && line("'\"") <= line("$") |
-            \     execute 'normal! g`"zvzz' |
-            \ endif
-
-        autocmd BufEnter * :syntax sync fromstart
-        autocmd BufEnter * :lchdir %:p:h
-
-        " auto load vimrc when editing it
-        " if os == "windows"
-        "     autocmd! bufwritepost _vimrc source $VIM/_vimrc
-        " elseif os == "linux"
-        "     autocmd! BufWritePost .vimrc source %
-        " endif
-
-        " Automatically delete trailing DOS-returns and whitespace on file open and write.
-        " autocmd BufRead,BufWritePre,FileWritePre * silent! %s/[\r \t]\+$//
-
-        " Automatically resize vertical splits
-        " autocmd WinEnter * :set winfixheight
-        " autocmd WinEnter * :wincmd =
-
-      augroup END
-    endif " }}}
-
-    "-----------------------------------------------------------
-    " Highlight current Line
-    "-----------------------------------------------------------
-    "highlight CurrentLine guibg=#4D4D4D         "848284     "guifg=white
-    "au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
-
-    "-----------------------------------------------------------
-    " Abbreviations
-    "-----------------------------------------------------------
-
-    "-----------------------------------------------------------
-    """ Status Line
-    "-----------------------------------------------------------
-    " Color of Status Line
-    if has('statusline') " {{{
-      set laststatus=2           " always show the status line
-      " set statusline=[Format=%{&ff}]\ [Type=%Y]\ [Pos=%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
-      " set statusline=[Format=%{&ff}]\ [Type=%Y]%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-      " set statusline=[%f][Format=%{&ff}]%{'['.(&fenc!=''?&fenc:&enc).']'}%y%1*%m%*%r%h%w%=[Pos=%l,%v][%l/%L(%p%%)]
-      " %([%R%M]%)   read-only, modified and modifiable flags between braces
-      " %{'$'[!&list]}  shows a '$' if in list mode
-      " %{'~'[&pm=='']} shows a '~' if in patchmode
-      " #%n    buffer number
-      set statusline=
-      set statusline+=[%f]                " file name
-      set statusline+=[%{&ff}]            " file format
-      set statusline+=%{'['.(&fenc!=''?&fenc:&enc).']'}
-      set statusline+=%y                  " file type
-      set statusline+=%7*%m%*             " modified flag
-      set statusline+=%r                  " readonly flag
-      set statusline+=%h                  "
-      set statusline+=%w
-      " set statusline+=\ [%{getcwd()}] " current directory
-      set statusline+=%#warningmsg#
-      set statusline+=%=                  " left/right separator
-      set statusline+=%6*%b(0X%B)
-      " set statusline+=[Pos=%l,%c%V]
-      set statusline+=[(%l,%c%V)/%L(%p%%)]%*       " cursor position
-    endif " }}}
-
-    " GUI Options {{{
-    " set guioptions+=grTt
-    set guioptions-=T
-    " don't use autoselect on OS X
+  " set guifont
+  function s:SetGuiFont()
     if has('mac')
-      set guioptions-=a
-    endif
-    " For CTRL-v to work autoselect must be off.
-    " On Unix we have two selections, autoselect can be used.
-    if !has('unix')
-      set guioptions-=a
-    endif
-
-    if has("gui_win32")     " Win
-      set guioptions+=bh  " Horizontal scrolbar
-    endif
-    set guioptions-=e
-    " }}}
-
-    " Font {{{
-    " set default guifont
-    if has("gui_running")
-      " check and determine the gui font after GUIEnter.
-      " NOTE: getfontname function only works after GUIEnter.
-      au GUIEnter * call s:SetGuiFont()
-    endif
-
-    " set guifont
-    function s:SetGuiFont()
-      if has('mac')
-        if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
-          set guifont=Bitstream\ Vera\ Sans\ Mono:h12
-        elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
-          set guifont=DejaVu\ Sans\ Mono:h12
-        elseif getfontname( "Menlo\ Regular" ) != ""
-          set guifont=Menlo\ Regular:h12
-        endif
-      elseif has('unix')
-        " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
-        set guifont=Monospace\ 10
-        set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
-      elseif has("gui_win32")     " Windows platform
-        let font_name = ""
-        if getfontname( "Consolas" ) != ""
-          set guifont=Consolas:h11:cANSI " this is the default visual studio font
-          let font_name = "Consolas"
-        elseif getfontname( "Source_Code_Pro" ) != ""
-          set guifont=Source_Code_Pro:h10:cANSI
-          let font_name = "Source_Code_Pro"
-        elseif getfontname( "Droid_Sans_Mono" ) != ""
-          set guifont=Droid_Sans_Mono:h10:cANSI
-          let font_name = "Droid_Sans_Mono"
-        elseif getfontname( "DejaVu_Sans_Mono" ) != ""
-          set guifont=DejaVu_Sans_Mono:h11:cANSI
-          let font_name = "DejaVu_Sans_Mono"
-        elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
-          set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
-          let font_name = "Bitstream_Vera_Sans_Mono"
-        elseif getfontname( "Raize" ) != ""
-          set guifont=Raize:h12:b:cANSI
-          let font_name = "Raize"
-        else
-          set guifont=Lucida_Console:h12:cANSI
-          let font_name = "Lucida_Console"
-        endif
-        set guifontwide=Courier_New:h12:cANSI
-        silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
+      if getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+        set guifont=Bitstream\ Vera\ Sans\ Mono:h12
+      elseif getfontname( "DejaVu\ Sans\ Mono" ) != ""
+        set guifont=DejaVu\ Sans\ Mono:h12
+      elseif getfontname( "Menlo\ Regular" ) != ""
+        set guifont=Menlo\ Regular:h12
       endif
-    endfunction
-
-    " commands for change font size
-    command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
-    command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
-    " }}}
-
-    """"""""""""""""""""""""""""""
-    " => Shell section
-    """"""""""""""""""""""""""""""
-    if s:os == "windows"
-      " ensure correct shell in gvim
-      set shell=c:\windows\system32\cmd.exe
+    elseif has('unix')
+      " set guifont=WenQuanYi\ Micro\ Hei\ Mono\ 10
+      set guifont=Monospace\ 10
+      set guifontwide=WenQuanYi\ Micro\ Hei\ Mono\ 10
+    elseif has("gui_win32")     " Windows platform
+      let font_name = ""
+      if getfontname( "Consolas" ) != ""
+        set guifont=Consolas:h11:cANSI " this is the default visual studio font
+        let font_name = "Consolas"
+      elseif getfontname( "Source_Code_Pro" ) != ""
+        set guifont=Source_Code_Pro:h10:cANSI
+        let font_name = "Source_Code_Pro"
+      elseif getfontname( "Droid_Sans_Mono" ) != ""
+        set guifont=Droid_Sans_Mono:h10:cANSI
+        let font_name = "Droid_Sans_Mono"
+      elseif getfontname( "DejaVu_Sans_Mono" ) != ""
+        set guifont=DejaVu_Sans_Mono:h11:cANSI
+        let font_name = "DejaVu_Sans_Mono"
+      elseif getfontname( "Bitstream_Vera_Sans_Mono" ) != ""
+        set guifont=Bitstream_Vera_Sans_Mono:h10:cANSI
+        let font_name = "Bitstream_Vera_Sans_Mono"
+      elseif getfontname( "Raize" ) != ""
+        set guifont=Raize:h12:b:cANSI
+        let font_name = "Raize"
+      else
+        set guifont=Lucida_Console:h12:cANSI
+        let font_name = "Lucida_Console"
+      endif
+      set guifontwide=Courier_New:h12:cANSI
+      silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
     endif
+  endfunction
 
-    if exists('$TMUX')
-      set term=screen-256color
-    endif
+  " commands for change font size
+  command! Bigger  :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)+1', '')
+  command! Smaller :let &guifont = substitute(&guifont, '\d\+$', '\=submatch(0)-1', '')
+  " }}}
+
+  """"""""""""""""""""""""""""""
+  " => Shell section
+  """"""""""""""""""""""""""""""
+  if s:os == "windows"
+    " ensure correct shell in gvim
+    set shell=c:\windows\system32\cmd.exe
+  endif
+
+  if exists('$TMUX')
+    set term=screen-256color
+  endif
 " }}} Basic
 
 "---------------------------------------------------------------
@@ -1004,7 +1003,8 @@ if g:load_vimrc_filetype "{{{
   augroup ft_verilog
     autocmd!
     autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal autoindent
-    autocmd FileType systemverilog,verilog_systemverilog,verilog set textwidth=100
+    autocmd FileType systemverilog,verilog_systemverilog,verilog setlocal textwidth=100
+    autocmd FileType systemverilog,verilog_systemverilog,verilog setlocal foldmethod=syntax
   augroup END
   " }}}
 
@@ -2624,6 +2624,12 @@ if g:load_vimrc_extended
   " ----------------------------------------------------------------------------
   nnoremap ]t :tabn<cr>
   nnoremap [t :tabp<cr>
+
+  " copy to system clipboard
+  map gy "*y
+  " copy whole file to system clipboard
+  nmap gY gg"*yG
+
   " }}}
 
   "-----------------------------------------------------------
