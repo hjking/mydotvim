@@ -123,12 +123,8 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   Plug 'sjl/badwolf'
   Plug 'jnurmine/Zenburn'
   Plug 'altercation/vim-colors-solarized'
-  Plug 'ajmwagar/vim-deus'
-  Plug 'morhetz/gruvbox'
   Plug 'tpope/vim-vividchalk'
   Plug 'tomasr/molokai'
-  Plug 'chriskempson/vim-tomorrow-theme'
-  Plug 'morhetz/gruvbox'
   Plug 'yuttie/hydrangea-vim'
   Plug 'tyrannicaltoucan/vim-deep-space'
   Plug 'AlessandroYorba/Despacio'
@@ -203,13 +199,13 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   Plug 'gcmt/wildfire.vim'
   Plug 'terryma/vim-expand-region'
   " Plug 'kana/vim-niceblock'
-  " Plug 'terryma/vim-multiple-cursors'
-  Plug 'mg979/vim-visual-multi'
+  Plug 'terryma/vim-multiple-cursors'
+  " Plug 'mg979/vim-visual-multi'
 
   """ Misc
   " Plug 'fholgado/minibufexpl.vim', { 'on': 'MBEOpen' }
   Plug 'jlanzarotta/bufexplorer', { 'on': ['BufExplorer', 'ToggleBufExplorer'] }
-  " Plug 'Konfekt/FastFold'
+  Plug 'Konfekt/FastFold'
   Plug 'bootleq/ShowMarks'
   Plug 'bruno-/vim-vertical-move'
   Plug 'hallison/vim-markdown', { 'for': 'markdown' }
@@ -897,11 +893,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 
   " GUI Options {{{
   " set guioptions+=grTt
-  set guioptions-=T
-  " don't use autoselect on OS X
-  if has('mac')
-    set guioptions-=a
-  endif
+  set guioptions-=T       " no toolbar
   " For CTRL-v to work autoselect must be off.
   " On Unix we have two selections, autoselect can be used.
   if !has('unix')
@@ -989,23 +981,19 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 if g:load_vimrc_filetype "{{{
 
   "-----------------------------------------------------------
-  " Verilog Automatic
+  " Verilog/Systemverilog
   " {{{
-  inoremap        iav     <ESC>:Allpn<CR>
-  noremap         :iav        :Allpn<CR>
-  " :inoremap     av      <ESC>:Allcom<CR>
-  " map           :av     :Allcom<CR>
-  inoremap        ihv             <ESC>:AddHeader<CR>
-  noremap         <leader>hv      :AddHeader<CR>
-  inoremap        icv             <ESC>:Acontent<CR>
-  noremap         <leader>cv      :Acontent<CR>
-
   augroup ft_verilog
     autocmd!
-    autocmd FileType verilog_systemverilog,verilog,systemverilog setlocal autoindent
-    autocmd FileType systemverilog,verilog_systemverilog,verilog setlocal textwidth=100
-    autocmd FileType systemverilog,verilog_systemverilog,verilog setlocal foldmethod=syntax
+    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal autoindent
+    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal textwidth=100
+    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal foldmethod=syntax
   augroup END
+
+  " vhda/verilog_systemverilog.vim
+  let g:verilog_navigate_split = 1
+  " let g:verilog_syntax_fold_lst = "class,function,task,interface,covergroup,sequence,property,instance"
+  let g:verilog_syntax_fold_lst = "all"
   " }}}
 
   "---------------
@@ -1300,7 +1288,7 @@ if g:load_vimrc_plugin_config " {{{
     " Opens current file heiarchy in Nerdtree
     nnoremap <leader>nf :NERDTreeFind<CR>
     let NERDChristmasTree=1                     " more colorful
-    let NERDTreeWinPos="left"                   " put NERDTree at left
+    let NERDTreeWinPos="right"                  " put NERDTree at left
     let NERDTreeWinSize=25                      " set size
     let NERDTreeShowLineNumbers=0               " show line number
     let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr','CVS']
