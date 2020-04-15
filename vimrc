@@ -11,63 +11,63 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 "-----------------------------------------------------------
 " Platform {{{
 "-----------------------------------------------------------
-  " Identify platform {{{
-  function! MySys()
-    if has("win16") || has("win32") || has("win64") || has("win95")
-      return "windows"
-    elseif has('win32unix')
-      return "cygwin"
-    elseif has('gui_macvim')
-      return "mac"
-    else
-      return "linux"
-    endif
-  endfunction
-
-  let s:os = MySys()
-  " }}}
-
-  if s:os == "windows"
-    let g:vimfiles = g:path_of_vimrc.'/vimfiles'
+" Identify platform {{{
+function! MySys()
+  if has("win16") || has("win32") || has("win64") || has("win95")
+    return "windows"
+  elseif has('win32unix')
+    return "cygwin"
+  elseif has('gui_macvim')
+    return "mac"
   else
-
-    let g:vimfiles = g:path_of_vimrc.'/.vim'
+    return "linux"
   endif
-  exec 'set rtp+='."g:vimfiles"
+endfunction
 
-  " Local variables {{{
-  let g:vimrc_loaded = 1
-  " Set which part to load
-  let g:load_vimrc_filetype = 1
-  let g:load_vimrc_plugin_config = 1
-  let g:load_vimrc_extended = 1
+let s:os = MySys()
+" }}}
 
-  let g:dotvim_settings = {}
-  " change the default directory where all miscellaneous persistent files go
-  let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
+if s:os == "windows"
+  " let g:vimfiles = g:path_of_vimrc.'/vimfiles'
+  let g:vimfiles = $VIM.'\vimfiles'
+else
+  let g:vimfiles = '~/.vim'
+endif
+exec 'set rtp+='."g:vimfiles"
 
-  " auto complete:
-  "      neocomplete: if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
-  "      neocomplcache
-  "      vimcompletesme
-  "      mucomplete
-  let g:dotvim_settings.autocomplete_method = 'vimcompletesme'
+" Local variables {{{
+let g:vimrc_loaded = 1
+" Set which part to load
+let g:load_vimrc_filetype = 1
+let g:load_vimrc_plugin_config = 1
+let g:load_vimrc_extended = 1
 
-  " fuzzy finder
-  let g:dotvim_settings.finder_method = 'ctrlp' " if v:version < 703
+let g:dotvim_settings = {}
+" change the default directory where all miscellaneous persistent files go
+let g:dotvim_settings.cache_dir=$HOME.'/.vim-cache'
 
-  " snippets:
-  "   neosnippet
-  "   ultisnips
-  "   snipmate
-  let g:dotvim_settings.snippet_method = 'ultisnips'
+" auto complete:
+"      neocomplete: if (v:version > 703 || (v:version == 703 && has('patch885'))) && has('lua')
+"      neocomplcache
+"      vimcompletesme
+"      mucomplete
+let g:dotvim_settings.autocomplete_method = 'vimcompletesme'
 
-  " statusline:
-  "   lightline : if v:version < 702
-  "   airline
-  let g:dotvim_settings.statusline_method = 'lightline'
+" fuzzy finder
+let g:dotvim_settings.finder_method = 'ctrlp' " if v:version < 703
 
-  " }}}
+" snippets:
+"   neosnippet
+"   ultisnips
+"   snipmate
+let g:dotvim_settings.snippet_method = 'ultisnips'
+
+" statusline:
+"   lightline : if v:version < 702
+"   airline
+let g:dotvim_settings.statusline_method = 'lightline'
+
+" }}}
 " }}} Platform
 
 "-----------------------------------------------------------
@@ -106,7 +106,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   " Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
   Plug 'junegunn/vim-easy-align', { 'on': '<plug>(LiveEasyAlign)' }
   Plug 'godlygeek/tabular'
-  Plug 'tommcdo/vim-lion'
+  " Plug 'tommcdo/vim-lion'
 
   """ Code completion
   if g:dotvim_settings.autocomplete_method == 'vimcompletesme'
@@ -159,8 +159,8 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
     Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
   endif
   Plug 'easymotion/vim-easymotion', { 'on': '<plug>(easymotion-s2)' }
-  Plug 'justinmk/vim-sneak'
-  Plug 'bkad/CamelCaseMotion'
+  " Plug 'justinmk/vim-sneak'
+  " Plug 'bkad/CamelCaseMotion'
 
   """ Snippets
   if g:dotvim_settings.snippet_method == 'snipmate'
@@ -695,7 +695,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   "-------------------------------------------------------------------------------
   if s:os == "windows"
     if exists('+shellslash')
-      set shellslash      " Exchange path separator
+      " set shellslash      " Exchange path separator
     endif
   endif
 
@@ -953,7 +953,7 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
         let font_name = "Lucida_Console"
       endif
       set guifontwide=Courier_New:h12:cANSI
-      silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
+      " silent exec "nnoremap <unique> <M-F1> :set guifont=".font_name.":h11:cANSI<CR>"
     endif
   endfunction
 
@@ -968,6 +968,8 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
   if s:os == "windows"
     " ensure correct shell in gvim
     set shell=c:\windows\system32\cmd.exe
+    set shellcmdflag=/c
+    set encoding=utf-8
   endif
 
   if exists('$TMUX')
@@ -976,57 +978,57 @@ let g:path_of_vimrc = substitute(g:path_of_vimrc_tmp, "\\", "/", "g")
 " }}} Basic
 
 "---------------------------------------------------------------
-"""""""""""""""""""""" Filetypes """""""""""""""""""""""""""""""
+" Filetypes {{{
 "---------------------------------------------------------------
-if g:load_vimrc_filetype "{{{
+  if g:load_vimrc_filetype
 
-  "-----------------------------------------------------------
-  " Verilog/Systemverilog
-  " {{{
-  augroup ft_verilog
-    autocmd!
-    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal autoindent
-    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal textwidth=100
-    autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal foldmethod=syntax
-  augroup END
+    "-----------------------------------------------------------
+    " Verilog/Systemverilog
+    " {{{
+    augroup ft_verilog
+      autocmd!
+      autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal autoindent
+      autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal textwidth=100
+      autocmd FileType verilog,systemverilog,verilog_systemverilog setlocal foldmethod=syntax
+    augroup END
 
-  " vhda/verilog_systemverilog.vim
-  let g:verilog_navigate_split = 1
-  " let g:verilog_syntax_fold_lst = "class,function,task,interface,covergroup,sequence,property,instance"
-  let g:verilog_syntax_fold_lst = "all"
-  " }}}
+    " vhda/verilog_systemverilog.vim
+    let g:verilog_navigate_split = 1
+    " let g:verilog_syntax_fold_lst = "class,function,task,interface,covergroup,sequence,property,instance"
+    let g:verilog_syntax_fold_lst = "all"
+    " }}}
 
-  "---------------
-  " Python
-  "---------------
-  " {{{
-  " auto complete
-  noremap <F9> :!python.exe
-  " Only do this part when compiled with support for autocommands.
-  " if has("autocmd")
-  augroup ft_python
-    autocmd!
-    autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
-    autocmd FileType python setlocal colorcolumn=79 textwidth=80
-    autocmd FileType python setlocal formatoptions+=croq
-    autocmd FileType python setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-    autocmd FileType python setlocal foldmethod=indent
-    autocmd FileType python setlocal cindent
-    autocmd FileType python setlocal cinkeys-=0#
-    autocmd FileType python setlocal indentkeys-=0#
-    autocmd FileType python inoremap <buffer> $r return
-    autocmd FileType python inoremap <buffer> $i import
-    autocmd FileType python inoremap <buffer> $p print
-    autocmd FileType python inoremap <buffer> $f #--- <esc>a
-    autocmd FileType python map <buffer> <leader>1 /class
-    autocmd FileType python map <buffer> <leader>2 /def
-    autocmd FileType python map <buffer> <leader>C ?class
-    autocmd FileType python map <buffer> <leader>D ?def
-  augroup END
-  " }}}
+    "---------------
+    " Python
+    "---------------
+    " {{{
+    " auto complete
+    noremap <F9> :!python.exe
+    " Only do this part when compiled with support for autocommands.
+    " if has("autocmd")
+    augroup ft_python
+      autocmd!
+      autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4 softtabstop=4
+      autocmd FileType python setlocal colorcolumn=79 textwidth=80
+      autocmd FileType python setlocal formatoptions+=croq
+      autocmd FileType python setlocal cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+      autocmd FileType python setlocal foldmethod=indent
+      autocmd FileType python setlocal cindent
+      autocmd FileType python setlocal cinkeys-=0#
+      autocmd FileType python setlocal indentkeys-=0#
+      autocmd FileType python inoremap <buffer> $r return
+      autocmd FileType python inoremap <buffer> $i import
+      autocmd FileType python inoremap <buffer> $p print
+      autocmd FileType python inoremap <buffer> $f #--- <esc>a
+      autocmd FileType python map <buffer> <leader>1 /class
+      autocmd FileType python map <buffer> <leader>2 /def
+      autocmd FileType python map <buffer> <leader>C ?class
+      autocmd FileType python map <buffer> <leader>D ?def
+    augroup END
+    " }}}
 
-  " Vim {{{
-  augroup ft_vim
+    " Vim {{{
+    augroup ft_vim
       autocmd!
 
       autocmd FileType vim setlocal foldmethod=marker keywordprg=:help
@@ -1038,45 +1040,45 @@ if g:load_vimrc_filetype "{{{
       autocmd FileType vim nnoremap <localleader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
 
       autocmd FileType vim inoremap <c-n> <c-x><c-n>
-  augroup END
-  " }}}
+    augroup END
+    " }}}
 
-  " HTML {{{
-  augroup ft_html
-    autocmd!
-    autocmd FileType html,php,java,xml set textwidth=80
-  augroup END
-  " }}}
+    " HTML {{{
+    augroup ft_html
+      autocmd!
+      autocmd FileType html,php,java,xml set textwidth=80
+    augroup END
+    " }}}
 
-  " CSS {{{
-  augroup ft_css
-    autocmd!
-    autocmd FileType css,scss,less setlocal foldmethod=marker foldmarker={,}
-    autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
-    autocmd Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
-    autocmd Filetype less,css setlocal iskeyword+=-
-  augroup END
-  " }}}
+    " CSS {{{
+    augroup ft_css
+      autocmd!
+      autocmd FileType css,scss,less setlocal foldmethod=marker foldmarker={,}
+      autocmd FileType css,scss nnoremap <silent> <leader>S vi{:sort<CR>
+      autocmd Filetype less,css setlocal omnifunc=csscomplete#CompleteCSS
+      autocmd Filetype less,css setlocal iskeyword+=-
+    augroup END
+    " }}}
 
-  " C {{{
-  augroup ft_c
+    " C {{{
+    augroup ft_c
       autocmd!
       autocmd FileType c,cpp setlocal foldmethod=marker foldmarker={,}
       autocmd FileType c,cpp setlocal textwidth=80
-  augroup END
-  " }}}
+    augroup END
+    " }}}
 
-  augroup ft_misc
-    autocmd!
-    autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
-    autocmd FileType text,perl,vimwiki set textwidth=80
-    autocmd FileType bash,shell set ts=2 textwidth=80
-    autocmd FileType lisp set ts=2 softtabstop=2
-    autocmd FileType snippets set expandtab
-  augroup END
+    augroup ft_misc
+      autocmd!
+      autocmd BufNewFile,BufRead .tmux.conf*,tmux.conf* setf tmux
+      autocmd FileType text,perl,vimwiki set textwidth=80
+      autocmd FileType bash,shell set ts=2 textwidth=80
+      autocmd FileType lisp set ts=2 softtabstop=2
+      autocmd FileType snippets set expandtab
+    augroup END
 
-  " Markdown {{{
-  augroup ft_markdown
+    " Markdown {{{
+    augroup ft_markdown
       autocmd!
 
       autocmd FileType markdown setlocal nolist
@@ -1089,26 +1091,26 @@ if g:load_vimrc_filetype "{{{
       autocmd Filetype markdown nnoremap <buffer> <localleader>2 yypVr-:redraw<cr>
       autocmd Filetype markdown nnoremap <buffer> <localleader>3 mzI###<space><esc>`zllll
       autocmd Filetype markdown nnoremap <buffer> <localleader>4 mzI####<space><esc>`zlllll
-  augroup END
-  " }}}
+    augroup END
+    " }}}
 
-endif
+  endif
 " }}} Filetypes
 
 
 "---------------------------------------------------------------
-"""""""""""""""""""""" Plugin_config """""""""""""""""""""""""""
+" Plugin_config
 "---------------------------------------------------------------
-if g:load_vimrc_plugin_config " {{{
+  if g:load_vimrc_plugin_config " {{{
 
-  " ----------------------------------------------------------------------------
-  " vim-plug extension
-  " ----------------------------------------------------------------------------
-  let g:plug_window = '-tabnew'
-  let g:plug_pwindow = 'vertical rightbelow new'
+    " ----------------------------------------------------------------------------
+    " vim-plug extension
+    " ----------------------------------------------------------------------------
+    let g:plug_window = '-tabnew'
+    let g:plug_pwindow = 'vertical rightbelow new'
 
-  "-----------------------------------------------------------
-  " Solarized {{{
+    "-----------------------------------------------------------
+    " Solarized {{{
     " Allow color schemes to do bright colors without forcing bold.
     if &t_Co == 8 && $TERM !~# '^linux\|^Eterm'
       set t_Co=16
@@ -1126,10 +1128,10 @@ if g:load_vimrc_plugin_config " {{{
       colorscheme murphy
       " colorscheme badwolf
     endtry
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " TagList {{{
+    "-----------------------------------------------------------
+    " TagList {{{
     let Tlist_Ctags_Cmd = g:dotvim_settings.ctags_path
     if !executable('ctags')
       let loaded_taglist = 1
@@ -1143,10 +1145,10 @@ if g:load_vimrc_plugin_config " {{{
     let Tlist_Enable_Fold_Column=0            " Do not show folding tree
     noremap tt  :TlistToggle<CR>
     nnoremap <silent> <leader>tl :Tlist<cr>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " tagbar {{{
+    "-----------------------------------------------------------
+    " tagbar {{{
     let g:tagbar_ctags_bin = g:dotvim_settings.ctags_path
     let g:tagbar_width = 20
     let g:tagbar_autofocus = 1
@@ -1179,23 +1181,23 @@ if g:load_vimrc_plugin_config " {{{
 
     " Add Verilog/Systemverilog support
     let g:tagbar_type_systemverilog = {
-        \ 'ctagstype' : 'systemverilog',
-        \ 'sro' : '::',
-        \ 'kinds' : [
-            \ 'c:classes',
-            \ 't:tasks',
-            \ 'f:functions',
-            \ 'm:modules',
-            \ 'p:programs',
-            \ 'i:interfaces',
-            \ 'e:typedefs',
-            \ 'd:defines'
-        \]
-    \}
-  " }}}
+          \ 'ctagstype' : 'systemverilog',
+          \ 'sro' : '::',
+          \ 'kinds' : [
+          \ 'c:classes',
+          \ 't:tasks',
+          \ 'f:functions',
+          \ 'm:modules',
+          \ 'p:programs',
+          \ 'i:interfaces',
+          \ 'e:typedefs',
+          \ 'd:defines'
+          \]
+          \}
+    " }}}
 
-  "-----------------------------------------------------------
-  " MiniBufExplorer {{{
+    "-----------------------------------------------------------
+    " MiniBufExplorer {{{
     let g:miniBufExplMapCTabSwitchBufs = 1
     let g:miniBufExplMapWindowNavVim = 1
     let g:miniBufExplMapWindowNavArrows = 1
@@ -1205,39 +1207,39 @@ if g:load_vimrc_plugin_config " {{{
     let g:miniBufExplUseSingleClick = 1    " select by single click
     " autocmd BufRead,BufNew :call UMiniBufExplorer
     " noremap ,be :MBEToggle<CR>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " Matchit {{{
+    "-----------------------------------------------------------
+    " Matchit {{{
     " Load matchit.vim, but only if the user hasn't installed a newer version.
     if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
       runtime! macros/matchit.vim
       let b:match_ignorecase=0
       let b:match_words=
-        \ '\<begin\>:\<end\>,' .
-        \ '\<if\>:\<else\>,' .
-        \ '\<module\>:\<endmodule\>,' .
-        \ '\<class\>:\<endclass\>,' .
-        \ '\<program\>:\<endprogram\>,' .
-        \ '\<clocking\>:\<endclocking\>,' .
-        \ '\<property\>:\<endproperty\>,' .
-        \ '\<sequence\>:\<endsequence\>,' .
-        \ '\<package\>:\<endpackage\>,' .
-        \ '\<covergroup\>:\<endgroup\>,' .
-        \ '\<primitive\>:\<endprimitive\>,' .
-        \ '\<specify\>:\<endspecify\>,' .
-        \ '\<generate\>:\<endgenerate\>,' .
-        \ '\<interface\>:\<endinterface\>,' .
-        \ '\<function\>:\<endfunction\>,' .
-        \ '\<task\>:\<endtask\>,' .
-        \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
-        \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
-        \ '`ifdef\>:`else\>:`endif\>,'
+            \ '\<begin\>:\<end\>,' .
+            \ '\<if\>:\<else\>,' .
+            \ '\<module\>:\<endmodule\>,' .
+            \ '\<class\>:\<endclass\>,' .
+            \ '\<program\>:\<endprogram\>,' .
+            \ '\<clocking\>:\<endclocking\>,' .
+            \ '\<property\>:\<endproperty\>,' .
+            \ '\<sequence\>:\<endsequence\>,' .
+            \ '\<package\>:\<endpackage\>,' .
+            \ '\<covergroup\>:\<endgroup\>,' .
+            \ '\<primitive\>:\<endprimitive\>,' .
+            \ '\<specify\>:\<endspecify\>,' .
+            \ '\<generate\>:\<endgenerate\>,' .
+            \ '\<interface\>:\<endinterface\>,' .
+            \ '\<function\>:\<endfunction\>,' .
+            \ '\<task\>:\<endtask\>,' .
+            \ '\<case\>\|\<casex\>\|\<casez\>:\<endcase\>,' .
+            \ '\<fork\>:\<join\>\|\<join_any\>\|\<join_none\>,' .
+            \ '`ifdef\>:`else\>:`endif\>,'
     endif
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " hl-matchit {{{
+    "-----------------------------------------------------------
+    " hl-matchit {{{
     "" If this variable is set, augroup is defined, and start highlighting.
     let g:hl_matchit_enable_on_vim_startup = 1
 
@@ -1249,10 +1251,10 @@ if g:load_vimrc_plugin_config " {{{
 
     "" you can specify use hl_matchit filetype.
     "let g:hl_matchit_allow_ft = 'html,vim,sh' " blah..blah..
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " Netrw {{{
+    "-----------------------------------------------------------
+    " Netrw {{{
     " File Explorer :e <PATH>
     let g:netrw_winsize        = 25
     let g:netrw_keepdir        = 0
@@ -1274,10 +1276,10 @@ if g:load_vimrc_plugin_config " {{{
     noremap <leader>fte :Texplore<CR>            " open in new tab
     noremap <leader>fve :Vexplore<CR>           " vertical split
     nnoremap <silent> <leader>fe :Sexplore!<cr>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " NERD Tree  File Manager {{{
+    "-----------------------------------------------------------
+    " NERD Tree  File Manager {{{
     " o     open file                           " t     open file in new tab
     " go    open file,but cursor in NERDtree    " T     same as t, but focus on the current tab
     " tab   open file in a split window         " !     execute current file
@@ -1313,18 +1315,18 @@ if g:load_vimrc_plugin_config " {{{
       autocmd Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
       " autocmd VimEnter * call StartUpNerdtree()
     augroup END
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " NERDTree-tabs {{{
+    "-----------------------------------------------------------
+    " NERDTree-tabs {{{
     noremap <leader>nn <plug>NERDTreeTabsToggle<CR>
     let g:nerdtree_tabs_open_on_console_startup=0   " NOT Open NERDTree on console vim startup
     let g:nerdtree_tabs_open_on_gui_startup=0       " Open NERDTree on gvim/macvim startup
     let g:NERDTreeNodeDelimiter=","
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  "Calendar {{{
+    "-----------------------------------------------------------
+    "Calendar {{{
     " :Calendar         " Open calendar
     " :CalendarH        " Open Calendar horizonally
     "let g:calendar_diary=<PATH>
@@ -1332,19 +1334,19 @@ if g:load_vimrc_plugin_config " {{{
     let g:calendar_mark = 'left-fit'
     let g:calendar_focus_today = 1
     noremap <Leader>ca :Calendar<CR>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " SVN Command {{{
+    "-----------------------------------------------------------
+    " SVN Command {{{
     let g:svnj_custom_statusbar_ops_hide = 1
     if s:os == "windows"
       " let g:svnj_cache_dir=$HOME.'/.vim-cache'
       let g:svnj_cache_dir=g:dotvim_settings.cache_dir
     endif
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " showmarks {{{
+    "-----------------------------------------------------------
+    " showmarks {{{
     " <Leader>mt  - Toggle whether marks are displayed or not.
     " <Leader>mo  - Turn ShowMarks on, and displays marks.
     " <Leader>mh  - Clear mark on current line.
@@ -1365,20 +1367,20 @@ if g:load_vimrc_plugin_config " {{{
     let g:showmarks_textother = "\t"
     let g:showmarks_no_mappings = 0
     " nmap mt <Plug>ShowMarksToggle
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " mark setting {{{
+    "-----------------------------------------------------------
+    " mark setting {{{
     nmap <silent> <leader>hl <Plug>MarkSet
     vmap <silent> <leader>hl <Plug>MarkSet
     nmap <silent> <leader>hh <Plug>MarkClear
     vmap <silent> <leader>hh <Plug>MarkClear
     nmap <silent> <leader>hr <Plug>MarkRegex
     vmap <silent> <leader>hr <Plug>MarkRegex
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " Vimwiki {{{
+    "-----------------------------------------------------------
+    " Vimwiki {{{
     let g:vimwiki_menu = 'Plugin.Vimwiki'
 
     let wiki_1 = {}
@@ -1394,39 +1396,39 @@ if g:load_vimrc_plugin_config " {{{
 
     let g:vimwiki_camel_case = 0
     let g:vimwiki_ext2syntax = {'.md': 'markdown', '.mkd': 'markdown', '.markdown': 'markdown'}
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " timestamp {{{
+    "-----------------------------------------------------------
+    " timestamp {{{
     let g:timestamp_regexp = '\v\C%(<%([cC]hanged?|[Mm]odified|[Uu]pdated)\s*:\s+)@<=\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|2010-11-01 12:57:29'
     let g:timestamp_rep = '%Y-%m-%d %H:%M:%S'
     let g:timestamp_modelines = 20
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " yankring.vim  {{{
+    "-----------------------------------------------------------
+    " yankring.vim  {{{
     let g:yankring_enabled=0
     let g:yankring_history_file = '.vim-cache/yankring_history'
     noremap <leader>yr :YRShow<cr>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " Colorful Parentheses {{{
-  " rainbow
+    "-----------------------------------------------------------
+    " Colorful Parentheses {{{
+    " rainbow
 
     let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
     " Colors I got off the internet somewhere
     let g:rainbow_conf = { 'ctermfgs': ['cyan', 'magenta', 'yellow', 'grey', 'red', 'green', 'blue'],
           \                'guifgs': ['#FF0000', '#FF00FF', '#FFFF00', '#000000', '#FF0000', '#00FF00', '#0000FF'] }
-  " }}}
+    " }}}
 
-  " ------------------------------------------------------------
-  " Draw It {{{
+    " ------------------------------------------------------------
+    " Draw It {{{
     let g:DrChipTopLvlMenu = 'Plugin.' " remove 'DrChip' menu
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " neocomplcache {{{
+    "-----------------------------------------------------------
+    " neocomplcache {{{
     if g:dotvim_settings.autocomplete_method == 'neocomplcache'
       if v:version >= 702
         let g:acp_enableAtStartup = 0              " Disable AutoComplPop.
@@ -1486,103 +1488,103 @@ if g:load_vimrc_plugin_config " {{{
         inoremap <expr><Space> pumvisible() ? neocomplcache#close_popup() : "\<Space>"
       endif
     endif
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " neocomplete {{{
+    "-----------------------------------------------------------
+    " neocomplete {{{
     if g:dotvim_settings.autocomplete_method == 'neocomplete'
-        "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-        " Disable AutoComplPop.
-        let g:acp_enableAtStartup = 0
-        " Use neocomplete.
-        let g:neocomplete#enable_at_startup = 1
-        " Use smartcase.
-        let g:neocomplete#enable_smart_case = 1
-        " Set minimum syntax keyword length.
-        let g:neocomplete#sources#syntax#min_keyword_length = 3
-        let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
-        let g:neocomplete#data_directory=g:dotvim_settings.cache_dir.'/neocomplcache'
+      "Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+      " Disable AutoComplPop.
+      let g:acp_enableAtStartup = 0
+      " Use neocomplete.
+      let g:neocomplete#enable_at_startup = 1
+      " Use smartcase.
+      let g:neocomplete#enable_smart_case = 1
+      " Set minimum syntax keyword length.
+      let g:neocomplete#sources#syntax#min_keyword_length = 3
+      let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+      let g:neocomplete#data_directory=g:dotvim_settings.cache_dir.'/neocomplcache'
 
-        " Define dictionary.
-        let g:neocomplete#sources#dictionary#dictionaries = {
+      " Define dictionary.
+      let g:neocomplete#sources#dictionary#dictionaries = {
             \ 'default' : '',
             \ 'vimshell' : $HOME.'/.vimshell_hist',
             \ 'scheme' : $HOME.'/.gosh_completions'
-                \ }
+            \ }
 
-        " Define keyword.
-        if !exists('g:neocomplete#keyword_patterns')
-            let g:neocomplete#keyword_patterns = {}
-        endif
-        let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+      " Define keyword.
+      if !exists('g:neocomplete#keyword_patterns')
+        let g:neocomplete#keyword_patterns = {}
+      endif
+      let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-        " Plugin key-mappings.
-        inoremap <expr><C-g>     neocomplete#undo_completion()
-        inoremap <expr><C-l>     neocomplete#complete_common_string()
+      " Plugin key-mappings.
+      inoremap <expr><C-g>     neocomplete#undo_completion()
+      inoremap <expr><C-l>     neocomplete#complete_common_string()
 
-        " Recommended key-mappings.
-        " <CR>: close popup and save indent.
-        inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-        function! s:my_cr_function()
-          return neocomplete#close_popup() . "\<CR>"
-          " For no inserting <CR> key.
-          "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
-        endfunction
-        " <TAB>: completion.
-        inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-        " <C-h>, <BS>: close popup and delete backword char.
-        inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-        inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
-        inoremap <expr><C-y>  neocomplete#close_popup()
-        inoremap <expr><C-e>  neocomplete#cancel_popup()
-        " Close popup by <Space>.
-        "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+      " Recommended key-mappings.
+      " <CR>: close popup and save indent.
+      inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+      function! s:my_cr_function()
+        return neocomplete#close_popup() . "\<CR>"
+        " For no inserting <CR> key.
+        "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+      endfunction
+      " <TAB>: completion.
+      inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+      " <C-h>, <BS>: close popup and delete backword char.
+      inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+      inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+      inoremap <expr><C-y>  neocomplete#close_popup()
+      inoremap <expr><C-e>  neocomplete#cancel_popup()
+      " Close popup by <Space>.
+      "inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
 
-        " For cursor moving in insert mode(Not recommended)
-        "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-        "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-        "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-        "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-        " Or set this.
-        "let g:neocomplete#enable_cursor_hold_i = 1
-        " Or set this.
-        "let g:neocomplete#enable_insert_char_pre = 1
+      " For cursor moving in insert mode(Not recommended)
+      "inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+      "inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+      "inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+      "inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+      " Or set this.
+      "let g:neocomplete#enable_cursor_hold_i = 1
+      " Or set this.
+      "let g:neocomplete#enable_insert_char_pre = 1
 
-        " AutoComplPop like behavior.
-        "let g:neocomplete#enable_auto_select = 1
+      " AutoComplPop like behavior.
+      "let g:neocomplete#enable_auto_select = 1
 
-        " Shell like behavior(not recommended).
-        "set completeopt+=longest
-        "let g:neocomplete#enable_auto_select = 1
-        "let g:neocomplete#disable_auto_complete = 1
-        "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+      " Shell like behavior(not recommended).
+      "set completeopt+=longest
+      "let g:neocomplete#enable_auto_select = 1
+      "let g:neocomplete#disable_auto_complete = 1
+      "inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
-        " Enable heavy omni completion.
-        if !exists('g:neocomplete#sources#omni#input_patterns')
-          let g:neocomplete#sources#omni#input_patterns = {}
-        endif
-        "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-        "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-        "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+      " Enable heavy omni completion.
+      if !exists('g:neocomplete#sources#omni#input_patterns')
+        let g:neocomplete#sources#omni#input_patterns = {}
+      endif
+      "let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+      "let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+      "let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
-        " For perlomni.vim setting.
-        " https://github.com/c9s/perlomni.vim
-        let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+      " For perlomni.vim setting.
+      " https://github.com/c9s/perlomni.vim
+      let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
     endif
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " conque {{{
+    "-----------------------------------------------------------
+    " conque {{{
     autocmd FileType conque_term match none
     let g:ConqueTerm_StartMessages = 0
 
     command! Sh ConqueTermSplit bash --login
     command! Irb ConqueTermSplit irb
     command! Py ConqueTermSplit ipython
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " indent-guides {{{
+    "-----------------------------------------------------------
+    " indent-guides {{{
     " highlight indent with different color
     " The default mapping : <Leader>ig
     " let g:indent_guides_enable_on_vim_startup = 1   " enable when startup
@@ -1591,142 +1593,138 @@ if g:load_vimrc_plugin_config " {{{
     let g:indent_guides_start_level=1
     let g:indent_guides_guide_size=1
     let g:indent_guides_color_change_percent=3
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " indentLines {{{
+    "-----------------------------------------------------------
+    " indentLines {{{
     autocmd! User indentLine doautocmd indentLine Syntax
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " undotree {{{
+    "-----------------------------------------------------------
+    " undotree {{{
     nnoremap <Leader>gu :UndotreeToggle<CR>
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " ctrlp {{{
+    "-----------------------------------------------------------
+    " ctrlp {{{
     if g:dotvim_settings.finder_method == 'ctrlp'
-        let g:ctrlp_map = '<Leader>p'
-        let g:ctrlp_cmd = 'CtrlP'
-        map <leader>j :CtrlP<cr>
-        " Set Ctrl-P to show match at top of list instead of at bottom, which is so
-        " stupid that it's not default
-        let g:ctrlp_match_window_reversed = 0
-        let g:ctrlp_cache_dir = g:dotvim_settings.cache_dir . '/ctrlp'
-        " Tell Ctrl-P to keep the current VIM working directory when starting a
-        " search, another really stupid non default
-        let g:ctrlp_working_path_mode = 'ra'
-        let g:ctrlp_clear_cache_on_exit=1
-        let g:ctrlp_max_height=40
-        let g:ctrlp_show_hidden=0
-        let g:ctrlp_follow_symlinks=1
-        let g:ctrlp_max_files=20000
-        let g:ctrlp_reuse_window='startify'
-        let g:ctrlp_extensions=['funky']
+      let g:ctrlp_map = '<Leader>p'
+      let g:ctrlp_cmd = 'CtrlP'
+      map <leader>j :CtrlP<cr>
+      " Set Ctrl-P to show match at top of list instead of at bottom, which is so
+      " stupid that it's not default
+      let g:ctrlp_match_window_reversed = 0
+      let g:ctrlp_cache_dir = g:dotvim_settings.cache_dir . '/ctrlp'
+      " Tell Ctrl-P to keep the current VIM working directory when starting a
+      " search, another really stupid non default
+      let g:ctrlp_working_path_mode = 'ra'
+      let g:ctrlp_clear_cache_on_exit=1
+      let g:ctrlp_max_height=40
+      let g:ctrlp_show_hidden=0
+      let g:ctrlp_follow_symlinks=1
+      let g:ctrlp_max_files=20000
+      let g:ctrlp_reuse_window='startify'
+      let g:ctrlp_extensions=['funky']
 
-        " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-        let g:ctrlp_custom_ignore = {
+      " let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+      let g:ctrlp_custom_ignore = {
             \ 'dir':  '\v[\/]\.(git|hg|svn)$',
             \ 'file': '\v\.(exe|so|dll|pyc)$',
             \ 'link': 'some_bad_symbolic_links',
             \ }
-        if s:os == "windows"  " Windows
-          let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-        elseif s:os == "linux"        " MacOSX/Linux
-          if executable('ag')
-            let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-          else
-            let g:ctrlp_user_command = 'find %s -type f'
-          endif
+      if s:os == "windows"  " Windows
+        let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+      elseif s:os == "linux"        " MacOSX/Linux
+        if executable('ag')
+          let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+        else
+          let g:ctrlp_user_command = 'find %s -type f'
         endif
-        let g:ctrlp_open_multi = '10t'
+      endif
+      let g:ctrlp_open_multi = '10t'
     endif
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " vim-cycle {{{
-    nmap <silent> <Leader>n <Plug>CycleNext
-    vmap <silent> <Leader>n <Plug>CycleNext
-  " }}}
-
-  "-----------------------------------------------------------
-  " Neosnippet {{{
+    "-----------------------------------------------------------
+    " Snippet {{{
+    " Neosnippet {{{
     set rtp+="g:vimfiles . '\snippets'"
 
     if g:dotvim_settings.snippet_method == 'neosnippet'
-        " Plugin key-mappings.
-        " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
-        " C-k can also be used to jump to the next field in the snippet.
-        imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-        xmap <C-k>     <Plug>(neosnippet_expand_target)
+      " Plugin key-mappings.
+      " C-k to select-and-expand a snippet from the Neocomplcache popup (Use C-n and C-p to select it).
+      " C-k can also be used to jump to the next field in the snippet.
+      imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+      xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-        " Tab to select the next field to fill in the snippet.
-        "" " SuperTab like snippets behavior
-        " inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "   \ "\<Plug>(neosnippet_expand_or_jump)"
-        "   \: pumvisible() ? "\<C-n>" : "\<TAB>"
-        " snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-        "   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+      " Tab to select the next field to fill in the snippet.
+      "" " SuperTab like snippets behavior
+      " inoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      "   \ "\<Plug>(neosnippet_expand_or_jump)"
+      "   \: pumvisible() ? "\<C-n>" : "\<TAB>"
+      " snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+      "   \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-        " For snippet_complete marker.
-        if has('conceal')
-          set conceallevel=2 concealcursor=i
-        endif"
+      " For snippet_complete marker.
+      if has('conceal')
+        set conceallevel=2 concealcursor=i
+      endif"
 
-        " use a different collection of snippets other than the built-in ones
-        " Enable snipMate compatibility feature, load snipMate snippets from runtime path automatically.
-        let g:neosnippet#enable_snipmate_compatibility = 1
+      " use a different collection of snippets other than the built-in ones
+      " Enable snipMate compatibility feature, load snipMate snippets from runtime path automatically.
+      let g:neosnippet#enable_snipmate_compatibility = 1
 
-        " Tell Neosnippet about the other snippets
-        let g:neosnippet#snippets_directory=[ g:vimfiles . '/snippets/snippets',
-                                            \ g:vimfiles . '/bundle/systemc/snippets']
+      " Tell Neosnippet about the other snippets
+      let g:neosnippet#snippets_directory=[ g:vimfiles . '/snippets/snippets',
+            \ g:vimfiles . '/bundle/systemc/snippets']
 
-        " associating certain filetypes with other snippet files.
-        let g:neosnippet#scope_aliases = {}
-        let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
-        let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
+      " associating certain filetypes with other snippet files.
+      let g:neosnippet#scope_aliases = {}
+      let g:neosnippet#scope_aliases['cpp'] = 'cpp,systemc'
+      let g:neosnippet#scope_aliases['systemverilog'] = 'systemverilog,uvm'
     endif
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " snipMate {{{
+    "-----------------------------------------------------------
+    " snipMate {{{
     if g:dotvim_settings.snippet_method == 'snipmate'
-        " Add my snippets folder
-        let g:local_snippets = g:vimfiles.'/snippets/snippets'
-        let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
-        let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
-        let g:snipMate.scope_aliases = {}
-        let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog,uvm'
-        let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog,uvm'
-        imap <C-J> <Plug>snipMateNextOrTrigger
-        smap <C-J> <Plug>snipMateNextOrTrigger
-        imap <C-K> <Plug>snipMateNextOrTrigger
-        smap <C-K> <Plug>snipMateNextOrTrigger
+      " Add my snippets folder
+      let g:local_snippets = g:vimfiles.'/snippets/snippets'
+      let g:snips_author = 'Hong Jin <hon9jin@gmail.com>'
+      let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
+      let g:snipMate.scope_aliases = {}
+      let g:snipMate.scope_aliases['systemverilog'] = 'verilog,systemverilog,uvm'
+      let g:snipMate.scope_aliases['verilog_systemverilog'] = 'verilog,systemverilog,uvm'
+      imap <C-J> <Plug>snipMateNextOrTrigger
+      smap <C-J> <Plug>snipMateNextOrTrigger
+      imap <C-K> <Plug>snipMateNextOrTrigger
+      smap <C-K> <Plug>snipMateNextOrTrigger
     endif
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " UltiSnips {{{
+    "-----------------------------------------------------------
+    " UltiSnips {{{
     if g:dotvim_settings.snippet_method == 'ultisnips'
-        " better key bindings for UltiSnipsExpandTrigger
-        " let g:UltiSnipsExpandTrigger = "<C-J>"
-        " let g:UltiSnipsJumpForwardTrigger = "<C-J>"
-        " let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
-        let g:UltiSnipsListSnippets = '<C-S-tab>'
-        let g:UltiSnipsExpandTrigger = '<tab>'
-        let g:UltiSnipsJumpForwardTrigger = '<tab>'
-        let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
-        let g:UltiSnipsEditSplit="vertical"
-        let g:UltiSnipsEnableSnipMate=0
-        " let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
-        " let g:UltiSnipsSnippetDirectories=["UltiSnips"]
-        let g:UltiSnipsSnippetDirectories=[g:vimfiles . '/snippets/UltiSnips', "UltiSnips"]
+      " better key bindings for UltiSnipsExpandTrigger
+      " let g:UltiSnipsExpandTrigger = "<C-J>"
+      " let g:UltiSnipsJumpForwardTrigger = "<C-J>"
+      " let g:UltiSnipsJumpBackwardTrigger = "<C-K>"
+      let g:UltiSnipsListSnippets = '<C-S-tab>'
+      let g:UltiSnipsExpandTrigger = '<tab>'
+      let g:UltiSnipsJumpForwardTrigger = '<tab>'
+      let g:UltiSnipsJumpBackwardTrigger = '<S-tab>'
+      let g:UltiSnipsEditSplit="vertical"
+      let g:UltiSnipsEnableSnipMate=0
+      " let g:UltiSnipsSnippetsDir=g:vimfiles . '/snippets/UltiSnips'
+      " let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+      let g:UltiSnipsSnippetDirectories=[g:vimfiles . '/snippets/UltiSnips', "UltiSnips"]
     endif
-  "}}}
+    "}}}
+    " Snippet }}}
 
-  "-----------------------------------------------------------
-  " delimitMate {{{
+    "-----------------------------------------------------------
+    " delimitMate {{{
     " let loaded_delimitMate = 1
     " au FileType mail let b:loaded_delimitMate = 1
     let delimitMate_matchpairs = "(:),[:],{:},<:>"
@@ -1743,19 +1741,19 @@ if g:load_vimrc_plugin_config " {{{
       autocmd FileType vim let b:delimitMate_quotes = "' `"
       autocmd FileType systemverilog let b:delimitMate_quotes = "\""
     augroup END
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " vim-easy-align {{{
+    "-----------------------------------------------------------
+    " vim-easy-align {{{
     " Start interactive EasyAlign in visual mode (e.g. vipga)
     xmap ga <Plug>(EasyAlign)
 
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " Tabular {{{
+    "-----------------------------------------------------------
+    " Tabular {{{
     if exists(":Tabularize")
       nnoremap <Leader>a&      : Tabularize /&<CR>
       vnoremap <Leader>a&      : Tabularize /&<CR>
@@ -1778,11 +1776,10 @@ if g:load_vimrc_plugin_config " {{{
       nnoremap <Leader>a/      : Tabularize /\/\//l2c1l0<CR>
       vnoremap <Leader>a/      : Tabularize /\/\//l2c1l0<CR>
     endif
-  " }}}
+    " }}}
 
-
-  "-----------------------------------------------------------
-  " fugitive {{{
+    "-----------------------------------------------------------
+    " fugitive {{{
     " Git integration!
     nnoremap <leader>gs :Gstatus<enter>
     nnoremap <leader>gd :Gdiff<enter>
@@ -1794,10 +1791,10 @@ if g:load_vimrc_plugin_config " {{{
     " % needs to be escaped, otherwise vim inserts its register %
     " Note that no <enter> so user has the option of changing number of commits
     nnoremap <leader>gh :r !git log --format=format:\%s -1
-  " }}}
+    " }}}
 
-  "-----------------------------------------------------------
-  " NerdCommenter {{{
+    "-----------------------------------------------------------
+    " NerdCommenter {{{
     " Add spaces after comment delimiters by default
     let g:NERDSpaceDelims = 1   " add extra space
     " Enable trimming of trailing whitespace when uncommenting
@@ -1806,16 +1803,16 @@ if g:load_vimrc_plugin_config " {{{
     let g:NERDCommentEmptyLines = 1
     " custom delimiters
     let g:NERDCustomDelimiters = { 'verilog_systemverilog': { 'left': '//', }, }
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " AuthorInfo {{{
+    "-----------------------------------------------------------
+    " AuthorInfo {{{
     let g:vimrc_author='Hong Jin'
     let g:vimrc_email='hongjin@fiberhome.com'
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " Grep {{{
+    "-----------------------------------------------------------
+    " Grep {{{
     if s:os == "windows"
       let g:Grep_Path       = g:vimfiles.'/gnu/grep.exe'
       let g:Fgrep_Path      = g:vimfiles.'/gnu/fgrep.exe'
@@ -1825,37 +1822,39 @@ if g:load_vimrc_plugin_config " {{{
     endif
     let Grep_Default_Options = '-i'
     let Grep_Skip_Dirs = 'RCS CVS .svn .git'
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " airline {{{
+    "-----------------------------------------------------------
+    " Status Line {{{
+    " airline {{{
     if g:dotvim_settings.statusline_method == 'airline'
-        " let g:airline_section_b = '%{getcwd()}'
-        " " let g:airline_section_c = '%t'
-        " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
-        " let g:airline_section_c = airline#section#create_left(['file'])
+      " let g:airline_section_b = '%{getcwd()}'
+      " " let g:airline_section_c = '%t'
+      " " let g:airline_section_c = airline#section#create_left(['%{getcwd()}', 'file'])
+      " let g:airline_section_c = airline#section#create_left(['file'])
 
-        let g:airline_inactive_collapse=1
+      let g:airline_inactive_collapse=1
 
-        " Enable Extensions
-        " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
+      " Enable Extensions
+      " let g:airline_extensions = ['branch', 'quickfix', 'tabline']
     endif
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " lightline {{{
+    "-----------------------------------------------------------
+    " lightline {{{
     if g:dotvim_settings.statusline_method == 'lightline'
-        "let g:lightline = {
-        "    \     'active': {
-        "    \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
-        "    \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
-        "    \     }
-        "    \ }
+      "let g:lightline = {
+      "    \     'active': {
+      "    \         'left': [['mode', 'paste' ], ['readonly', 'filename', 'modified']],
+      "    \         'right': [['lineinfo'], ['percent'], ['fileformat', 'fileencoding']]
+      "    \     }
+      "    \ }
     endif
-  " }}}
+    " }}}
+    " Status Line }}}
 
-  "-----------------------------------------------------------
-  " easymotion {{{
+    "-----------------------------------------------------------
+    " easymotion {{{
     " triggered with `<Leader><Leader>`
     " `<Leader><Leader>w` to find the beginning of a word
     " `<Leader><Leader>f` to find the character
@@ -1870,1027 +1869,1029 @@ if g:load_vimrc_plugin_config " {{{
     let g:EasyMotion_do_shade = 1
     hi link EasyMotionTarget ErrorMsg
     hi link EasyMotionShade Comment
-  "}}}
+    "}}}
 
-  "-----------------------------------------------------------
-  " Verilog {{{
-    " verilog root menu
-    let g:PluginTopLvlMenu = 'Plugin'
-  "}}}
+    "-----------------------------------------------------------
+    " Verilog {{{
+      " verilog root menu
+      let g:PluginTopLvlMenu = 'Plugin'
+    "}}}
 
-  "-----------------------------------------------------------
-  " uvm_gen {{{
-    let g:uvm_author    = "Hong Jin"
-    let g:uvm_email     = "hongjin@fiberhome.com"
-    let g:uvm_company   = "Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
-    let g:uvm_department = "Microelectronics Dept. Logic Development Group."
-  "}}}
+    "-----------------------------------------------------------
+    " uvm_gen {{{
+      let g:uvm_author    = "Hong Jin"
+      let g:uvm_email     = "hongjin@fiberhome.com"
+      let g:uvm_company   = "Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
+      let g:uvm_department = "Microelectronics Dept. Logic Development Group."
+    "}}}
 
-  "-----------------------------------------------------------
-  " multi_cursor {{{
-    let g:multi_cursor_use_default_mapping=1
-  "}}}
+    "-----------------------------------------------------------
+    " multi_cursor {{{
+      let g:multi_cursor_use_default_mapping=1
+    "}}}
 
-  "-----------------------------------------------------------
-  " CamelCaseMotion {{{
-    " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
-    if exists('g:loaded_camelcasemotion')
-      " call camelcasemotion#CreateMotionMappings('<leader>')
-      map <silent> W <Plug>CamelCaseMotion_w
-      map <silent> B <Plug>CamelCaseMotion_b
-      map <silent> E <Plug>CamelCaseMotion_e
-      sunmap W
-      sunmap B
-      sunmap E
-      omap <silent> iw <Plug>CamelCaseMotion_iw
-      xmap <silent> iw <Plug>CamelCaseMotion_iw
-      omap <silent> ib <Plug>CamelCaseMotion_ib
-      xmap <silent> ib <Plug>CamelCaseMotion_ib
-      omap <silent> ie <Plug>CamelCaseMotion_ie
-      xmap <silent> ie <Plug>CamelCaseMotion_ie
-    endif
-  "}}}
+    "-----------------------------------------------------------
+    " CamelCaseMotion {{{
+      " Replace the default 'w', 'b' and 'e' mappings with <Plug>CamelCaseMotion_?
+      if exists('g:loaded_camelcasemotion')
+        " call camelcasemotion#CreateMotionMappings('<leader>')
+        map <silent> W <Plug>CamelCaseMotion_w
+        map <silent> B <Plug>CamelCaseMotion_b
+        map <silent> E <Plug>CamelCaseMotion_e
+        sunmap W
+        sunmap B
+        sunmap E
+        omap <silent> iw <Plug>CamelCaseMotion_iw
+        xmap <silent> iw <Plug>CamelCaseMotion_iw
+        omap <silent> ib <Plug>CamelCaseMotion_ib
+        xmap <silent> ib <Plug>CamelCaseMotion_ib
+        omap <silent> ie <Plug>CamelCaseMotion_ie
+        xmap <silent> ie <Plug>CamelCaseMotion_ie
+      endif
+    "}}}
 
-  "-----------------------------------------------------------
-  " anzu {{{
-    " display the current match index number and total match number of search pattern
-    " mapping
-    nmap n <Plug>(anzu-n-with-echo)
-    nmap N <Plug>(anzu-N-with-echo)
-    " nmap * <Plug>(anzu-star-with-echo)
-    " nmap # <Plug>(anzu-sharp-with-echo)
+    "-----------------------------------------------------------
+    " anzu {{{
+      " display the current match index number and total match number of search pattern
+      " mapping
+      nmap n <Plug>(anzu-n-with-echo)
+      nmap N <Plug>(anzu-N-with-echo)
+      " nmap * <Plug>(anzu-star-with-echo)
+      " nmap # <Plug>(anzu-sharp-with-echo)
 
-    " clear status
-    nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+      " clear status
+      nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 
-    " statusline
-    " set statusline+=%{anzu#search_status()}
-  "}}}
+      " statusline
+      " set statusline+=%{anzu#search_status()}
+    "}}}
 
-  "-----------------------------------------------------------
-  " c-support {{{
-    " C/C++ IDE
-    let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
-    let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
-    let g:C_Root = '&Plugin.&C\/C\+\+.'
-    let g:C_FormatDate         = '%Y-%m-%d'
-    let g:C_FormatTime         = '%H:%M:%S'
-  "}}}
+    "-----------------------------------------------------------
+    " c-support {{{
+      " C/C++ IDE
+      let g:C_GlobalTemplateFile = g:vimfiles . '/bundle/c/c-support/templates/Templates'
+      let g:C_LocalTemplateFile  = g:vimfiles . '/c-support/templates/Templates'
+      let g:C_Root = '&Plugin.&C\/C\+\+.'
+      let g:C_FormatDate         = '%Y-%m-%d'
+      let g:C_FormatTime         = '%H:%M:%S'
+    "}}}
 
-  "-----------------------------------------------------------
-  " expand-region {{{
-    let g:expand_region_text_objects = {
-        \ 'iw'  :1,
-        \ 'iW'  :1,
-        \ 'i"'  :1,
-        \ 'i''' :1,
-        \ 'i]'  :1,
-        \ 'ib'  :1,
-        \ 'iB'  :1,
-        \ 'il'  :0,
-        \ 'ip'  :1,
-        \ 'ie'  :1,
-        \ }
-    xmap v <Plug>(expand_region_expand)
-    xmap V <Plug>(expand_region_shrink)
-  "}}}
+    "-----------------------------------------------------------
+    " expand-region {{{
+      let g:expand_region_text_objects = {
+          \ 'iw'  :1,
+          \ 'iW'  :1,
+          \ 'i"'  :1,
+          \ 'i''' :1,
+          \ 'i]'  :1,
+          \ 'ib'  :1,
+          \ 'iB'  :1,
+          \ 'il'  :0,
+          \ 'ip'  :1,
+          \ 'ie'  :1,
+          \ }
+      xmap v <Plug>(expand_region_expand)
+      xmap V <Plug>(expand_region_shrink)
+    "}}}
 
-  "-----------------------------------------------------------
-  " wildfire {{{
-    " This selects the next closest text object.
-    let g:wildfire_fuel_map = "<ENTER>"
+    "-----------------------------------------------------------
+    " wildfire {{{
+      " This selects the next closest text object.
+      let g:wildfire_fuel_map = "<ENTER>"
 
-    " This selects the previous closest text object.
-    let g:wildfire_water_map = "<BS>"
+      " This selects the previous closest text object.
+      let g:wildfire_water_map = "<BS>"
 
-    let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "ip", "it"]
-  "}}}
+      let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "ip", "it"]
+    "}}}
 
-  "-----------------------------------------------------------
-  " incsearch {{{
-    if exists('g:loaded_incsearch')
-      map /  <Plug>(incsearch-forward)
-      map ?  <Plug>(incsearch-backward)
-      map g/ <Plug>(incsearch-stay)
-      let g:incsearch#magic = '\v' " very magic
-      let g:incsearch#magic = '\V' " very nomagic
-      let g:incsearch#magic = '\m' " magic
-      let g:incsearch#magic = '\M' " nomagic
-      " work with anzu
-      map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
-      map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
-    endif
-  " }}}
+    "-----------------------------------------------------------
+    " incsearch.vim {{{
+      if exists('g:loaded_incsearch')
+        map /  <Plug>(incsearch-forward)
+        map ?  <Plug>(incsearch-backward)
+        map g/ <Plug>(incsearch-stay)
+        let g:incsearch#magic = '\v' " very magic
+        let g:incsearch#magic = '\V' " very nomagic
+        let g:incsearch#magic = '\m' " magic
+        let g:incsearch#magic = '\M' " nomagic
+        " work with anzu
+        map n <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+        map N <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
+      endif
+    " }}}
 
-  "-----------------------------------------------------------
-  " vim-asterisk {{{
-  " provides immap *   <Plug>(asterisk-*)
-    if exists('g:loaded_asterisk')
-      map *   <Plug>(asterisk-*)
-      map #   <Plug>(asterisk-#)
-      map g*  <Plug>(asterisk-g*)
-      map g#  <Plug>(asterisk-g#)
-      map z*  <Plug>(asterisk-z*)
-      map gz* <Plug>(asterisk-gz*)
-      map z#  <Plug>(asterisk-z#)
-      map gz# <Plug>(asterisk-gz#)
-    endif
-  " }}}
+    "-----------------------------------------------------------
+    " vim-asterisk {{{
+    " provides immap *   <Plug>(asterisk-*)
+      if exists('g:loaded_asterisk')
+        map *   <Plug>(asterisk-*)
+        map #   <Plug>(asterisk-#)
+        map g*  <Plug>(asterisk-g*)
+        map g#  <Plug>(asterisk-g#)
+        map z*  <Plug>(asterisk-z*)
+        map gz* <Plug>(asterisk-gz*)
+        map z#  <Plug>(asterisk-z#)
+        map gz# <Plug>(asterisk-gz#)
+      endif
+    " }}}
 
-  "-----------------------------------------------------------
-  " FastFold {{{
-    nmap zuz <Plug>(FastFoldUpdate)
-    let g:fastfold_savehook = 1
-    let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
-    let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
-    let g:tex_fold_enabled   = 1
-    let g:vimsyn_folding     = 'af'
-    let g:xml_syntax_folding = 1
-    let g:php_folding        = 1
-    let g:perl_fold          = 1
-  " }}}
+    "-----------------------------------------------------------
+    " FastFold {{{
+      nmap zuz <Plug>(FastFoldUpdate)
+      let g:fastfold_savehook = 1
+      let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+      let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+      let g:tex_fold_enabled   = 1
+      let g:vimsyn_folding     = 'af'
+      let g:xml_syntax_folding = 1
+      let g:php_folding        = 1
+      let g:perl_fold          = 1
+    " }}}
 
-  "-----------------------------------------------------------
-  " signify {{{
-  let g:signify_vcs_list = [ 'git', 'svn' ]
-  " }}}
-endif
-"}}} Plugin_config -----------------------------------------
+    "-----------------------------------------------------------
+    " signify {{{
+    let g:signify_vcs_list = [ 'git', 'svn' ]
+    " }}}
+  endif
+  " }}} Plugin_config -----------------------------------------
 
 
 "-----------------------------------------------------------
-"""""""""""""""""""""" Extended """"""""""""""""""""""""""""
+" Extended
 "-----------------------------------------------------------
-"{{{
-if g:load_vimrc_extended
+  if g:load_vimrc_extended "{{{
 
-  "-----------------------------------------------------------
-  " Key Mapping Setting {{{
-  "-----------------------------------------------------------
+    "-----------------------------------------------------------
+    " Key Mapping Setting {{{
+    "-----------------------------------------------------------
 
-  " map <F1> :call ToggleSketch()<CR>
-  " map <F2> zr
-  " map <F3>
-  " map <F4> :call TitleDet()
-  " map <F4>    :q<CR>
-  " imap <F4>    <ESC>:q<CR>
-  inoremap <silent> <F4> <C-o><F4>
-  " map <F5> LookUp File
-  " imap <silent> <F5> <C-o><F5>
-  " F4 / F5 - change window height
-  " "nnoremap <silent> <F4> <C-w>+
-  " "imap <silent> <F4> <C-o><F4>
-  " "nnoremap <silent> <F5> <C-w>-
-  " "imap <silent> <F5> <C-o><F5>
+    " map <F1> :call ToggleSketch()<CR>
+    " map <F2> zr
+    " map <F3>
+    " map <F4> :call TitleDet()
+    " map <F4>    :q<CR>
+    " imap <F4>    <ESC>:q<CR>
+    inoremap <silent> <F4> <C-o><F4>
+    " map <F5> LookUp File
+    " imap <silent> <F5> <C-o><F5>
+    " F4 / F5 - change window height
+    " "nnoremap <silent> <F4> <C-w>+
+    " "imap <silent> <F4> <C-o><F4>
+    " "nnoremap <silent> <F5> <C-w>-
+    " "imap <silent> <F5> <C-o><F5>
 
-  " map <F7> :tabprevious<CR>
-  map <silent> <F7> <C-o><F7>
-  " map <F7> :tabnext<CR>
-  map <silent> <F8> <C-o><F8>
+    " map <F7> :tabprevious<CR>
+    map <silent> <F7> <C-o><F7>
+    " map <F7> :tabnext<CR>
+    map <silent> <F8> <C-o><F8>
 
-  map  <F7>           :tabprevious<CR>
-  map  <F8>           :tabnext<CR>
-  map  <leader>tn     :tabnew<CR>
-  map  <leader>tc     :tabclose<CR>
-  map  <leader>to     :tabonly<cr>
-  imap  <F7>          <ESC>:tabprevious<CR>i
-  imap  <F8>          <ESC>:tabnext<CR>i
-  imap  ^T            <ESC>:tabnew<CR>i
+    map  <F7>           :tabprevious<CR>
+    map  <F8>           :tabnext<CR>
+    map  <leader>tn     :tabnew<CR>
+    map  <leader>tc     :tabclose<CR>
+    map  <leader>to     :tabonly<cr>
+    imap  <F7>          <ESC>:tabprevious<CR>i
+    imap  <F8>          <ESC>:tabnext<CR>i
+    imap  ^T            <ESC>:tabnew<CR>i
 
-  " map <F9> :!python.exe %
-  map     <F10>   :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
-  " Buffer - reverse everything ... :)
-  map     <F11>   ggVGg?     " rot-13
-  map     <F12>   a<C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
-  imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
-  " insert time    strftime("%c")
+    " map <F9> :!python.exe %
+    map     <F10>   :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+    " Buffer - reverse everything ... :)
+    map     <F11>   ggVGg?     " rot-13
+    map     <F12>   a<C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
+    imap    <F12>   <C-R>=strftime(" @ %Y-%m-%d %H:%M")<CR>
+    " insert time    strftime("%c")
 
-  " repeat command for each line in selection
-  vnoremap . :normal .<CR>
+    " repeat command for each line in selection
+    vnoremap . :normal .<CR>
 
-  " shortcut for :diffupdate
-  nnoremap du :diffupdate<CR>
+    " shortcut for :diffupdate
+    nnoremap du :diffupdate<CR>
 
-  " map Ctrl+C to Escape
-  inoremap <C-c> <Esc>
+    " map Ctrl+C to Escape
+    inoremap <C-c> <Esc>
 
-  " reselect visual block after indent
-  vnoremap > >gv
-  vnoremap < <gv
+    " reselect visual block after indent
+    vnoremap > >gv
+    vnoremap < <gv
 
-  " ,/ - remove highlighted search
-  " nnoremap <silent> ,/ :noh<CR>
+    " ,/ - remove highlighted search
+    " nnoremap <silent> ,/ :noh<CR>
 
-  " ,1-9 - quick buffer switching
-  nnoremap  <leader>1 :b1<CR>
-  nnoremap  <leader>2 :b2<CR>
-  nnoremap  <leader>3 :b3<CR>
-  nnoremap  <leader>4 :b4<CR>
-  nnoremap  <leader>5 :b5<CR>
-  nnoremap  <leader>6 :b6<CR>
-  nnoremap  <leader>7 :b7<CR>
-  nnoremap  <leader>8 :b8<CR>
-  nnoremap  <leader>9 :b9<CR>
+    " ,1-9 - quick buffer switching
+    nnoremap  <leader>1 :b1<CR>
+    nnoremap  <leader>2 :b2<CR>
+    nnoremap  <leader>3 :b3<CR>
+    nnoremap  <leader>4 :b4<CR>
+    nnoremap  <leader>5 :b5<CR>
+    nnoremap  <leader>6 :b6<CR>
+    nnoremap  <leader>7 :b7<CR>
+    nnoremap  <leader>8 :b8<CR>
+    nnoremap  <leader>9 :b9<CR>
 
-  " Allow insert mode editing like emacs
-  inoremap  <C-a>  <Home>
-  inoremap  <C-e>  <End>
-  inoremap  <C-f>  <Right>
-  inoremap  <C-b>  <Left>
+    " Allow insert mode editing like emacs
+    inoremap  <C-a>  <Home>
+    inoremap  <C-e>  <End>
+    inoremap  <C-f>  <Right>
+    inoremap  <C-b>  <Left>
 
-  noremap   <M-d>  <C-o>diW   " delete word
-  noremap   <M-y>  <C-o>yiW   " yank word
+    noremap   <M-d>  <C-o>diW   " delete word
+    noremap   <M-y>  <C-o>yiW   " yank word
 
-  " Buffer commands
-  nnoremap  <leader>bb :buffers<CR>
-  nnoremap  <Leader>bd :bdelete<CR>
+    " Buffer commands
+    nnoremap  <leader>bb :buffers<CR>
+    nnoremap  <Leader>bd :bdelete<CR>
 
-  " ,bn - next buffer
-  nnoremap  <leader>bn :bnext<CR>
+    " ,bn - next buffer
+    nnoremap  <leader>bn :bnext<CR>
 
-  " ,bp - previous buffer
-  nnoremap  <leader>bp :bprevious<CR>
+    " ,bp - previous buffer
+    nnoremap  <leader>bp :bprevious<CR>
 
-  " Remove trailing whitespace
-  nnoremap  <leader>dws :silent! %s/\s\+$//ge<enter>
-  vnoremap  <leader>dws :s/\s\+$//ge<enter>
-  " Remove trailing ^M
-  nmap      <leader>dms :%s/\r$//g<CR>:noh<CR>
+    " Remove trailing whitespace
+    nnoremap  <leader>dws :silent! %s/\s\+$//ge<enter>
+    vnoremap  <leader>dws :s/\s\+$//ge<enter>
+    " Remove trailing ^M
+    nmap      <leader>dms :%s/\r$//g<CR>:noh<CR>
 
-  " Ignore whitespace in diffs.
-  " Also shows current diffopt status.
-  nnoremap  <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
-  nnoremap  <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
+    " Ignore whitespace in diffs.
+    " Also shows current diffopt status.
+    nnoremap  <leader>s :set diffopt+=iwhite<enter>:set diffopt<enter>
+    nnoremap  <leader>S :set diffopt-=iwhite<enter>:set diffopt<enter>
 
-  " ,e* - Edit the vimrc file
-  nnoremap  <Leader>ev    :next $MYVIMRC<CR>
-  nnoremap  <Leader>sv    :source $MYVIMRC<CR>
+    " ,e* - Edit the vimrc file
+    nnoremap  <Leader>ev    :next $MYVIMRC<CR>
+    nnoremap  <Leader>sv    :source $MYVIMRC<CR>
 
-  " ,c - close current window
-  " nnoremap <silent> <leader>c :silent! close<CR>
+    " ,c - close current window
+    " nnoremap <silent> <leader>c :silent! close<CR>
 
-  " ,d - open definition in new window
-  nnoremap  <leader>d   <C-w>f
+    " ,d - open definition in new window
+    nnoremap  <leader>d   <C-w>f
 
-  " ,P - Go back to previous file
-  noremap   <Leader>P   <C-^>
+    " ,P - Go back to previous file
+    noremap   <Leader>P   <C-^>
 
-  " ,s - split horizontally
-  " nnoremap <silent> <leader>s :split<CR>
-  nnoremap  <silent> <leader>h :split^M^W^W<cr>
+    " ,s - split horizontally
+    " nnoremap <silent> <leader>s :split<CR>
+    nnoremap  <silent> <leader>h :split^M^W^W<cr>
 
-  " ,v - Reselect text that was just pasted
-  nnoremap  <leader>v V`]
+    " ,v - Reselect text that was just pasted
+    nnoremap  <leader>v V`]
 
-  " ,W - clear trailing whitespace
-  " nnoremap <silent> <leader>W :%s=\s\+$==<CR>
-  nnoremap  <leader>W     :%s/\s\+$//<cr>
+    " ,W - clear trailing whitespace
+    " nnoremap <silent> <leader>W :%s=\s\+$==<CR>
+    nnoremap  <leader>W     :%s/\s\+$//<cr>
 
-  " clearing highlighted search
-  nnoremap <silent> <leader>\     :nohlsearch<CR>
-  nnoremap <ESC><ESC>             :nohlsearch<CR>
+    " clearing highlighted search
+    nnoremap <silent> <leader>\     :nohlsearch<CR>
+    nnoremap <ESC><ESC>             :nohlsearch<CR>
 
-  inoremap <buffer> /*          /**/<Left><Left>
-  inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
-  inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
-  inoremap <buffer> <Leader>/*  /*
+    inoremap <buffer> /*          /**/<Left><Left>
+    inoremap <buffer> /*<Space>   /*<Space><Space>*/<Left><Left><Left>
+    inoremap <buffer> /*<CR>      /*<CR>*/<Esc>O
+    inoremap <buffer> <Leader>/*  /*
 
-  " Easy escape."{{{
-  inoremap jj           <Esc>
-  onoremap jj           <ESC>
-  inoremap j<Space>     j
-  onoremap j<Space>     j
-  "}}}
+    " Easy escape."{{{
+    inoremap jj           <Esc>
+    onoremap jj           <ESC>
+    inoremap j<Space>     j
+    onoremap j<Space>     j
+    "}}}
 
-  " Jump mark can restore column."{{{
-  nnoremap \  `
-  " Useless command.
-  nnoremap M  m
-  "}}}
+    " Jump mark can restore column."{{{
+    nnoremap \  `
+    " Useless command.
+    nnoremap M  m
+    "}}}
 
-  " Smart <C-f>, <C-b>.
-  nnoremap <silent> <C-f> <C-f>
-  nnoremap <silent> <C-b> <C-b>
+    " Smart <C-f>, <C-b>.
+    nnoremap <silent> <C-f> <C-f>
+    nnoremap <silent> <C-b> <C-b>
 
-  " Like gv, but select the last changed text.
-  nnoremap gc  `[v`]
-  " Specify the last changed text as {motion}.
-  vnoremap <silent> gc    :<C-u>normal gc<CR>
-  onoremap <silent> gc    :<C-u>normal gc<CR>
+    " Like gv, but select the last changed text.
+    nnoremap gc  `[v`]
+    " Specify the last changed text as {motion}.
+    vnoremap <silent> gc    :<C-u>normal gc<CR>
+    onoremap <silent> gc    :<C-u>normal gc<CR>
 
-  " Smart home and smart end."{{{
-  nnoremap <silent> gh    :<C-u>call SmartHome("n")<CR>
-  nnoremap <silent> ge    :<C-u>call SmartEnd("n")<CR>
-  xnoremap <silent> gh    <ESC>:<C-u>call SmartHome("v")<CR>
-  xnoremap <silent> ge    <ESC>:<C-u>call SmartEnd("v")<CR>
-  nnoremap <expr>   gm    (virtcol('$')/2).'\|'
-  xnoremap <expr>   gm    (virtcol('$')/2).'\|'
+    " Smart home and smart end."{{{
+    nnoremap <silent> gh    :<C-u>call SmartHome("n")<CR>
+    nnoremap <silent> ge    :<C-u>call SmartEnd("n")<CR>
+    xnoremap <silent> gh    <ESC>:<C-u>call SmartHome("v")<CR>
+    xnoremap <silent> ge    <ESC>:<C-u>call SmartEnd("v")<CR>
+    nnoremap <expr>   gm    (virtcol('$')/2).'\|'
+    xnoremap <expr>   gm    (virtcol('$')/2).'\|'
 
-  " Fast saving
-  " nnoremap <silent> <leader>wr :w<cr>
-  " nnoremap <silent> <leader>wf :w!<cr>
-  " nnoremap <silent> <leader>w :w!<cr>
-  " Force Saving Files that Require Root Permission
-  cnoremap w!! %!sudo tee > /dev/null %
-  " Fast quiting
-  nnoremap <silent> <leader>qw :wq<cr>
-  nnoremap <silent> <leader>qf :q!<cr>
-  nnoremap <silent> <leader>qq :q<cr>
-  nnoremap <silent> <leader>qa :qa<cr>
-  " Fast remove highlight search
-  nnoremap <silent> <leader><cr> :noh<cr>
-  " Fast redraw
-  nnoremap <silent> <leader>rr :redraw!<cr>
+    " Fast saving
+    " nnoremap <silent> <leader>wr :w<cr>
+    " nnoremap <silent> <leader>wf :w!<cr>
+    " nnoremap <silent> <leader>w :w!<cr>
+    " Force Saving Files that Require Root Permission
+    cnoremap w!! %!sudo tee > /dev/null %
+    " Fast quiting
+    nnoremap <silent> <leader>qw :wq<cr>
+    nnoremap <silent> <leader>qf :q!<cr>
+    nnoremap <silent> <leader>qq :q<cr>
+    nnoremap <silent> <leader>qa :qa<cr>
+    " Fast remove highlight search
+    nnoremap <silent> <leader><cr> :noh<cr>
+    " Fast redraw
+    nnoremap <silent> <leader>rr :redraw!<cr>
 
-  "Smart way to move btw. windows
-  " nmap <C-j> <C-W>j
-  nnoremap <C-k> <C-W>k
-  nnoremap <C-h> <C-W>h
-  nnoremap <C-l> <C-W>l
+    "Smart way to move btw. windows
+    " nmap <C-j> <C-W>j
+    nnoremap <C-k> <C-W>k
+    nnoremap <C-h> <C-W>h
+    nnoremap <C-l> <C-W>l
 
-  "Moving fast to front, back and 2 sides ;)
-  inoremap <m-$> <esc>$a
-  inoremap <m-0> <esc>0i
+    "Moving fast to front, back and 2 sides ;)
+    inoremap <m-$> <esc>$a
+    inoremap <m-0> <esc>0i
 
-  " Easily macro.
-  nnoremap @@ @a
+    " Easily macro.
+    nnoremap @@ @a
 
-  " CTRL-A is Select All
-  " noremap     <C-A>   gggH<C-O>G
-  " inoremap    <C-A>   <C-O>gg<C-O>gH<C-O>G
-  " cnoremap    <C-A>   <C-C>gggH<C-O>G
-  " onoremap    <C-A>   <C-C>gggH<C-O>G
-  " snoremap    <C-A>   <C-C>gggH<C-O>G
-  " xnoremap    <C-A>   <C-C>ggVG
-  "
-  "undo
-  noremap     <C-Z> u
-  inoremap    <C-Z> <C-O>u
-  "" cut
-  "vnoremap <C-X> "+x
-  "" copy
-  "vnoremap <C-C> "+y
-  "" paste
-  "map <C-Q>      "+gP
-  "cmap <C-Q>     <C-R>+
-  "" save
-  "noremap <C-S>      :update<CR>
-  "vnoremap <C-S>     <C-C>:update<CR>
-  "inoremap <C-S>     <C-O>:update<CR>
+    " CTRL-A is Select All
+    " noremap     <C-A>   gggH<C-O>G
+    " inoremap    <C-A>   <C-O>gg<C-O>gH<C-O>G
+    " cnoremap    <C-A>   <C-C>gggH<C-O>G
+    " onoremap    <C-A>   <C-C>gggH<C-O>G
+    " snoremap    <C-A>   <C-C>gggH<C-O>G
+    " xnoremap    <C-A>   <C-C>ggVG
+    "
+    "undo
+    noremap     <C-Z> u
+    inoremap    <C-Z> <C-O>u
+    "" cut
+    "vnoremap <C-X> "+x
+    "" copy
+    "vnoremap <C-C> "+y
+    "" paste
+    "map <C-Q>      "+gP
+    "cmap <C-Q>     <C-R>+
+    "" save
+    "noremap <C-S>      :update<CR>
+    "vnoremap <C-S>     <C-C>:update<CR>
+    "inoremap <C-S>     <C-O>:update<CR>
 
-  " comma always followed by a space
-  " inoremap  ,  ,<Space>
+    " comma always followed by a space
+    " inoremap  ,  ,<Space>
 
-  " set filetype to verilog
-  "map ,fv     :set ft=verilog<CR>
-  noremap <leader>fv     :set ft=systemverilog<CR>
+    " set filetype to verilog
+    "map ,fv     :set ft=verilog<CR>
+    noremap <leader>fv     :set ft=systemverilog<CR>
 
-  " Fold
-  nnoremap <silent> <leader>zo zO
-  vnoremap <silent> <leader>zo zO
-  " Fold close & Fold open
-  noremap <unique> <kPlus> zo
-  noremap <unique> <kMinus> zc
-  map <leader>zz :call ToggleFold()<CR>
+    " Fold
+    nnoremap <silent> <leader>zo zO
+    vnoremap <silent> <leader>zo zO
+    " Fold close & Fold open
+    " noremap <unique> <kPlus> zo
+    " noremap <unique> <kMinus> zc
+    map <leader>zz :call ToggleFold()<CR>
 
-  " Set as toggle foldcomment
-  nnoremap zc @=((foldclosed(line('.')) < 0) ? 'zc' :'zo')<CR>
-  nnoremap zr zR
+    " Set as toggle foldcomment
+    nnoremap zc @=((foldclosed(line('.')) < 0) ? 'zc' :'zo')<CR>
+    nnoremap zr zR
 
-  if version >= 600
-    " Reduce folding
-    map <F2> zr
-    map <S-F2> zR
-    " Increase folding
-    map <F3> zm
-    map <S-F3> zM
-  endif
-
-  " Yank from the cursor to the end of the line, to be consistent with C and D
-  nnoremap Y y$
-
-  "-----------------------------
-  " Spell checking
-  noremap <leader>sn ]s
-  noremap <leader>sp [s
-  noremap <leader>sa zg
-  noremap <leader>s? z=
-
-  " " don't use exact searches for */#
-  " " "noremap * g*
-  " " "noremap # g#
-  " noremap <kMultiply> g*          " map * to g*
-  " " Smart word search."{{{
-  " " Search cursor word by word unit.
-  " " nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
-  " " Search cursor word.
-  " nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
-  " " Search from cursor to word end.
-  " " nnoremap <silent> #  :<C-u>call <SID>SetSearch('""ye')<CR>
-
-  " " Search selected text.
-  " xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
-  " xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
-
-  " " Visual mode pressing * or # searches for the current selection
-  " " Super useful! From an idea by Michael Naumann
-  " vnoremap <silent> * :call VisualSelection('f', '')<CR>
-  " vnoremap <silent> # :call VisualSelection('b', '')<CR>
-
-  function! VisualSelection(direction, extra_filter) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
-
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
-
-    if a:direction == 'b'
-      execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-      call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.' . a:extra_filter)
-    elseif a:direction == 'replace'
-      call CmdLine("%s" . '/'. l:pattern . '/')
-    elseif a:direction == 'f'
-      execute "normal /" . l:pattern . "^M"
+    if version >= 600
+      " Reduce folding
+      map <F2> zr
+      map <S-F2> zR
+      " Increase folding
+      map <F3> zm
+      map <S-F3> zM
     endif
 
-    let @/ = l:pattern
-    let @" = l:saved_reg
-  endfunction
+    " Yank from the cursor to the end of the line, to be consistent with C and D
+    nnoremap Y y$
 
-  """"""""""""""""""""""""""""""
-  " Set search word.
-  " If set additional parametar, search by word unit.
-  """"""""""""""""""""""""""""""
-  function! s:SetSearch(cmd, ...)
-    let saved_reg = @"
-    if a:cmd != ''
-      silent exec 'normal! '.a:cmd
-    endif
-    let pattern = escape(@", '\\/.*$^~[]')
-    let pattern = substitute(pattern, '\n$', '', '')
-    if a:0 > 0
-      let pattern = '\<'.pattern.'\>'
-    endif
-    let @/ = pattern
-    let @" = saved_reg
-    echo @/
-  endfunction "}}}
+    "-----------------------------
+    " Spell checking
+    noremap <leader>sn ]s
+    noremap <leader>sp [s
+    noremap <leader>sa zg
+    noremap <leader>s? z=
 
-  " Smart home function"{{{
-  function! SmartHome(mode)
-    let curcol = col('.')
+    " " don't use exact searches for */#
+    " " "noremap * g*
+    " " "noremap # g#
+    " noremap <kMultiply> g*          " map * to g*
+    " " Smart word search."{{{
+    " " Search cursor word by word unit.
+    " " nnoremap <silent> *  :<C-u>call <SID>SetSearch('""yiw', 'word')<CR>
+    " " Search cursor word.
+    " nnoremap <silent> g* :<C-u>call <SID>SetSearch('""yiw')<CR>
+    " " Search from cursor to word end.
+    " " nnoremap <silent> #  :<C-u>call <SID>SetSearch('""ye')<CR>
 
-    if &wrap
-      normal! g^
-    else
-      normal! ^
-    endif
-    if col('.') == curcol
-      if &wrap
-        normal! g0
-      else
-        normal! 0
+    " " Search selected text.
+    " xnoremap <silent> * :<C-u>call <SID>SetSearch('""vgvy')<CR>
+    " xnoremap <silent> # :<C-u>call <SID>SetSearch('""vgvy')<CR>
+
+    " " Visual mode pressing * or # searches for the current selection
+    " " Super useful! From an idea by Michael Naumann
+    " vnoremap <silent> * :call VisualSelection('f', '')<CR>
+    " vnoremap <silent> # :call VisualSelection('b', '')<CR>
+
+    function! VisualSelection(direction, extra_filter) range
+      let l:saved_reg = @"
+      execute "normal! vgvy"
+
+      let l:pattern = escape(@", '\\/.*$^~[]')
+      let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+      if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+      elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.' . a:extra_filter)
+      elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+      elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
       endif
-    endif
 
-    if a:mode == "v"
-      normal! msgv`s
-    endif
+      let @/ = l:pattern
+      let @" = l:saved_reg
+    endfunction
 
-    return ""
-  endfunction "}}}
-
-  " Smart end function"{{{
-  function! SmartEnd(mode)
-    let curcol = col('.')
-    let lastcol = a:mode ==# 'i' ? col('$') : col('$') - 1
-
-    " Gravitate towards ending for wrapped lines
-    if curcol < lastcol - 1
-      call cursor(0, curcol + 1)
-    endif
-
-    if curcol < lastcol
-      if &wrap
-        normal! g$
-      else
-        normal! $
+    """"""""""""""""""""""""""""""
+    " Set search word.
+    " If set additional parametar, search by word unit.
+    """"""""""""""""""""""""""""""
+    function! s:SetSearch(cmd, ...)
+      let saved_reg = @"
+      if a:cmd != ''
+        silent exec 'normal! '.a:cmd
       endif
-    else
-      normal! g_
-    endif
+      let pattern = escape(@", '\\/.*$^~[]')
+      let pattern = substitute(pattern, '\n$', '', '')
+      if a:0 > 0
+        let pattern = '\<'.pattern.'\>'
+      endif
+      let @/ = pattern
+      let @" = saved_reg
+      echo @/
+    endfunction "}}}
 
-    " Correct edit mode cursor position, put after current character
-    if a:mode == "i"
-      call cursor(0, col(".") + 1)
-    endif
+    " Smart home function"{{{
+    function! SmartHome(mode)
+      let curcol = col('.')
 
-    if a:mode == "v"
-      normal! msgv`s
-    endif
-
-    return ""
-  endfunction "}}}
-  "}}}
-
-  " Paste next line.
-  nnoremap <silent> gp o<ESC>p^
-  nnoremap <silent> gP O<ESC>P^
-  xnoremap <silent> gp o<ESC>p^
-  xnoremap <silent> gP O<ESC>P^
-
-  " Jump to a line and the line of before and after of the same indent."{{{
-  " Useful for Python.
-  nnoremap <silent> g{ :<C-u>call search('^' . matchstr(getline(line('.') + 1), '\(\s*\)') .'\S', 'b')<CR>^
-  nnoremap <silent> g} :<C-u>call search('^' . matchstr(getline(line('.')), '\(\s*\)') .'\S')<CR>^
-
-  " Copy remaining word from above or below.
-  " Useful in situations where you need to repeat some code and don't want to
-  " copy a whole line and edit parts of it.
-  "     Wordwise Ctrl-Y in insert mode - Vim Tips Wiki
-  "     http://vim.wikia.com/wiki/Wordwise_Ctrl-Y_in_insert_mode
-  inoremap <expr> <c-y> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\\|.\)')
-  inoremap <expr> <c-e> matchstr(getline(line('.')+1), '\%' . virtcol('.') . 'v\%(\k\+\\|.\)')
-  "}}}
-
-  " Select rectangle.
-  xnoremap r <C-v>
-  " Select until end of current line in visual mode.
-  xnoremap v $h
-
-  " a>, i], etc... "{{{
-  " <angle>
-  onoremap aa  a>
-  xnoremap aa  a>
-  onoremap ia  i>
-  xnoremap ia  i>
-
-  " [rectangle]
-  onoremap ar  a]
-  xnoremap ar  a]
-  onoremap ir  i]
-  xnoremap ir  i]
-
-  " 'quote'
-  onoremap aq  a'
-  xnoremap aq  a'
-  onoremap iq  i'
-  xnoremap iq  i'
-
-  " "double quote"
-  onoremap ad  a"
-  xnoremap ad  a"
-  onoremap id  i"
-  xnoremap id  i"
-  "}}}
-
-  " Move in fold
-  noremap <unique> z<Up> zk
-  noremap <unique> z<Down> zj
-  if has("gui_running") "  the <alt> key is only available in gui mode.
-    noremap <unique> <M-Up> zk
-    noremap <unique> <M-Down> zj
-  endif
-
-  " Easy Diff goto
-  noremap <unique> <C-Up> [c
-  " noremap <unique> <C-k> [c
-  noremap <unique> <C-Down> ]c
-  " noremap <unique> <C-j> ]c
-
-  " map Up & Down to gj & gk, helpful for wrap text edit
-  noremap <unique> <Up> gk
-  noremap <unique> <Down> gj
-
-  nnoremap <space> 5jzz
-  nnoremap <backspace> 5kzz
-
-  " move vertically by visual line
-  noremap j gjzz
-  noremap k gkzz
-  " noremap gj j
-  " noremap gk k
-  " Wrapped lines goes down/up to next row, rather than next line in file
-  " nnoremap j gj
-  " nnoremap k gk
-  noremap G Gzz
-  noremap gg ggzz
-  noremap <C-d> <C-d>zz
-  noremap <C-u> <C-u>zz
-
-  " Keep search matches in the middle of the window.
-  " zz centers the screen on the cursor, zv unfolds any fold if the cursor
-  " suddenly appears inside a fold.
-  " nnoremap * *zzzv
-  " nnoremap # #zzzv
-  " nnoremap n nzzzv
-  " nnoremap N Nzzzv
-  " noremap n nzz
-  " noremap N Nzz
-  " noremap * *zz
-  " noremap # #zz
-
-  " nnoremap g* g*zz
-  " nnoremap g# g#zz
-  " Format Jump, center the screen when jumping through the changelist
-  nnoremap <silent> g; g;zz
-  nnoremap <silent> g, g,zz
-
-  " In normal mode, we use : much more often than ; so lets swap them.
-  " nnoremap ; :
-  " nnoremap : ;
-  " vnoremap ; :
-  " vnoremap : ;
-
-  " Use Q for formatting the current paragraph (or selection)
-  vnoremap Q gq
-  nnoremap Q gqap
-
-  " nnoremap <C-h> :<C-u>help<Space>
-
-  " using Perl/Python-compatible regex syntax
-  " Thanks to Steve Losh for this liberating tip
-  " See http://stevelosh.com/blog/2010/09/coming-home-to-vim
-  " nnoremap / /\v
-  " vnoremap / /\v
-
-  " Jump to matching pairs easily, with Tab
-  nnoremap <Tab> %
-  vnoremap <Tab> %
-
-  " Use shift-H and shift-L for move to beginning/end
-  nnoremap H 0
-  nnoremap L $
-
-  " cd to the directory containing the file in the buffer
-  nnoremap <silent> <leader>cd :lcd %:h<CR>
-  nnoremap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
-  nnoremap <silent> <leader>md :!mkdir -p %:p:h<CR>
-
-  " Get off my lawn
-  " nnoremap <Left> :echoe "Use h"<CR>
-  " nnoremap <Right> :echoe "Use l"<CR>
-  " nnoremap <Up> :echoe "Use k"<CR>
-  " nnoremap <Down> :echoe "Use j"<CR>
-
-  """ Code folding options
-  nnoremap <leader>f0 :set foldlevel=0<CR>
-  nnoremap <leader>f1 :set foldlevel=1<CR>
-  nnoremap <leader>f2 :set foldlevel=2<CR>
-  nnoremap <leader>f3 :set foldlevel=3<CR>
-  nnoremap <leader>f4 :set foldlevel=4<CR>
-  nnoremap <leader>f5 :set foldlevel=5<CR>
-  nnoremap <leader>f6 :set foldlevel=6<CR>
-  nnoremap <leader>f7 :set foldlevel=7<CR>
-  nnoremap <leader>f8 :set foldlevel=8<CR>
-  nnoremap <leader>f9 :set foldlevel=9<CR>
-
-  " Bash like keys for the command line
-  cnoremap <C-A>      <Home>
-  cnoremap <C-E>      <End>
-  cnoremap <C-K>      <C-U>
-
-  " autocomplete search history in command mode
-  cnoremap <C-P>      <Up>
-  cnoremap <C-N>      <Down>
-
-  " toggle the background between light and dark
-  map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
-
-  " use ,F to jump to tag in a vertical split
-  nnoremap <silent> <Leader>F :let word=expand("<cword>")<CR>:vsp<CR>:wincmd w<cr>:exec("tag ". word)<cr>
-
-  " use ,gf to go to file in a vertical split
-  nnoremap <silent> <Leader>gf :vertical botright wincmd f<CR>
-
-  " Auto indent pasted text
-  nnoremap p p=`]<C-o>
-  nnoremap P P=`]<C-o>
-
-  " ,gt: ctags go to definition in new tab
-  nnoremap <leader>gt  <C-w><C-]><C-w>T
-
-  " highlight last inserted text
-  nnoremap gV `[v`]
-
-  " CamelCase <==> under_scores
-  " Convert name_like_this to nameLikeThis in current line.
-  nnoremap  <Leader>sc    :s#_\(\l\)#\u\1#g<CR>
-
-  " Convert name_like_this to NameLikeThis in current line.
-  nnoremap  <Leader>sC    :s/\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)/\u\1\2/g<CR>
-
-  " Change UNDER_SCORES to CamelCase
-  " Convert NAME_LIKE_THIS to NameLikeThis in the current line.
-  nnoremap  <Leader>SC    :s#_*\(\u\)\(\u*\)#\1\L\2#g<CR>
-
-  " Change CamelCase to under_scores
-  " Convert each NameLikeThis to name_like_this in current line.
-  " nnoremap  <Leader>ss    :s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
-
-  " Alternative: accept numbers in name.
-  nnoremap  <Leader>ss    :s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>
-
-
-  " ----------------------------------------------------------------------------
-  " Quickfix
-  " ----------------------------------------------------------------------------
-  nnoremap ]q :cnext<cr>zz
-  nnoremap [q :cprev<cr>zz
-  nnoremap ]l :lnext<cr>zz
-  nnoremap [l :lprev<cr>zz
-
-  " ----------------------------------------------------------------------------
-  " Buffers
-  " ----------------------------------------------------------------------------
-  nnoremap ]b :bnext<cr>
-  nnoremap [b :bprev<cr>
-
-  " ----------------------------------------------------------------------------
-  " Tabs
-  " ----------------------------------------------------------------------------
-  nnoremap ]t :tabn<cr>
-  nnoremap [t :tabp<cr>
-
-  " copy to system clipboard
-  map gy "*y
-  " copy whole file to system clipboard
-  nmap gY gg"*yG
-
-  " }}}
-
-  "-----------------------------------------------------------
-  " Functions
-  "-----------------------------------------------------------
-
-  "-----------------------------------------------------------
-  " Switch to buffer according to file name
-  function! SwitchToBuf(filename)
-    "let fullfn = substitute(a:filename, "^\\~/", $HOME . "/", "")
-    " find in current tab
-    let bufwinnr = bufwinnr(a:filename)
-    if bufwinnr != -1
-      exec bufwinnr . "wincmd w"
-      return
-    else
-      " find in each tab
-      tabfirst
-      let tab = 1
-      while tab <= tabpagenr("$")
-        let bufwinnr = bufwinnr(a:filename)
-        if bufwinnr != -1
-          exec "normal " . tab . "gt"
-          exec bufwinnr . "wincmd w"
-          return
+      if &wrap
+        normal! g^
+      else
+        normal! ^
+      endif
+      if col('.') == curcol
+        if &wrap
+          normal! g0
+        else
+          normal! 0
         endif
-        tabnext
-        let tab = tab + 1
-      endwhile
-      " not exist, new tab
-      exec "tabnew " . a:filename
-    endif
+      endif
+
+      if a:mode == "v"
+        normal! msgv`s
+      endif
+
+      return ""
+    endfunction "}}}
+
+    " Smart end function"{{{
+    function! SmartEnd(mode)
+      let curcol = col('.')
+      let lastcol = a:mode ==# 'i' ? col('$') : col('$') - 1
+
+      " Gravitate towards ending for wrapped lines
+      if curcol < lastcol - 1
+        call cursor(0, curcol + 1)
+      endif
+
+      if curcol < lastcol
+        if &wrap
+          normal! g$
+        else
+          normal! $
+        endif
+      else
+        normal! g_
+      endif
+
+      " Correct edit mode cursor position, put after current character
+      if a:mode == "i"
+        call cursor(0, col(".") + 1)
+      endif
+
+      if a:mode == "v"
+        normal! msgv`s
+      endif
+
+      return ""
+    endfunction "}}}
+    "}}}
+
+    " Paste next line.
+    nnoremap <silent> gp o<ESC>p^
+    nnoremap <silent> gP O<ESC>P^
+    xnoremap <silent> gp o<ESC>p^
+    xnoremap <silent> gP O<ESC>P^
+
+    " Jump to a line and the line of before and after of the same indent."{{{
+    " Useful for Python.
+    nnoremap <silent> g{ :<C-u>call search('^' . matchstr(getline(line('.') + 1), '\(\s*\)') .'\S', 'b')<CR>^
+    nnoremap <silent> g} :<C-u>call search('^' . matchstr(getline(line('.')), '\(\s*\)') .'\S')<CR>^
+
+    " Copy remaining word from above or below.
+    " Useful in situations where you need to repeat some code and don't want to
+    " copy a whole line and edit parts of it.
+    "     Wordwise Ctrl-Y in insert mode - Vim Tips Wiki
+    "     http://vim.wikia.com/wiki/Wordwise_Ctrl-Y_in_insert_mode
+    inoremap <expr> <c-y> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\\|.\)')
+    inoremap <expr> <c-e> matchstr(getline(line('.')+1), '\%' . virtcol('.') . 'v\%(\k\+\\|.\)')
+    "}}}
+
+    " Select rectangle.
+    xnoremap r <C-v>
+    " Select until end of current line in visual mode.
+    xnoremap v $h
+
+    " a>, i], etc... "{{{
+    " <angle>
+    onoremap aa  a>
+    xnoremap aa  a>
+    onoremap ia  i>
+    xnoremap ia  i>
+
+    " [rectangle]
+    onoremap ar  a]
+    xnoremap ar  a]
+    onoremap ir  i]
+    xnoremap ir  i]
+
+    " 'quote'
+    onoremap aq  a'
+    xnoremap aq  a'
+    onoremap iq  i'
+    xnoremap iq  i'
+
+    " "double quote"
+    onoremap ad  a"
+    xnoremap ad  a"
+    onoremap id  i"
+    xnoremap id  i"
+    "}}}
+
+    " Move in fold
+    " noremap <unique> z<Up> zk
+    " noremap <unique> z<Down> zj
+    " if has("gui_running") "  the <alt> key is only available in gui mode.
+    "   noremap <unique> <M-Up> zk
+    "   noremap <unique> <M-Down> zj
+    " endif
+
+    " Easy Diff goto
+    " noremap <unique> <C-Up> [c
+    " noremap <unique> <C-k> [c
+    " noremap <unique> <C-Down> ]c
+    " noremap <unique> <C-j> ]c
+
+    " map Up & Down to gj & gk, helpful for wrap text edit
+    " noremap <unique> <Up> gk
+    " noremap <unique> <Down> gj
+
+    nnoremap <space> 5jzz
+    nnoremap <backspace> 5kzz
+
+    " move vertically by visual line
+    noremap j gjzz
+    noremap k gkzz
+    " noremap gj j
+    " noremap gk k
+    " Wrapped lines goes down/up to next row, rather than next line in file
+    " nnoremap j gj
+    " nnoremap k gk
+    noremap G Gzz
+    noremap gg ggzz
+    noremap <C-d> <C-d>zz
+    noremap <C-u> <C-u>zz
+
+    " Keep search matches in the middle of the window.
+    " zz centers the screen on the cursor, zv unfolds any fold if the cursor
+    " suddenly appears inside a fold.
+    " nnoremap * *zzzv
+    " nnoremap # #zzzv
+    " nnoremap n nzzzv
+    " nnoremap N Nzzzv
+    " noremap n nzz
+    " noremap N Nzz
+    " noremap * *zz
+    " noremap # #zz
+
+    " nnoremap g* g*zz
+    " nnoremap g# g#zz
+    " Format Jump, center the screen when jumping through the changelist
+    nnoremap <silent> g; g;zz
+    nnoremap <silent> g, g,zz
+
+    " In normal mode, we use : much more often than ; so lets swap them.
+    " nnoremap ; :
+    " nnoremap : ;
+    " vnoremap ; :
+    " vnoremap : ;
+
+    " Use Q for formatting the current paragraph (or selection)
+    vnoremap Q gq
+    nnoremap Q gqap
+
+    " nnoremap <C-h> :<C-u>help<Space>
+
+    " using Perl/Python-compatible regex syntax
+    " Thanks to Steve Losh for this liberating tip
+    " See http://stevelosh.com/blog/2010/09/coming-home-to-vim
+    " nnoremap / /\v
+    " vnoremap / /\v
+
+    " Jump to matching pairs easily, with Tab
+    nnoremap <Tab> %
+    vnoremap <Tab> %
+
+    " Use shift-H and shift-L for move to beginning/end
+    nnoremap H 0
+    nnoremap L $
+
+    " cd to the directory containing the file in the buffer
+    nnoremap <silent> <leader>cd :lcd %:h<CR>
+    nnoremap <silent> <leader>cr :lcd <c-r>=FindGitDirOrRoot()<cr><cr>
+    nnoremap <silent> <leader>md :!mkdir -p %:p:h<CR>
+
+    " Get off my lawn
+    " nnoremap <Left> :echoe "Use h"<CR>
+    " nnoremap <Right> :echoe "Use l"<CR>
+    " nnoremap <Up> :echoe "Use k"<CR>
+    " nnoremap <Down> :echoe "Use j"<CR>
+
+    """ Code folding options
+    nnoremap <leader>f0 :set foldlevel=0<CR>
+    nnoremap <leader>f1 :set foldlevel=1<CR>
+    nnoremap <leader>f2 :set foldlevel=2<CR>
+    nnoremap <leader>f3 :set foldlevel=3<CR>
+    nnoremap <leader>f4 :set foldlevel=4<CR>
+    nnoremap <leader>f5 :set foldlevel=5<CR>
+    nnoremap <leader>f6 :set foldlevel=6<CR>
+    nnoremap <leader>f7 :set foldlevel=7<CR>
+    nnoremap <leader>f8 :set foldlevel=8<CR>
+    nnoremap <leader>f9 :set foldlevel=9<CR>
+
+    " Bash like keys for the command line
+    cnoremap <C-A>      <Home>
+    cnoremap <C-E>      <End>
+    cnoremap <C-K>      <C-U>
+
+    " autocomplete search history in command mode
+    cnoremap <C-P>      <Up>
+    cnoremap <C-N>      <Down>
+
+    " toggle the background between light and dark
+    map <Leader>bg :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+
+    " use ,F to jump to tag in a vertical split
+    nnoremap <silent> <Leader>F :let word=expand("<cword>")<CR>:vsp<CR>:wincmd w<cr>:exec("tag ". word)<cr>
+
+    " use ,gf to go to file in a vertical split
+    nnoremap <silent> <Leader>gf :vertical botright wincmd f<CR>
+
+    " Auto indent pasted text
+    nnoremap p p=`]<C-o>
+    nnoremap P P=`]<C-o>
+
+    " ,gt: ctags go to definition in new tab
+    nnoremap <leader>gt  <C-w><C-]><C-w>T
+
+    " highlight last inserted text
+    nnoremap gV `[v`]
+
+    " CamelCase <==> under_scores
+    " Convert name_like_this to nameLikeThis in current line.
+    nnoremap  <Leader>sc    :s#_\(\l\)#\u\1#g<CR>
+
+    " Convert name_like_this to NameLikeThis in current line.
+    nnoremap  <Leader>sC    :s/\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)/\u\1\2/g<CR>
+
+    " Change UNDER_SCORES to CamelCase
+    " Convert NAME_LIKE_THIS to NameLikeThis in the current line.
+    nnoremap  <Leader>SC    :s#_*\(\u\)\(\u*\)#\1\L\2#g<CR>
+
+    " Change CamelCase to under_scores
+    " Convert each NameLikeThis to name_like_this in current line.
+    " nnoremap  <Leader>ss    :s#\(\<\u\l\+\|\l\+\)\(\u\)#\l\1_\l\2#g<CR>
+
+    " Alternative: accept numbers in name.
+    nnoremap  <Leader>ss    :s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>
+
+
+    " ----------------------------------------------------------------------------
+    " Quickfix
+    " ----------------------------------------------------------------------------
+    nnoremap ]q :cnext<cr>zz
+    nnoremap [q :cprev<cr>zz
+    nnoremap ]l :lnext<cr>zz
+    nnoremap [l :lprev<cr>zz
+
+    " ----------------------------------------------------------------------------
+    " Buffers
+    " ----------------------------------------------------------------------------
+    nnoremap ]b :bnext<cr>
+    nnoremap [b :bprev<cr>
+
+    " ----------------------------------------------------------------------------
+    " Tabs
+    " ----------------------------------------------------------------------------
+    nnoremap ]t :tabn<cr>
+    nnoremap [t :tabp<cr>
+
+    " copy to system clipboard
+    map gy "*y
+    " copy whole file to system clipboard
+    nmap gY gg"*yG
+
+    " }}}
+
+    "-----------------------------------------------------------
+    " Functions {{{
+    "-----------------------------------------------------------
+
+    "-----------------------------------------------------------
+    " Switch to buffer according to file name
+    function! SwitchToBuf(filename)
+      "let fullfn = substitute(a:filename, "^\\~/", $HOME . "/", "")
+      " find in current tab
+      let bufwinnr = bufwinnr(a:filename)
+      if bufwinnr != -1
+        exec bufwinnr . "wincmd w"
+        return
+      else
+        " find in each tab
+        tabfirst
+        let tab = 1
+        while tab <= tabpagenr("$")
+          let bufwinnr = bufwinnr(a:filename)
+          if bufwinnr != -1
+            exec "normal " . tab . "gt"
+            exec bufwinnr . "wincmd w"
+            return
+          endif
+          tabnext
+          let tab = tab + 1
+        endwhile
+        " not exist, new tab
+        exec "tabnew " . a:filename
+      endif
+    endfunction
+
+    function! CmdLine(str)
+      exe "menu Foo.Bar :" . a:str
+      emenu Foo.Bar
+      unmenu Foo
+    endfunction
+
+    function! VisualSearch(direction) range
+      let l:saved_reg = @"
+      execute "normal! vgvy"
+
+      let l:pattern = escape(@", '\\/.*$^~[]')
+      let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+      if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+      elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+      elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+      elseif a:direction == 'replace'
+        call CmdLine("%s" . '/'. l:pattern . '/')
+      else
+        execute "normal /" . l:pattern . "^M"
+      endif
+
+      let @/ = l:pattern
+      let @" = l:saved_reg
+    endfunction
+
+    "Basically you press * or # to search for the current selection !! Really useful
+    " vnoremap <silent> * :call VisualSearch('f')<CR>
+    " vnoremap <silent> # :call VisualSearch('b')<CR>
+    " vnoremap <silent> gv :call VisualSearch('gv')<CR>
+
+    noremap <Leader>ch :call SetColorColum()<CR>
+    function! SetColorColum()
+      let col_num = virtcol(".")
+      let cc_list = split(&cc, ',')
+      if count(cc_list, string(col_num)) <= 0
+        execute "set cc+=".col_num
+      else
+        execute "set cc-=".col_num
+      endif
+    endfunction
+
+    cnoremap $q <C-\>eDeleteTillSlash()<cr>
+
+    " autocmd GUIEnter * call libcallnr("vimtweak.dll", "SetAlpha", 230)
+
+    " retab
+    fu! Retab()
+      :retab
+      :%s/\s\+$//
+    endfunction
+
+    " Remap VIM 0 to first non-blank character
+    map 0 ^
+    nnoremap <Home> ^
+  endif
+
+  " Strip trailing whitespace
+  function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+  endfunction
+  autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+  " autocmd FileType c,cpp,scss,css,html,erb,java,php,ruby,python,javascript autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+  " nnoremap <leader>cs :call <SID>StripTrailingWhitespaces()<cr>
+
+
+  " Search for the current selection
+  function! s:VSetSearch()
+    let temp = @s
+    norm! gv"sy
+    let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
+    let @s = temp
   endfunction
 
-  function! CmdLine(str)
-    exe "menu Foo.Bar :" . a:str
-    emenu Foo.Bar
-    unmenu Foo
+  function! MyFormatXml()
+    set filetype=xml
+    :%s/></>\r</g
+    " :%s/<\([^>]\)*>/\r&/g<CR>
+    :normal gg=G<CR>
   endfunction
 
-  function! VisualSearch(direction) range
-    let l:saved_reg = @"
-    execute "normal! vgvy"
+  nmap <leader>ml :call MyFormatXml()<CR>
+  nmap <F8> :call MyFormatXml()<CR>
 
-    let l:pattern = escape(@", '\\/.*$^~[]')
-    let l:pattern = substitute(l:pattern, "\n$", "", "")
+  " }}} Function
 
-    if a:direction == 'b'
-      execute "normal ?" . l:pattern . "^M"
-    elseif a:direction == 'gv'
-      call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
-    elseif a:direction == 'f'
-      execute "normal /" . l:pattern . "^M"
-    elseif a:direction == 'replace'
-      call CmdLine("%s" . '/'. l:pattern . '/')
-    else
-      execute "normal /" . l:pattern . "^M"
-    endif
+" }}} if g:load_vimrc_extended
 
-    let @/ = l:pattern
-    let @" = l:saved_reg
+"-----------------------------------------------------------
+" Fisilink {{{
+"-----------------------------------------------------------
+
+  augroup my_fileheader
+    autocmd!
+    autocmd BufNewFile *.spec call FHHeader()
+    " when create a new file, insert header
+    autocmd BufNewFile *.v,*.sv,*.svh exec ":call SetFSLTitle()"
+  augroup END
+
+  noremap <Leader>fh :call FHHeader()<CR>
+  function! FHHeader()
+    let s:comment = "//"
+    let s:commentline = s:comment .   "----------------------------------------------------------------------"
+    let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
+    let s:department = s:comment .    " Microelectronics Dept."
+    let s:copyright = s:comment .     " All rights reserved."
+    let s:file = s:comment .          " FileName    : " . expand("%:t")
+    let s:author = s:comment .        " Author      : " . g:vimrc_author
+    let s:email= s:comment .          " EMail       : " . g:vimrc_email
+    let s:version = s:comment .       " Version     : 1.0"
+    let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
+    let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
+    let s:description= s:comment .    " Description : "
+    let s:hierarchy= s:comment .      " Hierarchy   : "
+    let s:history= s:comment .        " History"
+    let s:history_author= s:comment . "     Author   :"
+    let s:history_date= s:comment .   "     Date     :"
+    let s:history_rev= s:comment .    "     Revision :"
+
+    call append (0, [s:commentline,
+          \ s:company,
+          \ s:department,
+          \ s:copyright,
+          \ s:comment,
+          \ s:file,
+          \ s:author,
+          \ s:email,
+          \ s:version,
+          \ s:created,
+          \ s:modified,
+          \ s:description,
+          \ s:hierarchy,
+          \ s:commentline,
+          \ s:history,
+          \ s:history_author,
+          \ s:history_date,
+          \ s:history_rev,
+          \ s:commentline])
   endfunction
 
-  "Basically you press * or # to search for the current selection !! Really useful
-  " vnoremap <silent> * :call VisualSearch('f')<CR>
-  " vnoremap <silent> # :call VisualSearch('b')<CR>
-  " vnoremap <silent> gv :call VisualSearch('gv')<CR>
+  " set header function
+  func! SetFSLTitle()
+    call setline(1          , "\//                              ;;;;`';;;.                                                                            ")
+    call append(line(".")   , "\//                            ,`;;;;`';;;;,                                                                           ")
+    call append(line(".")+1 , "\//                          ::` :;;: `;;;';                                                                           ")
+    call append(line(".")+2 , "\//                        `    `` `    ;;;;                                                                           ")
+    call append(line(".")+3 , "\//              `:'++++++++++++++      .';;                                                                           ")
+    call append(line(".")+4 , "\//             ;+'+''++'+'+++'++:      ,;;;                                                                           ")
+    call append(line(".")+5 , "\//            '+++++++++'+'+++++       ;''`                                                                           ")
+    call append(line(".")+6 , "\//           ;+''''+''''+++++'',      `;''                                                                            ")
+    call append(line(".")+7 , "\//           ++''+++++++''++++:       ;;'`                                                                            ")
+    call append(line(".")+8 , "\//          `++++++'''''';;:.        :;;:                                                                             ")
+    call append(line(".")+9 , "\//          ,+++++'                 .;;;                                                                              ")
+    call append(line(".")+10, "\//          ;++++++                `;;'                                                                               ")
+    call append(line(".")+11, "\//          '+++++'               `;;'                                                                                ")
+    call append(line(".")+12, "\//        ,.'+++++'              `';;                                                                                 ")
+    call append(line(".")+13, "\//       ;;`++++++;`.,:;''''''  `';;                                                                                  ")
+    call append(line(".")+14, "\//      ;;. '++++++++++''++'+. `';;                                                                                   ")
+    call append(line(".")+15, "\//     '': `+++++++''++++'+'+ ,;',                                                                                    ")
+    call append(line(".")+16, "\//    ;;;  .++++'''++''+++++`;;;`   +'''''''    ;+''+';   +++'''+' ++''+''+     :+'''+++,+''+'+'   ++'+,+'''''':.+'''+")
+    call append(line(".")+17, "\//   :';   ;'++++'++''''++',;;:      +++++`   .+'    +'    '++++`   ''+'+.       `+'+'+   ,'+'+'    ''   +''++`  ,''` ")
+    call append(line(".")+18, "\//  .;;`   '++++'''';;:,,.`;;`       +++++    '':    :+    '++++    ;'+++         +'++:    ''+++,   :.   '''+'   ':   ")
+    call append(line(".")+19, "\//  ';:    ++++'''       ,;.         +'+''   '++;     '    ++++'    ++'+'        `'+++.   `:+'+'+   ;    +++++  ;,    ")
+    call append(line(".")+20, "\// ,;;     ''++'';  .   ;,           +'+':   +'++,    ;    '+++:    +''+'        ,++++`   .`++''+`  '    ++++; ;'`    ")
+    call append(line(".")+21, "\// ';;     ++'''+. ;  `,            `+'+'.   ++++++:       ++++.    +''+:        ;'+++    ; .++++'  '    ++++,'+'+    ")
+    call append(line(".")+22, "\//`;;.     '+++; ,;  `              .+'++`   '+++'+++'    .++++`    ''++,        ''+++    '  '++++  '   `''+++'+++'   ")
+    call append(line(".")+23, "\//,''.    .'+. .;:                  :''++     '+''+++''   :'+'+    .++++`        ++++'    '  :++++; ;   ,'++'`++'++`  ")
+    call append(line(".")+24, "\//:;';       ,;;'                   '+'++      ;+'+'+++`  ;+'++    :'+++         +++';    '   +'+++`,   '+'+' :+'++;  ")
+    call append(line(".")+25, "\//,;;;;.`.:;;''++                   '+'+'   '    ;'++'+`  ++'++    ;++'+         +'+',    ;   ''++''`   '+'++  ''+'+  ")
+    call append(line(".")+26, "\//`;;;;;;';;;''+'                   ++'+'   +`    `++++`  ++++'    '++'+     `: `'++'`   `.   `+'+++    ++++'  '+''+` ")
+    call append(line(".")+27, "\// .';;;;;;'+'++;                   +'++:   +'     ;+''   ++++:    +++''     +  ,++'+    ,`    +'''+    '+'':  .++++: ")
+    call append(line(".")+28, "\//   ,::. ''++'+,                  `++++.   ++     '''`  `'+++.    +'++'   .':  '++'+    '`    .++++   `++++,  .+++++ ")
+    call append(line(".")+29, "\//       `++++'+`                  '++++;  `+++   .''`   ''+'';   ;'++++::'++  `+'''+`  ,+;     +'''   '++++;  '++'+'`")
+    call append(line(".")+30, "\//       .''''''                  ,,,,,,,,  `:'+'+'.    ,,,,,,,, ,,,,,,,,,,,. .,,,,,,,`,,,,.    .,,.  ,,,,,,,`,,,,,,,,")
+    call append(line(".")+31, "\//--------------------------------------------------------------------------------------------------------------------")
+    call append(line(".")+32, "\// Copyright (c), Fisilink Microelectronics Technology Co., Ltd")
+    call append(line(".")+33, "\// Author      : ".$USER)
+    call append(line(".")+34, "\// Created Time: ".strftime("%c"))
+    call append(line(".")+35, "")
+    call append(line(".")+36, "\// Date        : ".strftime("%Y-%m-%d %H:%M:%S"))
+    call append(line(".")+37, "\// Revision    : 1.0")
+    call append(line(".")+38, "\// Description : ")
+    call append(line(".")+39, "\//--------------------------------------------------------------------------------------------------------------------")
+    call append(line(".")+40, "")
+    " go to end of file
+    autocmd BufNewFile * normal G
+  endfunc
+  "for c++
+  iab for_ for () begin<enter><enter>end
+  iab if_ if () begin<enter><enter>end
+  iab ife_ if () begin<enter><enter>end<enter>else begin<enter><enter>end
+  iab ifee_ if () begin<enter><enter>end<enter>else if () begin<enter><enter>end<enter>else begin<enter><enter>end
+  "for sv/v
+  iab al_ always @(posedge clk or negedge rst_n) begin<enter>if (!rst_n) begin<enter><enter>end else begin<enter><enter>end<enter>end
 
-  noremap <Leader>ch :call SetColorColum()<CR>
-  function! SetColorColum()
-    let col_num = virtcol(".")
-    let cc_list = split(&cc, ',')
-    if count(cc_list, string(col_num)) <= 0
-      execute "set cc+=".col_num
-    else
-      execute "set cc-=".col_num
-    endif
+  iab info_ `uvm_info (get_name(), $psprintf (""), UVM_NONE);
+  iab warning_ `uvm_warning (get_name(), $psprintf (""));
+  iab error_ `uvm_error (get_name(), $psprintf (""));
+  iab fatal_ `uvm_fatal (get_name(), $psprintf (""));
+
+  iab sq_ sequence s_xx;<enter><enter>endsequence<enter><enter>property p_xx;<enter>@(posedge clk) s_xx;<enter>endproperty<enter><enter>assert_xx : assert property (p_xx);
+
+  map     <F9>   a<C-R>='// '.$USER.strftime(" @ %Y-%m-%d %H:%M")<CR>
+
+  function! AddCommentBlock()
+    let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
+    let a:name_line="// struct      : "
+    let a:dscp_line="// description : "
+
+    call append(line(".")   , a:comment_line)
+    call append(line(".")+1 , a:name_line)
+    call append(line(".")+2 , a:dscp_line)
+    call append(line(".")+3 , a:comment_line)
   endfunction
 
-  cnoremap $q <C-\>eDeleteTillSlash()<cr>
+  function! MakeFSLStruct(name)
+    let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
+    let a:struct_name_line="// struct      : " . a:name
+    let a:struct_dscp_line="// description : "
 
-  " autocmd GUIEnter * call libcallnr("vimtweak.dll", "SetAlpha", 230)
-
-  " retab
-  fu! Retab()
-    :retab
-    :%s/\s\+$//
+    call append(line(".")   , a:comment_line)
+    call append(line(".")+1 , a:struct_name_line)
+    call append(line(".")+2 , a:struct_dscp_line)
+    call append(line(".")+3 , a:comment_line)
+    call append(line(".")+4 , "")
+    call append(line(".")+5 , "typedef struct {")
+    call append(line(".")+6 , "")
+    call append(line(".")+7 , "} " . a:name . ";")
   endfunction
 
-  " Remap VIM 0 to first non-blank character
-  map 0 ^
-  nnoremap <Home> ^
-endif
-"}}} Extended ----------------------------------------------
-
-" {{{ Fisilink ---------------------------------------------
-
-augroup my_fileheader
-  autocmd!
-  autocmd BufNewFile *.spec call FHHeader()
-  " when create a new file, insert header
-  autocmd BufNewFile *.v,*.sv,*.svh exec ":call SetFSLTitle()"
-augroup END
-
-noremap <Leader>fh :call FHHeader()<CR>
-function! FHHeader()
-  let s:comment = "//"
-  let s:commentline = s:comment .   "----------------------------------------------------------------------"
-  let s:company = s:comment .       " Copyright (c) " . strftime ("%Y") . ", Fiberhome Telecommunication Technology Co., Ltd."
-  let s:department = s:comment .    " Microelectronics Dept."
-  let s:copyright = s:comment .     " All rights reserved."
-  let s:file = s:comment .          " FileName    : " . expand("%:t")
-  let s:author = s:comment .        " Author      : " . g:vimrc_author
-  let s:email= s:comment .          " EMail       : " . g:vimrc_email
-  let s:version = s:comment .       " Version     : 1.0"
-  let s:created = s:comment .       " Created     : " . strftime ("%Y-%m-%d %H:%M:%S")
-  let s:modified = s:comment .      " Modified    : " . strftime ("%Y-%m-%d %H:%M:%S")
-  let s:description= s:comment .    " Description : "
-  let s:hierarchy= s:comment .      " Hierarchy   : "
-  let s:history= s:comment .        " History"
-  let s:history_author= s:comment . "     Author   :"
-  let s:history_date= s:comment .   "     Date     :"
-  let s:history_rev= s:comment .    "     Revision :"
-
-  call append (0, [s:commentline,
-        \ s:company,
-        \ s:department,
-        \ s:copyright,
-        \ s:comment,
-        \ s:file,
-        \ s:author,
-        \ s:email,
-        \ s:version,
-        \ s:created,
-        \ s:modified,
-        \ s:description,
-        \ s:hierarchy,
-        \ s:commentline,
-        \ s:history,
-        \ s:history_author,
-        \ s:history_date,
-        \ s:history_rev,
-        \ s:commentline])
-endfunction
-
-" set header function
-func! SetFSLTitle()
-  call setline(1          , "\//                              ;;;;`';;;.                                                                            ")
-  call append(line(".")   , "\//                            ,`;;;;`';;;;,                                                                           ")
-  call append(line(".")+1 , "\//                          ::` :;;: `;;;';                                                                           ")
-  call append(line(".")+2 , "\//                        `    `` `    ;;;;                                                                           ")
-  call append(line(".")+3 , "\//              `:'++++++++++++++      .';;                                                                           ")
-  call append(line(".")+4 , "\//             ;+'+''++'+'+++'++:      ,;;;                                                                           ")
-  call append(line(".")+5 , "\//            '+++++++++'+'+++++       ;''`                                                                           ")
-  call append(line(".")+6 , "\//           ;+''''+''''+++++'',      `;''                                                                            ")
-  call append(line(".")+7 , "\//           ++''+++++++''++++:       ;;'`                                                                            ")
-  call append(line(".")+8 , "\//          `++++++'''''';;:.        :;;:                                                                             ")
-  call append(line(".")+9 , "\//          ,+++++'                 .;;;                                                                              ")
-  call append(line(".")+10, "\//          ;++++++                `;;'                                                                               ")
-  call append(line(".")+11, "\//          '+++++'               `;;'                                                                                ")
-  call append(line(".")+12, "\//        ,.'+++++'              `';;                                                                                 ")
-  call append(line(".")+13, "\//       ;;`++++++;`.,:;''''''  `';;                                                                                  ")
-  call append(line(".")+14, "\//      ;;. '++++++++++''++'+. `';;                                                                                   ")
-  call append(line(".")+15, "\//     '': `+++++++''++++'+'+ ,;',                                                                                    ")
-  call append(line(".")+16, "\//    ;;;  .++++'''++''+++++`;;;`   +'''''''    ;+''+';   +++'''+' ++''+''+     :+'''+++,+''+'+'   ++'+,+'''''':.+'''+")
-  call append(line(".")+17, "\//   :';   ;'++++'++''''++',;;:      +++++`   .+'    +'    '++++`   ''+'+.       `+'+'+   ,'+'+'    ''   +''++`  ,''` ")
-  call append(line(".")+18, "\//  .;;`   '++++'''';;:,,.`;;`       +++++    '':    :+    '++++    ;'+++         +'++:    ''+++,   :.   '''+'   ':   ")
-  call append(line(".")+19, "\//  ';:    ++++'''       ,;.         +'+''   '++;     '    ++++'    ++'+'        `'+++.   `:+'+'+   ;    +++++  ;,    ")
-  call append(line(".")+20, "\// ,;;     ''++'';  .   ;,           +'+':   +'++,    ;    '+++:    +''+'        ,++++`   .`++''+`  '    ++++; ;'`    ")
-  call append(line(".")+21, "\// ';;     ++'''+. ;  `,            `+'+'.   ++++++:       ++++.    +''+:        ;'+++    ; .++++'  '    ++++,'+'+    ")
-  call append(line(".")+22, "\//`;;.     '+++; ,;  `              .+'++`   '+++'+++'    .++++`    ''++,        ''+++    '  '++++  '   `''+++'+++'   ")
-  call append(line(".")+23, "\//,''.    .'+. .;:                  :''++     '+''+++''   :'+'+    .++++`        ++++'    '  :++++; ;   ,'++'`++'++`  ")
-  call append(line(".")+24, "\//:;';       ,;;'                   '+'++      ;+'+'+++`  ;+'++    :'+++         +++';    '   +'+++`,   '+'+' :+'++;  ")
-  call append(line(".")+25, "\//,;;;;.`.:;;''++                   '+'+'   '    ;'++'+`  ++'++    ;++'+         +'+',    ;   ''++''`   '+'++  ''+'+  ")
-  call append(line(".")+26, "\//`;;;;;;';;;''+'                   ++'+'   +`    `++++`  ++++'    '++'+     `: `'++'`   `.   `+'+++    ++++'  '+''+` ")
-  call append(line(".")+27, "\// .';;;;;;'+'++;                   +'++:   +'     ;+''   ++++:    +++''     +  ,++'+    ,`    +'''+    '+'':  .++++: ")
-  call append(line(".")+28, "\//   ,::. ''++'+,                  `++++.   ++     '''`  `'+++.    +'++'   .':  '++'+    '`    .++++   `++++,  .+++++ ")
-  call append(line(".")+29, "\//       `++++'+`                  '++++;  `+++   .''`   ''+'';   ;'++++::'++  `+'''+`  ,+;     +'''   '++++;  '++'+'`")
-  call append(line(".")+30, "\//       .''''''                  ,,,,,,,,  `:'+'+'.    ,,,,,,,, ,,,,,,,,,,,. .,,,,,,,`,,,,.    .,,.  ,,,,,,,`,,,,,,,,")
-  call append(line(".")+31, "\//--------------------------------------------------------------------------------------------------------------------")
-  call append(line(".")+32, "\// Copyright (c), Fisilink Microelectronics Technology Co., Ltd")
-  call append(line(".")+33, "\// Author      : ".$USER)
-  call append(line(".")+34, "\// Created Time: ".strftime("%c"))
-  call append(line(".")+35, "")
-  call append(line(".")+36, "\// Date        : ".strftime("%Y-%m-%d %H:%M:%S"))
-  call append(line(".")+37, "\// Revision    : 1.0")
-  call append(line(".")+38, "\// Description : ")
-  call append(line(".")+39, "\//--------------------------------------------------------------------------------------------------------------------")
-  call append(line(".")+40, "")
-  " go to end of file
-  autocmd BufNewFile * normal G
-endfunc
-"for c++
-iab for_ for () begin<enter><enter>end
-iab if_ if () begin<enter><enter>end
-iab ife_ if () begin<enter><enter>end<enter>else begin<enter><enter>end
-iab ifee_ if () begin<enter><enter>end<enter>else if () begin<enter><enter>end<enter>else begin<enter><enter>end
-"for sv/v
-iab al_ always @(posedge clk or negedge rst_n) begin<enter>if (!rst_n) begin<enter><enter>end else begin<enter><enter>end<enter>end
-
-iab info_ `uvm_info (get_name(), $psprintf (""), UVM_NONE);
-iab warning_ `uvm_warning (get_name(), $psprintf (""));
-iab error_ `uvm_error (get_name(), $psprintf (""));
-iab fatal_ `uvm_fatal (get_name(), $psprintf (""));
-
-iab sq_ sequence s_xx;<enter><enter>endsequence<enter><enter>property p_xx;<enter>@(posedge clk) s_xx;<enter>endproperty<enter><enter>assert_xx : assert property (p_xx);
-
-map     <F9>   a<C-R>='// '.$USER.strftime(" @ %Y-%m-%d %H:%M")<CR>
-
-function! AddCommentBlock()
-  let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
-  let a:name_line="// struct      : "
-  let a:dscp_line="// description : "
-
-  call append(line(".")   , a:comment_line)
-  call append(line(".")+1 , a:name_line)
-  call append(line(".")+2 , a:dscp_line)
-  call append(line(".")+3 , a:comment_line)
-endfunction
-
-function! MakeFSLStruct(name)
-  let a:comment_line="////////////////////////////////////////////////////////////////////////////////"
-  let a:struct_name_line="// struct      : " . a:name
-  let a:struct_dscp_line="// description : "
-
-  call append(line(".")   , a:comment_line)
-  call append(line(".")+1 , a:struct_name_line)
-  call append(line(".")+2 , a:struct_dscp_line)
-  call append(line(".")+3 , a:comment_line)
-  call append(line(".")+4 , "")
-  call append(line(".")+5 , "typedef struct {")
-  call append(line(".")+6 , "")
-  call append(line(".")+7 , "} " . a:name . ";")
-endfunction
-
-"}}} Fisilink ----------------------------------------------
-
-
-" Strip trailing whitespace
-function! <SID>StripTrailingWhitespaces()
-  " Preparation: save last search, and cursor position.
-  let _s=@/
-  let l = line(".")
-  let c = col(".")
-  " Do the business:
-  %s/\s\+$//e
-  " Clean up: restore previous search history, and cursor position
-  let @/=_s
-  call cursor(l, c)
-endfunction
-autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
-" autocmd FileType c,cpp,scss,css,html,erb,java,php,ruby,python,javascript autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
-" nnoremap <leader>cs :call <SID>StripTrailingWhitespaces()<cr>
-
-
-" Search for the current selection
-function! s:VSetSearch()
-  let temp = @s
-  norm! gv"sy
-  let @/ = '\V' . substitute(escape(@s, '/\'), '\n', '\\n', 'g')
-  let @s = temp
-endfunction
-
-function! MyFormatXml()
-  set filetype=xml
-  :%s/></>\r</g
-  " :%s/<\([^>]\)*>/\r&/g<CR>
-  :normal gg=G<CR>
-endfunction
-
-nmap <leader>ml :call MyFormatXml()<CR>
-nmap <F8> :call MyFormatXml()<CR>
-
+" }}} Fisilink
 
 " ============================================================================
 " LOCAL VIMRC {{{
